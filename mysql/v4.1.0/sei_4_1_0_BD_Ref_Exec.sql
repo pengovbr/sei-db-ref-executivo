@@ -1,13 +1,13 @@
--- MariaDB dump 10.19  Distrib 10.5.24-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.21, for Linux (x86_64)
 --
 -- Host: localhost    Database: sei
 -- ------------------------------------------------------
--- Server version	10.5.24-MariaDB-1:10.5.24+maria~ubu2004
+-- Server version	8.0.21
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `acao_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `acao_federacao` (
   `id_acao_federacao` varchar(26) NOT NULL,
   `id_instalacao_federacao` varchar(26) NOT NULL,
@@ -32,10 +32,10 @@ CREATE TABLE `acao_federacao` (
   `id_documento_federacao` varchar(26) DEFAULT NULL,
   `dth_geracao` datetime NOT NULL,
   `dth_acesso` datetime DEFAULT NULL,
-  `sta_tipo` int(11) NOT NULL,
+  `sta_tipo` int NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_acao_federacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -53,14 +53,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `acesso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `acesso` (
-  `id_acesso` int(11) NOT NULL,
-  `id_usuario` int(11) DEFAULT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
+  `id_acesso` int NOT NULL,
+  `id_usuario` int DEFAULT NULL,
+  `id_unidade` int NOT NULL,
+  `id_protocolo` bigint NOT NULL,
   `sta_tipo` char(1) NOT NULL,
-  `id_controle_interno` int(11) DEFAULT NULL,
+  `id_controle_interno` int DEFAULT NULL,
   PRIMARY KEY (`id_acesso`),
   KEY `fk_acesso_usuario` (`id_usuario`),
   KEY `fk_acesso_protocolo` (`id_protocolo`),
@@ -73,7 +73,7 @@ CREATE TABLE `acesso` (
   CONSTRAINT `fk_acesso_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
   CONSTRAINT `fk_acesso_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_acesso_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,16 +91,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `acesso_externo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `acesso_externo` (
-  `id_acesso_externo` int(11) NOT NULL,
-  `id_atividade` int(11) NOT NULL,
-  `id_participante` int(11) NOT NULL,
+  `id_acesso_externo` int NOT NULL,
+  `id_atividade` int NOT NULL,
+  `id_participante` int NOT NULL,
   `dta_validade` datetime DEFAULT NULL,
   `email_unidade` varchar(250) DEFAULT NULL,
   `hash_interno` varchar(32) NOT NULL,
   `sta_tipo` char(1) NOT NULL,
-  `id_documento` bigint(20) DEFAULT NULL,
+  `id_documento` bigint DEFAULT NULL,
   `sin_processo` char(1) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   `email_destinatario` varchar(100) DEFAULT NULL,
@@ -114,10 +114,10 @@ CREATE TABLE `acesso_externo` (
   KEY `i05_acesso_externo` (`sta_tipo`,`sin_inclusao`),
   KEY `i06_acesso_externo` (`sta_tipo`,`dta_validade`),
   KEY `i07_acesso_externo` (`id_documento`,`sta_tipo`,`dta_validade`),
-  CONSTRAINT `fk_acesso_externo_atividade` FOREIGN KEY (`id_atividade`) REFERENCES `atividade` (`id_atividade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_acesso_externo_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_acesso_externo_participante` FOREIGN KEY (`id_participante`) REFERENCES `participante` (`id_participante`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_acesso_externo_atividade` FOREIGN KEY (`id_atividade`) REFERENCES `atividade` (`id_atividade`),
+  CONSTRAINT `fk_acesso_externo_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`),
+  CONSTRAINT `fk_acesso_externo_participante` FOREIGN KEY (`id_participante`) REFERENCES `participante` (`id_participante`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,7 +135,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `acesso_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `acesso_federacao` (
   `id_acesso_federacao` varchar(26) NOT NULL,
   `id_instalacao_federacao_rem` varchar(26) NOT NULL,
@@ -152,7 +152,7 @@ CREATE TABLE `acesso_federacao` (
   `motivo_liberacao` varchar(4000) DEFAULT NULL,
   `dth_cancelamento` datetime DEFAULT NULL,
   `motivo_cancelamento` varchar(4000) DEFAULT NULL,
-  `sta_tipo` int(11) NOT NULL,
+  `sta_tipo` int NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_acesso_federacao`),
   KEY `fk_acesso_fed_procedimento_fed` (`id_procedimento_federacao`),
@@ -178,7 +178,7 @@ CREATE TABLE `acesso_federacao` (
   CONSTRAINT `fk_acesso_fed_unidade_fed_rem` FOREIGN KEY (`id_unidade_federacao_rem`) REFERENCES `unidade_federacao` (`id_unidade_federacao`),
   CONSTRAINT `fk_acesso_fed_usuario_fed_dest` FOREIGN KEY (`id_usuario_federacao_dest`) REFERENCES `usuario_federacao` (`id_usuario_federacao`),
   CONSTRAINT `fk_acesso_fed_usuario_fed_rem` FOREIGN KEY (`id_usuario_federacao_rem`) REFERENCES `usuario_federacao` (`id_usuario_federacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -196,15 +196,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `acompanhamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `acompanhamento` (
-  `id_acompanhamento` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_grupo_acompanhamento` int(11) DEFAULT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
+  `id_acompanhamento` int NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_grupo_acompanhamento` int DEFAULT NULL,
+  `id_protocolo` bigint NOT NULL,
   `observacao` varchar(500) DEFAULT NULL,
-  `tipo_visualizacao` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `tipo_visualizacao` int NOT NULL,
+  `id_usuario` int NOT NULL,
   `dth_alteracao` datetime NOT NULL,
   `idx_acompanhamento` varchar(4000) DEFAULT NULL,
   PRIMARY KEY (`id_acompanhamento`),
@@ -212,11 +212,11 @@ CREATE TABLE `acompanhamento` (
   KEY `fk_acompanhamento_protocolo` (`id_protocolo`),
   KEY `fk_acompanhamento_unidade` (`id_unidade`),
   KEY `fk_acompanhamento_usuario` (`id_usuario`),
-  CONSTRAINT `fk_acompanhamento_grupo_acompa` FOREIGN KEY (`id_grupo_acompanhamento`) REFERENCES `grupo_acompanhamento` (`id_grupo_acompanhamento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_acompanhamento_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_acompanhamento_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_acompanhamento_grupo_acompa` FOREIGN KEY (`id_grupo_acompanhamento`) REFERENCES `grupo_acompanhamento` (`id_grupo_acompanhamento`),
+  CONSTRAINT `fk_acompanhamento_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
+  CONSTRAINT `fk_acompanhamento_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_acompanhamento_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -234,13 +234,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `andamento_instalacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `andamento_instalacao` (
-  `id_andamento_instalacao` int(11) NOT NULL,
+  `id_andamento_instalacao` int NOT NULL,
   `id_instalacao_federacao` varchar(26) NOT NULL,
-  `id_tarefa_instalacao` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_tarefa_instalacao` int NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
   `sta_estado` char(1) NOT NULL,
   `dth_estado` datetime NOT NULL,
   PRIMARY KEY (`id_andamento_instalacao`),
@@ -252,7 +252,7 @@ CREATE TABLE `andamento_instalacao` (
   CONSTRAINT `fk_andamento_inst_inst_fed` FOREIGN KEY (`id_instalacao_federacao`) REFERENCES `instalacao_federacao` (`id_instalacao_federacao`),
   CONSTRAINT `fk_andamento_inst_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_andamento_inst_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -270,14 +270,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `andamento_marcador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `andamento_marcador` (
-  `id_andamento_marcador` int(11) NOT NULL,
-  `id_marcador` int(11) DEFAULT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_andamento_marcador` int NOT NULL,
+  `id_marcador` int DEFAULT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
   `dth_execucao` datetime NOT NULL,
-  `id_procedimento` bigint(20) NOT NULL,
+  `id_procedimento` bigint NOT NULL,
   `sin_ultimo` char(1) NOT NULL,
   `texto` varchar(500) DEFAULT NULL,
   `sta_operacao` char(1) NOT NULL,
@@ -293,7 +293,7 @@ CREATE TABLE `andamento_marcador` (
   CONSTRAINT `fk_andamento_marcador_proced` FOREIGN KEY (`id_procedimento`) REFERENCES `procedimento` (`id_procedimento`),
   CONSTRAINT `fk_andamento_marcador_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_andamento_marcador_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -311,14 +311,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `andamento_plano_trabalho`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `andamento_plano_trabalho` (
-  `id_andamento_plano_trabalho` int(11) NOT NULL,
-  `id_plano_trabalho` int(11) NOT NULL,
-  `id_procedimento` bigint(20) NOT NULL,
-  `id_tarefa_plano_trabalho` int(11) NOT NULL,
-  `id_usuario_origem` int(11) NOT NULL,
-  `id_unidade_origem` int(11) NOT NULL,
+  `id_andamento_plano_trabalho` int NOT NULL,
+  `id_plano_trabalho` int NOT NULL,
+  `id_procedimento` bigint NOT NULL,
+  `id_tarefa_plano_trabalho` int NOT NULL,
+  `id_usuario_origem` int NOT NULL,
+  `id_unidade_origem` int NOT NULL,
   `dth_execucao` datetime NOT NULL,
   `sta_situacao` char(1) DEFAULT NULL,
   PRIMARY KEY (`id_andamento_plano_trabalho`),
@@ -332,7 +332,7 @@ CREATE TABLE `andamento_plano_trabalho` (
   CONSTRAINT `fk_andam_plano_trab_proced` FOREIGN KEY (`id_procedimento`) REFERENCES `procedimento` (`id_procedimento`),
   CONSTRAINT `fk_andam_plano_trab_uni_origem` FOREIGN KEY (`id_unidade_origem`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_andam_plano_trab_usu_origem` FOREIGN KEY (`id_usuario_origem`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -350,14 +350,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `andamento_situacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `andamento_situacao` (
-  `id_andamento_situacao` int(11) NOT NULL,
+  `id_andamento_situacao` int NOT NULL,
   `dth_execucao` datetime NOT NULL,
-  `id_procedimento` bigint(20) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_situacao` int(11) DEFAULT NULL,
+  `id_procedimento` bigint NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_situacao` int DEFAULT NULL,
   `sin_ultimo` char(1) NOT NULL,
   PRIMARY KEY (`id_andamento_situacao`),
   KEY `fk_andam_situacao_procedimento` (`id_procedimento`),
@@ -369,7 +369,7 @@ CREATE TABLE `andamento_situacao` (
   CONSTRAINT `fk_andam_situacao_situacao` FOREIGN KEY (`id_situacao`) REFERENCES `situacao` (`id_situacao`),
   CONSTRAINT `fk_andamento_situacao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_andamento_situacao_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -387,18 +387,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `anexo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `anexo` (
-  `id_anexo` int(11) NOT NULL,
+  `id_anexo` int NOT NULL,
   `nome` varchar(255) NOT NULL,
-  `id_protocolo` bigint(20) DEFAULT NULL,
+  `id_protocolo` bigint DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `tamanho` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `tamanho` int NOT NULL,
   `dth_inclusao` datetime NOT NULL,
-  `id_base_conhecimento` int(11) DEFAULT NULL,
-  `id_projeto` int(11) DEFAULT NULL,
+  `id_base_conhecimento` int DEFAULT NULL,
+  `id_projeto` int DEFAULT NULL,
   `hash` char(32) NOT NULL,
   PRIMARY KEY (`id_anexo`),
   UNIQUE KEY `ak1_anexo` (`id_anexo`,`sin_ativo`),
@@ -408,11 +408,11 @@ CREATE TABLE `anexo` (
   KEY `fk_anexo_protocolo` (`id_protocolo`),
   KEY `fk_anexo_unidade` (`id_unidade`),
   KEY `fk_anexo_usuario` (`id_usuario`),
-  CONSTRAINT `fk_anexo_base_conhecimento` FOREIGN KEY (`id_base_conhecimento`) REFERENCES `base_conhecimento` (`id_base_conhecimento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_anexo_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_anexo_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_anexo_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_anexo_base_conhecimento` FOREIGN KEY (`id_base_conhecimento`) REFERENCES `base_conhecimento` (`id_base_conhecimento`),
+  CONSTRAINT `fk_anexo_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
+  CONSTRAINT `fk_anexo_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
+  CONSTRAINT `fk_anexo_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -430,13 +430,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `anotacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `anotacao` (
-  `id_anotacao` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `descricao` longtext DEFAULT NULL,
+  `id_anotacao` int NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_usuario` int NOT NULL,
+  `descricao` longtext,
   `dth_anotacao` datetime NOT NULL,
   `sin_prioridade` char(1) NOT NULL,
   `sta_anotacao` char(1) NOT NULL,
@@ -445,10 +445,10 @@ CREATE TABLE `anotacao` (
   KEY `fk_anotacao_usuario` (`id_usuario`),
   KEY `i01_anotacao` (`id_unidade`,`id_protocolo`,`id_usuario`,`sin_prioridade`,`sta_anotacao`),
   KEY `fk_anotacao_unidade` (`id_unidade`),
-  CONSTRAINT `fk_anotacao_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_anotacao_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
   CONSTRAINT `fk_anotacao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
-  CONSTRAINT `fk_anotacao_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_anotacao_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -466,18 +466,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `arquivamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `arquivamento` (
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_localizador` int(11) DEFAULT NULL,
-  `id_atividade_arquivamento` int(11) DEFAULT NULL,
-  `id_atividade_desarquivamento` int(11) DEFAULT NULL,
-  `id_atividade_recebimento` int(11) DEFAULT NULL,
-  `id_atividade_solicitacao` int(11) DEFAULT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_localizador` int DEFAULT NULL,
+  `id_atividade_arquivamento` int DEFAULT NULL,
+  `id_atividade_desarquivamento` int DEFAULT NULL,
+  `id_atividade_recebimento` int DEFAULT NULL,
+  `id_atividade_solicitacao` int DEFAULT NULL,
   `sta_arquivamento` char(1) NOT NULL,
-  `id_atividade_cancelamento` int(11) DEFAULT NULL,
+  `id_atividade_cancelamento` int DEFAULT NULL,
   `sta_eliminacao` char(1) NOT NULL,
-  `id_atividade_eliminacao` int(11) DEFAULT NULL,
+  `id_atividade_eliminacao` int DEFAULT NULL,
   PRIMARY KEY (`id_protocolo`),
   KEY `i07_arquivamento` (`id_localizador`,`sta_arquivamento`),
   KEY `fk_arquiv_ativ_arquiv` (`id_atividade_arquivamento`),
@@ -495,7 +495,7 @@ CREATE TABLE `arquivamento` (
   CONSTRAINT `fk_arquiv_ativ_solic_desarq` FOREIGN KEY (`id_atividade_solicitacao`) REFERENCES `atividade` (`id_atividade`),
   CONSTRAINT `fk_arquivamento_localizador` FOREIGN KEY (`id_localizador`) REFERENCES `localizador` (`id_localizador`),
   CONSTRAINT `fk_arquivamento_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -513,17 +513,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `arquivo_extensao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `arquivo_extensao` (
-  `id_arquivo_extensao` int(11) NOT NULL,
+  `id_arquivo_extensao` int NOT NULL,
   `extensao` varchar(10) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
-  `tamanho_maximo` int(11) DEFAULT NULL,
+  `tamanho_maximo` int DEFAULT NULL,
   `sin_interface` char(1) NOT NULL,
   `sin_servico` char(1) NOT NULL,
   PRIMARY KEY (`id_arquivo_extensao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -542,15 +542,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `assinante`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assinante` (
-  `id_assinante` int(11) NOT NULL,
+  `id_assinante` int NOT NULL,
   `cargo_funcao` varchar(200) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
+  `id_orgao` int NOT NULL,
   PRIMARY KEY (`id_assinante`),
   KEY `fk_assinante_orgao` (`id_orgao`),
   CONSTRAINT `fk_assinante_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -569,22 +569,23 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `assinatura`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assinatura` (
-  `id_assinatura` int(11) NOT NULL,
-  `id_documento` bigint(20) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_assinatura` int NOT NULL,
+  `id_documento` bigint NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `nome` varchar(500) NOT NULL,
   `tratamento` varchar(200) NOT NULL,
-  `cpf` bigint(20) DEFAULT NULL,
-  `id_atividade` int(11) DEFAULT NULL,
+  `cpf` bigint DEFAULT NULL,
+  `id_atividade` int DEFAULT NULL,
   `sta_forma_autenticacao` char(1) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   `numero_serie_certificado` varchar(64) DEFAULT NULL,
-  `p7s_base64` longtext DEFAULT NULL,
-  `id_tarja_assinatura` int(11) NOT NULL,
+  `p7s_base64` longtext,
+  `id_tarja_assinatura` int NOT NULL,
   `agrupador` varchar(36) DEFAULT NULL,
+  `modulo_origem` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_assinatura`),
   UNIQUE KEY `ak1_assinatura` (`id_documento`,`id_usuario`),
   KEY `fk_assinatura_tarja_assinatura` (`id_tarja_assinatura`),
@@ -594,12 +595,12 @@ CREATE TABLE `assinatura` (
   KEY `fk_assinatura_usuario_autentic` (`id_usuario`),
   KEY `i01_assinatura` (`agrupador`),
   KEY `i02_assinatura` (`id_documento`,`id_atividade`),
-  CONSTRAINT `fk_assinatura_atividade` FOREIGN KEY (`id_atividade`) REFERENCES `atividade` (`id_atividade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_assinatura_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_assinatura_atividade` FOREIGN KEY (`id_atividade`) REFERENCES `atividade` (`id_atividade`),
+  CONSTRAINT `fk_assinatura_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`),
   CONSTRAINT `fk_assinatura_tarja_assinatura` FOREIGN KEY (`id_tarja_assinatura`) REFERENCES `tarja_assinatura` (`id_tarja_assinatura`),
-  CONSTRAINT `fk_assinatura_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_assinatura_usuario_autentic` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_assinatura_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
+  CONSTRAINT `fk_assinatura_usuario_autentic` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -617,24 +618,24 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `assunto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assunto` (
-  `id_assunto` int(11) NOT NULL,
+  `id_assunto` int NOT NULL,
   `codigo_estruturado` varchar(50) NOT NULL,
   `descricao` varchar(250) NOT NULL,
   `observacao` varchar(1000) DEFAULT NULL,
   `idx_assunto` varchar(1000) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
-  `prazo_intermediario` int(11) DEFAULT NULL,
-  `prazo_corrente` int(11) DEFAULT NULL,
+  `prazo_intermediario` int DEFAULT NULL,
+  `prazo_corrente` int DEFAULT NULL,
   `sta_destinacao` char(1) DEFAULT NULL,
   `sin_estrutural` char(1) DEFAULT NULL,
-  `id_tabela_assuntos` int(11) NOT NULL,
+  `id_tabela_assuntos` int NOT NULL,
   PRIMARY KEY (`id_assunto`),
   KEY `i01_assunto` (`id_tabela_assuntos`,`codigo_estruturado`,`sin_estrutural`,`sin_ativo`),
   KEY `fk_assunto_tabela_assuntos` (`id_tabela_assuntos`),
   CONSTRAINT `fk_assunto_tabela_assuntos` FOREIGN KEY (`id_tabela_assuntos`) REFERENCES `tabela_assuntos` (`id_tabela_assuntos`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -653,14 +654,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `assunto_proxy`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `assunto_proxy` (
-  `id_assunto_proxy` int(11) NOT NULL,
-  `id_assunto` int(11) NOT NULL,
+  `id_assunto_proxy` int NOT NULL,
+  `id_assunto` int NOT NULL,
   PRIMARY KEY (`id_assunto_proxy`),
   KEY `fk_assunto_proxy_assunto` (`id_assunto`),
   CONSTRAINT `fk_assunto_proxy_assunto` FOREIGN KEY (`id_assunto`) REFERENCES `assunto` (`id_assunto`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -679,23 +680,23 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `atividade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `atividade` (
-  `id_atividade` int(11) NOT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_atividade` int NOT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_unidade` int NOT NULL,
   `dth_abertura` datetime NOT NULL,
   `dth_conclusao` datetime DEFAULT NULL,
-  `id_tarefa` int(11) DEFAULT NULL,
-  `id_unidade_origem` int(11) NOT NULL,
-  `id_usuario_conclusao` int(11) DEFAULT NULL,
+  `id_tarefa` int DEFAULT NULL,
+  `id_unidade_origem` int NOT NULL,
+  `id_usuario_conclusao` int DEFAULT NULL,
   `sin_inicial` char(1) NOT NULL,
-  `id_usuario_visualizacao` int(11) DEFAULT NULL,
-  `id_usuario_atribuicao` int(11) DEFAULT NULL,
+  `id_usuario_visualizacao` int DEFAULT NULL,
+  `id_usuario_atribuicao` int DEFAULT NULL,
   `dta_prazo` datetime DEFAULT NULL,
-  `tipo_visualizacao` int(11) NOT NULL,
-  `id_usuario` int(11) DEFAULT NULL,
-  `id_usuario_origem` int(11) NOT NULL,
+  `tipo_visualizacao` int NOT NULL,
+  `id_usuario` int DEFAULT NULL,
+  `id_usuario_origem` int NOT NULL,
   PRIMARY KEY (`id_atividade`),
   KEY `i04_atividade` (`id_unidade`,`dth_abertura`,`id_tarefa`,`id_atividade`,`id_protocolo`,`dth_conclusao`),
   KEY `i06_atividade` (`id_unidade`,`id_protocolo`,`id_atividade`,`id_unidade_origem`),
@@ -716,16 +717,16 @@ CREATE TABLE `atividade` (
   KEY `i10_atividade` (`dth_abertura`,`id_tarefa`),
   KEY `i16_atividade` (`id_unidade`,`id_protocolo`,`dth_conclusao`,`id_usuario`,`id_atividade`,`id_usuario_atribuicao`),
   KEY `i17_atividade` (`id_protocolo`,`id_tarefa`,`id_unidade`,`id_unidade_origem`),
-  CONSTRAINT `fk_atividade_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_atividade_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
   CONSTRAINT `fk_atividade_tarefa` FOREIGN KEY (`id_tarefa`) REFERENCES `tarefa` (`id_tarefa`),
   CONSTRAINT `fk_atividade_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
-  CONSTRAINT `fk_atividade_unidade_origem` FOREIGN KEY (`id_unidade_origem`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_atividade_unidade_origem` FOREIGN KEY (`id_unidade_origem`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_atividade_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`),
-  CONSTRAINT `fk_atividade_usuario_atribuica` FOREIGN KEY (`id_usuario_atribuicao`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_atividade_usuario_conclusao` FOREIGN KEY (`id_usuario_conclusao`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_atividade_usuario_origem` FOREIGN KEY (`id_usuario_origem`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_atividade_usuario_visualiza` FOREIGN KEY (`id_usuario_visualizacao`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_atividade_usuario_atribuica` FOREIGN KEY (`id_usuario_atribuicao`) REFERENCES `usuario` (`id_usuario`),
+  CONSTRAINT `fk_atividade_usuario_conclusao` FOREIGN KEY (`id_usuario_conclusao`) REFERENCES `usuario` (`id_usuario`),
+  CONSTRAINT `fk_atividade_usuario_origem` FOREIGN KEY (`id_usuario_origem`) REFERENCES `usuario` (`id_usuario`),
+  CONSTRAINT `fk_atividade_usuario_visualiza` FOREIGN KEY (`id_usuario_visualizacao`) REFERENCES `usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -743,17 +744,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `atributo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `atributo` (
-  `id_atributo` int(11) NOT NULL,
-  `id_tipo_formulario` int(11) NOT NULL,
+  `id_atributo` int NOT NULL,
+  `id_tipo_formulario` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `rotulo` varchar(4000) NOT NULL,
-  `ordem` int(11) NOT NULL,
+  `ordem` int NOT NULL,
   `sta_tipo` varchar(20) NOT NULL,
-  `tamanho` int(11) DEFAULT NULL,
-  `linhas` int(11) DEFAULT NULL,
-  `decimais` int(11) DEFAULT NULL,
+  `tamanho` int DEFAULT NULL,
+  `linhas` int DEFAULT NULL,
+  `decimais` int DEFAULT NULL,
   `mascara` varchar(50) DEFAULT NULL,
   `valor_minimo` varchar(20) DEFAULT NULL,
   `valor_maximo` varchar(20) DEFAULT NULL,
@@ -763,7 +764,7 @@ CREATE TABLE `atributo` (
   PRIMARY KEY (`id_atributo`),
   KEY `fk_atributo_tipo_formulario` (`id_tipo_formulario`),
   CONSTRAINT `fk_atributo_tipo_formulario` FOREIGN KEY (`id_tipo_formulario`) REFERENCES `tipo_formulario` (`id_tipo_formulario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -781,17 +782,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `atributo_andam_plano_trab`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `atributo_andam_plano_trab` (
-  `id_atributo_andam_plano_trab` int(11) NOT NULL,
-  `id_andamento_plano_trabalho` int(11) NOT NULL,
+  `id_atributo_andam_plano_trab` int NOT NULL,
+  `id_andamento_plano_trabalho` int NOT NULL,
   `chave` varchar(50) NOT NULL,
   `valor` varchar(250) DEFAULT NULL,
   `id_origem` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_atributo_andam_plano_trab`),
   KEY `fk_atr_and_pla_tra_and_pla_tra` (`id_andamento_plano_trabalho`),
   CONSTRAINT `fk_atr_and_pla_tra_and_pla_tra` FOREIGN KEY (`id_andamento_plano_trabalho`) REFERENCES `andamento_plano_trabalho` (`id_andamento_plano_trabalho`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -809,10 +810,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `atributo_andamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `atributo_andamento` (
-  `id_atributo_andamento` int(11) NOT NULL,
-  `id_atividade` int(11) NOT NULL,
+  `id_atributo_andamento` int NOT NULL,
+  `id_atividade` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `valor` varchar(4000) DEFAULT NULL,
   `id_origem` varchar(50) DEFAULT NULL,
@@ -821,8 +822,8 @@ CREATE TABLE `atributo_andamento` (
   KEY `fk_atributo_andamento_atividad` (`id_atividade`),
   KEY `i02_atributo_andamento` (`nome`,`id_origem`),
   KEY `i04_atributo_andamento` (`id_atividade`,`id_atributo_andamento`),
-  CONSTRAINT `fk_atributo_andamento_atividad` FOREIGN KEY (`id_atividade`) REFERENCES `atividade` (`id_atividade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_atributo_andamento_atividad` FOREIGN KEY (`id_atividade`) REFERENCES `atividade` (`id_atividade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -840,17 +841,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `atributo_instalacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `atributo_instalacao` (
-  `id_atributo_instalacao` int(11) NOT NULL,
-  `id_andamento_instalacao` int(11) NOT NULL,
+  `id_atributo_instalacao` int NOT NULL,
+  `id_andamento_instalacao` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `valor` varchar(4000) NOT NULL,
   `id_origem` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_atributo_instalacao`),
   KEY `fk_atributo_inst_andam_inst` (`id_andamento_instalacao`),
   CONSTRAINT `fk_atributo_inst_andam_inst` FOREIGN KEY (`id_andamento_instalacao`) REFERENCES `andamento_instalacao` (`id_andamento_instalacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -868,17 +869,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `auditoria_protocolo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `auditoria_protocolo` (
-  `id_auditoria_protocolo` bigint(20) NOT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_anexo` int(11) DEFAULT NULL,
-  `versao` int(11) DEFAULT NULL,
+  `id_auditoria_protocolo` bigint NOT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_anexo` int DEFAULT NULL,
+  `versao` int DEFAULT NULL,
   `dta_auditoria` datetime NOT NULL,
   PRIMARY KEY (`id_auditoria_protocolo`),
   KEY `i01_auditoria_protocolo` (`id_usuario`,`id_protocolo`,`versao`,`dta_auditoria`,`id_anexo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -896,14 +897,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `avaliacao_documental`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `avaliacao_documental` (
-  `id_avaliacao_documental` int(11) NOT NULL,
-  `id_procedimento` bigint(20) NOT NULL,
-  `id_assunto_proxy` int(11) NOT NULL,
-  `id_assunto` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_avaliacao_documental` int NOT NULL,
+  `id_procedimento` bigint NOT NULL,
+  `id_assunto_proxy` int NOT NULL,
+  `id_assunto` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `sta_avaliacao` char(1) NOT NULL,
   `dta_avaliacao` datetime NOT NULL,
   PRIMARY KEY (`id_avaliacao_documental`),
@@ -918,7 +919,7 @@ CREATE TABLE `avaliacao_documental` (
   CONSTRAINT `fk_avaliacao_doc_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_avaliacao_documental_proced` FOREIGN KEY (`id_procedimento`) REFERENCES `procedimento` (`id_procedimento`),
   CONSTRAINT `fk_avaliacao_documental_usu` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -936,9 +937,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `aviso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `aviso` (
-  `id_aviso` int(11) NOT NULL,
+  `id_aviso` int NOT NULL,
   `sta_aviso` char(1) NOT NULL,
   `sin_liberado` char(1) NOT NULL,
   `dth_inicio` datetime NOT NULL,
@@ -948,7 +949,7 @@ CREATE TABLE `aviso` (
   `imagem` longtext NOT NULL,
   PRIMARY KEY (`id_aviso`),
   KEY `i01_aviso` (`dth_inicio`,`dth_fim`,`sin_liberado`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -966,21 +967,21 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `base_conhecimento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `base_conhecimento` (
-  `id_base_conhecimento` int(11) NOT NULL,
-  `id_base_conhecimento_agrupador` int(11) DEFAULT NULL,
-  `id_base_conhecimento_origem` int(11) DEFAULT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_base_conhecimento` int NOT NULL,
+  `id_base_conhecimento_agrupador` int DEFAULT NULL,
+  `id_base_conhecimento_origem` int DEFAULT NULL,
+  `id_unidade` int NOT NULL,
   `descricao` varchar(250) NOT NULL,
-  `conteudo` longtext DEFAULT NULL,
-  `id_documento_edoc` bigint(20) DEFAULT NULL,
+  `conteudo` longtext,
+  `id_documento_edoc` bigint DEFAULT NULL,
   `sta_estado` char(1) NOT NULL,
-  `id_usuario_gerador` int(11) NOT NULL,
+  `id_usuario_gerador` int NOT NULL,
   `dth_geracao` datetime NOT NULL,
   `dth_liberacao` datetime DEFAULT NULL,
-  `id_usuario_liberacao` int(11) DEFAULT NULL,
-  `id_conjunto_estilos` int(11) DEFAULT NULL,
+  `id_usuario_liberacao` int DEFAULT NULL,
+  `id_conjunto_estilos` int DEFAULT NULL,
   `sta_documento` char(1) NOT NULL,
   PRIMARY KEY (`id_base_conhecimento`),
   KEY `fk_base_conhecimento_unidade` (`id_unidade`),
@@ -989,11 +990,11 @@ CREATE TABLE `base_conhecimento` (
   KEY `fk_base_conhec_conj_estilos` (`id_conjunto_estilos`),
   KEY `i01_base_conhecimento` (`id_base_conhecimento_agrupador`),
   KEY `i02_base_conhecimento` (`id_unidade`,`sta_estado`),
-  CONSTRAINT `fk_base_conhec_conj_estilos` FOREIGN KEY (`id_conjunto_estilos`) REFERENCES `conjunto_estilos` (`id_conjunto_estilos`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_base_conhec_usu_gerador` FOREIGN KEY (`id_usuario_gerador`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_base_conhec_usu_liberacao` FOREIGN KEY (`id_usuario_liberacao`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_base_conhecimento_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_base_conhec_conj_estilos` FOREIGN KEY (`id_conjunto_estilos`) REFERENCES `conjunto_estilos` (`id_conjunto_estilos`),
+  CONSTRAINT `fk_base_conhec_usu_gerador` FOREIGN KEY (`id_usuario_gerador`) REFERENCES `usuario` (`id_usuario`),
+  CONSTRAINT `fk_base_conhec_usu_liberacao` FOREIGN KEY (`id_usuario_liberacao`) REFERENCES `usuario` (`id_usuario`),
+  CONSTRAINT `fk_base_conhecimento_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1011,11 +1012,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `bloco`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bloco` (
-  `id_bloco` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_bloco` int NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sta_tipo` char(1) NOT NULL,
   `idx_bloco` varchar(500) DEFAULT NULL,
@@ -1028,9 +1029,9 @@ CREATE TABLE `bloco` (
   KEY `fk_bloco_usuario` (`id_usuario`),
   KEY `i03_bloco` (`id_bloco`,`id_unidade`,`sta_tipo`,`sta_estado`),
   KEY `i04_bloco` (`id_bloco`,`sta_estado`),
-  CONSTRAINT `fk_bloco_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_bloco_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_bloco_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
+  CONSTRAINT `fk_bloco_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1048,16 +1049,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `campo_pesquisa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `campo_pesquisa` (
-  `id_campo_pesquisa` int(11) NOT NULL,
-  `chave` int(11) NOT NULL,
+  `id_campo_pesquisa` int NOT NULL,
+  `chave` int NOT NULL,
   `valor` varchar(4000) NOT NULL,
-  `id_pesquisa` int(11) NOT NULL,
+  `id_pesquisa` int NOT NULL,
   PRIMARY KEY (`id_campo_pesquisa`),
   KEY `fk_campo_pesquisa_pesquisa` (`id_pesquisa`),
   CONSTRAINT `fk_campo_pesquisa_pesquisa` FOREIGN KEY (`id_pesquisa`) REFERENCES `pesquisa` (`id_pesquisa`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1075,15 +1076,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `cargo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cargo` (
-  `id_cargo` int(11) NOT NULL,
+  `id_cargo` int NOT NULL,
   `expressao` varchar(100) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
-  `id_tratamento` int(11) DEFAULT NULL,
-  `id_vocativo` int(11) DEFAULT NULL,
+  `id_tratamento` int DEFAULT NULL,
+  `id_vocativo` int DEFAULT NULL,
   `sta_genero` char(1) DEFAULT NULL,
-  `id_titulo` int(11) DEFAULT NULL,
+  `id_titulo` int DEFAULT NULL,
   PRIMARY KEY (`id_cargo`),
   KEY `ie1_cargo` (`id_cargo`,`sin_ativo`),
   KEY `fk_cargo_tratamento` (`id_tratamento`),
@@ -1092,7 +1093,7 @@ CREATE TABLE `cargo` (
   CONSTRAINT `fk_cargo_titulo` FOREIGN KEY (`id_titulo`) REFERENCES `titulo` (`id_titulo`),
   CONSTRAINT `fk_cargo_tratamento` FOREIGN KEY (`id_tratamento`) REFERENCES `tratamento` (`id_tratamento`),
   CONSTRAINT `fk_cargo_vocativo` FOREIGN KEY (`id_vocativo`) REFERENCES `vocativo` (`id_vocativo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1111,16 +1112,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `cargo_funcao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cargo_funcao` (
-  `id_unidade` int(11) NOT NULL,
-  `id_cargo_funcao` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_cargo_funcao` int NOT NULL,
   `nome` varchar(100) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_unidade`,`id_cargo_funcao`),
   KEY `fk_cargo_funcao_unidade` (`id_unidade`),
-  CONSTRAINT `fk_cargo_funcao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_cargo_funcao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1138,13 +1139,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `categoria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categoria` (
-  `id_categoria` int(11) NOT NULL,
+  `id_categoria` int NOT NULL,
   `nome` varchar(100) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_categoria`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1162,13 +1163,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `cidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cidade` (
-  `id_cidade` int(11) NOT NULL,
-  `id_uf` int(11) DEFAULT NULL,
+  `id_cidade` int NOT NULL,
+  `id_uf` int DEFAULT NULL,
   `nome` varchar(50) NOT NULL,
-  `id_pais` int(11) DEFAULT NULL,
-  `codigo_ibge` int(11) DEFAULT NULL,
+  `id_pais` int DEFAULT NULL,
+  `codigo_ibge` int DEFAULT NULL,
   `sin_capital` char(1) NOT NULL,
   `latitude` decimal(9,6) DEFAULT NULL,
   `longitude` decimal(9,6) DEFAULT NULL,
@@ -1177,9 +1178,9 @@ CREATE TABLE `cidade` (
   KEY `fk_cidade_pais` (`id_pais`),
   KEY `i01_cidade` (`id_pais`,`id_uf`,`sin_capital`,`codigo_ibge`),
   KEY `fk_cidade_uf` (`id_uf`),
-  CONSTRAINT `fk_cidade_pais` FOREIGN KEY (`id_pais`) REFERENCES `pais` (`id_pais`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_cidade_uf` FOREIGN KEY (`id_uf`) REFERENCES `uf` (`id_uf`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_cidade_pais` FOREIGN KEY (`id_pais`) REFERENCES `pais` (`id_pais`),
+  CONSTRAINT `fk_cidade_uf` FOREIGN KEY (`id_uf`) REFERENCES `uf` (`id_uf`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1198,13 +1199,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `comentario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comentario` (
-  `id_comentario` int(11) NOT NULL,
-  `id_procedimento` bigint(20) NOT NULL,
-  `id_rel_protocolo_protocolo` bigint(20) DEFAULT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_comentario` int NOT NULL,
+  `id_procedimento` bigint NOT NULL,
+  `id_rel_protocolo_protocolo` bigint DEFAULT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
   `descricao` varchar(4000) NOT NULL,
   `dth_comentario` datetime NOT NULL,
   PRIMARY KEY (`id_comentario`),
@@ -1217,7 +1218,7 @@ CREATE TABLE `comentario` (
   CONSTRAINT `fk_comentario_rel_prot_prot` FOREIGN KEY (`id_rel_protocolo_protocolo`) REFERENCES `rel_protocolo_protocolo` (`id_rel_protocolo_protocolo`),
   CONSTRAINT `fk_comentario_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_comentario_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1235,12 +1236,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `conjunto_estilos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `conjunto_estilos` (
-  `id_conjunto_estilos` int(11) NOT NULL,
+  `id_conjunto_estilos` int NOT NULL,
   `sin_ultimo` char(1) NOT NULL,
   PRIMARY KEY (`id_conjunto_estilos`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1259,16 +1260,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `conjunto_estilos_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `conjunto_estilos_item` (
-  `id_conjunto_estilos_item` int(11) NOT NULL,
-  `id_conjunto_estilos` int(11) NOT NULL,
+  `id_conjunto_estilos_item` int NOT NULL,
+  `id_conjunto_estilos` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `formatacao` longtext NOT NULL,
   PRIMARY KEY (`id_conjunto_estilos_item`),
   KEY `fk_conj_est_item_conj_est` (`id_conjunto_estilos`),
-  CONSTRAINT `fk_conj_est_item_conj_est` FOREIGN KEY (`id_conjunto_estilos`) REFERENCES `conjunto_estilos` (`id_conjunto_estilos`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_conj_est_item_conj_est` FOREIGN KEY (`id_conjunto_estilos`) REFERENCES `conjunto_estilos` (`id_conjunto_estilos`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1287,13 +1288,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `contato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contato` (
-  `id_contato` int(11) NOT NULL,
-  `id_cargo` int(11) DEFAULT NULL,
+  `id_contato` int NOT NULL,
+  `id_cargo` int DEFAULT NULL,
   `nome` varchar(250) NOT NULL,
   `matricula_oab` varchar(10) DEFAULT NULL,
-  `cpf` bigint(20) DEFAULT NULL,
+  `cpf` bigint DEFAULT NULL,
   `matricula` varchar(10) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `sitio_internet` varchar(50) DEFAULT NULL,
@@ -1304,33 +1305,33 @@ CREATE TABLE `contato` (
   `idx_contato` varchar(1000) DEFAULT NULL,
   `dta_nascimento` datetime DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
-  `cnpj` bigint(20) DEFAULT NULL,
+  `cnpj` bigint DEFAULT NULL,
   `sigla` varchar(100) DEFAULT NULL,
-  `id_unidade_cadastro` int(11) DEFAULT NULL,
-  `id_usuario_cadastro` int(11) DEFAULT NULL,
+  `id_unidade_cadastro` int DEFAULT NULL,
+  `id_usuario_cadastro` int DEFAULT NULL,
   `dth_cadastro` datetime DEFAULT NULL,
-  `rg` bigint(20) DEFAULT NULL,
+  `rg` bigint DEFAULT NULL,
   `orgao_expedidor` varchar(50) DEFAULT NULL,
   `complemento` varchar(130) DEFAULT NULL,
   `sta_natureza` char(1) NOT NULL,
   `sin_endereco_associado` char(1) NOT NULL,
   `telefone_celular` varchar(50) DEFAULT NULL,
-  `id_cidade` int(11) DEFAULT NULL,
-  `id_uf` int(11) DEFAULT NULL,
-  `id_pais` int(11) DEFAULT NULL,
-  `id_contato_associado` int(11) NOT NULL,
+  `id_cidade` int DEFAULT NULL,
+  `id_uf` int DEFAULT NULL,
+  `id_pais` int DEFAULT NULL,
+  `id_contato_associado` int NOT NULL,
   `sta_genero` char(1) DEFAULT NULL,
-  `id_tipo_contato` int(11) NOT NULL,
+  `id_tipo_contato` int NOT NULL,
   `numero_passaporte` varchar(15) DEFAULT NULL,
-  `id_pais_passaporte` int(11) DEFAULT NULL,
-  `id_titulo` int(11) DEFAULT NULL,
+  `id_pais_passaporte` int DEFAULT NULL,
+  `id_titulo` int DEFAULT NULL,
   `telefone_comercial` varchar(100) DEFAULT NULL,
   `telefone_residencial` varchar(50) DEFAULT NULL,
   `conjuge` varchar(100) DEFAULT NULL,
   `funcao` varchar(100) DEFAULT NULL,
   `nome_registro_civil` varchar(250) DEFAULT NULL,
   `nome_social` varchar(250) DEFAULT NULL,
-  `id_categoria` int(11) DEFAULT NULL,
+  `id_categoria` int DEFAULT NULL,
   PRIMARY KEY (`id_contato`),
   KEY `i11_contato` (`nome`,`sin_ativo`,`sigla`),
   KEY `fk_contato_cargo` (`id_cargo`),
@@ -1356,7 +1357,7 @@ CREATE TABLE `contato` (
   CONSTRAINT `fk_contato_uf` FOREIGN KEY (`id_uf`) REFERENCES `uf` (`id_uf`),
   CONSTRAINT `fk_contato_unidade_cadastro` FOREIGN KEY (`id_unidade_cadastro`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_contato_usuario_cadastro` FOREIGN KEY (`id_usuario_cadastro`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1375,12 +1376,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `controle_interno`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `controle_interno` (
-  `id_controle_interno` int(11) NOT NULL,
+  `id_controle_interno` int NOT NULL,
   `descricao` varchar(250) NOT NULL,
   PRIMARY KEY (`id_controle_interno`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1398,12 +1399,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `controle_prazo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `controle_prazo` (
-  `id_controle_prazo` int(11) NOT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_controle_prazo` int NOT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
   `dta_prazo` datetime NOT NULL,
   `dta_conclusao` datetime DEFAULT NULL,
   PRIMARY KEY (`id_controle_prazo`),
@@ -1416,7 +1417,7 @@ CREATE TABLE `controle_prazo` (
   CONSTRAINT `fk_controle_prazo_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
   CONSTRAINT `fk_controle_prazo_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_controle_prazo_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1434,15 +1435,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `controle_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `controle_unidade` (
-  `id_controle_unidade` bigint(20) NOT NULL,
-  `id_procedimento` bigint(20) NOT NULL,
-  `id_situacao` int(11) NOT NULL,
+  `id_controle_unidade` bigint NOT NULL,
+  `id_procedimento` bigint NOT NULL,
+  `id_situacao` int NOT NULL,
   `dth_snapshot` datetime NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_usuario` int NOT NULL,
   `dth_execucao` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1460,17 +1461,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `cpad`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cpad` (
-  `id_cpad` int(11) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
+  `id_cpad` int NOT NULL,
+  `id_orgao` int NOT NULL,
   `sigla` varchar(30) NOT NULL,
   `descricao` varchar(100) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_cpad`),
   KEY `fk_cpad_orgao` (`id_orgao`),
   CONSTRAINT `fk_cpad_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1488,22 +1489,22 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `cpad_avaliacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cpad_avaliacao` (
-  `id_cpad_avaliacao` int(11) NOT NULL,
-  `id_avaliacao_documental` int(11) NOT NULL,
-  `id_cpad_composicao` int(11) NOT NULL,
+  `id_cpad_avaliacao` int NOT NULL,
+  `id_avaliacao_documental` int NOT NULL,
+  `id_cpad_composicao` int NOT NULL,
   `dth_avaliacao` datetime NOT NULL,
   `sta_cpad_avaliacao` char(1) NOT NULL,
-  `motivo` longtext DEFAULT NULL,
-  `justificativa` longtext DEFAULT NULL,
+  `motivo` longtext,
+  `justificativa` longtext,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_cpad_avaliacao`),
   KEY `fk_cpad_avaliacao_cpad_comp` (`id_cpad_composicao`),
   KEY `fk_cpad_avaliacao_aval_doc` (`id_avaliacao_documental`),
   CONSTRAINT `fk_cpad_avaliacao_aval_doc` FOREIGN KEY (`id_avaliacao_documental`) REFERENCES `avaliacao_documental` (`id_avaliacao_documental`),
   CONSTRAINT `fk_cpad_avaliacao_cpad_comp` FOREIGN KEY (`id_cpad_composicao`) REFERENCES `cpad_composicao` (`id_cpad_composicao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1521,14 +1522,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `cpad_composicao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cpad_composicao` (
-  `id_cpad_composicao` int(11) NOT NULL,
-  `id_cpad_versao` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_cargo` int(11) NOT NULL,
+  `id_cpad_composicao` int NOT NULL,
+  `id_cpad_versao` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_cargo` int NOT NULL,
   `sin_presidente` char(1) NOT NULL,
-  `ordem` int(11) NOT NULL,
+  `ordem` int NOT NULL,
   PRIMARY KEY (`id_cpad_composicao`),
   KEY `fk_cpad_composicao_cpad_versao` (`id_cpad_versao`),
   KEY `fk_cpad_composicao_usuario` (`id_usuario`),
@@ -1536,7 +1537,7 @@ CREATE TABLE `cpad_composicao` (
   CONSTRAINT `fk_cpad_composicao_cargo` FOREIGN KEY (`id_cargo`) REFERENCES `cargo` (`id_cargo`),
   CONSTRAINT `fk_cpad_composicao_cpad_versao` FOREIGN KEY (`id_cpad_versao`) REFERENCES `cpad_versao` (`id_cpad_versao`),
   CONSTRAINT `fk_cpad_composicao_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1554,17 +1555,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `cpad_versao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cpad_versao` (
-  `id_cpad_versao` int(11) NOT NULL,
-  `id_cpad` int(11) NOT NULL,
+  `id_cpad_versao` int NOT NULL,
+  `id_cpad` int NOT NULL,
   `sigla` varchar(30) NOT NULL,
   `descricao` varchar(100) NOT NULL,
   `dth_versao` datetime NOT NULL,
   `sin_editavel` char(1) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
-  `id_usuario` int(11) DEFAULT NULL,
-  `id_unidade` int(11) DEFAULT NULL,
+  `id_usuario` int DEFAULT NULL,
+  `id_unidade` int DEFAULT NULL,
   PRIMARY KEY (`id_cpad_versao`),
   KEY `fk_cpad_versao_usuario` (`id_usuario`),
   KEY `fk_cpad_versao_unidade` (`id_unidade`),
@@ -1572,7 +1573,7 @@ CREATE TABLE `cpad_versao` (
   CONSTRAINT `fk_cpad_versao_cpad` FOREIGN KEY (`id_cpad`) REFERENCES `cpad` (`id_cpad`),
   CONSTRAINT `fk_cpad_versao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_cpad_versao_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1590,18 +1591,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `documento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `documento` (
-  `id_documento` bigint(20) NOT NULL,
+  `id_documento` bigint NOT NULL,
   `numero` varchar(50) DEFAULT NULL,
-  `id_unidade_responsavel` int(11) NOT NULL,
-  `id_documento_edoc` bigint(20) DEFAULT NULL,
-  `id_serie` int(11) NOT NULL,
-  `id_procedimento` bigint(20) NOT NULL,
+  `id_unidade_responsavel` int NOT NULL,
+  `id_documento_edoc` bigint DEFAULT NULL,
+  `id_serie` int NOT NULL,
+  `id_procedimento` bigint NOT NULL,
   `sin_bloqueado` char(1) NOT NULL,
-  `id_conjunto_estilos` int(11) DEFAULT NULL,
-  `id_tipo_conferencia` int(11) DEFAULT NULL,
-  `id_tipo_formulario` int(11) DEFAULT NULL,
+  `id_conjunto_estilos` int DEFAULT NULL,
+  `id_tipo_conferencia` int DEFAULT NULL,
+  `id_tipo_formulario` int DEFAULT NULL,
   `sta_documento` char(1) NOT NULL,
   `nome_arvore` varchar(50) DEFAULT NULL,
   `sin_arquivamento` char(1) NOT NULL,
@@ -1622,14 +1623,14 @@ CREATE TABLE `documento` (
   KEY `i04_documento` (`numero`,`id_serie`),
   KEY `i06_documento` (`id_documento`,`sin_arquivamento`),
   KEY `i07_documento` (`id_documento`,`sin_versoes`),
-  CONSTRAINT `fk_documento_conjunto_estilos` FOREIGN KEY (`id_conjunto_estilos`) REFERENCES `conjunto_estilos` (`id_conjunto_estilos`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_documento_procedimento` FOREIGN KEY (`id_procedimento`) REFERENCES `procedimento` (`id_procedimento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_documento_protocolo` FOREIGN KEY (`id_documento`) REFERENCES `protocolo` (`id_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_documento_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_documento_conjunto_estilos` FOREIGN KEY (`id_conjunto_estilos`) REFERENCES `conjunto_estilos` (`id_conjunto_estilos`),
+  CONSTRAINT `fk_documento_procedimento` FOREIGN KEY (`id_procedimento`) REFERENCES `procedimento` (`id_procedimento`),
+  CONSTRAINT `fk_documento_protocolo` FOREIGN KEY (`id_documento`) REFERENCES `protocolo` (`id_protocolo`),
+  CONSTRAINT `fk_documento_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`),
   CONSTRAINT `fk_documento_tipo_conferencia` FOREIGN KEY (`id_tipo_conferencia`) REFERENCES `tipo_conferencia` (`id_tipo_conferencia`),
   CONSTRAINT `fk_documento_tipo_formulario` FOREIGN KEY (`id_tipo_formulario`) REFERENCES `tipo_formulario` (`id_tipo_formulario`),
-  CONSTRAINT `fk_documento_unidade_responsav` FOREIGN KEY (`id_unidade_responsavel`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_documento_unidade_responsav` FOREIGN KEY (`id_unidade_responsavel`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1647,16 +1648,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `documento_conteudo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `documento_conteudo` (
-  `id_documento` bigint(20) NOT NULL,
-  `conteudo` longtext DEFAULT NULL,
-  `conteudo_assinatura` longtext DEFAULT NULL,
+  `id_documento` bigint NOT NULL,
+  `conteudo` longtext,
+  `conteudo_assinatura` longtext,
   `crc_assinatura` char(8) DEFAULT NULL,
-  `qr_code_assinatura` longtext DEFAULT NULL,
+  `qr_code_assinatura` longtext,
   PRIMARY KEY (`id_documento`),
   CONSTRAINT `fk_doc_conteudo_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1674,14 +1675,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `documento_geracao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `documento_geracao` (
-  `id_documento` bigint(20) NOT NULL,
-  `id_documento_modelo` bigint(20) DEFAULT NULL,
-  `id_texto_padrao_interno` int(11) DEFAULT NULL,
+  `id_documento` bigint NOT NULL,
+  `id_documento_modelo` bigint DEFAULT NULL,
+  `id_texto_padrao_interno` int DEFAULT NULL,
   PRIMARY KEY (`id_documento`),
   CONSTRAINT `fk_documento_geracao_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1699,19 +1700,19 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `dominio`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dominio` (
-  `id_dominio` int(11) NOT NULL,
-  `id_atributo` int(11) NOT NULL,
+  `id_dominio` int NOT NULL,
+  `id_atributo` int NOT NULL,
   `valor` varchar(50) NOT NULL,
   `rotulo` varchar(100) NOT NULL,
-  `ordem` int(11) NOT NULL,
+  `ordem` int NOT NULL,
   `sin_padrao` char(1) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_dominio`),
   KEY `fk_dominio_atributo` (`id_atributo`),
   CONSTRAINT `fk_dominio_atributo` FOREIGN KEY (`id_atributo`) REFERENCES `atributo` (`id_atributo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1729,12 +1730,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `edital_eliminacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `edital_eliminacao` (
-  `id_edital_eliminacao` int(11) NOT NULL,
-  `id_procedimento` bigint(20) DEFAULT NULL,
-  `id_documento` bigint(20) DEFAULT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_edital_eliminacao` int NOT NULL,
+  `id_procedimento` bigint DEFAULT NULL,
+  `id_documento` bigint DEFAULT NULL,
+  `id_unidade` int NOT NULL,
   `especificacao` varchar(100) NOT NULL,
   `dta_publicacao` datetime DEFAULT NULL,
   `sta_edital_eliminacao` char(1) NOT NULL,
@@ -1745,7 +1746,7 @@ CREATE TABLE `edital_eliminacao` (
   CONSTRAINT `fk_edital_eliminacao_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`),
   CONSTRAINT `fk_edital_eliminacao_proced` FOREIGN KEY (`id_procedimento`) REFERENCES `procedimento` (`id_procedimento`),
   CONSTRAINT `fk_edital_eliminacao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1763,12 +1764,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `edital_eliminacao_conteudo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `edital_eliminacao_conteudo` (
-  `id_edital_eliminacao_conteudo` int(11) NOT NULL,
-  `id_avaliacao_documental` int(11) NOT NULL,
-  `id_edital_eliminacao` int(11) NOT NULL,
-  `id_usuario_inclusao` int(11) NOT NULL,
+  `id_edital_eliminacao_conteudo` int NOT NULL,
+  `id_avaliacao_documental` int NOT NULL,
+  `id_edital_eliminacao` int NOT NULL,
+  `id_usuario_inclusao` int NOT NULL,
   `dth_inclusao` datetime NOT NULL,
   PRIMARY KEY (`id_edital_eliminacao_conteudo`),
   KEY `fk_rel_aval_doc_ed_eli_av_doc` (`id_avaliacao_documental`),
@@ -1777,7 +1778,7 @@ CREATE TABLE `edital_eliminacao_conteudo` (
   CONSTRAINT `fk_edital_elim_cont_usu_inclus` FOREIGN KEY (`id_usuario_inclusao`) REFERENCES `usuario` (`id_usuario`),
   CONSTRAINT `fk_rel_aval_doc_ed_eli_av_doc` FOREIGN KEY (`id_avaliacao_documental`) REFERENCES `avaliacao_documental` (`id_avaliacao_documental`),
   CONSTRAINT `fk_rel_aval_doc_ed_eli_ed_eli` FOREIGN KEY (`id_edital_eliminacao`) REFERENCES `edital_eliminacao` (`id_edital_eliminacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1795,16 +1796,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `edital_eliminacao_erro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `edital_eliminacao_erro` (
-  `id_edital_eliminacao_erro` int(11) NOT NULL,
-  `id_edital_eliminacao_conteudo` int(11) NOT NULL,
+  `id_edital_eliminacao_erro` int NOT NULL,
+  `id_edital_eliminacao_conteudo` int NOT NULL,
   `dth_erro` datetime NOT NULL,
   `texto_erro` varchar(4000) NOT NULL,
   PRIMARY KEY (`id_edital_eliminacao_erro`),
   KEY `fk_edit_elim_erro_edit_eli_con` (`id_edital_eliminacao_conteudo`),
   CONSTRAINT `fk_edit_elim_erro_edit_eli_con` FOREIGN KEY (`id_edital_eliminacao_conteudo`) REFERENCES `edital_eliminacao_conteudo` (`id_edital_eliminacao_conteudo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1822,17 +1823,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `email_grupo_email`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `email_grupo_email` (
-  `id_email_grupo_email` int(11) NOT NULL,
-  `id_grupo_email` int(11) NOT NULL,
+  `id_email_grupo_email` int NOT NULL,
+  `id_grupo_email` int NOT NULL,
   `email` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `idx_email_grupo_email` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id_email_grupo_email`),
   KEY `fk_email_grupo_email_grupo_em` (`id_grupo_email`),
   CONSTRAINT `fk_email_grupo_email_grupo_em` FOREIGN KEY (`id_grupo_email`) REFERENCES `grupo_email` (`id_grupo_email`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1850,9 +1851,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `email_sistema`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `email_sistema` (
-  `id_email_sistema` int(11) NOT NULL,
+  `id_email_sistema` int NOT NULL,
   `descricao` varchar(250) NOT NULL,
   `de` varchar(250) NOT NULL,
   `para` varchar(250) NOT NULL,
@@ -1862,7 +1863,7 @@ CREATE TABLE `email_sistema` (
   `id_email_sistema_modulo` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_email_sistema`),
   UNIQUE KEY `i01_email_sistema` (`id_email_sistema_modulo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1881,17 +1882,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `email_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `email_unidade` (
-  `id_email_unidade` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_email_unidade` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `email` varchar(50) NOT NULL,
   `descricao` varchar(250) NOT NULL,
-  `sequencia` int(11) NOT NULL,
+  `sequencia` int NOT NULL,
   PRIMARY KEY (`id_email_unidade`),
   KEY `fk_email_unidade_unidade` (`id_unidade`),
-  CONSTRAINT `fk_email_unidade_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_email_unidade_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1910,15 +1911,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `email_utilizado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `email_utilizado` (
-  `id_email_utilizado` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_email_utilizado` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `email` varchar(300) NOT NULL,
   PRIMARY KEY (`id_email_utilizado`),
   KEY `fk_email_utilizado_unidade` (`id_unidade`),
   CONSTRAINT `fk_email_utilizado_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1936,23 +1937,23 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `estatisticas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `estatisticas` (
-  `id_estatisticas` bigint(20) NOT NULL,
-  `id_procedimento` bigint(20) DEFAULT NULL,
-  `id_documento` bigint(20) DEFAULT NULL,
-  `id_unidade` int(11) DEFAULT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `ano` int(11) DEFAULT NULL,
-  `mes` int(11) DEFAULT NULL,
-  `tempo_aberto` bigint(20) DEFAULT NULL,
+  `id_estatisticas` bigint NOT NULL,
+  `id_procedimento` bigint DEFAULT NULL,
+  `id_documento` bigint DEFAULT NULL,
+  `id_unidade` int DEFAULT NULL,
+  `id_usuario` int NOT NULL,
+  `ano` int DEFAULT NULL,
+  `mes` int DEFAULT NULL,
+  `tempo_aberto` bigint DEFAULT NULL,
   `dth_snapshot` datetime NOT NULL,
   `dth_abertura` datetime DEFAULT NULL,
   `dth_conclusao` datetime DEFAULT NULL,
-  `id_tipo_procedimento` int(11) DEFAULT NULL,
-  `quantidade` bigint(20) DEFAULT NULL,
+  `id_tipo_procedimento` int DEFAULT NULL,
+  `quantidade` bigint DEFAULT NULL,
   KEY `i01_estatisticas` (`id_estatisticas`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1970,13 +1971,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `estilo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `estilo` (
-  `id_estilo` int(11) NOT NULL,
+  `id_estilo` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `formatacao` longtext NOT NULL,
   PRIMARY KEY (`id_estilo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1995,18 +1996,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `etapa_trabalho`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `etapa_trabalho` (
-  `id_etapa_trabalho` int(11) NOT NULL,
-  `id_plano_trabalho` int(11) NOT NULL,
+  `id_etapa_trabalho` int NOT NULL,
+  `id_plano_trabalho` int NOT NULL,
   `nome` varchar(100) NOT NULL,
   `descricao` varchar(4000) DEFAULT NULL,
-  `ordem` int(11) NOT NULL,
+  `ordem` int NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_etapa_trabalho`),
   KEY `fk_etapa_trab_plano_trab` (`id_plano_trabalho`),
   CONSTRAINT `fk_etapa_trab_plano_trab` FOREIGN KEY (`id_plano_trabalho`) REFERENCES `plano_trabalho` (`id_plano_trabalho`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2024,12 +2025,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `feed`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feed` (
-  `id_feed` int(11) NOT NULL,
-  `conteudo` longtext DEFAULT NULL,
+  `id_feed` int NOT NULL,
+  `conteudo` longtext,
   PRIMARY KEY (`id_feed`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2047,16 +2048,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `feriado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feriado` (
-  `id_feriado` int(11) NOT NULL,
-  `id_orgao` int(11) DEFAULT NULL,
+  `id_feriado` int NOT NULL,
+  `id_orgao` int DEFAULT NULL,
   `descricao` varchar(100) NOT NULL,
   `dta_feriado` datetime NOT NULL,
   PRIMARY KEY (`id_feriado`),
   KEY `fk_feriado_orgao` (`id_orgao`),
   CONSTRAINT `fk_feriado_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2075,15 +2076,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `grupo_acompanhamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `grupo_acompanhamento` (
-  `id_grupo_acompanhamento` int(11) NOT NULL,
+  `id_grupo_acompanhamento` int NOT NULL,
   `nome` varchar(100) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
   PRIMARY KEY (`id_grupo_acompanhamento`),
   KEY `fk_grupo_acompanhamento_unidad` (`id_unidade`),
-  CONSTRAINT `fk_grupo_acompanhamento_unidad` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_grupo_acompanhamento_unidad` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2101,16 +2102,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `grupo_bloco`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `grupo_bloco` (
-  `id_grupo_bloco` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_grupo_bloco` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `nome` varchar(100) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_grupo_bloco`),
   KEY `fk_grupo_bloco_unidade` (`id_unidade`),
   CONSTRAINT `fk_grupo_bloco_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2128,18 +2129,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `grupo_contato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `grupo_contato` (
-  `id_grupo_contato` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_grupo_contato` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
   `sta_tipo` char(1) NOT NULL,
   PRIMARY KEY (`id_grupo_contato`),
   KEY `fk_grupo_contato_unidade` (`id_unidade`),
-  CONSTRAINT `fk_grupo_contato_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_grupo_contato_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2157,18 +2158,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `grupo_email`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `grupo_email` (
-  `id_grupo_email` int(11) NOT NULL,
+  `id_grupo_email` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
   `sta_tipo` char(1) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_grupo_email`),
   KEY `fk_grupo_email_unidade` (`id_unidade`),
-  CONSTRAINT `fk_grupo_email_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_grupo_email_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2186,10 +2187,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `grupo_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `grupo_federacao` (
-  `id_grupo_federacao` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_grupo_federacao` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sta_tipo` char(1) NOT NULL,
@@ -2197,7 +2198,7 @@ CREATE TABLE `grupo_federacao` (
   PRIMARY KEY (`id_grupo_federacao`),
   KEY `fk_grupo_federacao_unidade` (`id_unidade`),
   CONSTRAINT `fk_grupo_federacao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2215,15 +2216,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `grupo_protocolo_modelo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `grupo_protocolo_modelo` (
-  `id_grupo_protocolo_modelo` int(11) NOT NULL,
+  `id_grupo_protocolo_modelo` int NOT NULL,
   `nome` varchar(50) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
   PRIMARY KEY (`id_grupo_protocolo_modelo`),
   KEY `fk_grupo_protocolo_modelo_unid` (`id_unidade`),
   CONSTRAINT `fk_grupo_protocolo_modelo_unid` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2241,14 +2242,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `grupo_serie`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `grupo_serie` (
-  `id_grupo_serie` int(11) NOT NULL,
+  `id_grupo_serie` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   `descricao` varchar(250) NOT NULL,
   PRIMARY KEY (`id_grupo_serie`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2267,18 +2268,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `grupo_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `grupo_unidade` (
-  `id_grupo_unidade` int(11) NOT NULL,
+  `id_grupo_unidade` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sta_tipo` char(1) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
   PRIMARY KEY (`id_grupo_unidade`),
   KEY `fk_grupo_unidade_unidade` (`id_unidade`),
   CONSTRAINT `fk_grupo_unidade_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2296,16 +2297,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `hipotese_legal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `hipotese_legal` (
-  `id_hipotese_legal` int(11) NOT NULL,
+  `id_hipotese_legal` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `base_legal` varchar(50) NOT NULL,
   `descricao` varchar(500) DEFAULT NULL,
   `sta_nivel_acesso` char(1) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_hipotese_legal`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2324,14 +2325,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `imagem_formato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `imagem_formato` (
-  `id_imagem_formato` int(11) NOT NULL,
+  `id_imagem_formato` int NOT NULL,
   `formato` varchar(10) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_imagem_formato`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2350,9 +2351,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_agendamento_tarefa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_agendamento_tarefa` (
-  `id_infra_agendamento_tarefa` int(11) NOT NULL,
+  `id_infra_agendamento_tarefa` int NOT NULL,
   `descricao` varchar(500) NOT NULL,
   `comando` varchar(255) NOT NULL,
   `sta_periodicidade_execucao` char(1) NOT NULL,
@@ -2364,7 +2365,7 @@ CREATE TABLE `infra_agendamento_tarefa` (
   `email_erro` varchar(250) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_infra_agendamento_tarefa`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2383,38 +2384,38 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_auditoria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_auditoria` (
-  `id_infra_auditoria` bigint(20) NOT NULL,
+  `id_infra_auditoria` bigint NOT NULL,
   `recurso` varchar(50) NOT NULL,
   `dth_acesso` datetime NOT NULL,
   `ip` varchar(39) DEFAULT NULL,
-  `id_usuario` int(11) DEFAULT NULL,
+  `id_usuario` int DEFAULT NULL,
   `sigla_usuario` varchar(100) DEFAULT NULL,
   `nome_usuario` varchar(100) DEFAULT NULL,
-  `id_orgao_usuario` int(11) DEFAULT NULL,
+  `id_orgao_usuario` int DEFAULT NULL,
   `sigla_orgao_usuario` varchar(30) DEFAULT NULL,
-  `id_usuario_emulador` int(11) DEFAULT NULL,
+  `id_usuario_emulador` int DEFAULT NULL,
   `sigla_usuario_emulador` varchar(100) DEFAULT NULL,
   `nome_usuario_emulador` varchar(100) DEFAULT NULL,
-  `id_orgao_usuario_emulador` int(11) DEFAULT NULL,
+  `id_orgao_usuario_emulador` int DEFAULT NULL,
   `sigla_orgao_usuario_emulador` varchar(30) DEFAULT NULL,
-  `id_unidade` int(11) DEFAULT NULL,
+  `id_unidade` int DEFAULT NULL,
   `sigla_unidade` varchar(30) DEFAULT NULL,
   `descricao_unidade` varchar(250) DEFAULT NULL,
-  `id_orgao_unidade` int(11) DEFAULT NULL,
+  `id_orgao_unidade` int DEFAULT NULL,
   `sigla_orgao_unidade` varchar(30) DEFAULT NULL,
   `servidor` varchar(250) DEFAULT NULL,
-  `user_agent` longtext DEFAULT NULL,
-  `requisicao` longtext DEFAULT NULL,
-  `operacao` longtext DEFAULT NULL,
+  `user_agent` longtext,
+  `requisicao` longtext,
+  `operacao` longtext,
   PRIMARY KEY (`id_infra_auditoria`),
   KEY `i01_infra_auditoria` (`recurso`),
   KEY `i02_infra_auditoria` (`dth_acesso`),
   KEY `i03_infra_auditoria` (`sigla_usuario`),
   KEY `i04_infra_auditoria` (`sigla_unidade`),
   KEY `i05_infra_auditoria` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2432,16 +2433,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_captcha`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_captcha` (
   `identificacao` varchar(50) NOT NULL,
-  `dia` int(11) NOT NULL,
-  `mes` int(11) NOT NULL,
-  `ano` int(11) NOT NULL,
-  `acertos` bigint(20) NOT NULL,
-  `erros` bigint(20) NOT NULL,
+  `dia` int NOT NULL,
+  `mes` int NOT NULL,
+  `ano` int NOT NULL,
+  `acertos` bigint NOT NULL,
+  `erros` bigint NOT NULL,
   PRIMARY KEY (`identificacao`,`dia`,`mes`,`ano`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2459,16 +2460,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_captcha_tentativa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_captcha_tentativa` (
   `identificacao` varchar(50) NOT NULL,
   `id_usuario_origem` varchar(100) NOT NULL,
-  `tentativas` int(11) NOT NULL,
+  `tentativas` int NOT NULL,
   `dth_tentativa` datetime NOT NULL,
   `user_agent` varchar(500) NOT NULL,
   `ip` varchar(15) NOT NULL,
   PRIMARY KEY (`identificacao`,`id_usuario_origem`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2486,13 +2487,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_dado_usuario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_dado_usuario` (
-  `id_usuario` int(11) NOT NULL,
+  `id_usuario` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `valor` varchar(4000) DEFAULT NULL,
   PRIMARY KEY (`id_usuario`,`nome`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2511,16 +2512,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_erro_php`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_erro_php` (
   `id_infra_erro_php` varchar(32) NOT NULL,
-  `sta_tipo` int(11) NOT NULL,
+  `sta_tipo` int NOT NULL,
   `arquivo` varchar(255) NOT NULL,
-  `linha` int(11) NOT NULL,
+  `linha` int NOT NULL,
   `erro` varchar(4000) NOT NULL,
   `dth_cadastro` datetime NOT NULL,
   PRIMARY KEY (`id_infra_erro_php`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2538,16 +2539,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_log` (
-  `id_infra_log` bigint(20) NOT NULL,
+  `id_infra_log` bigint NOT NULL,
   `dth_log` datetime DEFAULT NULL,
   `texto_log` longtext NOT NULL,
   `ip` varchar(39) DEFAULT NULL,
   `sta_tipo` char(1) NOT NULL,
   PRIMARY KEY (`id_infra_log`),
   KEY `i01_infra_log` (`sta_tipo`,`dth_log`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2556,6 +2557,7 @@ CREATE TABLE `infra_log` (
 
 LOCK TABLES `infra_log` WRITE;
 /*!40000 ALTER TABLE `infra_log` DISABLE KEYS */;
+INSERT INTO `infra_log` VALUES (1,'2025-01-22 15:20:01','Agendamento FALHOU (8ec61158b840)\n\nServidor: 8ec61158b840\n\nData/Hora: 22/01/2025 15:20:01\n\nComando: AgendamentoRN::processarFederacao()\n\nErro: Descrição:\nException: \'Warning: /opt/infra/infra_php/formularios/rn/InfraAgendamentoTarefaRN.php linha:634.\nUndefined array key 1\n\' in /opt/infra/infra_php/Infra.php:264\nStack trace:\n#0 /opt/infra/infra_php/formularios/rn/InfraAgendamentoTarefaRN.php(634): infraGerarExcecao()\n#1 /opt/infra/infra_php/InfraAgendamentoTarefa.php(218): InfraAgendamentoTarefaRN->executar()\n#2 /opt/sei/scripts/AgendamentoTarefaSEI.php(27): InfraAgendamentoTarefa->executar()\n#3 {main}\n\nMensagem:\n\'Warning: /opt/infra/infra_php/formularios/rn/InfraAgendamentoTarefaRN.php linha:634.\nUndefined array key 1\n\'\n\nTrilha de Processamento:\n#0 /opt/infra/infra_php/formularios/rn/InfraAgendamentoTarefaRN.php(634): infraGerarExcecao()\n#1 /opt/infra/infra_php/InfraAgendamentoTarefa.php(218): InfraAgendamentoTarefaRN->executar()\n#2 /opt/sei/scripts/AgendamentoTarefaSEI.php(27): InfraAgendamentoTarefa->executar()\n#3 {main}',NULL,'E'),(2,'2025-01-22 15:20:01','Erro executando agendamentos.\n\nValidação:\nFalha na conexão com o servidor de e-mails.\n\nTrilha de Processamento:\n#0 /opt/infra/infra_php/InfraAgendamentoTarefa.php(254): InfraMail::enviarConfigurado()\n#1 /opt/sei/scripts/AgendamentoTarefaSEI.php(27): InfraAgendamentoTarefa->executar()\n#2 {main}',NULL,'E');
 /*!40000 ALTER TABLE `infra_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2565,9 +2567,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_navegador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_navegador` (
-  `id_infra_navegador` bigint(20) NOT NULL,
+  `id_infra_navegador` bigint NOT NULL,
   `identificacao` varchar(50) NOT NULL,
   `versao` varchar(20) DEFAULT NULL,
   `user_agent` varchar(4000) NOT NULL,
@@ -2575,7 +2577,7 @@ CREATE TABLE `infra_navegador` (
   `dth_acesso` datetime NOT NULL,
   PRIMARY KEY (`id_infra_navegador`),
   KEY `i01_infra_navegador` (`dth_acesso`,`identificacao`,`versao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2594,12 +2596,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_parametro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_parametro` (
   `nome` varchar(100) NOT NULL,
-  `valor` longtext DEFAULT NULL,
+  `valor` longtext,
   PRIMARY KEY (`nome`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2608,7 +2610,7 @@ CREATE TABLE `infra_parametro` (
 
 LOCK TABLES `infra_parametro` WRITE;
 /*!40000 ALTER TABLE `infra_parametro` DISABLE KEYS */;
-INSERT INTO `infra_parametro` VALUES ('ABC_ID_TIPO_CONTATO_UNIDADES','5'),('ABC_ID_TIPO_CONTATO_USUARIOS','1'),('ID_MODELO_INTERNO_BASE_CONHECIMENTO','40'),('ID_PAIS_BRASIL','76'),('ID_SERIE_EDITAL_ELIMINACAO',''),('ID_SERIE_EDITAL_ELIMINACAO_LISTAGEM_ELIMINADOS',''),('ID_SERIE_EMAIL','30'),('ID_SERIE_OUVIDORIA','86'),('ID_TIPO_CONTATO_ORGAOS','6'),('ID_TIPO_CONTATO_SISTEMAS','2'),('ID_TIPO_CONTATO_TEMPORARIO','4'),('ID_TIPO_CONTATO_USUARIOS_EXTERNOS','3'),('ID_TIPO_PROCEDIMENTO_ELIMINACAO',''),('ID_UNIDADE_TESTE','110000001'),('ID_USUARIO_INTERNET','4'),('ID_USUARIO_INTRANET','3'),('ID_USUARIO_SEI','1'),('ID_USUARIO_SIP','2'),('SEI_ACESSO_FORMULARIO_OUVIDORIA','0'),('SEI_ALTERACAO_NIVEL_ACESSO_DOCUMENTO','1'),('SEI_DATA_CORTE_SINALIZADOR_PARA_ARQUIVAMENTO',''),('SEI_EMAIL_ADMINISTRADOR','teste@dominio.gov.br'),('SEI_EMAIL_CONVERTER_ANEXO_HTML_PARA_PDF','0'),('SEI_EMAIL_SISTEMA','naoresponda@dominio.gov.br'),('SEI_EXIBIR_ARVORE_RESTRITO_SEM_ACESSO','1'),('SEI_FEDERACAO_NOME_TIPO_PROCESSO','0'),('SEI_FEDERACAO_NUMERO_PROCESSO','1'),('SEI_HABILITAR_ACESSO_EXTERNO_INCLUSAO_DOCUMENTO','0'),('SEI_HABILITAR_AUTENTICACAO_DOCUMENTO_EXTERNO','1'),('SEI_HABILITAR_CONSULTA_PROCESSUAL','0'),('SEI_HABILITAR_GRAU_SIGILO','0'),('SEI_HABILITAR_HIPOTESE_LEGAL','2'),('SEI_HABILITAR_MOVER_DOCUMENTO','2'),('SEI_HABILITAR_NUMERO_PROCESSO_INFORMADO','1'),('SEI_HABILITAR_VALIDACAO_CPF_CERTIFICADO_DIGITAL','1'),('SEI_HABILITAR_VALIDACAO_EXTENSAO_ARQUIVOS','1'),('SEI_HABILITAR_VERIFICACAO_REPOSITORIO','0'),('SEI_ID_SISTEMA','100000100'),('SEI_ID_TIPO_PROCEDIMENTO_FEDERACAO','100000424'),('SEI_MASCARA_ASSUNTO',NULL),('SEI_MASCARA_NUMERO_PROCESSO_INFORMADO','#####.######/####-##'),('SEI_MAX_TAM_MENSAGEM_OUVIDORIA','4000'),('SEI_MSG_AVISO_CADASTRO_USUARIO_EXTERNO','ATENÇÃO! Cadastro destinado a pessoas físicas que estejam com demandas em PROCESSOS ADMINISTRATIVOS na instituição.'),('SEI_MSG_FORMULARIO_OUVIDORIA',''),('SEI_NUM_DIAS_PRAZO_ELIMINACAO',''),('SEI_NUM_MAX_DOCS_PASTA','20'),('SEI_NUM_MAX_PROTOCOLOS_BLOCO','1000'),('SEI_NUM_PAGINACAO_CONTROLE_PROCESSOS','100'),('SEI_SINALIZACAO_PROCESSO','1'),('SEI_SUFIXO_EMAIL','.gov.br'),('SEI_TAM_MB_CORRETOR_DESABILITADO','2'),('SEI_TAM_MB_DOC_EXTERNO','200'),('SEI_TIPO_ASSINATURA_INTERNA','1'),('SEI_TIPO_AUTENTICACAO_INTERNA','1'),('SEI_TIPO_CAPTCHA','5'),('SEI_VERSAO','4.1.1'),('SEI_WS_NUM_MAX_DOCS','5'),('SEI_WS_PLANO_TRABALHO_INCLUSAO_DOCUMENTO','0');
+INSERT INTO `infra_parametro` VALUES ('ABC_ID_TIPO_CONTATO_UNIDADES','5'),('ABC_ID_TIPO_CONTATO_USUARIOS','1'),('ID_MODELO_INTERNO_BASE_CONHECIMENTO','40'),('ID_PAIS_BRASIL','76'),('ID_SERIE_EDITAL_ELIMINACAO',''),('ID_SERIE_EDITAL_ELIMINACAO_LISTAGEM_ELIMINADOS',''),('ID_SERIE_EMAIL','30'),('ID_SERIE_OUVIDORIA','86'),('ID_TIPO_CONTATO_ORGAOS','6'),('ID_TIPO_CONTATO_SISTEMAS','2'),('ID_TIPO_CONTATO_TEMPORARIO','4'),('ID_TIPO_CONTATO_USUARIOS_EXTERNOS','3'),('ID_TIPO_PROCEDIMENTO_ELIMINACAO',''),('ID_UNIDADE_TESTE','110000001'),('ID_USUARIO_INTERNET','4'),('ID_USUARIO_INTRANET','3'),('ID_USUARIO_SEI','1'),('ID_USUARIO_SIP','2'),('SEI_ACESSO_FORMULARIO_OUVIDORIA','0'),('SEI_ALTERACAO_NIVEL_ACESSO_DOCUMENTO','1'),('SEI_DATA_CORTE_SINALIZADOR_PARA_ARQUIVAMENTO',''),('SEI_EMAIL_ADMINISTRADOR','teste@dominio.gov.br'),('SEI_EMAIL_CONVERTER_ANEXO_HTML_PARA_PDF','0'),('SEI_EMAIL_SISTEMA','naoresponda@dominio.gov.br'),('SEI_EXIBIR_ARVORE_RESTRITO_SEM_ACESSO','1'),('SEI_FEDERACAO_NOME_TIPO_PROCESSO','0'),('SEI_FEDERACAO_NUMERO_PROCESSO','1'),('SEI_HABILITAR_ACESSO_EXTERNO_INCLUSAO_DOCUMENTO','0'),('SEI_HABILITAR_AUTENTICACAO_DOCUMENTO_EXTERNO','1'),('SEI_HABILITAR_CONSULTA_PROCESSUAL','0'),('SEI_HABILITAR_GRAU_SIGILO','0'),('SEI_HABILITAR_HIPOTESE_LEGAL','2'),('SEI_HABILITAR_MOVER_DOCUMENTO','2'),('SEI_HABILITAR_NUMERO_PROCESSO_INFORMADO','1'),('SEI_HABILITAR_VALIDACAO_CPF_CERTIFICADO_DIGITAL','1'),('SEI_HABILITAR_VALIDACAO_EXTENSAO_ARQUIVOS','1'),('SEI_HABILITAR_VERIFICACAO_REPOSITORIO','0'),('SEI_ID_SISTEMA','100000100'),('SEI_ID_TIPO_PROCEDIMENTO_FEDERACAO','100000424'),('SEI_MASCARA_ASSUNTO',NULL),('SEI_MASCARA_NUMERO_PROCESSO_INFORMADO','#####.######/####-##'),('SEI_MAX_TAM_MENSAGEM_OUVIDORIA','4000'),('SEI_MSG_AVISO_CADASTRO_USUARIO_EXTERNO','ATENÇÃO! Cadastro destinado a pessoas físicas que estejam com demandas em PROCESSOS ADMINISTRATIVOS na instituição.'),('SEI_MSG_FORMULARIO_OUVIDORIA',''),('SEI_NUM_DIAS_PRAZO_ELIMINACAO',''),('SEI_NUM_MAX_DOCS_PASTA','20'),('SEI_NUM_MAX_PROTOCOLOS_BLOCO','1000'),('SEI_NUM_PAGINACAO_CONTROLE_PROCESSOS','100'),('SEI_SINALIZACAO_PROCESSO','1'),('SEI_SUFIXO_EMAIL','.gov.br'),('SEI_TAM_MB_CORRETOR_DESABILITADO','2'),('SEI_TAM_MB_DOC_EXTERNO','200'),('SEI_TIPO_ASSINATURA_INTERNA','1'),('SEI_TIPO_AUTENTICACAO_INTERNA','1'),('SEI_TIPO_CAPTCHA','5'),('SEI_VERSAO','4.1.3'),('SEI_WS_NUM_MAX_DOCS','5'),('SEI_WS_PLANO_TRABALHO_INCLUSAO_DOCUMENTO','0');
 /*!40000 ALTER TABLE `infra_parametro` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2618,13 +2620,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_regra_auditoria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_regra_auditoria` (
-  `id_infra_regra_auditoria` int(11) NOT NULL,
+  `id_infra_regra_auditoria` int NOT NULL,
   `descricao` varchar(250) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_infra_regra_auditoria`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2643,14 +2645,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_regra_auditoria_recurso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_regra_auditoria_recurso` (
-  `id_infra_regra_auditoria` int(11) NOT NULL,
+  `id_infra_regra_auditoria` int NOT NULL,
   `recurso` varchar(50) NOT NULL,
   PRIMARY KEY (`id_infra_regra_auditoria`,`recurso`),
   KEY `fk_inf_reg_aud_rec_inf_reg_aud` (`id_infra_regra_auditoria`),
   CONSTRAINT `fk_inf_reg_aud_rec_inf_reg_aud` FOREIGN KEY (`id_infra_regra_auditoria`) REFERENCES `infra_regra_auditoria` (`id_infra_regra_auditoria`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2669,15 +2671,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `infra_sequencia`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `infra_sequencia` (
   `nome_tabela` varchar(30) NOT NULL,
-  `qtd_incremento` bigint(20) NOT NULL,
-  `num_atual` bigint(20) NOT NULL,
-  `num_maximo` bigint(20) NOT NULL,
+  `qtd_incremento` bigint NOT NULL,
+  `num_atual` bigint NOT NULL,
+  `num_maximo` bigint NOT NULL,
   PRIMARY KEY (`nome_tabela`),
   KEY `i01_infra_sequencia` (`nome_tabela`,`num_atual`,`qtd_incremento`,`num_maximo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2696,10 +2698,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `instalacao_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `instalacao_federacao` (
   `id_instalacao_federacao` varchar(26) NOT NULL,
-  `cnpj` bigint(20) NOT NULL,
+  `cnpj` bigint NOT NULL,
   `sigla` varchar(30) NOT NULL,
   `descricao` varchar(100) NOT NULL,
   `endereco` varchar(250) NOT NULL,
@@ -2712,7 +2714,7 @@ CREATE TABLE `instalacao_federacao` (
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_instalacao_federacao`),
   UNIQUE KEY `ak_cnjp` (`cnpj`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2730,18 +2732,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `item_etapa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `item_etapa` (
-  `id_item_etapa` int(11) NOT NULL,
-  `id_etapa_trabalho` int(11) NOT NULL,
+  `id_item_etapa` int NOT NULL,
+  `id_etapa_trabalho` int NOT NULL,
   `nome` varchar(100) NOT NULL,
   `descricao` varchar(4000) DEFAULT NULL,
-  `ordem` int(11) NOT NULL,
+  `ordem` int NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_item_etapa`),
   KEY `fk_item_etapa_etapa_trabalho` (`id_etapa_trabalho`),
   CONSTRAINT `fk_item_etapa_etapa_trabalho` FOREIGN KEY (`id_etapa_trabalho`) REFERENCES `etapa_trabalho` (`id_etapa_trabalho`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2759,14 +2761,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `lembrete`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lembrete` (
-  `id_lembrete` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `posicao_x` int(11) NOT NULL,
-  `posicao_y` int(11) NOT NULL,
-  `largura` int(11) NOT NULL,
-  `altura` int(11) NOT NULL,
+  `id_lembrete` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `posicao_x` int NOT NULL,
+  `posicao_y` int NOT NULL,
+  `largura` int NOT NULL,
+  `altura` int NOT NULL,
   `cor` char(7) NOT NULL,
   `cor_texto` char(7) NOT NULL,
   `dth_lembrete` datetime NOT NULL,
@@ -2775,7 +2777,7 @@ CREATE TABLE `lembrete` (
   PRIMARY KEY (`id_lembrete`),
   KEY `fk_lembrete_usuario` (`id_usuario`),
   CONSTRAINT `fk_lembrete_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2793,16 +2795,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `localizador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `localizador` (
-  `id_localizador` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_tipo_suporte` int(11) NOT NULL,
+  `id_localizador` int NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_tipo_suporte` int NOT NULL,
   `complemento` varchar(50) DEFAULT NULL,
   `sta_estado` char(1) NOT NULL,
-  `seq_localizador` int(11) NOT NULL,
-  `id_tipo_localizador` int(11) NOT NULL,
-  `id_lugar_localizador` int(11) NOT NULL,
+  `seq_localizador` int NOT NULL,
+  `id_tipo_localizador` int NOT NULL,
+  `id_lugar_localizador` int NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_localizador`),
   UNIQUE KEY `ak1_localizador` (`id_unidade`,`seq_localizador`,`id_tipo_localizador`),
@@ -2810,11 +2812,11 @@ CREATE TABLE `localizador` (
   KEY `fk_localizador_lugar_localizad` (`id_lugar_localizador`),
   KEY `fk_localizador_tipo_localizado` (`id_tipo_localizador`),
   KEY `fk_localizador_unidade` (`id_unidade`),
-  CONSTRAINT `fk_localizador_lugar_localizad` FOREIGN KEY (`id_lugar_localizador`) REFERENCES `lugar_localizador` (`id_lugar_localizador`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_localizador_tipo_localizado` FOREIGN KEY (`id_tipo_localizador`) REFERENCES `tipo_localizador` (`id_tipo_localizador`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_localizador_tipo_suporte` FOREIGN KEY (`id_tipo_suporte`) REFERENCES `tipo_suporte` (`id_tipo_suporte`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_localizador_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_localizador_lugar_localizad` FOREIGN KEY (`id_lugar_localizador`) REFERENCES `lugar_localizador` (`id_lugar_localizador`),
+  CONSTRAINT `fk_localizador_tipo_localizado` FOREIGN KEY (`id_tipo_localizador`) REFERENCES `tipo_localizador` (`id_tipo_localizador`),
+  CONSTRAINT `fk_localizador_tipo_suporte` FOREIGN KEY (`id_tipo_suporte`) REFERENCES `tipo_suporte` (`id_tipo_suporte`),
+  CONSTRAINT `fk_localizador_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2832,17 +2834,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `lugar_localizador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lugar_localizador` (
-  `id_lugar_localizador` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_lugar_localizador` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_lugar_localizador`),
   UNIQUE KEY `ak1_lugar_localizador` (`nome`,`id_unidade`),
   KEY `fk_lugar_localizador_unidade` (`id_unidade`),
-  CONSTRAINT `fk_lugar_localizador_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_lugar_localizador_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2860,16 +2862,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `mapeamento_assunto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `mapeamento_assunto` (
-  `id_assunto_origem` int(11) NOT NULL,
-  `id_assunto_destino` int(11) NOT NULL,
+  `id_assunto_origem` int NOT NULL,
+  `id_assunto_destino` int NOT NULL,
   PRIMARY KEY (`id_assunto_origem`,`id_assunto_destino`),
   KEY `fk_assunto_map_assunto_destino` (`id_assunto_destino`),
   KEY `fk_assunto_map_assunto_origem` (`id_assunto_origem`),
   CONSTRAINT `fk_assunto_map_assunto_destino` FOREIGN KEY (`id_assunto_destino`) REFERENCES `assunto` (`id_assunto`),
   CONSTRAINT `fk_assunto_map_assunto_origem` FOREIGN KEY (`id_assunto_origem`) REFERENCES `assunto` (`id_assunto`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2887,18 +2889,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `marcador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `marcador` (
-  `id_marcador` int(11) NOT NULL,
+  `id_marcador` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sin_ativo` char(1) DEFAULT NULL,
   `sta_icone` varchar(2) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
   PRIMARY KEY (`id_marcador`),
   KEY `fk_marcador_unidade` (`id_unidade`),
   CONSTRAINT `fk_marcador_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2916,13 +2918,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `modelo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `modelo` (
-  `id_modelo` int(11) NOT NULL,
+  `id_modelo` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_modelo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2941,12 +2943,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `monitoramento_servico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `monitoramento_servico` (
-  `id_monitoramento_servico` bigint(20) NOT NULL,
-  `id_servico` int(11) NOT NULL,
+  `id_monitoramento_servico` bigint NOT NULL,
+  `id_servico` int NOT NULL,
   `operacao` varchar(100) NOT NULL,
-  `tempo_execucao` bigint(20) NOT NULL,
+  `tempo_execucao` bigint NOT NULL,
   `ip_acesso` varchar(39) DEFAULT NULL,
   `dth_acesso` datetime NOT NULL,
   `servidor` varchar(250) DEFAULT NULL,
@@ -2956,7 +2958,7 @@ CREATE TABLE `monitoramento_servico` (
   KEY `i01_monitoramento_servico` (`dth_acesso`),
   KEY `i02_monitoramento_servico` (`operacao`),
   CONSTRAINT `fk_monitoram_servico_servico` FOREIGN KEY (`id_servico`) REFERENCES `servico` (`id_servico`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2974,15 +2976,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `nivel_acesso_permitido`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `nivel_acesso_permitido` (
-  `id_nivel_acesso_permitido` int(11) NOT NULL,
-  `id_tipo_procedimento` int(11) NOT NULL,
+  `id_nivel_acesso_permitido` int NOT NULL,
+  `id_tipo_procedimento` int NOT NULL,
   `sta_nivel_acesso` char(1) NOT NULL,
   PRIMARY KEY (`id_nivel_acesso_permitido`),
   KEY `fk_nivel_acesso_perm_tipo_proc` (`id_tipo_procedimento`),
-  CONSTRAINT `fk_nivel_acesso_perm_tipo_proc` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_nivel_acesso_perm_tipo_proc` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3001,14 +3003,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `notificacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `notificacao` (
-  `id_notificacao` int(11) NOT NULL,
-  `id_procedimento` bigint(20) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_notificacao` int NOT NULL,
+  `id_procedimento` bigint NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
   `dth_geracao` datetime NOT NULL,
-  `id_atividade_confirmacao` int(11) DEFAULT NULL,
+  `id_atividade_confirmacao` int DEFAULT NULL,
   PRIMARY KEY (`id_notificacao`),
   KEY `fk_notificacao_unidade` (`id_unidade`),
   KEY `fk_notificacao_usuario` (`id_usuario`),
@@ -3018,7 +3020,7 @@ CREATE TABLE `notificacao` (
   CONSTRAINT `fk_notificacao_procedimento` FOREIGN KEY (`id_procedimento`) REFERENCES `procedimento` (`id_procedimento`),
   CONSTRAINT `fk_notificacao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_notificacao_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3036,17 +3038,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `novidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `novidade` (
-  `id_novidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_novidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
   `titulo` varchar(50) NOT NULL,
   `descricao` longtext NOT NULL,
   `dth_liberacao` datetime DEFAULT NULL,
   PRIMARY KEY (`id_novidade`),
   KEY `fk_novidade_usuario` (`id_usuario`),
-  CONSTRAINT `fk_novidade_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_novidade_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3064,23 +3066,23 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `numeracao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `numeracao` (
-  `id_numeracao` int(11) NOT NULL,
-  `sequencial` int(11) NOT NULL,
-  `ano` int(11) DEFAULT NULL,
-  `id_serie` int(11) NOT NULL,
-  `id_orgao` int(11) DEFAULT NULL,
-  `id_unidade` int(11) DEFAULT NULL,
+  `id_numeracao` int NOT NULL,
+  `sequencial` int NOT NULL,
+  `ano` int DEFAULT NULL,
+  `id_serie` int NOT NULL,
+  `id_orgao` int DEFAULT NULL,
+  `id_unidade` int DEFAULT NULL,
   PRIMARY KEY (`id_numeracao`),
   UNIQUE KEY `ak_numeracao` (`ano`,`id_serie`,`id_orgao`,`id_unidade`),
   KEY `fk_numeracao_serie` (`id_serie`),
   KEY `fk_numeracao_orgao` (`id_orgao`),
   KEY `fk_numeracao_unidade` (`id_unidade`),
-  CONSTRAINT `fk_numeracao_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_numeracao_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_numeracao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_numeracao_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`),
+  CONSTRAINT `fk_numeracao_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`),
+  CONSTRAINT `fk_numeracao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3098,20 +3100,20 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `observacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `observacao` (
-  `id_observacao` int(11) NOT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_observacao` int NOT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_unidade` int NOT NULL,
   `descricao` longtext NOT NULL,
-  `idx_observacao` longtext DEFAULT NULL,
+  `idx_observacao` longtext,
   PRIMARY KEY (`id_observacao`),
   UNIQUE KEY `ak1_observacao` (`id_unidade`,`id_protocolo`),
   KEY `fk_observacao_protocolo` (`id_protocolo`),
   KEY `fk_observacao_unidade` (`id_unidade`),
-  CONSTRAINT `fk_observacao_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_observacao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_observacao_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
+  CONSTRAINT `fk_observacao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3129,24 +3131,24 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `operacao_servico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `operacao_servico` (
-  `id_operacao_servico` int(11) NOT NULL,
-  `sta_operacao_servico` int(11) NOT NULL,
-  `id_tipo_procedimento` int(11) DEFAULT NULL,
-  `id_serie` int(11) DEFAULT NULL,
-  `id_unidade` int(11) DEFAULT NULL,
-  `id_servico` int(11) DEFAULT NULL,
+  `id_operacao_servico` int NOT NULL,
+  `sta_operacao_servico` int NOT NULL,
+  `id_tipo_procedimento` int DEFAULT NULL,
+  `id_serie` int DEFAULT NULL,
+  `id_unidade` int DEFAULT NULL,
+  `id_servico` int DEFAULT NULL,
   PRIMARY KEY (`id_operacao_servico`),
   KEY `fk_oper_serv_serie` (`id_serie`),
   KEY `fk_oper_serv_servico` (`id_servico`),
   KEY `fk_oper_serv_tipo_proc` (`id_tipo_procedimento`),
   KEY `fk_oper_serv_unidade` (`id_unidade`),
-  CONSTRAINT `fk_oper_serv_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_oper_serv_servico` FOREIGN KEY (`id_servico`) REFERENCES `servico` (`id_servico`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_oper_serv_tipo_proc` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_oper_serv_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_oper_serv_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`),
+  CONSTRAINT `fk_oper_serv_servico` FOREIGN KEY (`id_servico`) REFERENCES `servico` (`id_servico`),
+  CONSTRAINT `fk_oper_serv_tipo_proc` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`),
+  CONSTRAINT `fk_oper_serv_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3164,21 +3166,21 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `ordenador_despesa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ordenador_despesa` (
-  `id_ordenador_despesa` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_ordenador_despesa` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_orgao` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `sin_padrao` char(1) NOT NULL,
   PRIMARY KEY (`id_ordenador_despesa`),
   KEY `fk_ordenador_despesa_orgao` (`id_orgao`),
   KEY `fk_ordenador_despesa_unidade` (`id_unidade`),
   KEY `fk_ordenador_despesa_usuario` (`id_usuario`),
-  CONSTRAINT `fk_ordenador_despesa_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ordenador_despesa_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ordenador_despesa_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_ordenador_despesa_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`),
+  CONSTRAINT `fk_ordenador_despesa_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
+  CONSTRAINT `fk_ordenador_despesa_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3196,13 +3198,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `orgao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orgao` (
-  `id_orgao` int(11) NOT NULL,
+  `id_orgao` int NOT NULL,
   `sigla` varchar(30) NOT NULL,
   `descricao` varchar(250) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
-  `timbre` longtext DEFAULT NULL,
+  `timbre` longtext,
   `sin_envio_processo` char(1) NOT NULL,
   `numeracao` varchar(250) DEFAULT NULL,
   `servidor_corretor_ortografico` varchar(250) DEFAULT NULL,
@@ -3210,10 +3212,10 @@ CREATE TABLE `orgao` (
   `sin_publicacao` char(1) NOT NULL,
   `codigo_sei` varchar(10) DEFAULT NULL,
   `idx_orgao` varchar(500) DEFAULT NULL,
-  `id_contato` int(11) NOT NULL,
+  `id_contato` int NOT NULL,
   `sin_federacao_envio` char(1) NOT NULL,
   `sin_federacao_recebimento` char(1) NOT NULL,
-  `id_unidade` int(11) DEFAULT NULL,
+  `id_unidade` int DEFAULT NULL,
   `id_orgao_federacao` varchar(26) DEFAULT NULL,
   `sin_consulta_processual` char(1) NOT NULL,
   PRIMARY KEY (`id_orgao`),
@@ -3223,7 +3225,7 @@ CREATE TABLE `orgao` (
   CONSTRAINT `fk_orgao_contato` FOREIGN KEY (`id_contato`) REFERENCES `contato` (`id_contato`),
   CONSTRAINT `fk_orgao_orgao_federacao` FOREIGN KEY (`id_orgao_federacao`) REFERENCES `orgao_federacao` (`id_orgao_federacao`),
   CONSTRAINT `fk_orgao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3232,7 +3234,7 @@ CREATE TABLE `orgao` (
 
 LOCK TABLES `orgao` WRITE;
 /*!40000 ALTER TABLE `orgao` DISABLE KEYS */;
-INSERT INTO `orgao` VALUES (0,'ABC','Nome Completo do Órgão','S','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','S','@cod_orgao_sei_03d@@cod_unidade_sei_02d@.@seq_anual_cod_unidade_sei_06d@/@ano_4d@-@dv_mod11_executivo_federal_2d@',NULL,'B','S','999','abc \"orgao processo eletronico\"',100000010,'N','N',NULL,NULL,'N');
+INSERT INTO `orgao` VALUES (0,'ABC','Orgao Processo Eletronico - MySql','S','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','S','@cod_orgao_sei_03d@@cod_unidade_sei_02d@.@seq_anual_cod_unidade_sei_06d@/@ano_4d@-@dv_mod11_executivo_federal_2d@',NULL,'B','S','999','abc \"orgao processo eletronico\"',100000010,'N','N',NULL,NULL,'N');
 /*!40000 ALTER TABLE `orgao` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3242,7 +3244,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `orgao_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orgao_federacao` (
   `id_orgao_federacao` varchar(26) NOT NULL,
   `id_instalacao_federacao` varchar(26) NOT NULL,
@@ -3251,7 +3253,7 @@ CREATE TABLE `orgao_federacao` (
   PRIMARY KEY (`id_orgao_federacao`),
   KEY `fk_orgao_fed_instalacao_fed` (`id_instalacao_federacao`),
   CONSTRAINT `fk_orgao_fed_instalacao_fed` FOREIGN KEY (`id_instalacao_federacao`) REFERENCES `instalacao_federacao` (`id_instalacao_federacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3269,10 +3271,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `orgao_historico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `orgao_historico` (
-  `id_orgao_historico` int(11) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
+  `id_orgao_historico` int NOT NULL,
+  `id_orgao` int NOT NULL,
   `sigla` varchar(30) NOT NULL,
   `descricao` varchar(250) NOT NULL,
   `dta_inicio` datetime NOT NULL,
@@ -3281,7 +3283,7 @@ CREATE TABLE `orgao_historico` (
   UNIQUE KEY `i02_orgao_historico` (`dta_inicio`,`dta_fim`,`id_orgao`),
   KEY `fk_orgao_historico_orgao` (`id_orgao`),
   CONSTRAINT `fk_orgao_historico_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3300,12 +3302,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `pais`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pais` (
-  `id_pais` int(11) NOT NULL,
+  `id_pais` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   PRIMARY KEY (`id_pais`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3324,7 +3326,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `parametro_acao_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `parametro_acao_federacao` (
   `id_acao_federacao` varchar(26) NOT NULL,
   `nome` varchar(50) NOT NULL,
@@ -3332,7 +3334,7 @@ CREATE TABLE `parametro_acao_federacao` (
   PRIMARY KEY (`id_acao_federacao`,`nome`),
   KEY `fk_param_acao_fed_acao_fed` (`id_acao_federacao`),
   CONSTRAINT `fk_param_acao_fed_acao_fed` FOREIGN KEY (`id_acao_federacao`) REFERENCES `acao_federacao` (`id_acao_federacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3350,24 +3352,24 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `participante`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `participante` (
-  `id_participante` int(11) NOT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_contato` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_participante` int NOT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_contato` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `sta_participacao` char(1) NOT NULL,
-  `sequencia` int(11) NOT NULL,
+  `sequencia` int NOT NULL,
   PRIMARY KEY (`id_participante`),
   UNIQUE KEY `ak1_participante` (`id_contato`,`id_protocolo`,`sta_participacao`),
   KEY `i01_participante` (`id_protocolo`,`sta_participacao`),
   KEY `fk_participante_unidade` (`id_unidade`),
   KEY `fk_participante_contato` (`id_contato`),
   KEY `fk_participante_protocolo` (`id_protocolo`),
-  CONSTRAINT `fk_participante_contato` FOREIGN KEY (`id_contato`) REFERENCES `contato` (`id_contato`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_participante_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_participante_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_participante_contato` FOREIGN KEY (`id_contato`) REFERENCES `contato` (`id_contato`),
+  CONSTRAINT `fk_participante_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
+  CONSTRAINT `fk_participante_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3385,18 +3387,18 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `pesquisa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pesquisa` (
-  `id_pesquisa` int(11) NOT NULL,
+  `id_pesquisa` int NOT NULL,
   `nome` varchar(50) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_unidade` int(11) DEFAULT NULL,
+  `id_usuario` int NOT NULL,
+  `id_unidade` int DEFAULT NULL,
   PRIMARY KEY (`id_pesquisa`),
   KEY `fk_pesquisa_usuario` (`id_usuario`),
   KEY `fk_pesquisa_unidade` (`id_unidade`),
   CONSTRAINT `fk_pesquisa_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_pesquisa_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3414,14 +3416,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `plano_trabalho`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `plano_trabalho` (
-  `id_plano_trabalho` int(11) NOT NULL,
+  `id_plano_trabalho` int NOT NULL,
   `nome` varchar(100) NOT NULL,
   `descricao` varchar(4000) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_plano_trabalho`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3439,16 +3441,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `procedimento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `procedimento` (
-  `id_procedimento` bigint(20) NOT NULL,
-  `id_tipo_procedimento` int(11) NOT NULL,
+  `id_procedimento` bigint NOT NULL,
+  `id_tipo_procedimento` int NOT NULL,
   `sta_ouvidoria` char(1) NOT NULL,
   `sin_ciencia` char(1) NOT NULL,
-  `id_plano_trabalho` int(11) DEFAULT NULL,
+  `id_plano_trabalho` int DEFAULT NULL,
   `dta_conclusao` datetime DEFAULT NULL,
   `dta_eliminacao` datetime DEFAULT NULL,
-  `id_tipo_prioridade` int(11) DEFAULT NULL,
+  `id_tipo_prioridade` int DEFAULT NULL,
   PRIMARY KEY (`id_procedimento`),
   KEY `fk_procedimento_tipo_procedime` (`id_tipo_procedimento`),
   KEY `fk_procedimento_plano_trabalho` (`id_plano_trabalho`),
@@ -3457,9 +3459,9 @@ CREATE TABLE `procedimento` (
   KEY `fk_proced_tipo_prioridade` (`id_tipo_prioridade`),
   CONSTRAINT `fk_proced_tipo_prioridade` FOREIGN KEY (`id_tipo_prioridade`) REFERENCES `tipo_prioridade` (`id_tipo_prioridade`),
   CONSTRAINT `fk_procedimento_plano_trabalho` FOREIGN KEY (`id_plano_trabalho`) REFERENCES `plano_trabalho` (`id_plano_trabalho`),
-  CONSTRAINT `fk_procedimento_protocolo` FOREIGN KEY (`id_procedimento`) REFERENCES `protocolo` (`id_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_procedimento_tipo_procedime` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_procedimento_protocolo` FOREIGN KEY (`id_procedimento`) REFERENCES `protocolo` (`id_protocolo`),
+  CONSTRAINT `fk_procedimento_tipo_procedime` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3477,22 +3479,22 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `protocolo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `protocolo` (
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_unidade_geradora` int(11) NOT NULL,
-  `id_usuario_gerador` int(11) NOT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_unidade_geradora` int NOT NULL,
+  `id_usuario_gerador` int NOT NULL,
   `protocolo_formatado` varchar(50) NOT NULL,
   `sta_protocolo` char(1) NOT NULL,
-  `id_protocolo_agrupador` bigint(20) NOT NULL,
+  `id_protocolo_agrupador` bigint NOT NULL,
   `dta_geracao` datetime NOT NULL,
   `sta_estado` char(1) NOT NULL,
-  `descricao` longtext DEFAULT NULL,
+  `descricao` longtext,
   `sta_nivel_acesso_local` char(1) NOT NULL,
   `sta_nivel_acesso_global` char(1) NOT NULL,
   `protocolo_formatado_pesquisa` varchar(50) NOT NULL,
-  `codigo_barras` longtext DEFAULT NULL,
-  `id_hipotese_legal` int(11) DEFAULT NULL,
+  `codigo_barras` longtext,
+  `id_hipotese_legal` int DEFAULT NULL,
   `sta_grau_sigilo` char(1) DEFAULT NULL,
   `sta_nivel_acesso_original` char(1) DEFAULT NULL,
   `protocolo_formatado_pesq_inv` varchar(50) NOT NULL,
@@ -3522,9 +3524,9 @@ CREATE TABLE `protocolo` (
   KEY `i17_protocolo` (`sin_eliminado`),
   CONSTRAINT `fk_protocolo_hipotese_legal` FOREIGN KEY (`id_hipotese_legal`) REFERENCES `hipotese_legal` (`id_hipotese_legal`),
   CONSTRAINT `fk_protocolo_protocolo_fed` FOREIGN KEY (`id_protocolo_federacao`) REFERENCES `protocolo_federacao` (`id_protocolo_federacao`),
-  CONSTRAINT `fk_protocolo_unidade` FOREIGN KEY (`id_unidade_geradora`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_protocolo_unidade` FOREIGN KEY (`id_unidade_geradora`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_protocolo_usuario` FOREIGN KEY (`id_usuario_gerador`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3542,7 +3544,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `protocolo_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `protocolo_federacao` (
   `id_protocolo_federacao` varchar(26) NOT NULL,
   `id_instalacao_federacao` varchar(26) NOT NULL,
@@ -3555,7 +3557,7 @@ CREATE TABLE `protocolo_federacao` (
   KEY `i02_protocolo_federacao` (`protocolo_formatado_pesquisa`),
   KEY `i03_protocolo_federacao` (`protocolo_formatado_pesq_inv`),
   CONSTRAINT `fk_protocolo_fed_inst_fed` FOREIGN KEY (`id_instalacao_federacao`) REFERENCES `instalacao_federacao` (`id_instalacao_federacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3573,13 +3575,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `protocolo_modelo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `protocolo_modelo` (
-  `id_protocolo_modelo` int(11) NOT NULL,
-  `id_grupo_protocolo_modelo` int(11) DEFAULT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
+  `id_protocolo_modelo` int NOT NULL,
+  `id_grupo_protocolo_modelo` int DEFAULT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_protocolo` bigint NOT NULL,
   `descricao` varchar(1000) DEFAULT NULL,
   `dth_alteracao` datetime NOT NULL,
   `idx_protocolo_modelo` varchar(4000) DEFAULT NULL,
@@ -3588,11 +3590,11 @@ CREATE TABLE `protocolo_modelo` (
   KEY `fk_protocolo_modelo_unidade` (`id_unidade`),
   KEY `fk_protocolo_modelo_usuario` (`id_usuario`),
   KEY `fk_protocolo_modelo_protocolo` (`id_protocolo`),
-  CONSTRAINT `fk_prot_mod_grupo_prot_mod` FOREIGN KEY (`id_grupo_protocolo_modelo`) REFERENCES `grupo_protocolo_modelo` (`id_grupo_protocolo_modelo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_protocolo_modelo_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_protocolo_modelo_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_protocolo_modelo_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_prot_mod_grupo_prot_mod` FOREIGN KEY (`id_grupo_protocolo_modelo`) REFERENCES `grupo_protocolo_modelo` (`id_grupo_protocolo_modelo`),
+  CONSTRAINT `fk_protocolo_modelo_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
+  CONSTRAINT `fk_protocolo_modelo_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
+  CONSTRAINT `fk_protocolo_modelo_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3610,24 +3612,24 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `publicacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `publicacao` (
-  `id_publicacao` int(11) NOT NULL,
+  `id_publicacao` int NOT NULL,
   `dth_agendamento` datetime NOT NULL,
   `sta_motivo` char(1) NOT NULL,
   `dta_disponibilizacao` datetime NOT NULL,
   `dta_publicacao_io` datetime DEFAULT NULL,
   `pagina_io` varchar(50) DEFAULT NULL,
-  `resumo` longtext DEFAULT NULL,
+  `resumo` longtext,
   `dta_publicacao` datetime DEFAULT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_documento` bigint(20) DEFAULT NULL,
-  `id_atividade` int(11) NOT NULL,
-  `numero` int(11) DEFAULT NULL,
-  `id_veiculo_publicacao` int(11) NOT NULL,
-  `id_veiculo_io` int(11) DEFAULT NULL,
-  `id_secao_io` int(11) DEFAULT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_documento` bigint DEFAULT NULL,
+  `id_atividade` int NOT NULL,
+  `numero` int DEFAULT NULL,
+  `id_veiculo_publicacao` int NOT NULL,
+  `id_veiculo_io` int DEFAULT NULL,
+  `id_secao_io` int DEFAULT NULL,
   PRIMARY KEY (`id_publicacao`),
   KEY `i01_publicacao` (`dta_publicacao`),
   KEY `fk_publicacao_atividade` (`id_atividade`),
@@ -3638,14 +3640,14 @@ CREATE TABLE `publicacao` (
   KEY `fk_publicacao_documento` (`id_documento`),
   KEY `fk_publicacao_unidade` (`id_unidade`),
   KEY `fk_publicacao_usuario` (`id_usuario`),
-  CONSTRAINT `fk_publicacao_atividade` FOREIGN KEY (`id_atividade`) REFERENCES `atividade` (`id_atividade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_publicacao_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_publicacao_atividade` FOREIGN KEY (`id_atividade`) REFERENCES `atividade` (`id_atividade`),
+  CONSTRAINT `fk_publicacao_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`),
   CONSTRAINT `fk_publicacao_secao_in` FOREIGN KEY (`id_secao_io`) REFERENCES `secao_imprensa_nacional` (`id_secao_imprensa_nacional`),
-  CONSTRAINT `fk_publicacao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_publicacao_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_publicacao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
+  CONSTRAINT `fk_publicacao_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`),
   CONSTRAINT `fk_publicacao_veiculo_in` FOREIGN KEY (`id_veiculo_io`) REFERENCES `veiculo_imprensa_nacional` (`id_veiculo_imprensa_nacional`),
   CONSTRAINT `fk_publicacao_veiculo_public` FOREIGN KEY (`id_veiculo_publicacao`) REFERENCES `veiculo_publicacao` (`id_veiculo_publicacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3663,25 +3665,25 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `publicacao_legado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `publicacao_legado` (
-  `id_publicacao_legado` int(11) NOT NULL,
-  `id_publicacao_legado_agrupador` int(11) NOT NULL,
+  `id_publicacao_legado` int NOT NULL,
+  `id_publicacao_legado_agrupador` int NOT NULL,
   `id_documento` varchar(20) NOT NULL,
-  `id_serie` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_serie` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `dta_publicacao_io` datetime DEFAULT NULL,
   `pagina_io` varchar(20) DEFAULT NULL,
   `dta_publicacao` datetime NOT NULL,
   `numero` varchar(30) DEFAULT NULL,
-  `resumo` longtext DEFAULT NULL,
+  `resumo` longtext,
   `conteudo_documento` longtext NOT NULL,
   `dta_geracao` datetime NOT NULL,
-  `id_orgao` int(11) NOT NULL,
+  `id_orgao` int NOT NULL,
   `protocolo_formatado` varchar(50) NOT NULL,
-  `id_secao_io` int(11) DEFAULT NULL,
-  `id_veiculo_io` int(11) DEFAULT NULL,
-  `id_veiculo_publicacao` int(11) NOT NULL,
+  `id_secao_io` int DEFAULT NULL,
+  `id_veiculo_io` int DEFAULT NULL,
+  `id_veiculo_publicacao` int NOT NULL,
   PRIMARY KEY (`id_publicacao_legado`),
   KEY `fk_publicacao_legado_serie` (`id_serie`),
   KEY `fk_publicacao_legado_unidade` (`id_unidade`),
@@ -3696,7 +3698,7 @@ CREATE TABLE `publicacao_legado` (
   CONSTRAINT `fk_public_legado_veicu_imp_nac` FOREIGN KEY (`id_veiculo_io`) REFERENCES `veiculo_imprensa_nacional` (`id_veiculo_imprensa_nacional`),
   CONSTRAINT `fk_publicacao_legado_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`),
   CONSTRAINT `fk_publicacao_legado_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3714,13 +3716,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `reabertura_programada`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reabertura_programada` (
-  `id_reabertura_programada` int(11) NOT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_atividade` int(11) DEFAULT NULL,
+  `id_reabertura_programada` int NOT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_atividade` int DEFAULT NULL,
   `dta_programada` datetime NOT NULL,
   `dth_alteracao` datetime NOT NULL,
   `dth_processamento` datetime DEFAULT NULL,
@@ -3739,7 +3741,7 @@ CREATE TABLE `reabertura_programada` (
   CONSTRAINT `fk_reabertura_prog_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
   CONSTRAINT `fk_reabertura_prog_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_reabertura_prog_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3757,16 +3759,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_acesso_ext_protocolo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_acesso_ext_protocolo` (
-  `id_acesso_externo` int(11) NOT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
+  `id_acesso_externo` int NOT NULL,
+  `id_protocolo` bigint NOT NULL,
   PRIMARY KEY (`id_acesso_externo`,`id_protocolo`),
   KEY `fk_rel_aces_ext_prot_protocolo` (`id_protocolo`),
   KEY `fk_rel_aces_ext_prot_aces_ext` (`id_acesso_externo`),
   CONSTRAINT `fk_rel_aces_ext_prot_aces_ext` FOREIGN KEY (`id_acesso_externo`) REFERENCES `acesso_externo` (`id_acesso_externo`),
   CONSTRAINT `fk_rel_aces_ext_prot_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3784,16 +3786,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_acesso_ext_serie`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_acesso_ext_serie` (
-  `id_acesso_externo` int(11) NOT NULL,
-  `id_serie` int(11) NOT NULL,
+  `id_acesso_externo` int NOT NULL,
+  `id_serie` int NOT NULL,
   PRIMARY KEY (`id_acesso_externo`,`id_serie`),
   KEY `fk_rel_aces_ext_serie_aces_ext` (`id_acesso_externo`),
   KEY `fk_rel_aces_ext_serie_serie` (`id_serie`),
   CONSTRAINT `fk_rel_aces_ext_serie_aces_ext` FOREIGN KEY (`id_acesso_externo`) REFERENCES `acesso_externo` (`id_acesso_externo`),
   CONSTRAINT `fk_rel_aces_ext_serie_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3811,16 +3813,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_assinante_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_assinante_unidade` (
-  `id_unidade` int(11) NOT NULL,
-  `id_assinante` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_assinante` int NOT NULL,
   PRIMARY KEY (`id_unidade`,`id_assinante`),
   KEY `fk_rel_assinante_uni_assinante` (`id_assinante`),
   KEY `fk_rel_assinante_uni_unidade` (`id_unidade`),
-  CONSTRAINT `fk_rel_assinante_uni_assinante` FOREIGN KEY (`id_assinante`) REFERENCES `assinante` (`id_assinante`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_rel_assinante_uni_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_rel_assinante_uni_assinante` FOREIGN KEY (`id_assinante`) REFERENCES `assinante` (`id_assinante`),
+  CONSTRAINT `fk_rel_assinante_uni_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3829,7 +3831,7 @@ CREATE TABLE `rel_assinante_unidade` (
 
 LOCK TABLES `rel_assinante_unidade` WRITE;
 /*!40000 ALTER TABLE `rel_assinante_unidade` DISABLE KEYS */;
-INSERT INTO `rel_assinante_unidade` VALUES (110000001,1),(110000001,2),(110000001,3),(110000001,4),(110000001,5),(110000001,6),(110000001,7),(110000001,8),(110000001,9),(110000001,10),(110000001,11),(110000001,12),(110000001,13),(110000001,14),(110000001,15),(110000001,16),(110000001,17),(110000001,18),(110000001,19),(110000001,20),(110000001,21),(110000002,1),(110000002,2),(110000002,3),(110000002,4),(110000002,5),(110000002,6),(110000002,7),(110000002,8),(110000002,9),(110000002,10),(110000002,11),(110000002,12),(110000002,13),(110000002,14),(110000002,15),(110000002,16),(110000002,17),(110000002,18),(110000002,19),(110000002,20),(110000002,21),(110000003,1),(110000003,2),(110000003,3),(110000003,4),(110000003,5),(110000003,6),(110000003,7),(110000003,8),(110000003,9),(110000003,10),(110000003,11),(110000003,12),(110000003,13),(110000003,14),(110000003,15),(110000003,16),(110000003,17),(110000003,18),(110000003,19),(110000003,20),(110000003,21);
+INSERT INTO `rel_assinante_unidade` VALUES (110000001,1),(110000002,1),(110000003,1),(110000001,2),(110000002,2),(110000003,2),(110000001,3),(110000002,3),(110000003,3),(110000001,4),(110000002,4),(110000003,4),(110000001,5),(110000002,5),(110000003,5),(110000001,6),(110000002,6),(110000003,6),(110000001,7),(110000002,7),(110000003,7),(110000001,8),(110000002,8),(110000003,8),(110000001,9),(110000002,9),(110000003,9),(110000001,10),(110000002,10),(110000003,10),(110000001,11),(110000002,11),(110000003,11),(110000001,12),(110000002,12),(110000003,12),(110000001,13),(110000002,13),(110000003,13),(110000001,14),(110000002,14),(110000003,14),(110000001,15),(110000002,15),(110000003,15),(110000001,16),(110000002,16),(110000003,16),(110000001,17),(110000002,17),(110000003,17),(110000001,18),(110000002,18),(110000003,18),(110000001,19),(110000002,19),(110000003,19),(110000001,20),(110000002,20),(110000003,20),(110000001,21),(110000002,21),(110000003,21);
 /*!40000 ALTER TABLE `rel_assinante_unidade` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -3839,16 +3841,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_aviso_orgao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_aviso_orgao` (
-  `id_aviso` int(11) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
+  `id_aviso` int NOT NULL,
+  `id_orgao` int NOT NULL,
   PRIMARY KEY (`id_aviso`,`id_orgao`),
   KEY `fk_rel_aviso_orgao_aviso` (`id_aviso`),
   KEY `fk_rel_aviso_orgao_orgao` (`id_orgao`),
   CONSTRAINT `fk_rel_aviso_orgao_aviso` FOREIGN KEY (`id_aviso`) REFERENCES `aviso` (`id_aviso`),
   CONSTRAINT `fk_rel_aviso_orgao_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3866,16 +3868,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_base_conhec_tipo_proced`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_base_conhec_tipo_proced` (
-  `id_tipo_procedimento` int(11) NOT NULL,
-  `id_base_conhecimento` int(11) NOT NULL,
+  `id_tipo_procedimento` int NOT NULL,
+  `id_base_conhecimento` int NOT NULL,
   PRIMARY KEY (`id_tipo_procedimento`,`id_base_conhecimento`),
   KEY `fk_rel_bc_tp_base_conhecimento` (`id_base_conhecimento`),
   KEY `fk_rel_bc_tp_tipo_procedimento` (`id_tipo_procedimento`),
-  CONSTRAINT `fk_rel_bc_tp_base_conhecimento` FOREIGN KEY (`id_base_conhecimento`) REFERENCES `base_conhecimento` (`id_base_conhecimento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_rel_bc_tp_tipo_procedimento` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_rel_bc_tp_base_conhecimento` FOREIGN KEY (`id_base_conhecimento`) REFERENCES `base_conhecimento` (`id_base_conhecimento`),
+  CONSTRAINT `fk_rel_bc_tp_tipo_procedimento` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3893,19 +3895,19 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_bloco_protocolo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_bloco_protocolo` (
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_bloco` int(11) NOT NULL,
-  `anotacao` longtext DEFAULT NULL,
-  `sequencia` int(11) NOT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_bloco` int NOT NULL,
+  `anotacao` longtext,
+  `sequencia` int NOT NULL,
   `idx_rel_bloco_protocolo` varchar(4000) DEFAULT NULL,
   PRIMARY KEY (`id_protocolo`,`id_bloco`),
   KEY `fk_rel_bloco_protocolo_bloco` (`id_bloco`),
   KEY `fk_rel_bloco_protocolo_protoco` (`id_protocolo`),
-  CONSTRAINT `fk_rel_bloco_protocolo_bloco` FOREIGN KEY (`id_bloco`) REFERENCES `bloco` (`id_bloco`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_rel_bloco_protocolo_protoco` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_rel_bloco_protocolo_bloco` FOREIGN KEY (`id_bloco`) REFERENCES `bloco` (`id_bloco`),
+  CONSTRAINT `fk_rel_bloco_protocolo_protoco` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3923,15 +3925,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_bloco_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_bloco_unidade` (
-  `id_unidade` int(11) NOT NULL,
-  `id_bloco` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_bloco` int NOT NULL,
   `sin_retornado` char(1) NOT NULL,
-  `id_usuario_atribuicao` int(11) DEFAULT NULL,
-  `id_usuario_revisao` int(11) DEFAULT NULL,
-  `id_usuario_prioridade` int(11) DEFAULT NULL,
-  `id_usuario_comentario` int(11) DEFAULT NULL,
+  `id_usuario_atribuicao` int DEFAULT NULL,
+  `id_usuario_revisao` int DEFAULT NULL,
+  `id_usuario_prioridade` int DEFAULT NULL,
+  `id_usuario_comentario` int DEFAULT NULL,
   `sin_revisao` char(1) NOT NULL,
   `sin_prioridade` char(1) NOT NULL,
   `sin_comentario` char(1) NOT NULL,
@@ -3939,7 +3941,7 @@ CREATE TABLE `rel_bloco_unidade` (
   `dth_revisao` datetime DEFAULT NULL,
   `dth_prioridade` datetime DEFAULT NULL,
   `dth_comentario` datetime DEFAULT NULL,
-  `id_grupo_bloco` int(11) DEFAULT NULL,
+  `id_grupo_bloco` int DEFAULT NULL,
   PRIMARY KEY (`id_unidade`,`id_bloco`),
   KEY `if3_rel_bloco_unidade` (`id_bloco`,`sin_retornado`),
   KEY `if4_rel_bloco_unidade` (`id_unidade`,`sin_retornado`),
@@ -3959,9 +3961,9 @@ CREATE TABLE `rel_bloco_unidade` (
   CONSTRAINT `fk_rel_blo_uni_usu_comentario` FOREIGN KEY (`id_usuario_comentario`) REFERENCES `usuario` (`id_usuario`),
   CONSTRAINT `fk_rel_blo_uni_usu_prioridade` FOREIGN KEY (`id_usuario_prioridade`) REFERENCES `usuario` (`id_usuario`),
   CONSTRAINT `fk_rel_blo_uni_usu_revisao` FOREIGN KEY (`id_usuario_revisao`) REFERENCES `usuario` (`id_usuario`),
-  CONSTRAINT `fk_rel_bloco_unidade_bloco` FOREIGN KEY (`id_bloco`) REFERENCES `bloco` (`id_bloco`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_rel_bloco_unidade_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_rel_bloco_unidade_bloco` FOREIGN KEY (`id_bloco`) REFERENCES `bloco` (`id_bloco`),
+  CONSTRAINT `fk_rel_bloco_unidade_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3979,16 +3981,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_controle_interno_orgao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_controle_interno_orgao` (
-  `id_controle_interno` int(11) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
+  `id_controle_interno` int NOT NULL,
+  `id_orgao` int NOT NULL,
   PRIMARY KEY (`id_controle_interno`,`id_orgao`),
   KEY `fk_rel_controle_interno_orgao` (`id_orgao`),
   KEY `fk_rel_controle_interno_org_id` (`id_controle_interno`),
   CONSTRAINT `fk_rel_controle_interno_org_id` FOREIGN KEY (`id_controle_interno`) REFERENCES `controle_interno` (`id_controle_interno`),
   CONSTRAINT `fk_rel_controle_interno_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4006,16 +4008,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_controle_interno_serie`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_controle_interno_serie` (
-  `id_serie` int(11) NOT NULL,
-  `id_controle_interno` int(11) NOT NULL,
+  `id_serie` int NOT NULL,
+  `id_controle_interno` int NOT NULL,
   PRIMARY KEY (`id_serie`,`id_controle_interno`),
   KEY `fk_rel_controle_interno_se_ci` (`id_controle_interno`),
   KEY `fk_rel_controle_interno_se_se` (`id_serie`),
   CONSTRAINT `fk_rel_controle_interno_se_ci` FOREIGN KEY (`id_controle_interno`) REFERENCES `controle_interno` (`id_controle_interno`),
   CONSTRAINT `fk_rel_controle_interno_se_se` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4033,16 +4035,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_controle_interno_tipo_proc`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_controle_interno_tipo_proc` (
-  `id_tipo_procedimento` int(11) NOT NULL,
-  `id_controle_interno` int(11) NOT NULL,
+  `id_tipo_procedimento` int NOT NULL,
+  `id_controle_interno` int NOT NULL,
   PRIMARY KEY (`id_tipo_procedimento`,`id_controle_interno`),
   KEY `fk_rel_contr_int_tipo_proc_ci` (`id_controle_interno`),
   KEY `fk_rel_contr_int_t_tipo_proc` (`id_tipo_procedimento`),
   CONSTRAINT `fk_rel_contr_int_t_tipo_proc` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`),
   CONSTRAINT `fk_rel_contr_int_tipo_proc_ci` FOREIGN KEY (`id_controle_interno`) REFERENCES `controle_interno` (`id_controle_interno`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4060,16 +4062,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_controle_interno_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_controle_interno_unidade` (
-  `id_controle_interno` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_controle_interno` int NOT NULL,
+  `id_unidade` int NOT NULL,
   PRIMARY KEY (`id_controle_interno`,`id_unidade`),
   KEY `fk_rel_controle_int_unid_ci` (`id_controle_interno`),
   KEY `fk_rel_controle_int_unid_unid` (`id_unidade`),
   CONSTRAINT `fk_rel_controle_int_unid_ci` FOREIGN KEY (`id_controle_interno`) REFERENCES `controle_interno` (`id_controle_interno`),
   CONSTRAINT `fk_rel_controle_int_unid_unid` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4087,16 +4089,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_grupo_contato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_grupo_contato` (
-  `id_contato` int(11) NOT NULL,
-  `id_grupo_contato` int(11) NOT NULL,
+  `id_contato` int NOT NULL,
+  `id_grupo_contato` int NOT NULL,
   PRIMARY KEY (`id_contato`,`id_grupo_contato`),
   KEY `fk_rel_grupo_contato_grupo_con` (`id_grupo_contato`),
   KEY `fk_rel_grupo_contato_contato` (`id_contato`),
-  CONSTRAINT `fk_rel_grupo_contato_contato` FOREIGN KEY (`id_contato`) REFERENCES `contato` (`id_contato`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_rel_grupo_contato_grupo_con` FOREIGN KEY (`id_grupo_contato`) REFERENCES `grupo_contato` (`id_grupo_contato`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_rel_grupo_contato_contato` FOREIGN KEY (`id_contato`) REFERENCES `contato` (`id_contato`),
+  CONSTRAINT `fk_rel_grupo_contato_grupo_con` FOREIGN KEY (`id_grupo_contato`) REFERENCES `grupo_contato` (`id_grupo_contato`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4114,16 +4116,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_grupo_fed_orgao_fed`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_grupo_fed_orgao_fed` (
-  `id_grupo_federacao` int(11) NOT NULL,
+  `id_grupo_federacao` int NOT NULL,
   `id_orgao_federacao` varchar(26) NOT NULL,
   PRIMARY KEY (`id_grupo_federacao`,`id_orgao_federacao`),
   KEY `fk_rel_grp_fed_org_fed_grp_fed` (`id_grupo_federacao`),
   KEY `fk_rel_grp_fed_org_fed_org_fed` (`id_orgao_federacao`),
   CONSTRAINT `fk_rel_grp_fed_org_fed_grp_fed` FOREIGN KEY (`id_grupo_federacao`) REFERENCES `grupo_federacao` (`id_grupo_federacao`),
   CONSTRAINT `fk_rel_grp_fed_org_fed_org_fed` FOREIGN KEY (`id_orgao_federacao`) REFERENCES `orgao_federacao` (`id_orgao_federacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4141,16 +4143,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_grupo_unidade_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_grupo_unidade_unidade` (
-  `id_unidade` int(11) NOT NULL,
-  `id_grupo_unidade` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_grupo_unidade` int NOT NULL,
   PRIMARY KEY (`id_unidade`,`id_grupo_unidade`),
   KEY `fk_rel_grupo_unid_grupo_unid` (`id_grupo_unidade`),
   KEY `fk_rel_grupo_unid_unidade` (`id_unidade`),
   CONSTRAINT `fk_rel_grupo_unid_grupo_unid` FOREIGN KEY (`id_grupo_unidade`) REFERENCES `grupo_unidade` (`id_grupo_unidade`),
   CONSTRAINT `fk_rel_grupo_unid_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4168,16 +4170,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_item_etapa_documento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_item_etapa_documento` (
-  `id_documento` bigint(20) NOT NULL,
-  `id_item_etapa` int(11) NOT NULL,
+  `id_documento` bigint NOT NULL,
+  `id_item_etapa` int NOT NULL,
   PRIMARY KEY (`id_documento`,`id_item_etapa`),
   KEY `fk_rel_item_etap_doc_documento` (`id_documento`),
   KEY `fk_rel_item_etap_doc_item_etap` (`id_item_etapa`),
   CONSTRAINT `fk_rel_item_etap_doc_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`),
   CONSTRAINT `fk_rel_item_etap_doc_item_etap` FOREIGN KEY (`id_item_etapa`) REFERENCES `item_etapa` (`id_item_etapa`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4195,16 +4197,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_item_etapa_serie`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_item_etapa_serie` (
-  `id_item_etapa` int(11) NOT NULL,
-  `id_serie` int(11) NOT NULL,
+  `id_item_etapa` int NOT NULL,
+  `id_serie` int NOT NULL,
   PRIMARY KEY (`id_serie`,`id_item_etapa`),
   KEY `fk_rel_item_etap_ser_serie` (`id_serie`),
   KEY `fk_rel_item_etap_ser_item_etap` (`id_item_etapa`),
   CONSTRAINT `fk_rel_item_etap_ser_item_etap` FOREIGN KEY (`id_item_etapa`) REFERENCES `item_etapa` (`id_item_etapa`),
   CONSTRAINT `fk_rel_item_etap_ser_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4222,16 +4224,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_item_etapa_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_item_etapa_unidade` (
-  `id_unidade` int(11) NOT NULL,
-  `id_item_etapa` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_item_etapa` int NOT NULL,
   PRIMARY KEY (`id_unidade`,`id_item_etapa`),
   KEY `fk_rel_item_etap_uni_unidade` (`id_unidade`),
   KEY `fk_rel_item_etap_uni_item_etap` (`id_item_etapa`),
   CONSTRAINT `fk_rel_item_etap_uni_item_etap` FOREIGN KEY (`id_item_etapa`) REFERENCES `item_etapa` (`id_item_etapa`),
   CONSTRAINT `fk_rel_item_etap_uni_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4249,10 +4251,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_notificacao_documento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_notificacao_documento` (
-  `id_documento` bigint(20) NOT NULL,
-  `id_notificacao` int(11) NOT NULL,
+  `id_documento` bigint NOT NULL,
+  `id_notificacao` int NOT NULL,
   `sin_processada` char(1) NOT NULL,
   PRIMARY KEY (`id_documento`,`id_notificacao`),
   KEY `i03_rel_notificacao_documento` (`id_documento`,`sin_processada`),
@@ -4260,7 +4262,7 @@ CREATE TABLE `rel_notificacao_documento` (
   KEY `fk_rel_notif_doc_notificacao` (`id_documento`),
   CONSTRAINT `fk_rel_notif_doc_documento` FOREIGN KEY (`id_notificacao`) REFERENCES `notificacao` (`id_notificacao`),
   CONSTRAINT `fk_rel_notif_doc_notificacao` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4278,16 +4280,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_orgao_pesquisa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_orgao_pesquisa` (
-  `id_orgao_1` int(11) NOT NULL,
-  `id_orgao_2` int(11) NOT NULL,
+  `id_orgao_1` int NOT NULL,
+  `id_orgao_2` int NOT NULL,
   PRIMARY KEY (`id_orgao_1`,`id_orgao_2`),
   KEY `fk_rel_orgao_pesq_org_1` (`id_orgao_1`),
   KEY `fk_rel_orgao_pesq_org_2` (`id_orgao_2`),
   CONSTRAINT `fk_rel_orgao_pesq_org_1` FOREIGN KEY (`id_orgao_1`) REFERENCES `orgao` (`id_orgao`),
   CONSTRAINT `fk_rel_orgao_pesq_org_2` FOREIGN KEY (`id_orgao_2`) REFERENCES `orgao` (`id_orgao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4305,21 +4307,21 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_protocolo_assunto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_protocolo_assunto` (
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `sequencia` int(11) NOT NULL,
-  `id_assunto_proxy` int(11) NOT NULL,
-  `id_protocolo_procedimento` bigint(20) DEFAULT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_unidade` int NOT NULL,
+  `sequencia` int NOT NULL,
+  `id_assunto_proxy` int NOT NULL,
+  `id_protocolo_procedimento` bigint DEFAULT NULL,
   PRIMARY KEY (`id_protocolo`,`id_assunto_proxy`),
   KEY `fk_rel_prot_assunto_assunto` (`id_assunto_proxy`),
   KEY `fk_rel_protocolo_assunto_uni` (`id_unidade`),
   KEY `fk_rel_prot_assunto_protocolo` (`id_protocolo`),
   CONSTRAINT `fk_rel_prot_assunto_assunto` FOREIGN KEY (`id_assunto_proxy`) REFERENCES `assunto_proxy` (`id_assunto_proxy`),
   CONSTRAINT `fk_rel_prot_assunto_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
-  CONSTRAINT `fk_rel_protocolo_assunto_uni` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_rel_protocolo_assunto_uni` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4337,17 +4339,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_protocolo_atributo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_protocolo_atributo` (
-  `id_protocolo` bigint(20) NOT NULL,
-  `id_atributo` int(11) NOT NULL,
+  `id_protocolo` bigint NOT NULL,
+  `id_atributo` int NOT NULL,
   `valor` varchar(4000) DEFAULT NULL,
   PRIMARY KEY (`id_protocolo`,`id_atributo`),
   KEY `fk_rel_prot_atributo_atributo` (`id_atributo`),
   KEY `fk_rel_prot_atributo_protocolo` (`id_protocolo`),
   CONSTRAINT `fk_rel_prot_atributo_atributo` FOREIGN KEY (`id_atributo`) REFERENCES `atributo` (`id_atributo`),
-  CONSTRAINT `fk_rel_prot_atributo_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_rel_prot_atributo_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4365,17 +4367,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_protocolo_protocolo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_protocolo_protocolo` (
-  `id_protocolo_1` bigint(20) NOT NULL,
-  `id_protocolo_2` bigint(20) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_protocolo_1` bigint NOT NULL,
+  `id_protocolo_2` bigint NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `sta_associacao` char(1) NOT NULL,
   `dth_associacao` datetime NOT NULL,
-  `sequencia` int(11) NOT NULL,
+  `sequencia` int NOT NULL,
   `sin_ciencia` char(1) NOT NULL,
-  `id_rel_protocolo_protocolo` bigint(20) NOT NULL,
+  `id_rel_protocolo_protocolo` bigint NOT NULL,
   PRIMARY KEY (`id_rel_protocolo_protocolo`),
   KEY `i01_rel_protocolo_protocolo` (`id_protocolo_2`,`id_protocolo_1`,`sta_associacao`),
   KEY `fk_protocolo_protocolo_1` (`id_protocolo_1`),
@@ -4384,9 +4386,9 @@ CREATE TABLE `rel_protocolo_protocolo` (
   KEY `fk_rel_protocolo_protocolo_uni` (`id_unidade`),
   CONSTRAINT `fk_protocolo_protocolo_1` FOREIGN KEY (`id_protocolo_1`) REFERENCES `protocolo` (`id_protocolo`),
   CONSTRAINT `fk_protocolo_protocolo_2` FOREIGN KEY (`id_protocolo_2`) REFERENCES `protocolo` (`id_protocolo`),
-  CONSTRAINT `fk_rel_proc_doc_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_rel_protocolo_protocolo_uni` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_rel_proc_doc_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`),
+  CONSTRAINT `fk_rel_protocolo_protocolo_uni` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4404,17 +4406,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_secao_mod_cj_estilos_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_secao_mod_cj_estilos_item` (
-  `id_secao_modelo` int(11) NOT NULL,
-  `id_conjunto_estilos_item` int(11) NOT NULL,
+  `id_secao_modelo` int NOT NULL,
+  `id_conjunto_estilos_item` int NOT NULL,
   `sin_padrao` char(1) NOT NULL,
   PRIMARY KEY (`id_secao_modelo`,`id_conjunto_estilos_item`),
   KEY `fk_re_secmod_cj_est_i_cj_est_i` (`id_conjunto_estilos_item`),
   KEY `fk_rel_secmod_cj_est_it_secmod` (`id_secao_modelo`),
   CONSTRAINT `fk_re_secmod_cj_est_i_cj_est_i` FOREIGN KEY (`id_conjunto_estilos_item`) REFERENCES `conjunto_estilos_item` (`id_conjunto_estilos_item`),
   CONSTRAINT `fk_rel_secmod_cj_est_it_secmod` FOREIGN KEY (`id_secao_modelo`) REFERENCES `secao_modelo` (`id_secao_modelo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4433,17 +4435,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_secao_modelo_estilo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_secao_modelo_estilo` (
-  `id_secao_modelo` int(11) NOT NULL,
-  `id_estilo` int(11) NOT NULL,
+  `id_secao_modelo` int NOT NULL,
+  `id_estilo` int NOT NULL,
   `sin_padrao` char(1) NOT NULL,
   PRIMARY KEY (`id_secao_modelo`,`id_estilo`),
   KEY `fk_rel_sec_mod_estilo_estilo` (`id_estilo`),
   KEY `fk_rel_sec_mod_estilo_sec_mod` (`id_secao_modelo`),
   CONSTRAINT `fk_rel_sec_mod_estilo_estilo` FOREIGN KEY (`id_estilo`) REFERENCES `estilo` (`id_estilo`),
   CONSTRAINT `fk_rel_sec_mod_estilo_sec_mod` FOREIGN KEY (`id_secao_modelo`) REFERENCES `secao_modelo` (`id_secao_modelo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4462,17 +4464,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_serie_assunto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_serie_assunto` (
-  `id_serie` int(11) NOT NULL,
-  `sequencia` int(11) NOT NULL,
-  `id_assunto_proxy` int(11) NOT NULL,
+  `id_serie` int NOT NULL,
+  `sequencia` int NOT NULL,
+  `id_assunto_proxy` int NOT NULL,
   PRIMARY KEY (`id_serie`,`id_assunto_proxy`),
   KEY `fk_rel_serie_assunto_assunto` (`id_assunto_proxy`),
   KEY `fk_rel_serie_assunto_serie` (`id_serie`),
   CONSTRAINT `fk_rel_serie_assunto_assunto` FOREIGN KEY (`id_assunto_proxy`) REFERENCES `assunto_proxy` (`id_assunto_proxy`),
   CONSTRAINT `fk_rel_serie_assunto_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4490,16 +4492,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_serie_plano_trabalho`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_serie_plano_trabalho` (
-  `id_serie` int(11) NOT NULL,
-  `id_plano_trabalho` int(11) NOT NULL,
+  `id_serie` int NOT NULL,
+  `id_plano_trabalho` int NOT NULL,
   PRIMARY KEY (`id_serie`,`id_plano_trabalho`),
   KEY `fk_rel_serie_plano_trab_serie` (`id_serie`),
   KEY `fk_rel_serie_plano_trab_plano` (`id_plano_trabalho`),
   CONSTRAINT `fk_rel_serie_plano_trab_plano` FOREIGN KEY (`id_plano_trabalho`) REFERENCES `plano_trabalho` (`id_plano_trabalho`),
   CONSTRAINT `fk_rel_serie_plano_trab_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4517,16 +4519,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_serie_veiculo_publicacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_serie_veiculo_publicacao` (
-  `id_serie` int(11) NOT NULL,
-  `id_veiculo_publicacao` int(11) NOT NULL,
+  `id_serie` int NOT NULL,
+  `id_veiculo_publicacao` int NOT NULL,
   PRIMARY KEY (`id_serie`,`id_veiculo_publicacao`),
   KEY `fk_rel_serie_veic_pub_veic_pub` (`id_veiculo_publicacao`),
   KEY `fk_rel_serie_veic_pub_serie` (`id_serie`),
   CONSTRAINT `fk_rel_serie_veic_pub_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`),
   CONSTRAINT `fk_rel_serie_veic_pub_veic_pub` FOREIGN KEY (`id_veiculo_publicacao`) REFERENCES `veiculo_publicacao` (`id_veiculo_publicacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4545,16 +4547,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_situacao_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_situacao_unidade` (
-  `id_unidade` int(11) NOT NULL,
-  `id_situacao` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_situacao` int NOT NULL,
   PRIMARY KEY (`id_unidade`,`id_situacao`),
   KEY `fk_rel_situacao_unid_situacao` (`id_situacao`),
   KEY `fk_rel_situacao_unid_unidade` (`id_unidade`),
   CONSTRAINT `fk_rel_situacao_unid_situacao` FOREIGN KEY (`id_situacao`) REFERENCES `situacao` (`id_situacao`),
   CONSTRAINT `fk_rel_situacao_unid_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4572,17 +4574,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_tipo_procedimento_assunto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_tipo_procedimento_assunto` (
-  `id_tipo_procedimento` int(11) NOT NULL,
-  `sequencia` int(11) NOT NULL,
-  `id_assunto_proxy` int(11) NOT NULL,
+  `id_tipo_procedimento` int NOT NULL,
+  `sequencia` int NOT NULL,
+  `id_assunto_proxy` int NOT NULL,
   PRIMARY KEY (`id_tipo_procedimento`,`id_assunto_proxy`),
   KEY `fk_rel_tipo_proc_assu_assunto` (`id_assunto_proxy`),
   KEY `fk_rel_tipo_proc_assu_tip_proc` (`id_tipo_procedimento`),
   CONSTRAINT `fk_rel_tipo_proc_assu_assunto` FOREIGN KEY (`id_assunto_proxy`) REFERENCES `assunto_proxy` (`id_assunto_proxy`),
   CONSTRAINT `fk_rel_tipo_proc_assu_tip_proc` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4601,11 +4603,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_unidade_tipo_contato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_unidade_tipo_contato` (
-  `id_rel_unidade_tipo_contato` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_tipo_contato` int(11) NOT NULL,
+  `id_rel_unidade_tipo_contato` int NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_tipo_contato` int NOT NULL,
   `sta_acesso` char(1) NOT NULL,
   PRIMARY KEY (`id_rel_unidade_tipo_contato`),
   KEY `i01_rel_unidade_tipo_contato` (`id_unidade`,`id_tipo_contato`,`sta_acesso`),
@@ -4613,7 +4615,7 @@ CREATE TABLE `rel_unidade_tipo_contato` (
   KEY `fk_rel_unid_tip_cont_unid` (`id_unidade`),
   CONSTRAINT `fk_rel_unid_tip_cont_tip_cont` FOREIGN KEY (`id_tipo_contato`) REFERENCES `tipo_contato` (`id_tipo_contato`),
   CONSTRAINT `fk_rel_unid_tip_cont_unid` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4632,16 +4634,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_usuario_grupo_acomp`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_usuario_grupo_acomp` (
-  `id_usuario` int(11) NOT NULL,
-  `id_grupo_acompanhamento` int(11) NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_grupo_acompanhamento` int NOT NULL,
   PRIMARY KEY (`id_usuario`,`id_grupo_acompanhamento`),
   KEY `fk_rel_usu_grp_acomp_usuario` (`id_usuario`),
   KEY `fk_rel_usu_grp_acomp_grp_acomp` (`id_grupo_acompanhamento`),
   CONSTRAINT `fk_rel_usu_grp_acomp_grp_acomp` FOREIGN KEY (`id_grupo_acompanhamento`) REFERENCES `grupo_acompanhamento` (`id_grupo_acompanhamento`),
   CONSTRAINT `fk_rel_usu_grp_acomp_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4659,16 +4661,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_usuario_grupo_bloco`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_usuario_grupo_bloco` (
-  `id_grupo_bloco` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_grupo_bloco` int NOT NULL,
+  `id_usuario` int NOT NULL,
   PRIMARY KEY (`id_grupo_bloco`,`id_usuario`),
   KEY `fk_rel_usu_grupo_bloco_usuario` (`id_usuario`),
   KEY `fk_rel_usu_grupo_bloco_grp_blo` (`id_grupo_bloco`),
   CONSTRAINT `fk_rel_usu_grupo_bloco_grp_blo` FOREIGN KEY (`id_grupo_bloco`) REFERENCES `grupo_bloco` (`id_grupo_bloco`),
   CONSTRAINT `fk_rel_usu_grupo_bloco_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4686,16 +4688,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_usuario_marcador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_usuario_marcador` (
-  `id_marcador` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_marcador` int NOT NULL,
+  `id_usuario` int NOT NULL,
   PRIMARY KEY (`id_marcador`,`id_usuario`),
   KEY `fk_rel_usuario_marcad_marcad` (`id_marcador`),
   KEY `fk_rel_usuario_marcad_usuario` (`id_usuario`),
   CONSTRAINT `fk_rel_usuario_marcad_marcad` FOREIGN KEY (`id_marcador`) REFERENCES `marcador` (`id_marcador`),
   CONSTRAINT `fk_rel_usuario_marcad_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4713,11 +4715,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_usuario_tipo_prioridade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_usuario_tipo_prioridade` (
-  `id_unidade` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_tipo_prioridade` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_tipo_prioridade` int NOT NULL,
   PRIMARY KEY (`id_unidade`,`id_usuario`,`id_tipo_prioridade`),
   KEY `fk_rel_uso_tipo_prio_unid` (`id_unidade`),
   KEY `fk_rel_uso_tipo_prio_usuario` (`id_usuario`),
@@ -4725,7 +4727,7 @@ CREATE TABLE `rel_usuario_tipo_prioridade` (
   CONSTRAINT `fk_rel_uso_tipo_prio_tipo_prio` FOREIGN KEY (`id_tipo_prioridade`) REFERENCES `tipo_prioridade` (`id_tipo_prioridade`),
   CONSTRAINT `fk_rel_uso_tipo_prio_unid` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_rel_uso_tipo_prio_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4743,11 +4745,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_usuario_tipo_proced`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_usuario_tipo_proced` (
-  `id_usuario` int(11) NOT NULL,
-  `id_tipo_procedimento` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_tipo_procedimento` int NOT NULL,
+  `id_unidade` int NOT NULL,
   PRIMARY KEY (`id_usuario`,`id_tipo_procedimento`,`id_unidade`),
   KEY `fk_rel_usu_tipo_proced_usu` (`id_usuario`),
   KEY `fk_rel_usu_tipo_proced_unidade` (`id_unidade`),
@@ -4755,7 +4757,7 @@ CREATE TABLE `rel_usuario_tipo_proced` (
   CONSTRAINT `fk_rel_usu_tipo_proced_tipo_pr` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`),
   CONSTRAINT `fk_rel_usu_tipo_proced_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_rel_usu_tipo_proced_usu` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4773,11 +4775,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `rel_usuario_usuario_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rel_usuario_usuario_unidade` (
-  `id_usuario` int(11) NOT NULL,
-  `id_usuario_atribuicao` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_usuario_atribuicao` int NOT NULL,
+  `id_unidade` int NOT NULL,
   PRIMARY KEY (`id_usuario`,`id_usuario_atribuicao`,`id_unidade`),
   KEY `fk_rel_usu_usu_uni_usuario` (`id_usuario`),
   KEY `fk_rel_usu_usu_uni_unidade` (`id_unidade`),
@@ -4785,7 +4787,7 @@ CREATE TABLE `rel_usuario_usuario_unidade` (
   CONSTRAINT `fk_rel_usu_usu_uni_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_rel_usu_usu_uni_usu_atrib` FOREIGN KEY (`id_usuario_atribuicao`) REFERENCES `usuario` (`id_usuario`),
   CONSTRAINT `fk_rel_usu_usu_uni_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4803,15 +4805,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `replicacao_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `replicacao_federacao` (
   `id_replicacao_federacao` varchar(26) NOT NULL,
   `id_instalacao_federacao` varchar(26) NOT NULL,
   `id_protocolo_federacao` varchar(26) NOT NULL,
-  `sta_tipo` int(11) NOT NULL,
+  `sta_tipo` int NOT NULL,
   `dth_cadastro` datetime NOT NULL,
   `dth_replicacao` datetime DEFAULT NULL,
-  `tentativa` int(11) NOT NULL,
+  `tentativa` int NOT NULL,
   `erro` varchar(4000) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_replicacao_federacao`),
@@ -4819,7 +4821,7 @@ CREATE TABLE `replicacao_federacao` (
   KEY `fk_replicacao_fed_prot_fed` (`id_protocolo_federacao`),
   CONSTRAINT `fk_replicacao_fed_inst_fed` FOREIGN KEY (`id_instalacao_federacao`) REFERENCES `instalacao_federacao` (`id_instalacao_federacao`),
   CONSTRAINT `fk_replicacao_fed_prot_fed` FOREIGN KEY (`id_protocolo_federacao`) REFERENCES `protocolo_federacao` (`id_protocolo_federacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4837,17 +4839,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `retorno_programado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `retorno_programado` (
-  `id_retorno_programado` int(11) NOT NULL,
-  `id_atividade_envio` int(11) NOT NULL,
-  `id_atividade_retorno` int(11) DEFAULT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_retorno_programado` int NOT NULL,
+  `id_atividade_envio` int NOT NULL,
+  `id_atividade_retorno` int DEFAULT NULL,
+  `id_usuario` int NOT NULL,
   `dta_programada` datetime NOT NULL,
   `dth_alteracao` datetime DEFAULT NULL,
-  `id_unidade_envio` int(11) NOT NULL,
-  `id_unidade_retorno` int(11) NOT NULL,
-  `id_protocolo` bigint(20) NOT NULL,
+  `id_unidade_envio` int NOT NULL,
+  `id_unidade_retorno` int NOT NULL,
+  `id_protocolo` bigint NOT NULL,
   PRIMARY KEY (`id_retorno_programado`),
   KEY `fk_retorno_programado_usuario` (`id_usuario`),
   KEY `fk_ret_prog_ativ_envio` (`id_atividade_envio`),
@@ -4859,13 +4861,13 @@ CREATE TABLE `retorno_programado` (
   KEY `i07_retorno_programado` (`id_unidade_envio`,`id_unidade_retorno`,`id_protocolo`,`id_atividade_retorno`),
   KEY `i08_retorno_programado` (`id_unidade_envio`,`id_unidade_retorno`,`dta_programada`),
   KEY `i09_retorno_programado` (`id_unidade_envio`,`id_unidade_retorno`,`id_protocolo`),
-  CONSTRAINT `fk_ret_prog_ativ_envio` FOREIGN KEY (`id_atividade_envio`) REFERENCES `atividade` (`id_atividade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ret_prog_ativ_retorno` FOREIGN KEY (`id_atividade_retorno`) REFERENCES `atividade` (`id_atividade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ret_prog_ativ_envio` FOREIGN KEY (`id_atividade_envio`) REFERENCES `atividade` (`id_atividade`),
+  CONSTRAINT `fk_ret_prog_ativ_retorno` FOREIGN KEY (`id_atividade_retorno`) REFERENCES `atividade` (`id_atividade`),
   CONSTRAINT `fk_ret_programado_protocolo` FOREIGN KEY (`id_protocolo`) REFERENCES `protocolo` (`id_protocolo`),
   CONSTRAINT `fk_ret_programado_uni_envio` FOREIGN KEY (`id_unidade_envio`) REFERENCES `unidade` (`id_unidade`),
   CONSTRAINT `fk_ret_programado_uni_retorno` FOREIGN KEY (`id_unidade_retorno`) REFERENCES `unidade` (`id_unidade`),
-  CONSTRAINT `fk_retorno_programado_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_retorno_programado_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4883,30 +4885,30 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `secao_documento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `secao_documento` (
-  `id_secao_documento` int(11) NOT NULL,
-  `id_secao_modelo` int(11) NOT NULL,
-  `id_documento` bigint(20) DEFAULT NULL,
-  `id_base_conhecimento` int(11) DEFAULT NULL,
-  `ordem` int(11) NOT NULL,
+  `id_secao_documento` int NOT NULL,
+  `id_secao_modelo` int NOT NULL,
+  `id_documento` bigint DEFAULT NULL,
+  `id_base_conhecimento` int DEFAULT NULL,
+  `ordem` int NOT NULL,
   `sin_somente_leitura` char(1) NOT NULL,
   `sin_assinatura` char(1) NOT NULL,
   `sin_principal` char(1) NOT NULL,
   `sin_dinamica` char(1) NOT NULL,
   `sin_cabecalho` char(1) NOT NULL,
   `sin_rodape` char(1) NOT NULL,
-  `conteudo` longtext DEFAULT NULL,
+  `conteudo` longtext,
   `sin_html` char(1) NOT NULL,
   PRIMARY KEY (`id_secao_documento`),
   KEY `i01_secao_documento` (`id_documento`,`id_base_conhecimento`,`sin_cabecalho`,`sin_rodape`),
   KEY `fk_secao_doc_secao_mod` (`id_secao_modelo`),
   KEY `fk_secao_doc_base_conhecimento` (`id_base_conhecimento`),
   KEY `fk_secao_documento_documento` (`id_documento`),
-  CONSTRAINT `fk_secao_doc_base_conhecimento` FOREIGN KEY (`id_base_conhecimento`) REFERENCES `base_conhecimento` (`id_base_conhecimento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_secao_doc_secao_mod` FOREIGN KEY (`id_secao_modelo`) REFERENCES `secao_modelo` (`id_secao_modelo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_secao_documento_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_secao_doc_base_conhecimento` FOREIGN KEY (`id_base_conhecimento`) REFERENCES `base_conhecimento` (`id_base_conhecimento`),
+  CONSTRAINT `fk_secao_doc_secao_mod` FOREIGN KEY (`id_secao_modelo`) REFERENCES `secao_modelo` (`id_secao_modelo`),
+  CONSTRAINT `fk_secao_documento_documento` FOREIGN KEY (`id_documento`) REFERENCES `documento` (`id_documento`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4924,16 +4926,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `secao_imprensa_nacional`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `secao_imprensa_nacional` (
-  `id_secao_imprensa_nacional` int(11) NOT NULL,
-  `id_veiculo_imprensa_nacional` int(11) NOT NULL,
+  `id_secao_imprensa_nacional` int NOT NULL,
+  `id_veiculo_imprensa_nacional` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id_secao_imprensa_nacional`),
   KEY `fk_secao_in_veiculo_in` (`id_veiculo_imprensa_nacional`),
   CONSTRAINT `fk_secao_in_veiculo_in` FOREIGN KEY (`id_veiculo_imprensa_nacional`) REFERENCES `veiculo_imprensa_nacional` (`id_veiculo_imprensa_nacional`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4952,13 +4954,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `secao_modelo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `secao_modelo` (
-  `id_secao_modelo` int(11) NOT NULL,
-  `id_modelo` int(11) NOT NULL,
+  `id_secao_modelo` int NOT NULL,
+  `id_modelo` int NOT NULL,
   `nome` varchar(50) NOT NULL,
-  `conteudo` longtext DEFAULT NULL,
-  `ordem` int(11) NOT NULL,
+  `conteudo` longtext,
+  `ordem` int NOT NULL,
   `sin_somente_leitura` char(1) NOT NULL,
   `sin_assinatura` char(1) NOT NULL,
   `sin_principal` char(1) NOT NULL,
@@ -4970,8 +4972,8 @@ CREATE TABLE `secao_modelo` (
   PRIMARY KEY (`id_secao_modelo`),
   KEY `fk_secao_modelo_modelo` (`id_modelo`),
   KEY `i01_secao_modelo` (`id_modelo`,`ordem`),
-  CONSTRAINT `fk_secao_modelo_modelo` FOREIGN KEY (`id_modelo`) REFERENCES `modelo` (`id_modelo`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_secao_modelo_modelo` FOREIGN KEY (`id_modelo`) REFERENCES `modelo` (`id_modelo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -4991,12 +4993,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_acesso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_acesso` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5014,12 +5016,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_acesso_externo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_acesso_externo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5037,12 +5039,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_acompanhamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_acompanhamento` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5060,12 +5062,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_andamento_instalacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_andamento_instalacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5084,12 +5086,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_andamento_marcador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_andamento_marcador` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5107,12 +5109,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_andamento_plano_trabalho`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_andamento_plano_trabalho` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5130,12 +5132,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_andamento_situacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_andamento_situacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5153,12 +5155,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_anexo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_anexo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5176,12 +5178,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_anotacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_anotacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5199,12 +5201,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_arquivo_extensao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_arquivo_extensao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5223,12 +5225,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_assinante`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_assinante` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5247,12 +5249,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_assinatura`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_assinatura` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5270,12 +5272,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_assunto`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_assunto` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=685 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=685 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5294,12 +5296,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_assunto_proxy`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_assunto_proxy` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=685 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=685 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5318,12 +5320,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_atividade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_atividade` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5341,12 +5343,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_atributo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_atributo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5364,12 +5366,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_atributo_andam_plano_trab`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_atributo_andam_plano_trab` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5387,12 +5389,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_atributo_andamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_atributo_andamento` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5410,12 +5412,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_atributo_andamento_situaca`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_atributo_andamento_situaca` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5434,12 +5436,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_atributo_instalacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_atributo_instalacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5458,12 +5460,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_auditoria_protocolo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_auditoria_protocolo` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5481,12 +5483,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_avaliacao_documental`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_avaliacao_documental` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5504,12 +5506,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_aviso`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_aviso` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5527,12 +5529,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_base_conhecimento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_base_conhecimento` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5550,12 +5552,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_bloco`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_bloco` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5573,12 +5575,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_campo_pesquisa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_campo_pesquisa` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5597,12 +5599,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_cargo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_cargo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5621,12 +5623,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_categoria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_categoria` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5645,12 +5647,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_cidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_cidade` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5565 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5565 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5669,12 +5671,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_comentario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_comentario` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5693,12 +5695,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_conjunto_estilos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_conjunto_estilos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5717,12 +5719,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_conjunto_estilos_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_conjunto_estilos_item` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1682 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1682 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5741,12 +5743,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_contato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_contato` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100000011 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100000011 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5765,12 +5767,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_controle_interno`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_controle_interno` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5788,12 +5790,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_controle_prazo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_controle_prazo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5812,12 +5814,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_controle_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_controle_unidade` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5835,12 +5837,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_cpad`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_cpad` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5858,12 +5860,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_cpad_avaliacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_cpad_avaliacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5881,12 +5883,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_cpad_composicao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_cpad_composicao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5904,12 +5906,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_cpad_versao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_cpad_versao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5927,12 +5929,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_documento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_documento` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5951,12 +5953,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_dominio`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_dominio` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5974,12 +5976,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_edital_eliminacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_edital_eliminacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5997,12 +5999,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_edital_eliminacao_conteudo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_edital_eliminacao_conteudo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6020,12 +6022,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_edital_eliminacao_erro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_edital_eliminacao_erro` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6043,12 +6045,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_email_grupo_email`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_email_grupo_email` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6066,12 +6068,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_email_sistema`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_email_sistema` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6090,12 +6092,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_email_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_email_unidade` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=729 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=729 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6114,12 +6116,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_email_utilizado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_email_utilizado` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6137,12 +6139,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_estatisticas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_estatisticas` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6160,12 +6162,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_estilo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_estilo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6184,12 +6186,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_etapa_trabalho`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_etapa_trabalho` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6207,12 +6209,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_feed`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_feed` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6230,12 +6232,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_feriado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_feriado` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6254,12 +6256,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_grupo_acompanhamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_grupo_acompanhamento` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6277,12 +6279,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_grupo_bloco`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_grupo_bloco` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6301,12 +6303,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_grupo_contato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_grupo_contato` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6324,12 +6326,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_grupo_email`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_grupo_email` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6347,12 +6349,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_grupo_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_grupo_federacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6371,12 +6373,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_grupo_protocolo_modelo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_grupo_protocolo_modelo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6394,12 +6396,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_grupo_serie`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_grupo_serie` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6418,12 +6420,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_grupo_unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_grupo_unidade` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6441,12 +6443,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_hipotese_legal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_hipotese_legal` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6465,12 +6467,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_imagem_formato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_imagem_formato` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6489,12 +6491,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_infra_auditoria`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_infra_auditoria` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6512,12 +6514,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_infra_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_infra_log` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6526,6 +6528,7 @@ CREATE TABLE `seq_infra_log` (
 
 LOCK TABLES `seq_infra_log` WRITE;
 /*!40000 ALTER TABLE `seq_infra_log` DISABLE KEYS */;
+INSERT INTO `seq_infra_log` VALUES (1,'0'),(2,'0');
 /*!40000 ALTER TABLE `seq_infra_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -6535,12 +6538,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_infra_navegador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_infra_navegador` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6559,12 +6562,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_item_etapa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_item_etapa` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6582,12 +6585,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_lembrete`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_lembrete` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6606,12 +6609,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_localizador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_localizador` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6629,12 +6632,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_lugar_localizador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_lugar_localizador` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6652,12 +6655,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_marcador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_marcador` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6675,12 +6678,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_modelo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_modelo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6699,12 +6702,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_monitoramento_servico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_monitoramento_servico` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6722,12 +6725,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_nivel_acesso_permitido`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_nivel_acesso_permitido` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3030 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3030 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6746,12 +6749,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_notificacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_notificacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6769,12 +6772,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_novidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_novidade` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6792,12 +6795,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_numeracao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_numeracao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6815,12 +6818,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_observacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_observacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6838,12 +6841,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_operacao_servico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_operacao_servico` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6861,12 +6864,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_ordenador_despesa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_ordenador_despesa` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6884,12 +6887,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_orgao_historico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_orgao_historico` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6908,12 +6911,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_pais`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_pais` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=895 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=895 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6932,12 +6935,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_participante`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_participante` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6955,12 +6958,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_pesquisa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_pesquisa` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -6979,12 +6982,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_plano_trabalho`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_plano_trabalho` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7002,12 +7005,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_protocolo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_protocolo` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7025,12 +7028,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_protocolo_modelo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_protocolo_modelo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7048,12 +7051,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_publicacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_publicacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7071,12 +7074,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_reabertura_programada`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_reabertura_programada` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7094,12 +7097,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_rel_protocolo_protocolo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_rel_protocolo_protocolo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7117,12 +7120,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_rel_unidade_tipo_contato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_rel_unidade_tipo_contato` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7141,12 +7144,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_retorno_programado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_retorno_programado` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7164,12 +7167,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_secao_documento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_secao_documento` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7187,12 +7190,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_secao_imprensa_nacional`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_secao_imprensa_nacional` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7211,12 +7214,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_secao_modelo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_secao_modelo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=776 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=776 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7235,12 +7238,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_serie`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_serie` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=283 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=283 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7259,12 +7262,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_serie_publicacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_serie_publicacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7282,12 +7285,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_serie_restricao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_serie_restricao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7305,12 +7308,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_servico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_servico` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7328,12 +7331,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_situacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_situacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7351,12 +7354,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tabela_assuntos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tabela_assuntos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7375,12 +7378,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tarefa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tarefa` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7399,12 +7402,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tarja_assinatura`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tarja_assinatura` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7423,12 +7426,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_texto_padrao_interno`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_texto_padrao_interno` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7446,12 +7449,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tipo_conferencia`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tipo_conferencia` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7470,12 +7473,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tipo_contato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tipo_contato` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7494,12 +7497,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tipo_formulario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tipo_formulario` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7517,12 +7520,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tipo_localizador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tipo_localizador` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7540,12 +7543,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tipo_prioridade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tipo_prioridade` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7564,12 +7567,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tipo_proced_restricao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tipo_proced_restricao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7587,12 +7590,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tipo_procedimento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tipo_procedimento` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100000425 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100000425 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7611,12 +7614,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tipo_suporte`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tipo_suporte` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7635,12 +7638,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_titulo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_titulo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7659,12 +7662,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_tratamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_tratamento` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7683,12 +7686,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_uf`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_uf` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7707,12 +7710,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_unidade_historico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_unidade_historico` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7731,12 +7734,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_unidade_publicacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_unidade_publicacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7754,12 +7757,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_upload`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_upload` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7777,12 +7780,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_veiculo_imprensa_nacional`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_veiculo_imprensa_nacional` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7801,12 +7804,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_veiculo_publicacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_veiculo_publicacao` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7825,12 +7828,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_versao_secao_documento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_versao_secao_documento` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7848,12 +7851,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `seq_vocativo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `seq_vocativo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `campo` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7872,22 +7875,22 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `serie`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `serie` (
   `nome` varchar(100) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
-  `id_modelo_edoc` int(11) DEFAULT NULL,
-  `id_grupo_serie` int(11) DEFAULT NULL,
-  `id_serie` int(11) NOT NULL,
+  `id_modelo_edoc` int DEFAULT NULL,
+  `id_grupo_serie` int DEFAULT NULL,
+  `id_serie` int NOT NULL,
   `sin_interessado` char(1) NOT NULL,
   `sin_destinatario` char(1) NOT NULL,
   `sta_numeracao` char(1) NOT NULL,
   `sin_assinatura_publicacao` char(1) NOT NULL,
-  `id_modelo` int(11) DEFAULT NULL,
+  `id_modelo` int DEFAULT NULL,
   `sta_aplicabilidade` char(1) NOT NULL,
   `sin_interno` char(1) NOT NULL,
-  `id_tipo_formulario` int(11) DEFAULT NULL,
+  `id_tipo_formulario` int DEFAULT NULL,
   `sin_usuario_externo` char(1) NOT NULL,
   `sin_valor_monetario` char(1) NOT NULL,
   PRIMARY KEY (`id_serie`),
@@ -7896,10 +7899,10 @@ CREATE TABLE `serie` (
   KEY `i01_serie` (`sin_ativo`,`sta_aplicabilidade`,`sin_interno`),
   KEY `fk_serie_tipo_formulario` (`id_tipo_formulario`),
   KEY `fk_serie_grupo_serie` (`id_grupo_serie`),
-  CONSTRAINT `fk_serie_grupo_serie` FOREIGN KEY (`id_grupo_serie`) REFERENCES `grupo_serie` (`id_grupo_serie`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_serie_modelo` FOREIGN KEY (`id_modelo`) REFERENCES `modelo` (`id_modelo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_serie_grupo_serie` FOREIGN KEY (`id_grupo_serie`) REFERENCES `grupo_serie` (`id_grupo_serie`),
+  CONSTRAINT `fk_serie_modelo` FOREIGN KEY (`id_modelo`) REFERENCES `modelo` (`id_modelo`),
   CONSTRAINT `fk_serie_tipo_formulario` FOREIGN KEY (`id_tipo_formulario`) REFERENCES `tipo_formulario` (`id_tipo_formulario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7918,16 +7921,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `serie_escolha`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `serie_escolha` (
-  `id_serie` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_serie` int NOT NULL,
+  `id_unidade` int NOT NULL,
   PRIMARY KEY (`id_serie`,`id_unidade`),
   KEY `fk_serie_escolha_serie` (`id_serie`),
   KEY `fk_serie_escolha_unidade` (`id_unidade`),
-  CONSTRAINT `fk_serie_escolha_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_serie_escolha_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_serie_escolha_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`),
+  CONSTRAINT `fk_serie_escolha_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7945,17 +7948,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `serie_publicacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `serie_publicacao` (
-  `id_serie_publicacao` int(11) NOT NULL,
-  `id_serie` int(11) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
+  `id_serie_publicacao` int NOT NULL,
+  `id_serie` int NOT NULL,
+  `id_orgao` int NOT NULL,
   PRIMARY KEY (`id_serie_publicacao`),
   KEY `fk_serie_publicacao_serie` (`id_serie`),
   KEY `fk_serie_publicacao_orgao` (`id_orgao`),
   CONSTRAINT `fk_serie_publicacao_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`),
   CONSTRAINT `fk_serie_publicacao_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -7973,12 +7976,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `serie_restricao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `serie_restricao` (
-  `id_serie_restricao` int(11) NOT NULL,
-  `id_serie` int(11) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
-  `id_unidade` int(11) DEFAULT NULL,
+  `id_serie_restricao` int NOT NULL,
+  `id_serie` int NOT NULL,
+  `id_orgao` int NOT NULL,
+  `id_unidade` int DEFAULT NULL,
   PRIMARY KEY (`id_serie_restricao`),
   KEY `fk_serie_restricao_serie` (`id_serie`),
   KEY `fk_serie_restricao_orgao` (`id_orgao`),
@@ -7986,7 +7989,7 @@ CREATE TABLE `serie_restricao` (
   CONSTRAINT `fk_serie_restricao_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`),
   CONSTRAINT `fk_serie_restricao_serie` FOREIGN KEY (`id_serie`) REFERENCES `serie` (`id_serie`),
   CONSTRAINT `fk_serie_restricao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8004,13 +8007,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `servico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `servico` (
-  `id_servico` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id_servico` int NOT NULL,
+  `id_usuario` int NOT NULL,
   `identificacao` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
-  `servidor` longtext DEFAULT NULL,
+  `servidor` longtext,
   `sin_link_externo` char(1) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   `sin_chave_acesso` char(1) NOT NULL,
@@ -8020,8 +8023,8 @@ CREATE TABLE `servico` (
   PRIMARY KEY (`id_servico`),
   KEY `fk_servico_usuario` (`id_usuario`),
   KEY `i02_servico` (`crc`),
-  CONSTRAINT `fk_servico_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_servico_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8039,13 +8042,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sinalizacao_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sinalizacao_federacao` (
   `id_instalacao_federacao` varchar(26) NOT NULL,
   `id_protocolo_federacao` varchar(26) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
   `dth_sinalizacao` datetime NOT NULL,
-  `sta_sinalizacao` int(11) DEFAULT NULL,
+  `sta_sinalizacao` int DEFAULT NULL,
   PRIMARY KEY (`id_instalacao_federacao`,`id_protocolo_federacao`,`id_unidade`),
   KEY `fk_sinalizacao_fed_inst_fed` (`id_instalacao_federacao`),
   KEY `fk_sinalizacao_fed_prot_fed` (`id_protocolo_federacao`),
@@ -8054,7 +8057,7 @@ CREATE TABLE `sinalizacao_federacao` (
   CONSTRAINT `fk_sinalizacao_fed_inst_fed` FOREIGN KEY (`id_instalacao_federacao`) REFERENCES `instalacao_federacao` (`id_instalacao_federacao`),
   CONSTRAINT `fk_sinalizacao_fed_prot_fed` FOREIGN KEY (`id_protocolo_federacao`) REFERENCES `protocolo_federacao` (`id_protocolo_federacao`),
   CONSTRAINT `fk_sinalizacao_fed_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8072,14 +8075,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `situacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `situacao` (
-  `id_situacao` int(11) NOT NULL,
+  `id_situacao` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_situacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8097,14 +8100,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tabela_assuntos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tabela_assuntos` (
-  `id_tabela_assuntos` int(11) NOT NULL,
+  `id_tabela_assuntos` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sin_atual` char(1) NOT NULL,
   PRIMARY KEY (`id_tabela_assuntos`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8123,9 +8126,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tarefa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tarefa` (
-  `id_tarefa` int(11) NOT NULL,
+  `id_tarefa` int NOT NULL,
   `nome` varchar(250) NOT NULL,
   `sin_historico_resumido` char(1) NOT NULL,
   `sin_historico_completo` char(1) NOT NULL,
@@ -8136,7 +8139,7 @@ CREATE TABLE `tarefa` (
   `sin_consulta_processual` char(1) NOT NULL,
   PRIMARY KEY (`id_tarefa`),
   UNIQUE KEY `i01_tarefa` (`id_tarefa_modulo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8155,12 +8158,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tarefa_instalacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tarefa_instalacao` (
-  `id_tarefa_instalacao` int(11) NOT NULL,
+  `id_tarefa_instalacao` int NOT NULL,
   `nome` varchar(250) NOT NULL,
   PRIMARY KEY (`id_tarefa_instalacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8179,12 +8182,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tarefa_plano_trabalho`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tarefa_plano_trabalho` (
-  `id_tarefa_plano_trabalho` int(11) NOT NULL,
+  `id_tarefa_plano_trabalho` int NOT NULL,
   `nome` varchar(250) NOT NULL,
   PRIMARY KEY (`id_tarefa_plano_trabalho`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8203,15 +8206,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tarja_assinatura`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tarja_assinatura` (
-  `id_tarja_assinatura` int(11) NOT NULL,
+  `id_tarja_assinatura` int NOT NULL,
   `texto` longtext NOT NULL,
-  `logo` longtext DEFAULT NULL,
+  `logo` longtext,
   `sin_ativo` char(1) NOT NULL,
   `sta_tarja_assinatura` char(1) NOT NULL,
   PRIMARY KEY (`id_tarja_assinatura`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8230,20 +8233,20 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `texto_padrao_interno`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `texto_padrao_interno` (
-  `id_texto_padrao_interno` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_texto_padrao_interno` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(300) DEFAULT NULL,
   `conteudo` longtext NOT NULL,
-  `id_conjunto_estilos` int(11) DEFAULT NULL,
+  `id_conjunto_estilos` int DEFAULT NULL,
   PRIMARY KEY (`id_texto_padrao_interno`),
   KEY `fk_texto_padrao_int_conj` (`id_conjunto_estilos`),
   KEY `fk_texto_padrao_int_unid` (`id_unidade`),
   CONSTRAINT `fk_texto_padrao_int_conj` FOREIGN KEY (`id_conjunto_estilos`) REFERENCES `conjunto_estilos` (`id_conjunto_estilos`),
   CONSTRAINT `fk_texto_padrao_int_unid` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8261,13 +8264,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tipo_conferencia`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_conferencia` (
-  `id_tipo_conferencia` int(11) NOT NULL,
+  `id_tipo_conferencia` int NOT NULL,
   `descricao` varchar(250) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_tipo_conferencia`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8286,16 +8289,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tipo_contato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_contato` (
-  `id_tipo_contato` int(11) NOT NULL,
+  `id_tipo_contato` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
   `sin_sistema` char(1) NOT NULL,
   `sta_acesso` char(1) NOT NULL,
   PRIMARY KEY (`id_tipo_contato`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8314,14 +8317,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tipo_formulario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_formulario` (
-  `id_tipo_formulario` int(11) NOT NULL,
+  `id_tipo_formulario` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_tipo_formulario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8339,10 +8342,10 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tipo_localizador`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_localizador` (
-  `id_tipo_localizador` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_tipo_localizador` int NOT NULL,
+  `id_unidade` int NOT NULL,
   `sigla` varchar(20) NOT NULL,
   `nome` varchar(50) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
@@ -8351,8 +8354,8 @@ CREATE TABLE `tipo_localizador` (
   UNIQUE KEY `ak1_tipo_localizador` (`sigla`,`id_unidade`),
   UNIQUE KEY `ak_tipo_arquivo_nome` (`nome`,`id_unidade`),
   KEY `fk_tipo_localizador_unidade` (`id_unidade`),
-  CONSTRAINT `fk_tipo_localizador_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_tipo_localizador_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8370,14 +8373,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tipo_prioridade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_prioridade` (
-  `id_tipo_prioridade` int(11) NOT NULL,
+  `id_tipo_prioridade` int NOT NULL,
   `nome` varchar(100) NOT NULL,
   `descricao` varchar(500) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_tipo_prioridade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8396,12 +8399,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tipo_proced_restricao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_proced_restricao` (
-  `id_tipo_proced_restricao` int(11) NOT NULL,
-  `id_tipo_procedimento` int(11) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
-  `id_unidade` int(11) DEFAULT NULL,
+  `id_tipo_proced_restricao` int NOT NULL,
+  `id_tipo_procedimento` int NOT NULL,
+  `id_orgao` int NOT NULL,
+  `id_unidade` int DEFAULT NULL,
   PRIMARY KEY (`id_tipo_proced_restricao`),
   KEY `fk_tipo_proced_restr_tipo_proc` (`id_tipo_procedimento`),
   KEY `fk_tipo_proced_restr_orgao` (`id_orgao`),
@@ -8409,7 +8412,7 @@ CREATE TABLE `tipo_proced_restricao` (
   CONSTRAINT `fk_tipo_proced_restr_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`),
   CONSTRAINT `fk_tipo_proced_restr_tipo_proc` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`),
   CONSTRAINT `fk_tipo_proced_restr_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8427,9 +8430,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tipo_procedimento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_procedimento` (
-  `id_tipo_procedimento` int(11) NOT NULL,
+  `id_tipo_procedimento` int NOT NULL,
   `nome` varchar(100) NOT NULL,
   `descricao` varchar(250) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
@@ -8437,9 +8440,9 @@ CREATE TABLE `tipo_procedimento` (
   `sin_interno` char(1) NOT NULL,
   `sin_ouvidoria` char(1) NOT NULL,
   `sin_individual` char(1) NOT NULL,
-  `id_hipotese_legal_sugestao` int(11) DEFAULT NULL,
+  `id_hipotese_legal_sugestao` int DEFAULT NULL,
   `sta_grau_sigilo_sugestao` char(1) DEFAULT NULL,
-  `id_plano_trabalho` int(11) DEFAULT NULL,
+  `id_plano_trabalho` int DEFAULT NULL,
   PRIMARY KEY (`id_tipo_procedimento`),
   KEY `fk_tipo_proced_hipotese_legal` (`id_hipotese_legal_sugestao`),
   KEY `i01_tipo_procedimento` (`id_tipo_procedimento`,`sin_ativo`),
@@ -8447,7 +8450,7 @@ CREATE TABLE `tipo_procedimento` (
   KEY `fk_tipo_proced_plano_trabalho` (`id_plano_trabalho`),
   CONSTRAINT `fk_tipo_proced_hipotese_legal` FOREIGN KEY (`id_hipotese_legal_sugestao`) REFERENCES `hipotese_legal` (`id_hipotese_legal`),
   CONSTRAINT `fk_tipo_proced_plano_trabalho` FOREIGN KEY (`id_plano_trabalho`) REFERENCES `plano_trabalho` (`id_plano_trabalho`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8466,16 +8469,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tipo_procedimento_escolha`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_procedimento_escolha` (
-  `id_tipo_procedimento` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_tipo_procedimento` int NOT NULL,
+  `id_unidade` int NOT NULL,
   PRIMARY KEY (`id_tipo_procedimento`,`id_unidade`),
   KEY `fk_tipo_proc_escolha_tipo_proc` (`id_tipo_procedimento`),
   KEY `fk_tipo_proc_escolha_unidade` (`id_unidade`),
-  CONSTRAINT `fk_tipo_proc_escolha_tipo_proc` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tipo_proc_escolha_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_tipo_proc_escolha_tipo_proc` FOREIGN KEY (`id_tipo_procedimento`) REFERENCES `tipo_procedimento` (`id_tipo_procedimento`),
+  CONSTRAINT `fk_tipo_proc_escolha_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8493,14 +8496,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tipo_suporte`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tipo_suporte` (
-  `id_tipo_suporte` int(11) NOT NULL,
+  `id_tipo_suporte` int NOT NULL,
   `nome` varchar(50) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_tipo_suporte`),
   UNIQUE KEY `ak1_tipo_suporte` (`nome`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8519,14 +8522,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `titulo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `titulo` (
-  `id_titulo` int(11) NOT NULL,
+  `id_titulo` int NOT NULL,
   `expressao` varchar(100) NOT NULL,
   `abreviatura` varchar(20) DEFAULT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_titulo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8544,14 +8547,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tratamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tratamento` (
-  `id_tratamento` int(11) NOT NULL,
+  `id_tratamento` int NOT NULL,
   `expressao` varchar(100) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_tratamento`),
   KEY `ie1_tratamento` (`id_tratamento`,`sin_ativo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8570,17 +8573,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `uf`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `uf` (
-  `id_uf` int(11) NOT NULL,
+  `id_uf` int NOT NULL,
   `sigla` char(2) DEFAULT NULL,
   `nome` varchar(50) NOT NULL,
-  `id_pais` int(11) NOT NULL,
-  `codigo_ibge` int(11) DEFAULT NULL,
+  `id_pais` int NOT NULL,
+  `codigo_ibge` int DEFAULT NULL,
   PRIMARY KEY (`id_uf`),
   KEY `fk_uf_pais` (`id_pais`),
-  CONSTRAINT `fk_uf_pais` FOREIGN KEY (`id_pais`) REFERENCES `pais` (`id_pais`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_uf_pais` FOREIGN KEY (`id_pais`) REFERENCES `pais` (`id_pais`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8599,20 +8602,20 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `unidade`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `unidade` (
-  `id_unidade` int(11) NOT NULL,
+  `id_unidade` int NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   `sigla` varchar(30) NOT NULL,
   `descricao` varchar(250) NOT NULL,
   `sin_mail_pendencia` char(1) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
+  `id_orgao` int NOT NULL,
   `sin_envio_processo` char(1) NOT NULL,
   `sin_arquivamento` char(1) NOT NULL,
   `sin_ouvidoria` char(1) NOT NULL,
   `sin_protocolo` char(1) NOT NULL,
   `codigo_sei` varchar(10) DEFAULT NULL,
-  `id_contato` int(11) NOT NULL,
+  `id_contato` int NOT NULL,
   `idx_unidade` varchar(500) DEFAULT NULL,
   `id_origem` varchar(50) DEFAULT NULL,
   `id_unidade_federacao` varchar(26) DEFAULT NULL,
@@ -8623,9 +8626,9 @@ CREATE TABLE `unidade` (
   KEY `fk_unidade_contato` (`id_contato`),
   KEY `fk_unidade_unidade_federacao` (`id_unidade_federacao`),
   CONSTRAINT `fk_unidade_contato` FOREIGN KEY (`id_contato`) REFERENCES `contato` (`id_contato`),
-  CONSTRAINT `fk_unidade_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_unidade_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`),
   CONSTRAINT `fk_unidade_unidade_federacao` FOREIGN KEY (`id_unidade_federacao`) REFERENCES `unidade_federacao` (`id_unidade_federacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8644,7 +8647,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `unidade_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `unidade_federacao` (
   `id_unidade_federacao` varchar(26) NOT NULL,
   `id_instalacao_federacao` varchar(26) NOT NULL,
@@ -8653,7 +8656,7 @@ CREATE TABLE `unidade_federacao` (
   PRIMARY KEY (`id_unidade_federacao`),
   KEY `fk_unidade_fed_instalacao_fed` (`id_instalacao_federacao`),
   CONSTRAINT `fk_unidade_fed_instalacao_fed` FOREIGN KEY (`id_instalacao_federacao`) REFERENCES `instalacao_federacao` (`id_instalacao_federacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8671,11 +8674,11 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `unidade_historico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `unidade_historico` (
-  `id_unidade_historico` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
+  `id_unidade_historico` int NOT NULL,
+  `id_unidade` int NOT NULL,
+  `id_orgao` int NOT NULL,
   `sigla` varchar(30) NOT NULL,
   `descricao` varchar(250) NOT NULL,
   `dta_inicio` datetime NOT NULL,
@@ -8686,7 +8689,7 @@ CREATE TABLE `unidade_historico` (
   KEY `fk_unidade_historico_orgao` (`id_orgao`),
   CONSTRAINT `fk_unidade_historico_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`),
   CONSTRAINT `fk_unidade_historico_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8705,14 +8708,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `unidade_publicacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `unidade_publicacao` (
-  `id_unidade_publicacao` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
+  `id_unidade_publicacao` int NOT NULL,
+  `id_unidade` int NOT NULL,
   PRIMARY KEY (`id_unidade_publicacao`),
   KEY `fk_unidade_publicacao_unidade` (`id_unidade`),
   CONSTRAINT `fk_unidade_publicacao_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8730,14 +8733,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `usuario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuario` (
-  `id_usuario` int(11) NOT NULL,
+  `id_usuario` int NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   `sigla` varchar(100) NOT NULL,
   `nome` varchar(100) NOT NULL,
-  `id_contato` int(11) NOT NULL,
-  `id_orgao` int(11) NOT NULL,
+  `id_contato` int NOT NULL,
+  `id_orgao` int NOT NULL,
   `idx_usuario` varchar(500) DEFAULT NULL,
   `sta_tipo` char(1) NOT NULL,
   `senha` char(60) DEFAULT NULL,
@@ -8751,10 +8754,10 @@ CREATE TABLE `usuario` (
   KEY `fk_usuario_orgao` (`id_orgao`),
   KEY `i02_usuario` (`id_contato`,`sta_tipo`),
   KEY `fk_usuario_usuario_federacao` (`id_usuario_federacao`),
-  CONSTRAINT `fk_usuario_contato` FOREIGN KEY (`id_contato`) REFERENCES `contato` (`id_contato`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_usuario_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_usuario_contato` FOREIGN KEY (`id_contato`) REFERENCES `contato` (`id_contato`),
+  CONSTRAINT `fk_usuario_orgao` FOREIGN KEY (`id_orgao`) REFERENCES `orgao` (`id_orgao`),
   CONSTRAINT `fk_usuario_usuario_federacao` FOREIGN KEY (`id_usuario_federacao`) REFERENCES `usuario_federacao` (`id_usuario_federacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8773,7 +8776,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `usuario_federacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuario_federacao` (
   `id_usuario_federacao` varchar(26) NOT NULL,
   `id_instalacao_federacao` varchar(26) NOT NULL,
@@ -8782,7 +8785,7 @@ CREATE TABLE `usuario_federacao` (
   PRIMARY KEY (`id_usuario_federacao`),
   KEY `fk_usuario_fed_instalacao_fed` (`id_instalacao_federacao`),
   CONSTRAINT `fk_usuario_fed_instalacao_fed` FOREIGN KEY (`id_instalacao_federacao`) REFERENCES `instalacao_federacao` (`id_instalacao_federacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8800,13 +8803,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `veiculo_imprensa_nacional`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `veiculo_imprensa_nacional` (
-  `id_veiculo_imprensa_nacional` int(11) NOT NULL,
+  `id_veiculo_imprensa_nacional` int NOT NULL,
   `sigla` varchar(15) NOT NULL,
   `descricao` varchar(250) NOT NULL,
   PRIMARY KEY (`id_veiculo_imprensa_nacional`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8825,9 +8828,9 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `veiculo_publicacao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `veiculo_publicacao` (
-  `id_veiculo_publicacao` int(11) NOT NULL,
+  `id_veiculo_publicacao` int NOT NULL,
   `nome` varchar(100) NOT NULL,
   `descricao` varchar(500) DEFAULT NULL,
   `sta_tipo` char(1) NOT NULL,
@@ -8837,7 +8840,7 @@ CREATE TABLE `veiculo_publicacao` (
   `sin_exibir_pesquisa_interna` char(1) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_veiculo_publicacao`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8856,25 +8859,25 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `versao_secao_documento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `versao_secao_documento` (
-  `id_versao_secao_documento` bigint(20) NOT NULL,
-  `id_secao_documento` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_unidade` int(11) NOT NULL,
-  `conteudo` longtext DEFAULT NULL,
+  `id_versao_secao_documento` bigint NOT NULL,
+  `id_secao_documento` int NOT NULL,
+  `id_usuario` int NOT NULL,
+  `id_unidade` int NOT NULL,
+  `conteudo` longtext,
   `dth_atualizacao` datetime NOT NULL,
-  `versao` int(11) DEFAULT NULL,
+  `versao` int DEFAULT NULL,
   `sin_ultima` char(1) NOT NULL,
   PRIMARY KEY (`id_versao_secao_documento`),
   KEY `i01_versao_secao_documento` (`id_secao_documento`,`versao`),
   KEY `fk_versao_secao_doc_usuario` (`id_usuario`),
   KEY `fk_versao_secao_doc_unidade` (`id_unidade`),
   KEY `fk_versao_sec_doc_sec_doc` (`id_secao_documento`),
-  CONSTRAINT `fk_versao_sec_doc_sec_doc` FOREIGN KEY (`id_secao_documento`) REFERENCES `secao_documento` (`id_secao_documento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_versao_secao_doc_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_versao_secao_doc_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  CONSTRAINT `fk_versao_sec_doc_sec_doc` FOREIGN KEY (`id_secao_documento`) REFERENCES `secao_documento` (`id_secao_documento`),
+  CONSTRAINT `fk_versao_secao_doc_unidade` FOREIGN KEY (`id_unidade`) REFERENCES `unidade` (`id_unidade`),
+  CONSTRAINT `fk_versao_secao_doc_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id_usuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8892,14 +8895,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `vocativo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `vocativo` (
-  `id_vocativo` int(11) NOT NULL,
+  `id_vocativo` int NOT NULL,
   `expressao` varchar(100) NOT NULL,
   `sin_ativo` char(1) NOT NULL,
   PRIMARY KEY (`id_vocativo`),
   KEY `ie1_vocativo` (`id_vocativo`,`sin_ativo`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -8921,4 +8924,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-14 17:25:18
+-- Dump completed on 2025-01-22 18:20:50
