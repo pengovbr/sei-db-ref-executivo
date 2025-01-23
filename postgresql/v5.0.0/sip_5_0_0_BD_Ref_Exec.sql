@@ -33,6 +33,25 @@ CREATE TABLE public.administrador_sistema (
 ALTER TABLE public.administrador_sistema OWNER TO sip_user;
 
 --
+-- Name: assinatura_sso; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.assinatura_sso (
+    id_assinatura_sso character varying(26) NOT NULL,
+    id_login_sso character varying(26) NOT NULL,
+    sta_assinatura_sso character(1) NOT NULL,
+    dth_assinatura_sso timestamp without time zone NOT NULL,
+    token_sistema character varying(26) NOT NULL,
+    code_servico character varying(50),
+    identificador_conteudo character varying(100),
+    hash_conteudo character varying(64),
+    sta_erro integer
+);
+
+
+ALTER TABLE public.assinatura_sso OWNER TO postgres;
+
+--
 -- Name: codigo_acesso; Type: TABLE; Schema: public; Owner: sip_user
 --
 
@@ -51,7 +70,9 @@ CREATE TABLE public.codigo_acesso (
     dth_desativacao timestamp without time zone,
     dth_acesso timestamp without time zone,
     email character varying(100),
-    sin_ativo character(1) NOT NULL
+    sin_ativo character(1) NOT NULL,
+    identificacao character varying(50) NOT NULL,
+    sin_unico character(1) NOT NULL
 );
 
 
@@ -237,22 +258,6 @@ CREATE TABLE public.infra_captcha (
 ALTER TABLE public.infra_captcha OWNER TO sip_user;
 
 --
--- Name: infra_captcha_tentativa; Type: TABLE; Schema: public; Owner: sip_user
---
-
-CREATE TABLE public.infra_captcha_tentativa (
-    identificacao character varying(50) NOT NULL,
-    id_usuario_origem character varying(100) NOT NULL,
-    tentativas integer NOT NULL,
-    dth_tentativa timestamp without time zone NOT NULL,
-    user_agent character varying(500) NOT NULL,
-    ip character varying(15) NOT NULL
-);
-
-
-ALTER TABLE public.infra_captcha_tentativa OWNER TO sip_user;
-
---
 -- Name: infra_erro_php; Type: TABLE; Schema: public; Owner: sip_user
 --
 
@@ -262,7 +267,8 @@ CREATE TABLE public.infra_erro_php (
     arquivo character varying(255) NOT NULL,
     linha integer NOT NULL,
     erro character varying(4000) NOT NULL,
-    dth_cadastro timestamp without time zone NOT NULL
+    dth_cadastro timestamp without time zone NOT NULL,
+    quantidade bigint
 );
 
 
@@ -282,6 +288,23 @@ CREATE TABLE public.infra_log (
 
 
 ALTER TABLE public.infra_log OWNER TO sip_user;
+
+--
+-- Name: infra_navegador_verificacao; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.infra_navegador_verificacao (
+    tipo_navegador character varying(50) NOT NULL,
+    versao_menor character varying(10),
+    operador_menor character varying(2),
+    versao_maior character varying(10),
+    operador_maior character varying(2),
+    sin_verificar character(1) NOT NULL,
+    sin_compativel character(1) NOT NULL
+);
+
+
+ALTER TABLE public.infra_navegador_verificacao OWNER TO postgres;
 
 --
 -- Name: infra_parametro; Type: TABLE; Schema: public; Owner: sip_user
@@ -383,7 +406,7 @@ CREATE TABLE public.login (
 ALTER TABLE public.login OWNER TO sip_user;
 
 --
--- Name: login_sso; Type: TABLE; Schema: public; Owner: sip_user
+-- Name: login_sso; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.login_sso (
@@ -392,7 +415,9 @@ CREATE TABLE public.login_sso (
     id_servico_sso integer NOT NULL,
     cpf bigint,
     nome character varying(100),
+    nome_social character varying(100),
     email character varying(100),
+    telefone character varying(50),
     sta_login_sso character(1) NOT NULL,
     dth_login_sso timestamp without time zone NOT NULL,
     origem character varying(4000),
@@ -404,11 +429,14 @@ CREATE TABLE public.login_sso (
     user_agent character varying(500) NOT NULL,
     sta_nivel_confiabilidade character(1),
     sta_tipo_acesso character(1) NOT NULL,
-    state character varying(32)
+    sta_erro integer,
+    state character varying(32),
+    sin_certificado_digital character(1),
+    sin_2_fatores character(1)
 );
 
 
-ALTER TABLE public.login_sso OWNER TO sip_user;
+ALTER TABLE public.login_sso OWNER TO postgres;
 
 --
 -- Name: menu; Type: TABLE; Schema: public; Owner: sip_user
@@ -606,7 +634,7 @@ CREATE TABLE public.rel_regra_auditoria_recurso (
 ALTER TABLE public.rel_regra_auditoria_recurso OWNER TO sip_user;
 
 --
--- Name: rel_sistema_servico_sso; Type: TABLE; Schema: public; Owner: sip_user
+-- Name: rel_sistema_servico_sso; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.rel_sistema_servico_sso (
@@ -617,7 +645,7 @@ CREATE TABLE public.rel_sistema_servico_sso (
 );
 
 
-ALTER TABLE public.rel_sistema_servico_sso OWNER TO sip_user;
+ALTER TABLE public.rel_sistema_servico_sso OWNER TO postgres;
 
 --
 -- Name: seq_infra_auditoria; Type: SEQUENCE; Schema: public; Owner: sip_user
@@ -648,31 +676,35 @@ CREATE SEQUENCE public.seq_infra_log
 ALTER TABLE public.seq_infra_log OWNER TO sip_user;
 
 --
--- Name: servico_sso; Type: TABLE; Schema: public; Owner: sip_user
+-- Name: servico_sso; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.servico_sso (
     id_servico_sso integer NOT NULL,
     identificacao character varying(50) NOT NULL,
-    descricao character varying(250),
+    titulo character varying(100) NOT NULL,
     sta_servico_sso character(1) NOT NULL,
     client_id character varying(250) NOT NULL,
     client_secret character varying(250) NOT NULL,
     scope character varying(250) NOT NULL,
-    url_login character varying(250) NOT NULL,
-    url_api character varying(250),
+    url_base character varying(250) NOT NULL,
+    url_api_conta character varying(250),
     url_issuer character varying(250),
     url_token character varying(250),
     url_logout character varying(250),
-    url_auth character varying(250),
+    url_authorize character varying(250),
     campo_sso character varying(50) NOT NULL,
     campo_usuario character varying(50) NOT NULL,
     logo text,
+    client_id_assinatura character varying(250),
+    client_secret_assinatura character varying(250),
+    url_base_assinatura character varying(250),
+    url_api_assinatura character varying(250),
     sin_ativo character(1) NOT NULL
 );
 
 
-ALTER TABLE public.servico_sso OWNER TO sip_user;
+ALTER TABLE public.servico_sso OWNER TO postgres;
 
 --
 -- Name: servidor_autenticacao; Type: TABLE; Schema: public; Owner: sip_user
@@ -718,8 +750,7 @@ CREATE TABLE public.sistema (
     alias character varying(4000),
     sin_autenticacao_padrao character(1) NOT NULL,
     sin_permissao character(1) NOT NULL,
-    sta_confiabilidade_interno character(1),
-    sta_confiabilidade_externo character(1)
+    sta_confiabilidade_interno character(1)
 );
 
 
@@ -795,7 +826,7 @@ CREATE TABLE public.usuario_historico (
 ALTER TABLE public.usuario_historico OWNER TO sip_user;
 
 --
--- Name: usuario_login; Type: TABLE; Schema: public; Owner: sip_user
+-- Name: usuario_login; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.usuario_login (
@@ -809,7 +840,7 @@ CREATE TABLE public.usuario_login (
 );
 
 
-ALTER TABLE public.usuario_login OWNER TO sip_user;
+ALTER TABLE public.usuario_login OWNER TO postgres;
 
 --
 -- Data for Name: administrador_sistema; Type: TABLE DATA; Schema: public; Owner: sip_user
@@ -822,10 +853,18 @@ COPY public.administrador_sistema (id_usuario, id_sistema) FROM stdin;
 
 
 --
+-- Data for Name: assinatura_sso; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.assinatura_sso (id_assinatura_sso, id_login_sso, sta_assinatura_sso, dth_assinatura_sso, token_sistema, code_servico, identificador_conteudo, hash_conteudo, sta_erro) FROM stdin;
+\.
+
+
+--
 -- Data for Name: codigo_acesso; Type: TABLE DATA; Schema: public; Owner: sip_user
 --
 
-COPY public.codigo_acesso (id_codigo_acesso, id_usuario, id_usuario_desativacao, id_sistema, chave_geracao, dth_geracao, chave_ativacao, dth_envio_ativacao, dth_ativacao, chave_desativacao, dth_envio_desativacao, dth_desativacao, dth_acesso, email, sin_ativo) FROM stdin;
+COPY public.codigo_acesso (id_codigo_acesso, id_usuario, id_usuario_desativacao, id_sistema, chave_geracao, dth_geracao, chave_ativacao, dth_envio_ativacao, dth_ativacao, chave_desativacao, dth_envio_desativacao, dth_desativacao, dth_acesso, email, sin_ativo, identificacao, sin_unico) FROM stdin;
 \.
 
 
@@ -899,7 +938,7 @@ COPY public.infra_agendamento_tarefa (id_infra_agendamento_tarefa, descricao, co
 3	Replicar todos os usuários para o SEI	AgendamentoRN::replicarTodosUsuariosSEI	D	6	\N	\N	N	\N	\N	N
 4	Replicar todas as unidades da hierarquia para o SEI	AgendamentoRN::replicarUnidadesHierarquiaSEI	D	5	\N	\N	N	\N	\N	N
 5	Replica regras de auditoria para o SEI.	AgendamentoRN::replicarRegrasAuditoriaSEI	D	7	\N	\N	N	\N	\N	S
-2	Teste de agendamento SIP	AgendamentoRN::testarAgendamento	N	0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55	2025-01-08 14:35:01	2014-11-14 08:05:04	N	\N	\N	S
+2	Teste de agendamento SIP	AgendamentoRN::testarAgendamento	N	0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55	2025-01-23 17:45:01	2014-11-14 08:05:04	N	\N	\N	S
 \.
 
 
@@ -908,71 +947,6 @@ COPY public.infra_agendamento_tarefa (id_infra_agendamento_tarefa, descricao, co
 --
 
 COPY public.infra_auditoria (id_infra_auditoria, id_usuario, id_orgao_usuario, id_usuario_emulador, id_orgao_usuario_emulador, id_unidade, id_orgao_unidade, recurso, dth_acesso, ip, sigla_usuario, nome_usuario, sigla_orgao_usuario, sigla_usuario_emulador, nome_usuario_emulador, sigla_orgao_usuario_emulador, sigla_unidade, descricao_unidade, sigla_orgao_unidade, servidor, user_agent, requisicao, operacao) FROM stdin;
-2	\N	\N	\N	\N	\N	\N	item_menu_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::cadastrarControlado(\n ItemMenuDTO:\nIdItemMenu = [null]\nIdMenu = 100000078\nIdMenuPai = [null]\nIdItemMenuPai = [null]\nIdSistema = 100000099\nIdRecurso = [null]\nRotulo = Login Único SSO\nDescricao = [null]\nIcone = sso.svg\nSequencia = 0\nSinNovaJanela = N\nSinAtivo = S)
-3	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = login_sso\nDescricao = [null]\nCaminho = controlador.php?acao=login_sso\nSinAtivo = S)
-4	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = login_sso_consultar\nDescricao = [null]\nCaminho = controlador.php?acao=login_sso_consultar\nSinAtivo = S)
-5	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = login_sso_listar\nDescricao = [null]\nCaminho = controlador.php?acao=login_sso_listar\nSinAtivo = S)
-6	\N	\N	\N	\N	\N	\N	item_menu_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::cadastrarControlado(\n ItemMenuDTO:\nIdItemMenu = [null]\nIdMenu = 100000078\nIdMenuPai = 100000078\nIdItemMenuPai = 100005719\nIdSistema = 100000099\nIdRecurso = 100015989\nRotulo = Autenticações\nDescricao = [null]\nIcone = [null]\nSequencia = 0\nSinNovaJanela = N\nSinAtivo = S)
-7	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = servico_sso_cadastrar\nDescricao = [null]\nCaminho = controlador.php?acao=servico_sso_cadastrar\nSinAtivo = S)
-8	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = servico_sso_consultar\nDescricao = [null]\nCaminho = controlador.php?acao=servico_sso_consultar\nSinAtivo = S)
-9	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = servico_sso_listar\nDescricao = [null]\nCaminho = controlador.php?acao=servico_sso_listar\nSinAtivo = S)
-10	\N	\N	\N	\N	\N	\N	item_menu_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::cadastrarControlado(\n ItemMenuDTO:\nIdItemMenu = [null]\nIdMenu = 100000078\nIdMenuPai = 100000078\nIdItemMenuPai = 100005719\nIdSistema = 100000099\nIdRecurso = 100015992\nRotulo = Serviços\nDescricao = [null]\nIcone = [null]\nSequencia = 0\nSinNovaJanela = N\nSinAtivo = S)
-11	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = servico_sso_alterar\nDescricao = [null]\nCaminho = controlador.php?acao=servico_sso_alterar\nSinAtivo = S)
-12	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = servico_sso_excluir\nDescricao = [null]\nCaminho = controlador.php?acao=servico_sso_excluir\nSinAtivo = S)
-13	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = servico_sso_desativar\nDescricao = [null]\nCaminho = controlador.php?acao=servico_sso_desativar\nSinAtivo = S)
-14	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = servico_sso_selecionar\nDescricao = [null]\nCaminho = controlador.php?acao=servico_sso_selecionar\nSinAtivo = S)
-15	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = servico_sso_reativar\nDescricao = [null]\nCaminho = controlador.php?acao=servico_sso_reativar\nSinAtivo = S)
-16	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = servico_sso_upload\nDescricao = [null]\nCaminho = controlador.php?acao=servico_sso_upload\nSinAtivo = S)
-17	\N	\N	\N	\N	\N	\N	servico_sso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ServicoSsoRN::cadastrarControlado(\n ServicoSsoDTO:\nSinAtivo = S\nIdServicoSso = [null]\nIdentificacao = gov.br\nDescricao = [null]\nStaServicoSso = G\nClientId = xxxxxxxxxxxxxxxxxxxx\nClientSecret = xxxxxxxxxxxxxxxxxxxx\nScope = openid+email+profile+govbr_confiabilidades\nUrlLogin = https://sso.staging.acesso.gov.br\nUrlApi = https://api.staging.acesso.gov.br/confiabilidades/v3/contas\nUrlIssuer = [null]\nUrlAuth = [null]\nUrlToken = [null]\nUrlLogout = https://sso.staging.acesso.gov.br/logout?post_logout_redirect_uri=@post_logout_redirect_uri@\nCampoSso = sub\nCampoUsuario = Cpf\nLogo = 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)
-18	\N	\N	\N	\N	\N	\N	servico_sso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ServicoSsoRN::cadastrarControlado(\n ServicoSsoDTO:\nIdServicoSso = [null]\nIdentificacao = Microsoft Azure\nDescricao = [null]\nStaServicoSso = O\nClientId = aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa\nClientSecret = ...............\nScope = openid+email+profile\nUrlLogin = https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb\nUrlApi = [null]\nUrlIssuer = https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/v2.0\nUrlAuth = https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/oauth2/v2.0/authorize\nUrlToken = https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/oauth2/v2.0/token\nUrlLogout = https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/oauth2/logout?post_logout_redirect_uri=@post_logout_redirect_uri@\nCampoSso = email\nCampoUsuario = Email\nLogo = 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\nSinAtivo = S)
-19	\N	\N	\N	\N	\N	\N	servico_sso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ServicoSsoRN::cadastrarControlado(\n ServicoSsoDTO:\nIdServicoSso = [null]\nIdentificacao = Google\nDescricao = [null]\nStaServicoSso = O\nClientId = xxxxxxxxxxxxxxxxxxxx\nClientSecret = xxxxxxxxxxxxxxxxxxxx\nScope = email\nUrlLogin = https://accounts.google.com\nUrlApi = [null]\nUrlIssuer = [null]\nUrlAuth = https://accounts.google.com/o/oauth2/auth\nUrlToken = https://oauth2.googleapis.com/token\nUrlLogout = https://www.google.com/accounts/logout?continue=https://appengine.google.com/_ah/logout?continue=@post_logout_redirect_uri@\nCampoSso = email\nCampoUsuario = Email\nLogo = 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\nSinAtivo = S)
-20	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = rel_sistema_servico_sso_cadastrar\nDescricao = [null]\nCaminho = controlador.php?acao=rel_sistema_servico_sso_cadastrar\nSinAtivo = S)
-21	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = rel_sistema_servico_sso_consultar\nDescricao = [null]\nCaminho = controlador.php?acao=rel_sistema_servico_sso_consultar\nSinAtivo = S)
-22	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = rel_sistema_servico_sso_listar\nDescricao = [null]\nCaminho = controlador.php?acao=rel_sistema_servico_sso_listar\nSinAtivo = S)
-23	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = rel_sistema_servico_sso_alterar\nDescricao = [null]\nCaminho = controlador.php?acao=rel_sistema_servico_sso_alterar\nSinAtivo = S)
-24	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = rel_sistema_servico_sso_excluir\nDescricao = [null]\nCaminho = controlador.php?acao=rel_sistema_servico_sso_excluir\nSinAtivo = S)
-25	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = rel_sistema_servico_sso_selecionar\nDescricao = [null]\nCaminho = controlador.php?acao=rel_sistema_servico_sso_selecionar\nSinAtivo = S)
-26	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = infra_erro_php_listar\nDescricao = [null]\nCaminho = controlador.php?acao=infra_erro_php_listar\nSinAtivo = S)
-27	\N	\N	\N	\N	\N	\N	item_menu_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::cadastrarControlado(\n ItemMenuDTO:\nIdItemMenu = [null]\nIdMenu = 100000078\nIdMenuPai = 100000078\nIdItemMenuPai = 100005400\nIdSistema = 100000099\nIdRecurso = 100016005\nRotulo = Erros do PHP\nDescricao = [null]\nIcone = [null]\nSequencia = 0\nSinNovaJanela = N\nSinAtivo = S)
-28	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:14	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000099\nNome = infra_erro_php_excluir\nDescricao = [null]\nCaminho = controlador.php?acao=infra_erro_php_excluir\nSinAtivo = S)
-29	\N	\N	\N	\N	\N	\N	item_menu_excluir	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::excluirControlado(\nArray (0) {\n})
-30	\N	\N	\N	\N	\N	\N	recurso_excluir	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::excluirControlado(\nArray (1) {\n [0] => \n  RecursoDTO:\nIdRecurso = 100014901\n})
-31	\N	\N	\N	\N	\N	\N	item_menu_excluir	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::excluirControlado(\nArray (0) {\n})
-32	\N	\N	\N	\N	\N	\N	recurso_excluir	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::excluirControlado(\nArray (1) {\n [0] => \n  RecursoDTO:\nIdRecurso = 100014900\n})
-33	\N	\N	\N	\N	\N	\N	item_menu_excluir	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::excluirControlado(\nArray (0) {\n})
-34	\N	\N	\N	\N	\N	\N	recurso_excluir	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::excluirControlado(\nArray (1) {\n [0] => \n  RecursoDTO:\nIdRecurso = 100014902\n})
-35	\N	\N	\N	\N	\N	\N	item_menu_excluir	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::excluirControlado(\nArray (0) {\n})
-36	\N	\N	\N	\N	\N	\N	recurso_excluir	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::excluirControlado(\nArray (1) {\n [0] => \n  RecursoDTO:\nIdRecurso = 100014904\n})
-37	\N	\N	\N	\N	\N	\N	item_menu_excluir	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::excluirControlado(\nArray (1) {\n [0] => \n  ItemMenuDTO:\nIdMenu = 100000079\nIdItemMenu = 100005543\n})
-38	\N	\N	\N	\N	\N	\N	item_menu_excluir	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::excluirControlado(\nArray (0) {\n})
-39	\N	\N	\N	\N	\N	\N	recurso_excluir	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::excluirControlado(\nArray (1) {\n [0] => \n  RecursoDTO:\nIdRecurso = 100014903\n})
-40	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = infra_editor_comentario_cadastrar\nDescricao = [null]\nCaminho = controlador.php?acao=infra_editor_comentario_cadastrar\nSinAtivo = S)
-41	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = infra_editor_comentario_alterar\nDescricao = [null]\nCaminho = controlador.php?acao=infra_editor_comentario_alterar\nSinAtivo = S)
-42	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = infra_editor_comentario_excluir\nDescricao = [null]\nCaminho = controlador.php?acao=infra_editor_comentario_excluir\nSinAtivo = S)
-43	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = infra_editor_comentario_consultar\nDescricao = [null]\nCaminho = controlador.php?acao=infra_editor_comentario_consultar\nSinAtivo = S)
-44	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = infra_editor_comentario_listar\nDescricao = [null]\nCaminho = controlador.php?acao=infra_editor_comentario_listar\nSinAtivo = S)
-45	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = infra_editor_comentario_desativar\nDescricao = [null]\nCaminho = controlador.php?acao=infra_editor_comentario_desativar\nSinAtivo = S)
-46	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = infra_editor_comentario_reativar\nDescricao = [null]\nCaminho = controlador.php?acao=infra_editor_comentario_reativar\nSinAtivo = S)
-47	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = infra_editor_comentario_sincronizar\nDescricao = [null]\nCaminho = controlador.php?acao=infra_editor_comentario_sincronizar\nSinAtivo = S)
-48	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = infra_erro_php_listar\nDescricao = [null]\nCaminho = controlador.php?acao=infra_erro_php_listar\nSinAtivo = S)
-49	\N	\N	\N	\N	\N	\N	item_menu_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::cadastrarControlado(\n ItemMenuDTO:\nIdItemMenu = [null]\nIdMenu = 100000079\nIdMenuPai = 100000079\nIdItemMenuPai = 100005460\nIdSistema = 100000100\nIdRecurso = 100016015\nRotulo = Erros do PHP\nDescricao = [null]\nIcone = [null]\nSequencia = 0\nSinNovaJanela = N\nSinAtivo = S)
-50	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = infra_erro_php_excluir\nDescricao = [null]\nCaminho = controlador.php?acao=infra_erro_php_excluir\nSinAtivo = S)
-51	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = lixeira_cadastrar\nDescricao = [null]\nCaminho = controlador.php?acao=lixeira_cadastrar\nSinAtivo = S)
-52	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = lixeira_alterar\nDescricao = [null]\nCaminho = controlador.php?acao=lixeira_alterar\nSinAtivo = S)
-53	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = lixeira_consultar\nDescricao = [null]\nCaminho = controlador.php?acao=lixeira_consultar\nSinAtivo = S)
-54	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = lixeira_listar\nDescricao = [null]\nCaminho = controlador.php?acao=lixeira_listar\nSinAtivo = S)
-55	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = lixeira_download\nDescricao = [null]\nCaminho = controlador.php?acao=lixeira_download\nSinAtivo = S)
-56	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = lixeira_excluir\nDescricao = [null]\nCaminho = controlador.php?acao=lixeira_excluir\nSinAtivo = S)
-57	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = lixeira_selecionar\nDescricao = [null]\nCaminho = controlador.php?acao=lixeira_selecionar\nSinAtivo = S)
-58	\N	\N	\N	\N	\N	\N	item_menu_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	ItemMenuRN::cadastrarControlado(\n ItemMenuDTO:\nIdItemMenu = [null]\nIdMenu = 100000079\nIdMenuPai = [null]\nIdItemMenuPai = [null]\nIdSistema = 100000100\nIdRecurso = 100016020\nRotulo = Lixeira\nDescricao = [null]\nIcone = lixeira.svg\nSequencia = 0\nSinNovaJanela = N\nSinAtivo = S)
-59	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = solicitacao_ouvidoria_cadastrar\nDescricao = [null]\nCaminho = controlador.php?acao=solicitacao_ouvidoria_cadastrar\nSinAtivo = S)
-60	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = solicitacao_ouvidoria_alterar\nDescricao = [null]\nCaminho = controlador.php?acao=solicitacao_ouvidoria_alterar\nSinAtivo = S)
-61	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = solicitacao_ouvidoria_excluir\nDescricao = [null]\nCaminho = controlador.php?acao=solicitacao_ouvidoria_excluir\nSinAtivo = S)
-62	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = solicitacao_ouvidoria_consultar\nDescricao = [null]\nCaminho = controlador.php?acao=solicitacao_ouvidoria_consultar\nSinAtivo = S)
-63	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = solicitacao_ouvidoria_listar\nDescricao = [null]\nCaminho = controlador.php?acao=solicitacao_ouvidoria_listar\nSinAtivo = S)
-64	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = solicitacao_ouvidoria_selecionar\nDescricao = [null]\nCaminho = controlador.php?acao=solicitacao_ouvidoria_selecionar\nSinAtivo = S)
-65	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = solicitacao_ouvidoria_bloquear\nDescricao = [null]\nCaminho = controlador.php?acao=solicitacao_ouvidoria_bloquear\nSinAtivo = S)
-66	\N	\N	\N	\N	\N	\N	recurso_cadastrar	2025-01-08 14:35:39	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	GET - Array\n(\n)\n\nPOST - Array\n(\n)\n	RecursoRN::cadastrarControlado(\n RecursoDTO:\nIdRecurso = [null]\nIdSistema = 100000100\nNome = solicitacao_ouvidoria_desbloquear\nDescricao = [null]\nCaminho = controlador.php?acao=solicitacao_ouvidoria_desbloquear\nSinAtivo = S)
 \.
 
 
@@ -985,18 +959,10 @@ COPY public.infra_captcha (identificacao, dia, mes, ano, acertos, erros) FROM st
 
 
 --
--- Data for Name: infra_captcha_tentativa; Type: TABLE DATA; Schema: public; Owner: sip_user
---
-
-COPY public.infra_captcha_tentativa (identificacao, id_usuario_origem, tentativas, dth_tentativa, user_agent, ip) FROM stdin;
-\.
-
-
---
 -- Data for Name: infra_erro_php; Type: TABLE DATA; Schema: public; Owner: sip_user
 --
 
-COPY public.infra_erro_php (id_infra_erro_php, sta_tipo, arquivo, linha, erro, dth_cadastro) FROM stdin;
+COPY public.infra_erro_php (id_infra_erro_php, sta_tipo, arquivo, linha, erro, dth_cadastro, quantidade) FROM stdin;
 \.
 
 
@@ -1005,9 +971,18 @@ COPY public.infra_erro_php (id_infra_erro_php, sta_tipo, arquivo, linha, erro, d
 --
 
 COPY public.infra_log (id_infra_log, dth_log, texto_log, ip, sta_tipo) FROM stdin;
-2	2025-01-08 14:35:01	Teste Agendamento SIP	\N	I
-3	2025-01-08 14:35:01	Agendamento FALHOU (24ea892601c0)\n\nServidor: 24ea892601c0\n\nData/Hora: 08/01/2025 14:35:01\n\nComando: AgendamentoRN::testarAgendamento()\n\nErro: Validação:\nFalha na conexão com o servidor de e-mails.\n\nTrilha de Processamento:\n#0 /opt/infra/infra_php/formularios/rn/InfraAgendamentoTarefaRN.php(664): AgendamentoRN->testarAgendamento()\n#1 /opt/infra/infra_php/InfraAgendamentoTarefa.php(218): InfraAgendamentoTarefaRN->executar()\n#2 /opt/sip/scripts/AgendamentoTarefaSip.php(34): InfraAgendamentoTarefa->executar()\n#3 {main}	\N	E
-4	2025-01-08 14:35:01	Erro executando agendamentos.\n\nValidação:\nFalha na conexão com o servidor de e-mails.\n\nTrilha de Processamento:\n#0 /opt/infra/infra_php/InfraAgendamentoTarefa.php(254): InfraMail::enviarConfigurado()\n#1 /opt/sip/scripts/AgendamentoTarefaSip.php(34): InfraAgendamentoTarefa->executar()\n#2 {main}	\N	E
+\.
+
+
+--
+-- Data for Name: infra_navegador_verificacao; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.infra_navegador_verificacao (tipo_navegador, versao_menor, operador_menor, versao_maior, operador_maior, sin_verificar, sin_compativel) FROM stdin;
+Chrome	88	>=	\N	\N	S	S
+Edge	88	>=	\N	\N	S	S
+Firefox	94	>=	\N	\N	S	S
+Safari	14	>=	\N	\N	S	S
 \.
 
 
@@ -1038,6 +1013,10 @@ SIP_FORMATAR_NOME_USUARIO	1
 SIP_TIPO_CAPTCHA	5
 SIP_2_FATORES_TEMPO_DIAS_PAUSA_USUARIO	3
 ID_UNIDADE_TESTE	110000001
+SIP_2_FATORES_UNICO_HABILITADO	0
+SIP_2_FATORES_UNICO_IDENTIFICACAO	
+INFRA_NAVEGADOR_MENSAGEM_AVISO	O seu navegador precisa ser atualizado porque é <b>inseguro ou não suportado</b> pelo sistema.
+INFRA_NAVEGADOR_MENSAGEM_AJUDA	<p>Para que o navegador funcione de maneira adequada, é preciso manter o programa sempre atualizado, para tirar melhor proveito de seus recursos e evitar problemas.</p>\n<p>Quando você não atualiza o navegador, ele não acompanha os padrões mais modernos de desenvolvimento da web. Esse atraso em relação aos sites pode causar dois problemas: o primeiro, e mais perigoso, refere-se às <strong>brechas de segurança</strong>, que deixam algumas lacunas nas quais criminosos se aproveitam para roubar senhas, dados e informações. Ainda, um navegador desatualizado tem problemas para ler e entender os códigos de programação e, por consequência, as páginas <strong>demoram a carregar o conteúdo.</strong></p>\n<p>As empresas responsáveis pelos navegadores estão sempre trabalhando para corrigir as falhas de segurança de uma versão. Por isso, é essencial manter sempre a última versão disponível instalada no seu computador ou dispositivo móvel.</p>
 SIP_VERSAO	3.2.0
 SEI_VERSAO	5.0.0
 \.
@@ -1144,12 +1123,15 @@ COPY public.infra_regra_auditoria_recurso (id_infra_regra_auditoria, recurso) FR
 1	grupo_perfil_desativar
 1	grupo_perfil_reativar
 1	sistema_configurar
+1	perfil_sincronizar
 1	login_sso
 1	servico_sso_cadastrar
 1	servico_sso_alterar
 1	servico_sso_excluir
 1	servico_sso_desativar
 1	servico_sso_reativar
+1	infra_navegador_configurar
+1	assinatura_sso
 \.
 
 
@@ -1174,8 +1156,8 @@ grupo_perfil	1	0	999999999
 perfil	1	100000951	199999999
 regra_auditoria	1	6	999999999
 servico_sso	1	103	999999999
-item_menu	1	100005724	199999999
-recurso	1	100016031	199999999
+item_menu	1	100005732	199999999
+recurso	1	100016051	199999999
 \.
 
 
@@ -1255,11 +1237,8 @@ COPY public.item_menu (id_menu, id_item_menu, id_sistema, id_menu_pai, id_item_m
 100000079	100005463	100000100	\N	100005471	100015529	Tabela de Assuntos	\N	0	S	N	\N
 100000079	100005464	100000100	\N	\N	\N	Relatórios	\N	0	S	N	relatorios.svg
 100000079	100005465	100000100	100000079	100005460	100014561	Log	\N	0	S	N	\N
-100000079	100005467	100000100	\N	\N	100014925	Arquivamento	\N	0	S	N	arquivamento.svg
-100000079	100005470	100000100	\N	\N	\N	Localizadores	\N	0	S	N	\N
 100000079	100005471	100000100	\N	\N	\N	Administração	\N	0	S	N	administracao.svg
 100000079	100005472	100000100	\N	100005677	100014815	Internos	\N	0	S	N	\N
-100000079	100005474	100000100	\N	\N	100014926	Desarquivamento	\N	0	S	N	desarquivamento.svg
 100000079	100005476	100000100	\N	\N	100014749	Iniciar Processo	\N	0	S	N	iniciar_processo.svg
 100000079	100005477	100000100	\N	100005677	100014820	Reunião	\N	0	S	N	\N
 100000079	100005478	100000100	\N	\N	100014898	Retorno Programado	\N	0	S	N	retorno_programado.svg
@@ -1272,6 +1251,9 @@ COPY public.item_menu (id_menu, id_item_menu, id_sistema, id_menu_pai, id_item_m
 100000079	100005487	100000100	100000079	100005470	100014623	Novo	\N	10	S	N	\N
 100000079	100005488	100000100	\N	\N	100014751	Controle de Processos	\N	0	S	N	controle_processos.svg
 100000078	100005676	100000099	\N	\N	100015568	Habilitações 2FA	\N	0	S	N	2fa.svg
+100000079	100005467	100000100	\N	100005729	100014925	Arquivamento	\N	10	S	N	\N
+100000079	100005474	100000100	\N	100005729	100014926	Desarquivamento	\N	20	S	N	\N
+100000079	100005470	100000100	\N	100005729	\N	Localizadores	\N	50	S	N	\N
 100000079	100005489	100000100	\N	\N	100014862	Processos Sobrestados	\N	0	S	N	processos_sobrestados.svg
 100000079	100005490	100000100	100000079	100005470	\N	Tipos	\N	30	S	N	\N
 100000079	100005491	100000100	100000079	100005466	100014947	Unidade	\N	20	S	N	\N
@@ -1422,12 +1404,10 @@ COPY public.item_menu (id_menu, id_item_menu, id_sistema, id_menu_pai, id_item_m
 100000079	100005669	100000100	100000079	100005466	100015542	Arquivamento	\N	0	S	N	\N
 100000079	100005670	100000100	100000079	100005498	100015549	Migrar Dados	\N	30	S	N	\N
 100000079	100005677	100000100	\N	\N	\N	Blocos	\N	0	S	N	blocos.svg
-100000079	100005678	100000100	\N	\N	100015592	Painel de Controle	\N	0	S	N	painel_controle.svg
 100000079	100005679	100000100	100000079	100005479	\N	Títulos	\N	90	S	N	\N
 100000079	100005680	100000100	100000079	100005679	100015625	Listar	\N	2	S	N	\N
 100000079	100005681	100000100	100000079	100005679	100015627	Novo	\N	1	S	N	\N
 100000079	100005682	100000100	100000079	100005679	100015631	Reativar	\N	3	S	N	\N
-100000079	100005683	100000100	\N	\N	100015641	Controle de Prazos	\N	0	S	N	controle_prazo.svg
 100000079	100005684	100000100	100000079	100005479	\N	Categorias	\N	100	S	N	\N
 100000079	100005685	100000100	100000079	100005684	100015649	Listar	\N	20	S	N	\N
 100000079	100005686	100000100	100000079	100005684	100015650	Nova	\N	10	S	N	\N
@@ -1451,24 +1431,29 @@ COPY public.item_menu (id_menu, id_item_menu, id_sistema, id_menu_pai, id_item_m
 100000079	100005704	100000100	100000079	100005702	100015898	Processos	\N	0	S	N	\N
 100000079	100005705	100000100	\N	\N	100015906	Reabertura Programada	\N	0	S	N	reabertura_programada.svg
 100000079	100005706	100000100	100000079	100005471	\N	CPAD	\N	0	S	N	\N
-100000079	100005707	100000100	100000079	100005706	100015912	Nova	\N	10	S	N	\N
-100000079	100005708	100000100	100000079	100005706	100015914	Listar	\N	20	S	N	\N
-100000079	100005709	100000100	100000079	100005706	100015918	Reativar	\N	30	S	N	\N
-100000079	100005710	100000100	\N	\N	100015935	Avaliação Documental	\N	0	S	N	\N
-100000079	100005711	100000100	\N	\N	100015940	Avaliação CPAD	\N	0	S	N	\N
-100000079	100005712	100000100	\N	\N	100015954	Editais de Eliminação	\N	0	S	N	\N
-100000079	100005713	100000100	\N	\N	100015961	Documentos para Eliminação	\N	0	S	N	\N
 100000079	100005714	100000100	100000079	100005464	100015973	Atividade na Unidade	\N	0	S	N	\N
 100000079	100005715	100000100	100000079	100005471	\N	Tipos de Prioridade	\N	0	S	N	\N
 100000079	100005716	100000100	100000079	100005715	100015975	Listar	\N	20	S	N	\N
 100000079	100005717	100000100	100000079	100005715	100015977	Novo	\N	10	S	N	\N
 100000079	100005718	100000100	100000079	100005715	100015981	Reativar	\N	30	S	N	\N
-100000078	100005719	100000099	\N	\N	\N	Login Único SSO	\N	0	S	N	sso.svg
-100000078	100005720	100000099	100000078	100005719	100015989	Autenticações	\N	0	S	N	\N
-100000078	100005721	100000099	100000078	100005719	100015992	Serviços	\N	0	S	N	\N
-100000078	100005722	100000099	100000078	100005400	100016005	Erros do PHP	\N	0	S	N	\N
-100000079	100005723	100000100	100000079	100005460	100016015	Erros do PHP	\N	0	S	N	\N
-100000079	100005724	100000100	\N	\N	100016020	Lixeira	\N	0	S	N	lixeira.svg
+100000078	100005719	100000099	100000078	100005402	100015987	Sincronizar	\N	90	S	N	\N
+100000078	100005720	100000099	\N	\N	\N	Login Único SSO	\N	0	S	N	sso.svg
+100000078	100005721	100000099	100000078	100005720	100015990	Autenticações	\N	0	S	N	\N
+100000078	100005722	100000099	100000078	100005720	100015993	Serviços	\N	0	S	N	\N
+100000079	100005713	100000100	\N	100005729	100015961	Documentos para Eliminação	\N	40	S	N	\N
+100000079	100005678	100000100	\N	\N	100015592	Painel de Controle	\N	0	S	N	painel_controle.svg
+100000079	100005683	100000100	\N	\N	100015641	Controle de Prazos	\N	0	S	N	controle_prazo.svg
+100000078	100005723	100000099	100000078	100005400	100016006	Erros do PHP	\N	0	S	N	\N
+100000078	100005724	100000099	100000078	100005400	100016009	Configuração de Navegadores	\N	0	S	N	\N
+100000079	100005725	100000100	100000079	100005460	100016021	Erros do PHP	\N	0	S	N	\N
+100000079	100005726	100000100	\N	\N	100016026	Lixeira	\N	0	S	N	lixeira.svg
+100000079	100005727	100000100	100000079	100005596	100016043	Termos de Uso	\N	30	S	N	\N
+100000079	100005729	100000100	\N	\N	\N	Arquivo	\N	0	S	N	arquivo.svg
+100000079	100005712	100000100	\N	100005729	100015954	Editais de Eliminação	\N	30	S	N	\N
+100000079	100005730	100000100	\N	\N	\N	Avaliação Documental	\N	0	S	N	avaliacao_documental.svg
+100000079	100005731	100000100	100000079	100005730	100015935	Avaliação	\N	0	S	N	\N
+100000079	100005732	100000100	100000079	100005730	100015940	Revisão	\N	0	S	N	\N
+100000079	100005728	100000100	100000079	100005460	100016043	Termo de Uso	\N	0	S	N	\N
 \.
 
 
@@ -1481,10 +1466,10 @@ COPY public.login (id_login, id_sistema, id_usuario, id_usuario_emulador, dth_lo
 
 
 --
--- Data for Name: login_sso; Type: TABLE DATA; Schema: public; Owner: sip_user
+-- Data for Name: login_sso; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.login_sso (id_login_sso, id_sistema, id_servico_sso, cpf, nome, email, sta_login_sso, dth_login_sso, origem, destino_login, destino_logout, http_client_ip, http_x_forwarded_for, remote_addr, user_agent, sta_nivel_confiabilidade, sta_tipo_acesso, state) FROM stdin;
+COPY public.login_sso (id_login_sso, id_sistema, id_servico_sso, cpf, nome, nome_social, email, telefone, sta_login_sso, dth_login_sso, origem, destino_login, destino_logout, http_client_ip, http_x_forwarded_for, remote_addr, user_agent, sta_nivel_confiabilidade, sta_tipo_acesso, sta_erro, state, sin_certificado_digital, sin_2_fatores) FROM stdin;
 \.
 
 
@@ -1526,8 +1511,8 @@ COPY public.perfil (id_perfil, id_sistema, nome, descricao, sin_coordenado, sin_
 100000945	100000100	Inspeção	Acesso aos recursos específicos para quem trabalha com inspeção administrativa no órgão.	N	S	N
 100000946	100000099	Coordenador de Unidade	\N	N	S	N
 100000949	100000100	Acervo de Sigilosos da Unidade	\N	N	S	N
-100000950	100000100	CPAD	Comissão Permanente de Avaliação de Documentos	N	S	N
 100000951	100000100	Colaborador (Básico sem Assinatura)	Acesso aos recursos básicos para qualquer usuário no SEI. Pode ser combinado com outros perfis, mas sempre tem que ser concedido para qualquer outro perfil funcionar corretamente.	N	S	N
+100000950	100000100	Avaliação Documental	\N	N	S	N
 \.
 
 
@@ -3009,27 +2994,9 @@ COPY public.recurso (id_sistema, id_recurso, nome, descricao, caminho, sin_ativo
 100000100	100015909	documento_geracao_excluir	\N	controlador.php?acao=documento_geracao_excluir	S
 100000100	100015910	documento_geracao_consultar	\N	controlador.php?acao=documento_geracao_consultar	S
 100000100	100015911	documento_geracao_listar	\N	controlador.php?acao=documento_geracao_listar	S
-100000100	100015912	cpad_cadastrar	\N	controlador.php?acao=cpad_cadastrar	S
-100000100	100015913	cpad_consultar	\N	controlador.php?acao=cpad_consultar	S
-100000100	100015914	cpad_listar	\N	controlador.php?acao=cpad_listar	S
-100000100	100015915	cpad_alterar	\N	controlador.php?acao=cpad_alterar	S
-100000100	100015916	cpad_excluir	\N	controlador.php?acao=cpad_excluir	S
-100000100	100015917	cpad_desativar	\N	controlador.php?acao=cpad_desativar	S
-100000100	100015918	cpad_reativar	\N	controlador.php?acao=cpad_reativar	S
-100000100	100015919	cpad_versao_consultar	\N	controlador.php?acao=cpad_versao_consultar	S
-100000100	100015920	cpad_versao_listar	\N	controlador.php?acao=cpad_versao_listar	S
-100000100	100015921	cpad_versao_cadastrar	\N	controlador.php?acao=cpad_versao_cadastrar	S
-100000100	100015922	cpad_versao_alterar	\N	controlador.php?acao=cpad_versao_alterar	S
-100000100	100015923	cpad_versao_excluir	\N	controlador.php?acao=cpad_versao_excluir	S
-100000100	100015924	cpad_versao_desativar	\N	controlador.php?acao=cpad_versao_desativar	S
-100000100	100015925	cpad_versao_reativar	\N	controlador.php?acao=cpad_versao_reativar	S
 100000100	100015926	cpad_composicao_consultar	\N	controlador.php?acao=cpad_composicao_consultar	S
-100000100	100015927	cpad_composicao_listar	\N	controlador.php?acao=cpad_composicao_listar	S
 100000100	100015928	cpad_composicao_cadastrar	\N	controlador.php?acao=cpad_composicao_cadastrar	S
 100000100	100015929	cpad_composicao_alterar	\N	controlador.php?acao=cpad_composicao_alterar	S
-100000100	100015930	cpad_composicao_excluir	\N	controlador.php?acao=cpad_composicao_excluir	S
-100000100	100015931	cpad_composicao_desativar	\N	controlador.php?acao=cpad_composicao_desativar	S
-100000100	100015932	cpad_composicao_reativar	\N	controlador.php?acao=cpad_composicao_reativar	S
 100000100	100015933	avaliacao_documental_consultar	\N	controlador.php?acao=avaliacao_documental_consultar	S
 100000100	100015934	avaliacao_documental_listar	\N	controlador.php?acao=avaliacao_documental_listar	S
 100000100	100015935	avaliacao_documental_pesquisar	\N	controlador.php?acao=avaliacao_documental_pesquisar	S
@@ -3037,13 +3004,6 @@ COPY public.recurso (id_sistema, id_recurso, nome, descricao, caminho, sin_ativo
 100000100	100015937	avaliacao_documental_alterar	\N	controlador.php?acao=avaliacao_documental_alterar	S
 100000100	100015938	avaliacao_documental_excluir	\N	controlador.php?acao=avaliacao_documental_excluir	S
 100000100	100015939	avaliacao_documental_selecionar	\N	controlador.php?acao=avaliacao_documental_selecionar	S
-100000100	100015940	cpad_avaliacao_listar	\N	controlador.php?acao=cpad_avaliacao_listar	S
-100000100	100015941	cpad_avaliacao_cadastrar	\N	controlador.php?acao=cpad_avaliacao_cadastrar	S
-100000100	100015942	cpad_avaliacao_alterar	\N	controlador.php?acao=cpad_avaliacao_alterar	S
-100000100	100015943	cpad_avaliacao_consultar	\N	controlador.php?acao=cpad_avaliacao_consultar	S
-100000100	100015944	cpad_avaliacao_excluir	\N	controlador.php?acao=cpad_avaliacao_excluir	S
-100000100	100015945	cpad_avaliacao_ativar	\N	controlador.php?acao=cpad_avaliacao_ativar	S
-100000100	100015946	cpad_avaliacao_desativar	\N	controlador.php?acao=cpad_avaliacao_desativar	S
 100000100	100015947	edital_eliminacao_cadastrar	\N	controlador.php?acao=edital_eliminacao_cadastrar	S
 100000100	100015948	edital_eliminacao_alterar	\N	controlador.php?acao=edital_eliminacao_alterar	S
 100000100	100015949	edital_eliminacao_consultar	\N	controlador.php?acao=edital_eliminacao_consultar	S
@@ -3084,51 +3044,77 @@ COPY public.recurso (id_sistema, id_recurso, nome, descricao, caminho, sin_ativo
 100000100	100015984	rel_usuario_tipo_prioridade_excluir	\N	controlador.php?acao=rel_usuario_tipo_prioridade_excluir	S
 100000100	100015985	rel_usuario_tipo_prioridade_listar	\N	controlador.php?acao=rel_usuario_tipo_prioridade_listar	S
 100000100	100015986	rel_usuario_tipo_prioridade_selecionar	\N	controlador.php?acao=rel_usuario_tipo_prioridade_selecionar	S
-100000099	100015987	login_sso	\N	controlador.php?acao=login_sso	S
-100000099	100015988	login_sso_consultar	\N	controlador.php?acao=login_sso_consultar	S
-100000099	100015989	login_sso_listar	\N	controlador.php?acao=login_sso_listar	S
-100000099	100015990	servico_sso_cadastrar	\N	controlador.php?acao=servico_sso_cadastrar	S
-100000099	100015991	servico_sso_consultar	\N	controlador.php?acao=servico_sso_consultar	S
-100000099	100015992	servico_sso_listar	\N	controlador.php?acao=servico_sso_listar	S
-100000099	100015993	servico_sso_alterar	\N	controlador.php?acao=servico_sso_alterar	S
-100000099	100015994	servico_sso_excluir	\N	controlador.php?acao=servico_sso_excluir	S
-100000099	100015995	servico_sso_desativar	\N	controlador.php?acao=servico_sso_desativar	S
-100000099	100015996	servico_sso_selecionar	\N	controlador.php?acao=servico_sso_selecionar	S
-100000099	100015997	servico_sso_reativar	\N	controlador.php?acao=servico_sso_reativar	S
-100000099	100015998	servico_sso_upload	\N	controlador.php?acao=servico_sso_upload	S
-100000099	100015999	rel_sistema_servico_sso_cadastrar	\N	controlador.php?acao=rel_sistema_servico_sso_cadastrar	S
-100000099	100016000	rel_sistema_servico_sso_consultar	\N	controlador.php?acao=rel_sistema_servico_sso_consultar	S
-100000099	100016001	rel_sistema_servico_sso_listar	\N	controlador.php?acao=rel_sistema_servico_sso_listar	S
-100000099	100016002	rel_sistema_servico_sso_alterar	\N	controlador.php?acao=rel_sistema_servico_sso_alterar	S
-100000099	100016003	rel_sistema_servico_sso_excluir	\N	controlador.php?acao=rel_sistema_servico_sso_excluir	S
-100000099	100016004	rel_sistema_servico_sso_selecionar	\N	controlador.php?acao=rel_sistema_servico_sso_selecionar	S
-100000099	100016005	infra_erro_php_listar	\N	controlador.php?acao=infra_erro_php_listar	S
-100000099	100016006	infra_erro_php_excluir	\N	controlador.php?acao=infra_erro_php_excluir	S
-100000100	100016007	infra_editor_comentario_cadastrar	\N	controlador.php?acao=infra_editor_comentario_cadastrar	S
-100000100	100016008	infra_editor_comentario_alterar	\N	controlador.php?acao=infra_editor_comentario_alterar	S
-100000100	100016009	infra_editor_comentario_excluir	\N	controlador.php?acao=infra_editor_comentario_excluir	S
-100000100	100016010	infra_editor_comentario_consultar	\N	controlador.php?acao=infra_editor_comentario_consultar	S
-100000100	100016011	infra_editor_comentario_listar	\N	controlador.php?acao=infra_editor_comentario_listar	S
-100000100	100016012	infra_editor_comentario_desativar	\N	controlador.php?acao=infra_editor_comentario_desativar	S
-100000100	100016013	infra_editor_comentario_reativar	\N	controlador.php?acao=infra_editor_comentario_reativar	S
-100000100	100016014	infra_editor_comentario_sincronizar	\N	controlador.php?acao=infra_editor_comentario_sincronizar	S
-100000100	100016015	infra_erro_php_listar	\N	controlador.php?acao=infra_erro_php_listar	S
-100000100	100016016	infra_erro_php_excluir	\N	controlador.php?acao=infra_erro_php_excluir	S
-100000100	100016017	lixeira_cadastrar	\N	controlador.php?acao=lixeira_cadastrar	S
-100000100	100016018	lixeira_alterar	\N	controlador.php?acao=lixeira_alterar	S
-100000100	100016019	lixeira_consultar	\N	controlador.php?acao=lixeira_consultar	S
-100000100	100016020	lixeira_listar	\N	controlador.php?acao=lixeira_listar	S
-100000100	100016021	lixeira_download	\N	controlador.php?acao=lixeira_download	S
-100000100	100016022	lixeira_excluir	\N	controlador.php?acao=lixeira_excluir	S
-100000100	100016023	lixeira_selecionar	\N	controlador.php?acao=lixeira_selecionar	S
-100000100	100016024	solicitacao_ouvidoria_cadastrar	\N	controlador.php?acao=solicitacao_ouvidoria_cadastrar	S
-100000100	100016025	solicitacao_ouvidoria_alterar	\N	controlador.php?acao=solicitacao_ouvidoria_alterar	S
-100000100	100016026	solicitacao_ouvidoria_excluir	\N	controlador.php?acao=solicitacao_ouvidoria_excluir	S
-100000100	100016027	solicitacao_ouvidoria_consultar	\N	controlador.php?acao=solicitacao_ouvidoria_consultar	S
-100000100	100016028	solicitacao_ouvidoria_listar	\N	controlador.php?acao=solicitacao_ouvidoria_listar	S
-100000100	100016029	solicitacao_ouvidoria_selecionar	\N	controlador.php?acao=solicitacao_ouvidoria_selecionar	S
-100000100	100016030	solicitacao_ouvidoria_bloquear	\N	controlador.php?acao=solicitacao_ouvidoria_bloquear	S
-100000100	100016031	solicitacao_ouvidoria_desbloquear	\N	controlador.php?acao=solicitacao_ouvidoria_desbloquear	S
+100000099	100015987	perfil_sincronizar	\N	controlador.php?acao=perfil_sincronizar	S
+100000099	100015988	login_sso	\N	controlador.php?acao=login_sso	S
+100000099	100015989	login_sso_consultar	\N	controlador.php?acao=login_sso_consultar	S
+100000099	100015990	login_sso_listar	\N	controlador.php?acao=login_sso_listar	S
+100000099	100015991	servico_sso_cadastrar	\N	controlador.php?acao=servico_sso_cadastrar	S
+100000099	100015992	servico_sso_consultar	\N	controlador.php?acao=servico_sso_consultar	S
+100000099	100015993	servico_sso_listar	\N	controlador.php?acao=servico_sso_listar	S
+100000099	100015994	servico_sso_alterar	\N	controlador.php?acao=servico_sso_alterar	S
+100000099	100015995	servico_sso_excluir	\N	controlador.php?acao=servico_sso_excluir	S
+100000099	100015996	servico_sso_desativar	\N	controlador.php?acao=servico_sso_desativar	S
+100000099	100015997	servico_sso_selecionar	\N	controlador.php?acao=servico_sso_selecionar	S
+100000099	100015998	servico_sso_reativar	\N	controlador.php?acao=servico_sso_reativar	S
+100000099	100015999	servico_sso_upload	\N	controlador.php?acao=servico_sso_upload	S
+100000099	100016000	rel_sistema_servico_sso_cadastrar	\N	controlador.php?acao=rel_sistema_servico_sso_cadastrar	S
+100000099	100016001	rel_sistema_servico_sso_consultar	\N	controlador.php?acao=rel_sistema_servico_sso_consultar	S
+100000099	100016002	rel_sistema_servico_sso_listar	\N	controlador.php?acao=rel_sistema_servico_sso_listar	S
+100000099	100016003	rel_sistema_servico_sso_alterar	\N	controlador.php?acao=rel_sistema_servico_sso_alterar	S
+100000099	100016004	rel_sistema_servico_sso_excluir	\N	controlador.php?acao=rel_sistema_servico_sso_excluir	S
+100000099	100016005	rel_sistema_servico_sso_selecionar	\N	controlador.php?acao=rel_sistema_servico_sso_selecionar	S
+100000099	100016006	infra_erro_php_listar	\N	controlador.php?acao=infra_erro_php_listar	S
+100000100	100015944	revisao_avaliacao_excluir	\N	controlador.php?acao=revisao_avaliacao_excluir	S
+100000100	100015946	revisao_avaliacao_desativar	\N	controlador.php?acao=revisao_avaliacao_desativar	S
+100000100	100015940	revisao_avaliacao_pesquisar	\N	controlador.php?acao=revisao_avaliacao_pesquisar	S
+100000100	100015942	revisao_avaliacao_alterar	\N	controlador.php?acao=revisao_avaliacao_alterar	S
+100000100	100015943	revisao_avaliacao_consultar	\N	controlador.php?acao=revisao_avaliacao_consultar	S
+100000099	100016007	infra_erro_php_excluir	\N	controlador.php?acao=infra_erro_php_excluir	S
+100000099	100016008	infra_navegador_alertar	\N	controlador.php?acao=infra_navegador_alertar	S
+100000099	100016009	infra_navegador_configurar	\N	controlador.php?acao=infra_navegador_configurar	S
+100000099	100016010	assinatura_sso	\N	controlador.php?acao=assinatura_sso	S
+100000099	100016011	assinatura_sso_consultar	\N	controlador.php?acao=assinatura_sso_consultar	S
+100000099	100016012	assinatura_sso_listar	\N	controlador.php?acao=assinatura_sso_listar	S
+100000100	100016013	infra_editor_comentario_cadastrar	\N	controlador.php?acao=infra_editor_comentario_cadastrar	S
+100000100	100016014	infra_editor_comentario_alterar	\N	controlador.php?acao=infra_editor_comentario_alterar	S
+100000100	100016015	infra_editor_comentario_excluir	\N	controlador.php?acao=infra_editor_comentario_excluir	S
+100000100	100016016	infra_editor_comentario_consultar	\N	controlador.php?acao=infra_editor_comentario_consultar	S
+100000100	100016017	infra_editor_comentario_listar	\N	controlador.php?acao=infra_editor_comentario_listar	S
+100000100	100016018	infra_editor_comentario_desativar	\N	controlador.php?acao=infra_editor_comentario_desativar	S
+100000100	100016019	infra_editor_comentario_reativar	\N	controlador.php?acao=infra_editor_comentario_reativar	S
+100000100	100016020	infra_editor_comentario_sincronizar	\N	controlador.php?acao=infra_editor_comentario_sincronizar	S
+100000100	100016021	infra_erro_php_listar	\N	controlador.php?acao=infra_erro_php_listar	S
+100000100	100016022	infra_erro_php_excluir	\N	controlador.php?acao=infra_erro_php_excluir	S
+100000100	100016023	lixeira_cadastrar	\N	controlador.php?acao=lixeira_cadastrar	S
+100000100	100016024	lixeira_alterar	\N	controlador.php?acao=lixeira_alterar	S
+100000100	100016025	lixeira_consultar	\N	controlador.php?acao=lixeira_consultar	S
+100000100	100016026	lixeira_listar	\N	controlador.php?acao=lixeira_listar	S
+100000100	100016027	lixeira_download	\N	controlador.php?acao=lixeira_download	S
+100000100	100016028	lixeira_excluir	\N	controlador.php?acao=lixeira_excluir	S
+100000100	100016029	lixeira_selecionar	\N	controlador.php?acao=lixeira_selecionar	S
+100000100	100016030	solicitacao_ouvidoria_cadastrar	\N	controlador.php?acao=solicitacao_ouvidoria_cadastrar	S
+100000100	100016031	solicitacao_ouvidoria_alterar	\N	controlador.php?acao=solicitacao_ouvidoria_alterar	S
+100000100	100016032	solicitacao_ouvidoria_excluir	\N	controlador.php?acao=solicitacao_ouvidoria_excluir	S
+100000100	100016033	solicitacao_ouvidoria_consultar	\N	controlador.php?acao=solicitacao_ouvidoria_consultar	S
+100000100	100016034	solicitacao_ouvidoria_listar	\N	controlador.php?acao=solicitacao_ouvidoria_listar	S
+100000100	100016035	solicitacao_ouvidoria_selecionar	\N	controlador.php?acao=solicitacao_ouvidoria_selecionar	S
+100000100	100016036	solicitacao_ouvidoria_bloquear	\N	controlador.php?acao=solicitacao_ouvidoria_bloquear	S
+100000100	100016037	solicitacao_ouvidoria_desbloquear	\N	controlador.php?acao=solicitacao_ouvidoria_desbloquear	S
+100000100	100016038	usuario_configurar	\N	controlador.php?acao=usuario_configurar	S
+100000100	100016039	usuario_externo_aceite	\N	controlador_externo.php?acao=usuario_externo_aceite	S
+100000100	100016040	usuario_externo_gov_br_cadastrar	\N	controlador_externo.php?acao=usuario_externo_gov_br_cadastrar	S
+100000100	100016041	usuario_externo_gov_br_alterar	\N	controlador_externo.php?acao=usuario_externo_gov_br_alterar	S
+100000100	100016042	termo_uso_consultar	\N	controlador.php?acao=termo_uso_consultar	S
+100000100	100016043	termo_uso_listar	\N	controlador.php?acao=termo_uso_listar	S
+100000100	100016044	termo_uso_cadastrar	\N	controlador.php?acao=termo_uso_cadastrar	S
+100000100	100016045	termo_uso_alterar	\N	controlador.php?acao=termo_uso_alterar	S
+100000100	100016046	termo_uso_excluir	\N	controlador.php?acao=termo_uso_excluir	S
+100000100	100016047	termo_uso_clonar	\N	controlador.php?acao=termo_uso_clonar	S
+100000100	100016048	termo_uso_liberar	\N	controlador.php?acao=termo_uso_liberar	S
+100000100	100016049	termo_uso_cancelar_liberacao	\N	controlador.php?acao=termo_uso_cancelar_liberacao	S
+100000100	100016050	usuario_externo_termo_bloquear	\N	controlador_externo.php?acao=usuario_externo_termo_bloquear	S
+100000100	100015941	revisao_avaliacao_cadastrar	\N	controlador.php?acao=revisao_avaliacao_cadastrar	S
+100000100	100016051	assinatura_avancada_ajuda	\N	controlador.php?acao=assinatura_avancada_ajuda	S
 \.
 
 
@@ -3443,11 +3429,6 @@ COPY public.rel_perfil_item_menu (id_perfil, id_sistema, id_menu, id_item_menu, 
 100000939	100000100	100000079	100005703	100015682
 100000939	100000100	100000079	100005704	100015898
 100000938	100000100	100000079	100005705	100015906
-100000939	100000100	100000079	100005707	100015912
-100000939	100000100	100000079	100005708	100015914
-100000939	100000100	100000079	100005709	100015918
-100000941	100000100	100000079	100005710	100015935
-100000950	100000100	100000079	100005711	100015940
 100000941	100000100	100000079	100005712	100015954
 100000941	100000100	100000079	100005713	100015961
 100000938	100000100	100000079	100005714	100015973
@@ -3481,11 +3462,17 @@ COPY public.rel_perfil_item_menu (id_perfil, id_sistema, id_menu, id_item_menu, 
 100000951	100000100	100000079	100005484	100014914
 100000939	100000100	100000079	100005549	100014467
 100000939	100000100	100000079	100005555	100014471
-100000931	100000099	100000078	100005720	100015989
-100000931	100000099	100000078	100005721	100015992
-100000931	100000099	100000078	100005722	100016005
-100000940	100000100	100000079	100005723	100016015
-100000938	100000100	100000079	100005724	100016020
+100000933	100000099	100000078	100005719	100015987
+100000931	100000099	100000078	100005721	100015990
+100000931	100000099	100000078	100005722	100015993
+100000931	100000099	100000078	100005723	100016006
+100000931	100000099	100000078	100005724	100016009
+100000940	100000100	100000079	100005725	100016021
+100000938	100000100	100000079	100005726	100016026
+100000939	100000100	100000079	100005727	100016043
+100000940	100000100	100000079	100005728	100016043
+100000950	100000100	100000079	100005731	100015935
+100000950	100000100	100000079	100005732	100015940
 \.
 
 
@@ -5288,28 +5275,9 @@ COPY public.rel_perfil_recurso (id_perfil, id_sistema, id_recurso) FROM stdin;
 100000938	100000100	100015909
 100000938	100000100	100015910
 100000938	100000100	100015911
-100000939	100000100	100015912
-100000938	100000100	100015913
-100000938	100000100	100015914
-100000939	100000100	100015914
-100000939	100000100	100015915
-100000939	100000100	100015916
-100000939	100000100	100015917
-100000939	100000100	100015918
-100000938	100000100	100015919
-100000938	100000100	100015920
-100000939	100000100	100015921
-100000939	100000100	100015922
-100000939	100000100	100015923
-100000939	100000100	100015924
-100000939	100000100	100015925
 100000938	100000100	100015926
-100000938	100000100	100015927
 100000939	100000100	100015928
 100000939	100000100	100015929
-100000939	100000100	100015930
-100000939	100000100	100015931
-100000939	100000100	100015932
 100000938	100000100	100015933
 100000938	100000100	100015934
 100000941	100000100	100015935
@@ -5325,11 +5293,9 @@ COPY public.rel_perfil_recurso (id_perfil, id_sistema, id_recurso) FROM stdin;
 100000938	100000100	100015943
 100000950	100000100	100015944
 100000941	100000100	100015944
-100000950	100000100	100015945
 100000950	100000100	100015946
 100000941	100000100	100015946
 100000950	100000100	100015937
-100000950	100000100	100015922
 100000941	100000100	100015947
 100000941	100000100	100015948
 100000938	100000100	100015949
@@ -5341,7 +5307,6 @@ COPY public.rel_perfil_recurso (id_perfil, id_sistema, id_recurso) FROM stdin;
 100000941	100000100	100015954
 100000941	100000100	100015955
 100000938	100000100	100015956
-100000941	100000100	100015957
 100000941	100000100	100015958
 100000938	100000100	100015959
 100000941	100000100	100015960
@@ -6034,12 +5999,7 @@ COPY public.rel_perfil_recurso (id_perfil, id_sistema, id_recurso) FROM stdin;
 100000951	100000100	100015904
 100000951	100000100	100015905
 100000951	100000100	100015906
-100000951	100000100	100015913
-100000951	100000100	100015914
-100000951	100000100	100015919
-100000951	100000100	100015920
 100000951	100000100	100015926
-100000951	100000100	100015927
 100000951	100000100	100015933
 100000951	100000100	100015934
 100000951	100000100	100015940
@@ -6235,58 +6195,82 @@ COPY public.rel_perfil_recurso (id_perfil, id_sistema, id_recurso) FROM stdin;
 100000939	100000100	100014467
 100000939	100000100	100014471
 100000939	100000100	100014468
-100000932	100000099	100015987
+100000937	100000099	100015822
+100000933	100000099	100015987
 100000932	100000099	100015988
 100000932	100000099	100015989
-100000931	100000099	100015989
+100000932	100000099	100015990
 100000931	100000099	100015990
-100000932	100000099	100015991
+100000931	100000099	100015991
 100000932	100000099	100015992
-100000931	100000099	100015992
+100000932	100000099	100015993
 100000931	100000099	100015993
 100000931	100000099	100015994
 100000931	100000099	100015995
-100000932	100000099	100015996
-100000931	100000099	100015997
+100000931	100000099	100015996
+100000932	100000099	100015997
 100000931	100000099	100015998
-100000933	100000099	100015999
 100000931	100000099	100015999
-100000932	100000099	100016000
+100000933	100000099	100016000
+100000931	100000099	100016000
 100000932	100000099	100016001
-100000933	100000099	100016002
-100000931	100000099	100016002
+100000932	100000099	100016002
 100000933	100000099	100016003
 100000931	100000099	100016003
-100000932	100000099	100016004
-100000931	100000099	100016005
+100000933	100000099	100016004
+100000931	100000099	100016004
+100000932	100000099	100016005
 100000931	100000099	100016006
+100000931	100000099	100016007
+100000932	100000099	100016008
+100000931	100000099	100016009
+100000932	100000099	100016010
+100000932	100000099	100016011
+100000932	100000099	100016012
 100000938	100000100	100014489
 100000938	100000100	100014495
-100000938	100000100	100016007
-100000938	100000100	100016008
-100000938	100000100	100016009
-100000938	100000100	100016010
-100000938	100000100	100016011
-100000938	100000100	100016012
 100000938	100000100	100016013
 100000938	100000100	100016014
-100000940	100000100	100016015
-100000940	100000100	100016016
+100000938	100000100	100016015
+100000938	100000100	100016016
 100000938	100000100	100016017
 100000938	100000100	100016018
 100000938	100000100	100016019
 100000938	100000100	100016020
-100000938	100000100	100016021
-100000938	100000100	100016022
+100000940	100000100	100016021
+100000940	100000100	100016022
 100000938	100000100	100016023
-100000944	100000100	100016024
-100000944	100000100	100016025
-100000944	100000100	100016026
+100000938	100000100	100016024
+100000938	100000100	100016025
+100000938	100000100	100016026
 100000938	100000100	100016027
 100000938	100000100	100016028
 100000938	100000100	100016029
 100000944	100000100	100016030
 100000944	100000100	100016031
+100000944	100000100	100016032
+100000938	100000100	100016033
+100000938	100000100	100016034
+100000938	100000100	100016035
+100000944	100000100	100016036
+100000944	100000100	100016037
+100000938	100000100	100016038
+100000938	100000100	100016042
+100000938	100000100	100016043
+100000939	100000100	100016043
+100000939	100000100	100016044
+100000939	100000100	100016045
+100000939	100000100	100016046
+100000939	100000100	100016047
+100000939	100000100	100016048
+100000939	100000100	100016049
+100000940	100000100	100016043
+100000950	100000100	100015936
+100000950	100000100	100015938
+100000950	100000100	100015939
+100000950	100000100	100015935
+100000938	100000100	100015957
+100000938	100000100	100016051
 \.
 
 
@@ -6770,20 +6754,11 @@ COPY public.rel_regra_auditoria_recurso (id_recurso, id_sistema, id_regra_audito
 100015979	100000100	2
 100015980	100000100	2
 100015981	100000100	2
-100015912	100000100	6
-100015915	100000100	6
-100015916	100000100	6
-100015917	100000100	6
-100015918	100000100	6
 100015928	100000100	6
 100015929	100000100	6
-100015930	100000100	6
-100015931	100000100	6
-100015932	100000100	6
 100015941	100000100	6
 100015942	100000100	6
 100015944	100000100	6
-100015945	100000100	6
 100015946	100000100	6
 100015947	100000100	6
 100015948	100000100	6
@@ -6794,24 +6769,38 @@ COPY public.rel_regra_auditoria_recurso (id_recurso, id_sistema, id_regra_audito
 100015955	100000100	6
 100015958	100000100	6
 100015987	100000099	1
-100015990	100000099	1
-100015993	100000099	1
+100015988	100000099	1
+100015991	100000099	1
 100015994	100000099	1
 100015995	100000099	1
-100015997	100000099	1
-100016017	100000100	2
-100016021	100000100	2
-100016022	100000100	2
-100016025	100000100	2
+100015996	100000099	1
+100015998	100000099	1
+100016009	100000099	1
+100016010	100000099	1
+100016023	100000100	2
+100016027	100000100	2
+100016028	100000100	2
 100016030	100000100	2
-100016024	100000100	2
 100016031	100000100	2
-100016026	100000100	2
+100016032	100000100	2
+100016036	100000100	2
+100016037	100000100	2
+100016038	100000100	2
+100016044	100000100	2
+100016045	100000100	2
+100016046	100000100	2
+100016047	100000100	2
+100016048	100000100	2
+100016049	100000100	2
+100016039	100000100	3
+100016040	100000100	3
+100016041	100000100	3
+100016050	100000100	3
 \.
 
 
 --
--- Data for Name: rel_sistema_servico_sso; Type: TABLE DATA; Schema: public; Owner: sip_user
+-- Data for Name: rel_sistema_servico_sso; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.rel_sistema_servico_sso (id_sistema, id_servico_sso, sta_tipo_acesso, ordem) FROM stdin;
@@ -6819,13 +6808,13 @@ COPY public.rel_sistema_servico_sso (id_sistema, id_servico_sso, sta_tipo_acesso
 
 
 --
--- Data for Name: servico_sso; Type: TABLE DATA; Schema: public; Owner: sip_user
+-- Data for Name: servico_sso; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.servico_sso (id_servico_sso, identificacao, descricao, sta_servico_sso, client_id, client_secret, scope, url_login, url_api, url_issuer, url_token, url_logout, url_auth, campo_sso, campo_usuario, logo, sin_ativo) FROM stdin;
-101	gov.br	\N	G	xxxxxxxxxxxxxxxxxxxx	xxxxxxxxxxxxxxxxxxxx	openid+email+profile+govbr_confiabilidades	https://sso.staging.acesso.gov.br	https://api.staging.acesso.gov.br/confiabilidades/v3/contas	\N	\N	https://sso.staging.acesso.gov.br/logout?post_logout_redirect_uri=@post_logout_redirect_uri@	\N	sub	Cpf	iVBORw0KGgoAAAANSUhEUgAAAMgAAAAoCAYAAAC7HLUcAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAz+SURBVHhe7Z0PVFRVHse/84c/Awwgf4b/ICJqiqiga2oqYUi5p/+bxa5sWqm1x7S2P1YWFbtaWu7uMd2WsqJ1t2yzDDOLlcNS5r8IjsmIKRqKNiAgCAOMIMzb333vDsxMiHUKBut+PO/M/fPm3fve/L73/n73PlVVajwqQSAQ9IoskNHDo+Hu7o6uri75EAgGCo1GIx8dHR28ZPBQfqwKap6WOyjEIRhomM0NRnHY6BaIQCD4Lv0uEK1Wy1MCweVHvwuks7OTpwSCyw/hYgkEfSAEIhD0gRCIQNAHQiACQR8IgQgEfSAEIhgQVrz5Fa5+rEA+bl25i5cOfoRABANC6/lONLZ0yEdT6+DdOXdGCEQg6AMhEIGgD7rf5hX8fGkwt6P0eCPKTpyDt6cWs8aFYGiIj+zq1DSel8/RatQYHu4DtUoFSF3AhTryi8qhajtCtVZAFw/JOwFwN5DVaFHdaoJEfxhuancE64LlNKOLvn+mrYbnAB83PbLeqEBR2Rk5H+TrgYJVs1Df3I5DJ8/hm+oWhAToMDE+AAY/T/kctJ+mZrkr5jaEhnIv6ks50LSH8gZIhtuUun6Evc3rEoGUvF6AG3byTC/MmZ+EV9MDeO7S1OZ/hgm5HT/4e78EdhlrseKfX6G57QIvIfvSqnFdchjiI3yx9v3DcpnB3xN5WTOh07RCdWQxVM37ydLb5Lpu1DpZJNKYd7D4s2WobquWi3UaHd6avRkatUbOG88a8cS+x+Q048Fxf0TeR34OArlrdhw2bD8qxyY2mHjvSY/DgrQ4qL+aDbQclMul6EcBSwVUdXmUI7F6RMA6sUSu608cXnd3BalJAcgig3Y+UiPd+BmCH8OxajMefKXEQRyMC51WbP/ChPxSEy/hWM9DZZwLVeP/visOhtUClbkY6tKpGOPtywvJdrssONp0lOeAL86QuDieGk9MCvkVzyk0mDuwZku5gzgYLJ/z8TEcqmriJZyz20kcH1CCxMHQ+iufA4BLBTLp2iQsplHf+cgYo+dnCH4MO4pN6LT2/IXRcHJjnp2XiKcyEsjF8obxhL0hSlBVPglVywGep5IhabAmF8M6qQxS0M1UQu4Xo6MGaTikpDmHGow8BRw5x9wyhdTIWeRi+fCcglWS4OGmxoJrhuHJOxIwOtrPdmWc7+jCI6+VOvRbRa4eVBpIPonUjxsh+c/gNf3PIA7SG7A1qwARWUbUdjVg97t7kbmI8hkFmPJQMXY3KKMJc9eYe8XYkVsq168rk7Oy6xWR8Rm21llQkb8fmQsKsDC/gWo6UVtmxLo/F2IKnc++k7J0N3JKWZ0Nu/bbTNj6UhGdy67Fq51oN1Ugh66X8nt+vUf3ItfhegS7j027MZffx4RFRVjx7nG6P15POPS5qBhLuu95Pwpr2D3ze+HlKc8cgLGXwZ6x93A9T5F9kQVuXDYZN14ZiVunRWP9fRN5jYKqqwWqs5/wnII0fC1NAVEUdwRDGrmB3KvRvAYY3XkQMV49ccehsz2COdFcKX+qVGrMIoH0xpq7J2DZTaPwm6ui8cr9kxFIbpcN01kLqs863pQUcR+kxI+pHzmQhj7NS/ufwb+K1dGKzX8qxZKdFxA/VY8M+k2qTE2Y+2oFmqk6mAK7pSOV20gYScEguWgJTjPwqY+KMfffrfSr6mX3rb24BDeuqsH7zTrcxNy6VG9EmS3IfqEUK3aZ+bdsWLB5TTmySXSpqf6I5jGkPe1lxbjtoZPIJi8jYRK/Xl0rVtD1luRzI22rxLqlpZi7w4LacNZPPeboO5H7fiXSV5CRK7FyN0c/pD6/2Qo/ut7iYeyezcj8y0Fszd2Lue+1dz+LiiP1yMw9jnb+PXvOnOu5aFSQN8IDvXgOCKN0gN6d58gAmUtFLlQ3HmFKQN4NPWPvMTxNxi9ZcU3QUJ4DDjeW06jfhT3Vu2WXi+FBwXuET6SctsfP2w0zE0J4joJ4nRaxoY6zTIuT+yWFZFKjSowzkLhUIKtXKaOgw/G6Mvp0c9KMAkMMPn15BrLmT8aLa2KxlIUoB5pRQR/R05OwYIryl7Kip8TLLloqDXo9dGB1sQ4bN6Rg0yOTZffNI2kU8v46A0VrpmA5c+sWTsGm50Ixh87O3XkStcoXFSqaUBAdR+2nYOXCRCQ7e3/nK5HzUhNK3Nyxfk0K1t/Pr7chDi+mGjBnGHvEVhjfq8RqmlBuzkxE0TOTqZ+TsXLtNGxLU6P2ZD1W77RvtQPrSpQ+r1yYhKzskchi7Z6qR/YJA/Jsz+L5GMyn4tp9DfKzcEbFV5kYnV3cf+d0dUmyO9OD87/d0ZsxOprLuMCxPEX672xDce1+bKvcxkuAtKjZ8NL2iNKGqtuh+p6oSMhsJnMBLhVIr0F6vDevteGNB+bHw9f2e3kOwQh54LLgjJMHczGWLkwmw7a7VY0fDIHNMBYdRA65ZTmbjSg0qzGc1VVYcEo+yYYeT98Z29O+MxX1eIMmnYS0WNwcateGVywySFBzaIYjy0bhTjJQfQDuTbcflXVI/m0UFlOq8MPT6PHigcWZ45Bssy1NBCYms4Qa92aMRrStL16BmBhPnxSD9zaDRAb3PEtTgwXFFWd5DhR/NKKt3U4gampMbTc9smXWC/YPmGKUtq95mqFCjGEWQr1CeR7Iq8zDCbMywGnVWswbeScJ01l4wLnWDpQc6+kLC85PnGnhOQVfr57ZDTQTsfZcgUsF0muQPt3egBha+H13EJKx/337QqdxvE3mEs29+wDSc2qRTTFJdl4NMrNMWMfrHaHv9jGz15rIZaLPaIOzsO2oM6OMLSSFusPgfC1PP8SzwdHc5WDk/t52BsL6IC/saWEI+P4/GdvvsOeBnBI8/a+DeDz3AJa94rRMqtXD6ncVzyioTjxLU00LJOsFCuCfIktWll0ZUtANUGn9cNeohbwE+LrxMCydinsVoI7CfetKcdtzu7Dl8yq5zJ4lL3+Jt4tOYM/hOjxMQTnbE7EREahD6JBefFkX4FKBuIZTyCWXaLenDuuzJ+Pbt6+hIxXfvBaDpfyMH4IhUgcm6apainEuRrAeY5mB13Q4BOQy55tQwaYsvQY9YepPQ3pyuEPwy0bqvH2n8fGXJrRYOskIdbyGQSN03AuQdPI8KqOqfQfq/VdAs384VKaNpArbMqsvpKiH5eS44ET4uitLvlaqt20ettcPxYFvGlFZ04KN/z0ul9nwdNfAQqPb6i3l+MOGYnkxQeITjYebBs8vmACN2jUzhjO/QIF0op3F4UOHYFa8LaBQw+OcBcd47gcRF4QFdBnjzkpsNdkFlhSU575Uiq17atCMMExLoUdtbsA/8u1jDQtK3jqFHEqlXh+JBKXwJyPE3xNbHp+OYRQAs51yG2xDLiMlRl5etcF20NVuZPhj3oXkM47UwfeiJJr6rHx0Z2VeoyEl7aZP5tuRsWs9Ee3juNGsoWD6lhG/5jnSPrVnz+goP1w/OQLuWkfz05FwFpCrOnbowO1zXAqX/pMjxZ+Q/9/bhmhcJLla379rhhA2SnZgx+aDWHHQjdwZP2x84mLmFoHk6TSi7TIhfYUZ8+PdcK6uGR+UqZHMfnMKyt8ubEByqnL2JfGMxeL761GwqglLHirCjqkBmOjZjs/3tKLwPDDNPxBzproj+Y5YLC85jtWbDsL4hR4ZFEdVlZmRa6L+xwRheZqza/nTMETvjrcenSa7MKfr22RxhAXooNe5YebyntcZtBoVjdpksG5hkBK3Q+qogarxUxL6IWXmIEFI/jNpiCd/0C5WYQH3A+MfRE2rskvO8NR4YJhvPLw0viirbMLtM6JxvsOK312trHqxtkdG+uKea4cjv8SEb+stiA/XY9b40O5ZzRq3hsYyPiurXDeOu65lorCU/H8WAzgfFX24K70xNg6bpmoRTS5Ebnk7RgTbuw7OuGPa4kS8Sud7nDIju/AcBcf+WP+3q7D29gBMo0GyyXHj+ZJ4jJ2EbetisTJJi4pi6n9hK05RgLzykST8JzNGcZ0oaF/6QiI2zSGXzETt5puxw6zF/Ftikb9yPBL6yeXe93W97OezJd0rRwXJozMbuf/+0RGHVawronxlkciwmYKEIIXOgzTsOUhxqyGF3SO/j+UQyHMMuhAkBiV2HyOGjJRnrPSkcDx86xWIomcRH6HHpBGB8jGK2mL7MjFUvujaeHnzcl5qrCxcVi7jM54CsWnK4TeFFw484mXFnznrPzyKjfnHZIMND/CU38Oqqm3DBbtlX7arzWaZuDDxBoM9Ln8XS9D/1DUpm4VsH6Sqrg3Hq1scxMFYdN1wIY6LIGaQnznsFXfm5xtPNsmvcDBxMFeK+frjh/kjbUI4uV1+5NoMjlWjwYTLXncXCC4HhIslEFwCIRCBoA+EQASCPhACEQj6QAhEIOiDfheI+A90BJcz/S4Q8R/oCC5n5H0QnhYIBA4A/wcoFqjQFFvhUwAAAABJRU5ErkJggg==	S
-102	Microsoft Azure	\N	O	aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa	...............	openid+email+profile	https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb	\N	https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/v2.0	https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/oauth2/v2.0/token	https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/oauth2/logout?post_logout_redirect_uri=@post_logout_redirect_uri@	https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/oauth2/v2.0/authorize	email	Email	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	S
-103	Google	\N	O	xxxxxxxxxxxxxxxxxxxx	xxxxxxxxxxxxxxxxxxxx	email	https://accounts.google.com	\N	\N	https://oauth2.googleapis.com/token	https://www.google.com/accounts/logout?continue=https://appengine.google.com/_ah/logout?continue=@post_logout_redirect_uri@	https://accounts.google.com/o/oauth2/auth	email	Email	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	S
+COPY public.servico_sso (id_servico_sso, identificacao, titulo, sta_servico_sso, client_id, client_secret, scope, url_base, url_api_conta, url_issuer, url_token, url_logout, url_authorize, campo_sso, campo_usuario, logo, client_id_assinatura, client_secret_assinatura, url_base_assinatura, url_api_assinatura, sin_ativo) FROM stdin;
+101	gov.br	Entrar com gov.br	G	[endereco_sip_teste]	xxxxxxxxxxxxxxxxxxxx	openid+email+phone+profile+govbr_confiabilidades	https://sso.staging.acesso.gov.br	https://api.staging.acesso.gov.br/confiabilidades/v3/contas	\N	\N	https://sso.staging.acesso.gov.br/logout?post_logout_redirect_uri=@post_logout_redirect_uri@	\N	sub	Cpf	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	\N	\N	https://cas.staging.iti.br/oauth2.0	https://assinatura-api.staging.iti.br/externo/v2	S
+102	Microsoft	Entrar com Microsoft	O	aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa	...............	openid+email+profile	https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb	\N	https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/v2.0	https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/oauth2/v2.0/token	https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/oauth2/logout?post_logout_redirect_uri=@post_logout_redirect_uri@	https://login.microsoftonline.com/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/oauth2/v2.0/authorize	email	Email	iVBORw0KGgoAAAANSUhEUgAAASwAAAA5CAYAAACMERbpAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAAL4UlEQVR4Xu3db2wb933H8ffdkdL+PNhWUXbEDLVS0kElFZZSoZtdbFhs0bGsPhhg70FBUSJlB2u2AXnQyLKbxC5qOXNiqS6WDViAzhb/iQu2ug8GNLZj0t4zZ9mE2E4sOipZ2OhixTGdZcWw1eL92YMjKZKSJSaNG138fQH3iPcj73fH+9zv+7sTpXz00UfWnTt30HUdIYRYizRNo6WlBSWfz1sSVkKItU7TNJS5uTnLsiw2btyIoij16wghxGcul8thmiZq/QtCCLFWSWAJIRxDAksI4RgSWEIIx5DAEkI4hgSWEMIxJLCEEI4hgSWEcAwJLCGEY0hgCSEcQwJLCOEYElhCCMdY03/8bBXmWMj9Aqz6V5bTgvaH7bh+cZ2Z9z/EaqjN7/GljY/wBdfa6rcQolb5j5/XdGDd/bs/Qv+XIpj1ryznm7hOP03z9Si7Zl+jaDXUiJ0d/8S3HnWjra2uCyGqyK81CCEcRwJLCOEYElhCCMeQwBJCOIZMun+ak+6FNOPPxLhWNFa4selnaPIQO9pcqB/rM2dJhH/EuqPPsv1jt/08y5KMvMjZhSIGgC/E5KEdtLk1yruokD7CM/EsRd0+Kn2jUcI9eV7dY7d7fDRKuKcJl4Mv34X0EUbjWRZKffQNTnCo34v72jQjP2rlyLMBvFX7xGlk0t1JCmnGw0c5U9Qby+4HWf4NLt02MStXjAKXL/4Uy7j3JcTxChleSc5VAhmgvc3DncwLRF46w13dqFndySSw7gs/Q5NxktMpUqn65TA7vTJCun9yvPHWbcxyYhUuczFnsTSvOghFYyRSKfZ+1dmjq0V+QhMxEtMp9n61+XPSp1pSEt6XkvARQquWfbMkwi9ytqizbV+Mr11+kol0Ed2ktmy8miB87CxF+wWbb4jJv9Q4cSBhf9a+r/PmD6aZ0w2sbfuJjmyi6b8yS8pTf2iSQ/1tuFSFwrlxnolfo9geYv/X3+T7qTl0wyKwL0q4uwltmS97pU3l7A+wPxpmU1NtqZGNRTh6bqHUl9L2HtpBm1tFKZdosSzF9hCTuz/gO8fPlfrnZ2jyIE+05UiNHOX1BR2jtN0Hd7ThXvYgLZaEj/j85H+Wx3p8n70PXOpiObjBh/9nefKWxbZVSsL68gr6GIuG2dTkQq36vMdHx9D+5gdkikUMX4iJQzvwujXurNi+pJDhyGiM7IK+OH2wdYypkU001yRNluTIi5y9Wyp5Af/gBAf7vbg1ZZlttcvib7W/yol/1akeXFXKxGX349omJeEakp4Ic/T1clgB5EiMxnlbX2kurCxHYiLOu6V1A70daHeWhhVALjnK4TPz6Iv1EuQTvJR4F92wgAC9XRrqMt+K2ViEb8eyVWEFkOalSIwrC+XPmSURGeaFs1Vhhf0Zo+EoVxaM2mtPPsFoTRjnSPz9ON8LHeFMKawAcslXSN/Slxkl1dmymYCmoV2YYdY0MavKwb7Nm1E1rb7FEtl4hGdis7UBQIZjkRhXFmpL8szkMV4v2kHi39zNOvVDzo9H+PbUcu0Pc+a9ot2H5cIK4MIxXjg7v7iPryYZCf81r1WFFUBueh/hk5e5W7OTHwzLfDXFry5HYnSY0GCQYLBu+YfLdSc99kgllmA6lSL17E7cLhVIM/OOidk1ROx4hA63hlIuNQ/vxOuuOnS+ISbjSaZTKfY81sS7p5P81DDwhSaJJ6dJpV5mz5ftUWTu5u2q+R2bv7LeHrrrRktgjxxPnTcwzOp1n2dnkwuVNKfStzBMi8K5U6QNAxM/Q5OxUkl8sLLeS/F30I3akyywL0oimSL13E6aXCrkc+S2jjEVT5J6eS+dbg2FHBcvVZV599RD71YFVcswc9XENG8znwfL6qP3MW2F0W5JIcOp8ya6YY9iYolpUqmDDDS50cjw43O3MGqOXR9j0TjJVIrD33gY97WzJHIGumVP7MeTKVKpl9nb0YRLyZF85Rzv6wbWrXnyloVFH2NTdvuX93TS5FLITZ/hqm5gUiDz4zSGboAvxET5+/HcAM1uDS4cI3mlyO9ue57o8T10NrlQyiXh4QH+ZG+c4+FOe5+W2h/+xsOOHF1VW9OB5d57muZ/TtN8qpHlr3C7NWgfIvF4nFe3JhtanvzSp1QO/gr8oX66NLtc4iu9BBT1Yx2YwK4A68vtgc6wfbIcHvAylxhhOPQ0J6+Vru5LBNgdWI+20tlcOcGq1+1kqHyyDnhxqXe49EYO07Twh54i8FC5HO5g5+CjaJoC52fIGlbVKMUe0SkqsL4Nv6KgAH29HWiqCp5utvjV1YOmSkdvAEXRyPzHLObb/07aNDG29tKpNrBPb82TKwXJru3r7W2umuuqP+H9g/10aVrlfbMzaSzTgK1jDG1ylUpMD327AqguDfJvcPkDE3NdGz5FQSHDsZFhQsET/OcfH+BkfJpUai89zS7UwmUu5k0My0/oqe085CpdSLr6Cfk1XApkZrIY5oM1ylr1GH6WVOs3+V+10aX0hTRNftssNrw03ZfjvcKk+5PdS65y7W2tn+784TsJIsMhgsEgR+rLs0+gcPM6lmWBr43We27nB8znLSzLvkO1GJ/g8W5Yvn+l96t9xY93vcLSYV6DysF3YYbEm+cwLAO/d93yn1+nMH8dLPMe27WaAjdv2M393rrjWRXGAHj6eH7fEzS5yyVqObiCBA++xnvF6lHYBrwehcW38+DdoNgh/wBa091+68Iv+dr0L+lJNrIs8G8GWO/9Lbzz+/D2Q40tP7/b4K9BrFV+2tZXn1yzJCbPoetmVam4WBIu4WujdZUhjMfbbp+A+Xlu3/NnMNbR5rNPrOvzBcyqnVq4ecMOvF8HTzdb/AqakiFzwcAw/Gx+rBV1lT4CeNraQVEr/VxtizfUXGg8eDfYzXM3b9f2tzJyq9IVYiqWKF3IDjLQ7EYDyCc587aO0Voehd3gZsG+ENgK3Lxh0eA9pc+dNR1Y4hMo3OR66eQI7OqzS8XCJS7mq59N+pjWl0+exfkqKJAeDzM0aM/LLRgteL9oB1Yu+Qrp9/XS52U5PT1nz/1s66VDU+7zl85D95aNKOV09m2mp7XBsrIyEqqeryqQGY8wPBgk+MNLLKwwXG31+u0Au3CMxBW9NLK156JM3QDfZrrXqXyYOUJkeJBg8ASX7uqYdBCaOsCOUmjdmC9gtbTRriioVM19AVw9Q7I8T1YunR8gD1Zvf21WmHQPBjn51r3mk1ZTft+TXK7cmavj6WGLzz5B0xMRO1CePkl2xafvV+EJsHubhqbadxqHQ4MEg09zMlvEsPwMDXThUhU6w2Nsd7lQyZEYDZf6P87pBR2TAPuHv4JrueclPmWeni1sVOw5H//mHlrV6gJ1BZ4+dm9TcWmlO3FDdj9PZBfQLT+hgS60FbbfE3iKoY1ue35pMsJwKFjbvjQX1RrYTUBzoVWXgsHx0t3APnYF1qNpnYRGt+Nya5BPsi88xGAwSPCF17hbtOfJQpvcjT1rVW7/w0uOv7PYSHfFZ80T4C9Cj+Jatqar5yFwaD9PuBef+fGHJokf6LfvGJ2fIWuYjT3aVqUzHCX+ndKdvIoA+6Pfpb/yIKw9Ef/cjroHMbftJ5qI0N20OEF9X3m8pdEJbPB6Gpq/KusYjhI7MFA1v0TpbuAh+h++R1ld4aHvYJTjI/YdvwpfiInYd9lZad9BaOr7RDqaqP3tyD7GpsJsai4du64QU7FnF8vF8lqjU8T39tQ9r7WUHaCuus9wtjX94OhbP/kfvvlzKDY0NFD5xz//Lf7gxgTKe98DS69fYXne/wZf8yef5BVC3Hfy4KgQwnEksIQQjiGBJYRwDAksIYRjSGAJIRxDAksI4Rhr+rGGuzf+j1TW4sMGH2v4sx2/wRdvvY5yK0tD/0lV3QDtfwq/I7ktxFrmiH+kKoQQyHNYQggnksASQjiGBJYQwjEksIQQjiGBJYRwDAksIYRjSGAJIRxDAksI4RgSWEIIx5DAEkI4hgSWEMIxJLCEEI4hgSWEcAwln89but7gf5gRQojPiKZpqC0tLbhcrvrXhBBizdA0jZaWFv4fdJTH8OLRqQ8AAAAASUVORK5CYII=	\N	\N	\N	\N	S
+103	Google	Entrar com Google	O	xxxxxxxxxxxxxxxxxxxx	xxxxxxxxxxxxxxxxxxxx	email	https://accounts.google.com	\N	\N	https://oauth2.googleapis.com/token	https://www.google.com/accounts/logout?continue=https://appengine.google.com/_ah/logout?continue=@post_logout_redirect_uri@	https://accounts.google.com/o/oauth2/auth	email	Email	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	\N	\N	\N	\N	S
 \.
 
 
@@ -6843,9 +6832,9 @@ COPY public.servidor_autenticacao (id_servidor_autenticacao, nome, sta_tipo, end
 -- Data for Name: sistema; Type: TABLE DATA; Schema: public; Owner: sip_user
 --
 
-COPY public.sistema (id_sistema, id_orgao, id_hierarquia, sigla, descricao, pagina_inicial, sin_ativo, web_service, logo, sta_2_fatores, esquema_login, servicos_liberados, chave_acesso, crc, alias, sin_autenticacao_padrao, sin_permissao, sta_confiabilidade_interno, sta_confiabilidade_externo) FROM stdin;
-100000099	0	100000018	SIP	Sistema de Permissões	https://localhost/sip	S	\N	iVBORw0KGgoAAAANSUhEUgAAAJYAAADICAYAAAAKhRhlAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo2MkNDRTkzMEY0RjJFMjExOEZDREM0OEY5REVERTIyMiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozOTM0MUE4N0YzMTExMUUyODIyNUE2M0UxNkU5MEY4MCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozOTM0MUE4NkYzMTExMUUyODIyNUE2M0UxNkU5MEY4MCIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjJGM0EzNkE5RkNGMkUyMTE5MzEwQzJEQTM3N0RGMkFCIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjYyQ0NFOTMwRjRGMkUyMTE4RkNEQzQ4RjlERURFMjIyIi8+IDwvcmRmOkRlc2NyaXB0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	P	dsgov	\N	$2a$12$VGlzUNkiuuSRRarooGKzzOOvZnMKz/bNIz.721dwe/dq75CGyfj6S	d27791b8	\N	S	S	\N	\N
-100000100	0	100000018	SEI	Sistema Eletrônico de Informações	https://localhost/sei/inicializar.php	S	https://localhost/sei/controlador_ws.php?servico=sip	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	P	dsgov	1,2,3,4,5,6	$2a$12$U1UYoWD3Yer2fedJEGOti.YN.cCBByAqI21tsrQ5Qi9.VcTfn4thS	7babf862	\N	S	S	\N	\N
+COPY public.sistema (id_sistema, id_orgao, id_hierarquia, sigla, descricao, pagina_inicial, sin_ativo, web_service, logo, sta_2_fatores, esquema_login, servicos_liberados, chave_acesso, crc, alias, sin_autenticacao_padrao, sin_permissao, sta_confiabilidade_interno) FROM stdin;
+100000099	0	100000018	SIP	Sistema de Permissões	https://localhost/sip	S	\N	iVBORw0KGgoAAAANSUhEUgAAAJYAAADICAYAAAAKhRhlAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo2MkNDRTkzMEY0RjJFMjExOEZDREM0OEY5REVERTIyMiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozOTM0MUE4N0YzMTExMUUyODIyNUE2M0UxNkU5MEY4MCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozOTM0MUE4NkYzMTExMUUyODIyNUE2M0UxNkU5MEY4MCIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjJGM0EzNkE5RkNGMkUyMTE5MzEwQzJEQTM3N0RGMkFCIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjYyQ0NFOTMwRjRGMkUyMTE4RkNEQzQ4RjlERURFMjIyIi8+IDwvcmRmOkRlc2NyaXB0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	P	dsgov	\N	$2a$12$VGlzUNkiuuSRRarooGKzzOOvZnMKz/bNIz.721dwe/dq75CGyfj6S	d27791b8	\N	S	S	\N
+100000100	0	100000018	SEI	Sistema Eletrônico de Informações	https://localhost/sei/inicializar.php	S	https://localhost/sei/controlador_ws.php?servico=sip	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	P	dsgov	1,2,3,4,5,6	$2a$12$U1UYoWD3Yer2fedJEGOti.YN.cCBByAqI21tsrQ5Qi9.VcTfn4thS	7babf862	\N	S	S	\N
 \.
 
 
@@ -6891,10 +6880,11 @@ COPY public.usuario_historico (id_usuario_historico, id_codigo_acesso, id_usuari
 
 
 --
--- Data for Name: usuario_login; Type: TABLE DATA; Schema: public; Owner: sip_user
+-- Data for Name: usuario_login; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.usuario_login (id_usuario, tentativas, dth_tentativa, http_client_ip, http_x_forwarded_for, remote_addr, user_agent) FROM stdin;
+100000001	0	2025-01-23 17:44:39	\N	172.27.0.1	172.27.0.6	Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:134.0) Gecko/20100101 Firefox/134.0
 \.
 
 
@@ -6902,14 +6892,14 @@ COPY public.usuario_login (id_usuario, tentativas, dth_tentativa, http_client_ip
 -- Name: seq_infra_auditoria; Type: SEQUENCE SET; Schema: public; Owner: sip_user
 --
 
-SELECT pg_catalog.setval('public.seq_infra_auditoria', 66, true);
+SELECT pg_catalog.setval('public.seq_infra_auditoria', 1, true);
 
 
 --
 -- Name: seq_infra_log; Type: SEQUENCE SET; Schema: public; Owner: sip_user
 --
 
-SELECT pg_catalog.setval('public.seq_infra_log', 4, true);
+SELECT pg_catalog.setval('public.seq_infra_log', 1, true);
 
 
 --
@@ -6918,6 +6908,14 @@ SELECT pg_catalog.setval('public.seq_infra_log', 4, true);
 
 ALTER TABLE ONLY public.administrador_sistema
     ADD CONSTRAINT pk_administrador_sistema PRIMARY KEY (id_sistema, id_usuario);
+
+
+--
+-- Name: assinatura_sso pk_assinatura_sso; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.assinatura_sso
+    ADD CONSTRAINT pk_assinatura_sso PRIMARY KEY (id_assinatura_sso);
 
 
 --
@@ -7009,14 +7007,6 @@ ALTER TABLE ONLY public.infra_captcha
 
 
 --
--- Name: infra_captcha_tentativa pk_infra_captcha_tentativa; Type: CONSTRAINT; Schema: public; Owner: sip_user
---
-
-ALTER TABLE ONLY public.infra_captcha_tentativa
-    ADD CONSTRAINT pk_infra_captcha_tentativa PRIMARY KEY (identificacao, id_usuario_origem);
-
-
---
 -- Name: infra_erro_php pk_infra_erro_php; Type: CONSTRAINT; Schema: public; Owner: sip_user
 --
 
@@ -7030,6 +7020,14 @@ ALTER TABLE ONLY public.infra_erro_php
 
 ALTER TABLE ONLY public.infra_log
     ADD CONSTRAINT pk_infra_log PRIMARY KEY (id_infra_log);
+
+
+--
+-- Name: infra_navegador_verificacao pk_infra_navegador_verificacao; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.infra_navegador_verificacao
+    ADD CONSTRAINT pk_infra_navegador_verificacao PRIMARY KEY (tipo_navegador);
 
 
 --
@@ -7081,7 +7079,7 @@ ALTER TABLE ONLY public.login
 
 
 --
--- Name: login_sso pk_login_sso; Type: CONSTRAINT; Schema: public; Owner: sip_user
+-- Name: login_sso pk_login_sso; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.login_sso
@@ -7193,7 +7191,7 @@ ALTER TABLE ONLY public.rel_regra_auditoria_recurso
 
 
 --
--- Name: rel_sistema_servico_sso pk_rel_sistema_servico_sso; Type: CONSTRAINT; Schema: public; Owner: sip_user
+-- Name: rel_sistema_servico_sso pk_rel_sistema_servico_sso; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.rel_sistema_servico_sso
@@ -7201,7 +7199,7 @@ ALTER TABLE ONLY public.rel_sistema_servico_sso
 
 
 --
--- Name: servico_sso pk_servico_sso; Type: CONSTRAINT; Schema: public; Owner: sip_user
+-- Name: servico_sso pk_servico_sso; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.servico_sso
@@ -7257,7 +7255,7 @@ ALTER TABLE ONLY public.usuario_historico
 
 
 --
--- Name: usuario_login pk_usuario_login; Type: CONSTRAINT; Schema: public; Owner: sip_user
+-- Name: usuario_login pk_usuario_login; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.usuario_login
@@ -7307,10 +7305,416 @@ CREATE UNIQUE INDEX ak_usuario_sigla_orgao ON public.usuario USING btree (id_org
 
 
 --
+-- Name: fk_admin_sistema_sistema; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_admin_sistema_sistema ON public.administrador_sistema USING btree (id_sistema);
+
+
+--
+-- Name: fk_admin_sistema_usuario; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_admin_sistema_usuario ON public.administrador_sistema USING btree (id_usuario);
+
+
+--
+-- Name: fk_assinatura_sso_login_sso; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_assinatura_sso_login_sso ON public.assinatura_sso USING btree (id_login_sso);
+
+
+--
+-- Name: fk_auditoria_recurso_recurso; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_auditoria_recurso_recurso ON public.rel_regra_auditoria_recurso USING btree (id_recurso, id_sistema);
+
+
+--
+-- Name: fk_auditoria_sistema; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_auditoria_sistema ON public.regra_auditoria USING btree (id_sistema);
+
+
+--
+-- Name: fk_cod_acesso_usu_desativacao; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_cod_acesso_usu_desativacao ON public.codigo_acesso USING btree (id_usuario_desativacao);
+
+
+--
+-- Name: fk_cod_bloqueio_cod_acesso; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_cod_bloqueio_cod_acesso ON public.codigo_bloqueio USING btree (id_codigo_acesso);
+
+
+--
+-- Name: fk_codigo_acesso_sistema; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_codigo_acesso_sistema ON public.codigo_acesso USING btree (id_sistema);
+
+
+--
+-- Name: fk_codigo_acesso_usuario; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_codigo_acesso_usuario ON public.codigo_acesso USING btree (id_usuario);
+
+
+--
+-- Name: fk_coordenador_perfil_perfil; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_coordenador_perfil_perfil ON public.coordenador_perfil USING btree (id_perfil, id_sistema);
+
+
+--
+-- Name: fk_coordenador_perfil_usuario; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_coordenador_perfil_usuario ON public.coordenador_perfil USING btree (id_usuario);
+
+
+--
+-- Name: fk_coordenador_unidade_sistema; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_coordenador_unidade_sistema ON public.coordenador_unidade USING btree (id_sistema);
+
+
+--
+-- Name: fk_coordenador_unidade_unidade; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_coordenador_unidade_unidade ON public.coordenador_unidade USING btree (id_unidade);
+
+
+--
+-- Name: fk_coordenador_unidade_usuario; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_coordenador_unidade_usuario ON public.coordenador_unidade USING btree (id_usuario);
+
+
+--
+-- Name: fk_disp_acesso_cod_acesso; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_disp_acesso_cod_acesso ON public.dispositivo_acesso USING btree (id_codigo_acesso);
+
+
+--
+-- Name: fk_grupo_perfil_sistema; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_grupo_perfil_sistema ON public.grupo_perfil USING btree (id_sistema);
+
+
+--
 -- Name: fk_inf_reg_aud_rec_inf_reg_aud; Type: INDEX; Schema: public; Owner: sip_user
 --
 
 CREATE INDEX fk_inf_reg_aud_rec_inf_reg_aud ON public.infra_regra_auditoria_recurso USING btree (id_infra_regra_auditoria);
+
+
+--
+-- Name: fk_item_menu_item_menu; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_item_menu_item_menu ON public.item_menu USING btree (id_item_menu_pai, id_menu_pai);
+
+
+--
+-- Name: fk_item_menu_menu; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_item_menu_menu ON public.item_menu USING btree (id_menu);
+
+
+--
+-- Name: fk_item_menu_recurso; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_item_menu_recurso ON public.item_menu USING btree (id_recurso, id_sistema);
+
+
+--
+-- Name: fk_login_codigo_acesso; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_login_codigo_acesso ON public.login USING btree (id_codigo_acesso);
+
+
+--
+-- Name: fk_login_dispositivo_acesso; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_login_dispositivo_acesso ON public.login USING btree (id_dispositivo_acesso);
+
+
+--
+-- Name: fk_login_login_sso; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_login_login_sso ON public.login USING btree (id_login_sso);
+
+
+--
+-- Name: fk_login_sistema; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_login_sistema ON public.login USING btree (id_sistema);
+
+
+--
+-- Name: fk_login_sso_servico_sso; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_login_sso_servico_sso ON public.login_sso USING btree (id_servico_sso);
+
+
+--
+-- Name: fk_login_sso_sistema; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_login_sso_sistema ON public.login_sso USING btree (id_sistema);
+
+
+--
+-- Name: fk_login_usuario; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_login_usuario ON public.login USING btree (id_usuario);
+
+
+--
+-- Name: fk_login_usuario_emulador; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_login_usuario_emulador ON public.login USING btree (id_usuario_emulador);
+
+
+--
+-- Name: fk_menu_sistema; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_menu_sistema ON public.menu USING btree (id_sistema);
+
+
+--
+-- Name: fk_perfil_sistema; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_perfil_sistema ON public.perfil USING btree (id_sistema);
+
+
+--
+-- Name: fk_permissao_perfil; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_permissao_perfil ON public.permissao USING btree (id_perfil, id_sistema);
+
+
+--
+-- Name: fk_permissao_tipo_permissao; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_permissao_tipo_permissao ON public.permissao USING btree (id_tipo_permissao);
+
+
+--
+-- Name: fk_permissao_unidade; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_permissao_unidade ON public.permissao USING btree (id_unidade);
+
+
+--
+-- Name: fk_permissao_usuario; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_permissao_usuario ON public.permissao USING btree (id_usuario);
+
+
+--
+-- Name: fk_recurso_sistema; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_recurso_sistema ON public.recurso USING btree (id_sistema);
+
+
+--
+-- Name: fk_recurso_vinculado_recurso_1; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_recurso_vinculado_recurso_1 ON public.recurso_vinculado USING btree (id_recurso_vinculado, id_sistema_vinculado);
+
+
+--
+-- Name: fk_recurso_vinculado_recurso_2; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_recurso_vinculado_recurso_2 ON public.recurso_vinculado USING btree (id_recurso, id_sistema);
+
+
+--
+-- Name: fk_rel_auditoria_recurso_audit; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_auditoria_recurso_audit ON public.rel_regra_auditoria_recurso USING btree (id_regra_auditoria);
+
+
+--
+-- Name: fk_rel_grupo_perf_perf_grupo; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_grupo_perf_perf_grupo ON public.rel_grupo_perfil_perfil USING btree (id_grupo_perfil, id_sistema);
+
+
+--
+-- Name: fk_rel_grupo_perf_perf_perfil; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_grupo_perf_perf_perfil ON public.rel_grupo_perfil_perfil USING btree (id_perfil, id_sistema);
+
+
+--
+-- Name: fk_rel_hie_uni_hierarquia; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_hie_uni_hierarquia ON public.rel_hierarquia_unidade USING btree (id_hierarquia);
+
+
+--
+-- Name: fk_rel_hie_uni_rel_hie_uni; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_hie_uni_rel_hie_uni ON public.rel_hierarquia_unidade USING btree (id_hierarquia_pai, id_unidade_pai);
+
+
+--
+-- Name: fk_rel_hie_uni_unidade; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_hie_uni_unidade ON public.rel_hierarquia_unidade USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_orgao_aut_autenticacao; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_orgao_aut_autenticacao ON public.rel_orgao_autenticacao USING btree (id_servidor_autenticacao);
+
+
+--
+-- Name: fk_rel_orgao_aut_orgao; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_orgao_aut_orgao ON public.rel_orgao_autenticacao USING btree (id_orgao);
+
+
+--
+-- Name: fk_rel_per_ite_men_rel_per_rec; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_per_ite_men_rel_per_rec ON public.rel_perfil_item_menu USING btree (id_perfil, id_recurso, id_sistema);
+
+
+--
+-- Name: fk_rel_perfil_item_menu_it_men; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_perfil_item_menu_it_men ON public.rel_perfil_item_menu USING btree (id_item_menu, id_menu);
+
+
+--
+-- Name: fk_rel_perfil_recurso_perfil; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_perfil_recurso_perfil ON public.rel_perfil_recurso USING btree (id_perfil, id_sistema);
+
+
+--
+-- Name: fk_rel_perfil_recurso_recurso; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_rel_perfil_recurso_recurso ON public.rel_perfil_recurso USING btree (id_recurso, id_sistema);
+
+
+--
+-- Name: fk_rel_sis_serv_sso_serv_sso; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_rel_sis_serv_sso_serv_sso ON public.rel_sistema_servico_sso USING btree (id_servico_sso);
+
+
+--
+-- Name: fk_rel_sis_serv_sso_sistema; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_rel_sis_serv_sso_sistema ON public.rel_sistema_servico_sso USING btree (id_sistema);
+
+
+--
+-- Name: fk_sistema_hierarquia; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_sistema_hierarquia ON public.sistema USING btree (id_hierarquia);
+
+
+--
+-- Name: fk_sistema_orgao; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_sistema_orgao ON public.sistema USING btree (id_orgao);
+
+
+--
+-- Name: fk_unidade_orgao; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_unidade_orgao ON public.unidade USING btree (id_orgao);
+
+
+--
+-- Name: fk_usuario_historico_cod_acess; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_usuario_historico_cod_acess ON public.usuario_historico USING btree (id_codigo_acesso);
+
+
+--
+-- Name: fk_usuario_historico_usu_oper; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_usuario_historico_usu_oper ON public.usuario_historico USING btree (id_usuario_operacao);
+
+
+--
+-- Name: fk_usuario_historico_usuario; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_usuario_historico_usuario ON public.usuario_historico USING btree (id_usuario);
+
+
+--
+-- Name: fk_usuario_login_usuario; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_usuario_login_usuario ON public.usuario_login USING btree (id_usuario);
+
+
+--
+-- Name: fk_usuario_orgao; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX fk_usuario_orgao ON public.usuario USING btree (id_orgao);
 
 
 --
@@ -7331,7 +7735,7 @@ CREATE INDEX i01_codigo_bloqueio ON public.codigo_bloqueio USING btree (dth_envi
 -- Name: i01_dispositivo_acesso; Type: INDEX; Schema: public; Owner: sip_user
 --
 
-CREATE INDEX i01_dispositivo_acesso ON public.dispositivo_acesso USING btree (dth_acesso);
+CREATE INDEX i01_dispositivo_acesso ON public.dispositivo_acesso USING btree (id_codigo_acesso, dth_acesso);
 
 
 --
@@ -7370,17 +7774,24 @@ CREATE INDEX i01_rel_perfil_item_menu ON public.rel_perfil_item_menu USING btree
 
 
 --
--- Name: i01_servico_sso; Type: INDEX; Schema: public; Owner: sip_user
+-- Name: i01_servico_sso; Type: INDEX; Schema: public; Owner: postgres
 --
 
 CREATE UNIQUE INDEX i01_servico_sso ON public.servico_sso USING btree (identificacao);
 
 
 --
+-- Name: i02_codigo_acesso; Type: INDEX; Schema: public; Owner: sip_user
+--
+
+CREATE INDEX i02_codigo_acesso ON public.codigo_acesso USING btree (id_usuario, id_sistema, sin_unico);
+
+
+--
 -- Name: i02_dispositivo_acesso; Type: INDEX; Schema: public; Owner: sip_user
 --
 
-CREATE INDEX i02_dispositivo_acesso ON public.dispositivo_acesso USING btree (dth_liberacao);
+CREATE INDEX i02_dispositivo_acesso ON public.dispositivo_acesso USING btree (id_codigo_acesso, dth_liberacao);
 
 
 --
@@ -7545,405 +7956,6 @@ CREATE INDEX i08_usuario ON public.usuario USING btree (dth_pausa_2fa);
 
 
 --
--- Name: if_admin_sistema_sistema; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_admin_sistema_sistema ON public.administrador_sistema USING btree (id_sistema);
-
-
---
--- Name: if_admin_sistema_usuario; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_admin_sistema_usuario ON public.administrador_sistema USING btree (id_usuario);
-
-
---
--- Name: if_auditoria_recurso_recurso; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_auditoria_recurso_recurso ON public.rel_regra_auditoria_recurso USING btree (id_recurso, id_sistema);
-
-
---
--- Name: if_auditoria_sistema; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_auditoria_sistema ON public.regra_auditoria USING btree (id_sistema);
-
-
---
--- Name: if_cod_acesso_usu_desativacao; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_cod_acesso_usu_desativacao ON public.codigo_acesso USING btree (id_usuario_desativacao);
-
-
---
--- Name: if_cod_bloqueio_cod_acesso; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_cod_bloqueio_cod_acesso ON public.codigo_bloqueio USING btree (id_codigo_acesso);
-
-
---
--- Name: if_codigo_acesso_sistema; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_codigo_acesso_sistema ON public.codigo_acesso USING btree (id_sistema);
-
-
---
--- Name: if_codigo_acesso_usuario; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_codigo_acesso_usuario ON public.codigo_acesso USING btree (id_usuario);
-
-
---
--- Name: if_coordenador_perfil_perfil; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_coordenador_perfil_perfil ON public.coordenador_perfil USING btree (id_perfil, id_sistema);
-
-
---
--- Name: if_coordenador_perfil_usuario; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_coordenador_perfil_usuario ON public.coordenador_perfil USING btree (id_usuario);
-
-
---
--- Name: if_coordenador_unidade_sistema; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_coordenador_unidade_sistema ON public.coordenador_unidade USING btree (id_sistema);
-
-
---
--- Name: if_coordenador_unidade_unidade; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_coordenador_unidade_unidade ON public.coordenador_unidade USING btree (id_unidade);
-
-
---
--- Name: if_coordenador_unidade_usuario; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_coordenador_unidade_usuario ON public.coordenador_unidade USING btree (id_usuario);
-
-
---
--- Name: if_disp_acesso_cod_acesso; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_disp_acesso_cod_acesso ON public.dispositivo_acesso USING btree (id_codigo_acesso);
-
-
---
--- Name: if_grupo_perfil_sistema; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_grupo_perfil_sistema ON public.grupo_perfil USING btree (id_sistema);
-
-
---
--- Name: if_item_menu_item_menu; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_item_menu_item_menu ON public.item_menu USING btree (id_item_menu_pai, id_menu_pai);
-
-
---
--- Name: if_item_menu_menu; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_item_menu_menu ON public.item_menu USING btree (id_menu);
-
-
---
--- Name: if_item_menu_recurso; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_item_menu_recurso ON public.item_menu USING btree (id_recurso, id_sistema);
-
-
---
--- Name: if_login_codigo_acesso; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_login_codigo_acesso ON public.login USING btree (id_codigo_acesso);
-
-
---
--- Name: if_login_dispositivo_acesso; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_login_dispositivo_acesso ON public.login USING btree (id_dispositivo_acesso);
-
-
---
--- Name: if_login_login_sso; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_login_login_sso ON public.login USING btree (id_login_sso);
-
-
---
--- Name: if_login_sistema; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_login_sistema ON public.login USING btree (id_sistema);
-
-
---
--- Name: if_login_sso_servico_sso; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_login_sso_servico_sso ON public.login_sso USING btree (id_servico_sso);
-
-
---
--- Name: if_login_sso_sistema; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_login_sso_sistema ON public.login_sso USING btree (id_sistema);
-
-
---
--- Name: if_login_usuario; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_login_usuario ON public.login USING btree (id_usuario);
-
-
---
--- Name: if_login_usuario_emulador; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_login_usuario_emulador ON public.login USING btree (id_usuario_emulador);
-
-
---
--- Name: if_menu_sistema; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_menu_sistema ON public.menu USING btree (id_sistema);
-
-
---
--- Name: if_perfil_sistema; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_perfil_sistema ON public.perfil USING btree (id_sistema);
-
-
---
--- Name: if_permissao_perfil; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_permissao_perfil ON public.permissao USING btree (id_perfil, id_sistema);
-
-
---
--- Name: if_permissao_tipo_permissao; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_permissao_tipo_permissao ON public.permissao USING btree (id_tipo_permissao);
-
-
---
--- Name: if_permissao_unidade; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_permissao_unidade ON public.permissao USING btree (id_unidade);
-
-
---
--- Name: if_permissao_usuario; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_permissao_usuario ON public.permissao USING btree (id_usuario);
-
-
---
--- Name: if_recurso_sistema; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_recurso_sistema ON public.recurso USING btree (id_sistema);
-
-
---
--- Name: if_recurso_vinculado_recurso_1; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_recurso_vinculado_recurso_1 ON public.recurso_vinculado USING btree (id_recurso_vinculado, id_sistema_vinculado);
-
-
---
--- Name: if_recurso_vinculado_recurso_2; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_recurso_vinculado_recurso_2 ON public.recurso_vinculado USING btree (id_recurso, id_sistema);
-
-
---
--- Name: if_rel_auditoria_recurso_audit; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_auditoria_recurso_audit ON public.rel_regra_auditoria_recurso USING btree (id_regra_auditoria);
-
-
---
--- Name: if_rel_grupo_perf_perf_grupo; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_grupo_perf_perf_grupo ON public.rel_grupo_perfil_perfil USING btree (id_grupo_perfil, id_sistema);
-
-
---
--- Name: if_rel_grupo_perf_perf_perfil; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_grupo_perf_perf_perfil ON public.rel_grupo_perfil_perfil USING btree (id_perfil, id_sistema);
-
-
---
--- Name: if_rel_hie_uni_hierarquia; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_hie_uni_hierarquia ON public.rel_hierarquia_unidade USING btree (id_hierarquia);
-
-
---
--- Name: if_rel_hie_uni_rel_hie_uni; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_hie_uni_rel_hie_uni ON public.rel_hierarquia_unidade USING btree (id_hierarquia_pai, id_unidade_pai);
-
-
---
--- Name: if_rel_hie_uni_unidade; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_hie_uni_unidade ON public.rel_hierarquia_unidade USING btree (id_unidade);
-
-
---
--- Name: if_rel_orgao_aut_autenticacao; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_orgao_aut_autenticacao ON public.rel_orgao_autenticacao USING btree (id_servidor_autenticacao);
-
-
---
--- Name: if_rel_orgao_aut_orgao; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_orgao_aut_orgao ON public.rel_orgao_autenticacao USING btree (id_orgao);
-
-
---
--- Name: if_rel_per_ite_men_rel_per_rec; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_per_ite_men_rel_per_rec ON public.rel_perfil_item_menu USING btree (id_perfil, id_recurso, id_sistema);
-
-
---
--- Name: if_rel_perfil_item_menu_it_men; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_perfil_item_menu_it_men ON public.rel_perfil_item_menu USING btree (id_item_menu, id_menu);
-
-
---
--- Name: if_rel_perfil_recurso_perfil; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_perfil_recurso_perfil ON public.rel_perfil_recurso USING btree (id_perfil, id_sistema);
-
-
---
--- Name: if_rel_perfil_recurso_recurso; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_perfil_recurso_recurso ON public.rel_perfil_recurso USING btree (id_recurso, id_sistema);
-
-
---
--- Name: if_rel_sis_serv_sso_serv_sso; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_sis_serv_sso_serv_sso ON public.rel_sistema_servico_sso USING btree (id_servico_sso);
-
-
---
--- Name: if_rel_sis_serv_sso_sistema; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_rel_sis_serv_sso_sistema ON public.rel_sistema_servico_sso USING btree (id_sistema);
-
-
---
--- Name: if_sistema_hierarquia; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_sistema_hierarquia ON public.sistema USING btree (id_hierarquia);
-
-
---
--- Name: if_sistema_orgao; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_sistema_orgao ON public.sistema USING btree (id_orgao);
-
-
---
--- Name: if_unidade_orgao; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_unidade_orgao ON public.unidade USING btree (id_orgao);
-
-
---
--- Name: if_usuario_historico_cod_acess; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_usuario_historico_cod_acess ON public.usuario_historico USING btree (id_codigo_acesso);
-
-
---
--- Name: if_usuario_historico_usu_oper; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_usuario_historico_usu_oper ON public.usuario_historico USING btree (id_usuario_operacao);
-
-
---
--- Name: if_usuario_historico_usuario; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_usuario_historico_usuario ON public.usuario_historico USING btree (id_usuario);
-
-
---
--- Name: if_usuario_login_usuario; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_usuario_login_usuario ON public.usuario_login USING btree (id_usuario);
-
-
---
--- Name: if_usuario_orgao; Type: INDEX; Schema: public; Owner: sip_user
---
-
-CREATE INDEX if_usuario_orgao ON public.usuario USING btree (id_orgao);
-
-
---
 -- Name: administrador_sistema fk_admin_sistema_sistema; Type: FK CONSTRAINT; Schema: public; Owner: sip_user
 --
 
@@ -7957,6 +7969,14 @@ ALTER TABLE ONLY public.administrador_sistema
 
 ALTER TABLE ONLY public.administrador_sistema
     ADD CONSTRAINT fk_admin_sistema_usuario FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario);
+
+
+--
+-- Name: assinatura_sso fk_assinatura_sso_login_sso; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.assinatura_sso
+    ADD CONSTRAINT fk_assinatura_sso_login_sso FOREIGN KEY (id_login_sso) REFERENCES public.login_sso(id_login_sso);
 
 
 --
@@ -8128,7 +8148,7 @@ ALTER TABLE ONLY public.login
 
 
 --
--- Name: login_sso fk_login_sso_servico_sso; Type: FK CONSTRAINT; Schema: public; Owner: sip_user
+-- Name: login_sso fk_login_sso_servico_sso; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.login_sso
@@ -8136,7 +8156,7 @@ ALTER TABLE ONLY public.login_sso
 
 
 --
--- Name: login_sso fk_login_sso_sistema; Type: FK CONSTRAINT; Schema: public; Owner: sip_user
+-- Name: login_sso fk_login_sso_sistema; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.login_sso
@@ -8328,7 +8348,7 @@ ALTER TABLE ONLY public.rel_perfil_recurso
 
 
 --
--- Name: rel_sistema_servico_sso fk_rel_sis_serv_sso_serv_sso; Type: FK CONSTRAINT; Schema: public; Owner: sip_user
+-- Name: rel_sistema_servico_sso fk_rel_sis_serv_sso_serv_sso; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.rel_sistema_servico_sso
@@ -8336,7 +8356,7 @@ ALTER TABLE ONLY public.rel_sistema_servico_sso
 
 
 --
--- Name: rel_sistema_servico_sso fk_rel_sis_serv_sso_sistema; Type: FK CONSTRAINT; Schema: public; Owner: sip_user
+-- Name: rel_sistema_servico_sso fk_rel_sis_serv_sso_sistema; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.rel_sistema_servico_sso
@@ -8392,7 +8412,7 @@ ALTER TABLE ONLY public.usuario_historico
 
 
 --
--- Name: usuario_login fk_usuario_login_usuario; Type: FK CONSTRAINT; Schema: public; Owner: sip_user
+-- Name: usuario_login fk_usuario_login_usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.usuario_login
@@ -8412,6 +8432,55 @@ ALTER TABLE ONLY public.usuario
 --
 
 GRANT ALL ON SCHEMA public TO sip_user;
+
+
+--
+-- Name: TABLE assinatura_sso; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.assinatura_sso TO sip_user;
+
+
+--
+-- Name: TABLE infra_navegador_verificacao; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.infra_navegador_verificacao TO sip_user;
+
+
+--
+-- Name: TABLE login_sso; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.login_sso TO sip_user;
+
+
+--
+-- Name: TABLE rel_sistema_servico_sso; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.rel_sistema_servico_sso TO sip_user;
+
+
+--
+-- Name: TABLE servico_sso; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.servico_sso TO sip_user;
+
+
+--
+-- Name: TABLE usuario_login; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.usuario_login TO sip_user;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: postgres
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT ALL ON TABLES  TO sip_user;
 
 
 --

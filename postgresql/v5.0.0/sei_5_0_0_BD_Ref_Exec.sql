@@ -268,7 +268,9 @@ CREATE TABLE public.arquivo_extensao (
     sin_ativo character(1) NOT NULL,
     tamanho_maximo integer,
     sin_interface character(1) NOT NULL,
-    sin_servico character(1) NOT NULL
+    sin_servico character(1) NOT NULL,
+    sin_ouvidoria character(1) NOT NULL,
+    sin_usuario_externo character(1) NOT NULL
 );
 
 
@@ -517,6 +519,19 @@ CREATE TABLE public.base_conhecimento (
 ALTER TABLE public.base_conhecimento OWNER TO sei_user;
 
 --
+-- Name: base_conhecimento_idx; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.base_conhecimento_idx (
+    id_base_conhecimento integer NOT NULL,
+    id_anexo integer NOT NULL,
+    dth_indexacao timestamp without time zone
+);
+
+
+ALTER TABLE public.base_conhecimento_idx OWNER TO postgres;
+
+--
 -- Name: bloco; Type: TABLE; Schema: public; Owner: sei_user
 --
 
@@ -524,7 +539,7 @@ CREATE TABLE public.bloco (
     id_bloco integer NOT NULL,
     id_unidade integer NOT NULL,
     id_usuario integer NOT NULL,
-    descricao character varying(1000),
+    descricao character varying(4000),
     sta_tipo character(1) NOT NULL,
     idx_bloco character varying(4000),
     sta_estado character(1) NOT NULL
@@ -610,6 +625,23 @@ CREATE TABLE public.cidade (
 ALTER TABLE public.cidade OWNER TO sei_user;
 
 --
+-- Name: codigo_acesso; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.codigo_acesso (
+    id_codigo_acesso character varying(26) NOT NULL,
+    id_usuario integer NOT NULL,
+    dth_geracao timestamp without time zone NOT NULL,
+    email character varying(100) NOT NULL,
+    codigo character(6) NOT NULL,
+    dth_utilizacao timestamp without time zone,
+    sin_ativo character(1) NOT NULL
+);
+
+
+ALTER TABLE public.codigo_acesso OWNER TO postgres;
+
+--
 -- Name: comentario; Type: TABLE; Schema: public; Owner: sei_user
 --
 
@@ -680,7 +712,7 @@ CREATE TABLE public.contato (
     idx_contato character varying(1000),
     dta_nascimento timestamp without time zone,
     sin_ativo character(1) NOT NULL,
-    cnpj bigint,
+    cnpj character(14),
     sigla character varying(100),
     dth_cadastro timestamp without time zone,
     rg bigint,
@@ -747,74 +779,6 @@ CREATE TABLE public.controle_unidade (
 
 
 ALTER TABLE public.controle_unidade OWNER TO sei_user;
-
---
--- Name: cpad; Type: TABLE; Schema: public; Owner: sei_user
---
-
-CREATE TABLE public.cpad (
-    id_cpad integer NOT NULL,
-    id_orgao integer NOT NULL,
-    sigla character varying(30) NOT NULL,
-    descricao character varying(100) NOT NULL,
-    sin_ativo character(1) NOT NULL
-);
-
-
-ALTER TABLE public.cpad OWNER TO sei_user;
-
---
--- Name: cpad_avaliacao; Type: TABLE; Schema: public; Owner: sei_user
---
-
-CREATE TABLE public.cpad_avaliacao (
-    id_cpad_avaliacao integer NOT NULL,
-    id_avaliacao_documental integer NOT NULL,
-    id_cpad_composicao integer NOT NULL,
-    dth_avaliacao timestamp without time zone NOT NULL,
-    sta_cpad_avaliacao character(1) NOT NULL,
-    motivo text,
-    justificativa text,
-    sin_ativo character(1) NOT NULL
-);
-
-
-ALTER TABLE public.cpad_avaliacao OWNER TO sei_user;
-
---
--- Name: cpad_composicao; Type: TABLE; Schema: public; Owner: sei_user
---
-
-CREATE TABLE public.cpad_composicao (
-    id_cpad_composicao integer NOT NULL,
-    id_cpad_versao integer NOT NULL,
-    id_usuario integer NOT NULL,
-    id_cargo integer NOT NULL,
-    sin_presidente character(1) NOT NULL,
-    ordem integer NOT NULL
-);
-
-
-ALTER TABLE public.cpad_composicao OWNER TO sei_user;
-
---
--- Name: cpad_versao; Type: TABLE; Schema: public; Owner: sei_user
---
-
-CREATE TABLE public.cpad_versao (
-    id_cpad_versao integer NOT NULL,
-    id_cpad integer NOT NULL,
-    sigla character varying(30) NOT NULL,
-    descricao character varying(100) NOT NULL,
-    dth_versao timestamp without time zone NOT NULL,
-    sin_editavel character(1) NOT NULL,
-    sin_ativo character(1) NOT NULL,
-    id_usuario integer,
-    id_unidade integer
-);
-
-
-ALTER TABLE public.cpad_versao OWNER TO sei_user;
 
 --
 -- Name: documento; Type: TABLE; Schema: public; Owner: sei_user
@@ -1291,22 +1255,6 @@ CREATE TABLE public.infra_captcha (
 ALTER TABLE public.infra_captcha OWNER TO sei_user;
 
 --
--- Name: infra_captcha_tentativa; Type: TABLE; Schema: public; Owner: sei_user
---
-
-CREATE TABLE public.infra_captcha_tentativa (
-    identificacao character varying(50) NOT NULL,
-    id_usuario_origem character varying(100) NOT NULL,
-    tentativas integer NOT NULL,
-    dth_tentativa timestamp without time zone NOT NULL,
-    user_agent character varying(500) NOT NULL,
-    ip character varying(15) NOT NULL
-);
-
-
-ALTER TABLE public.infra_captcha_tentativa OWNER TO sei_user;
-
---
 -- Name: infra_dado_usuario; Type: TABLE; Schema: public; Owner: sei_user
 --
 
@@ -1354,7 +1302,8 @@ CREATE TABLE public.infra_erro_php (
     arquivo character varying(255) NOT NULL,
     linha integer NOT NULL,
     erro character varying(4000) NOT NULL,
-    dth_cadastro timestamp without time zone NOT NULL
+    dth_cadastro timestamp without time zone NOT NULL,
+    quantidade bigint
 );
 
 
@@ -1448,7 +1397,7 @@ ALTER TABLE public.infra_sequencia OWNER TO sei_user;
 
 CREATE TABLE public.instalacao_federacao (
     id_instalacao_federacao character varying(26) NOT NULL,
-    cnpj bigint NOT NULL,
+    cnpj character(14),
     sigla character varying(30) NOT NULL,
     descricao character varying(100) NOT NULL,
     endereco character varying(250) NOT NULL,
@@ -1914,6 +1863,18 @@ CREATE TABLE public.protocolo_federacao (
 ALTER TABLE public.protocolo_federacao OWNER TO sei_user;
 
 --
+-- Name: protocolo_idx; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.protocolo_idx (
+    id_protocolo bigint NOT NULL,
+    dth_indexacao timestamp without time zone
+);
+
+
+ALTER TABLE public.protocolo_idx OWNER TO postgres;
+
+--
 -- Name: protocolo_modelo; Type: TABLE; Schema: public; Owner: sei_user
 --
 
@@ -1956,6 +1917,18 @@ CREATE TABLE public.publicacao (
 
 
 ALTER TABLE public.publicacao OWNER TO sei_user;
+
+--
+-- Name: publicacao_idx; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.publicacao_idx (
+    id_publicacao integer NOT NULL,
+    dth_indexacao timestamp without time zone
+);
+
+
+ALTER TABLE public.publicacao_idx OWNER TO postgres;
 
 --
 -- Name: publicacao_legado; Type: TABLE; Schema: public; Owner: sei_user
@@ -2512,6 +2485,25 @@ CREATE TABLE public.retorno_programado (
 ALTER TABLE public.retorno_programado OWNER TO sei_user;
 
 --
+-- Name: revisao_avaliacao; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.revisao_avaliacao (
+    id_revisao_avaliacao integer NOT NULL,
+    id_avaliacao_documental integer NOT NULL,
+    id_usuario integer NOT NULL,
+    id_unidade integer NOT NULL,
+    dth_revisao timestamp without time zone NOT NULL,
+    sta_revisao_avaliacao character(1) NOT NULL,
+    motivo text,
+    justificativa text,
+    sin_ativo character(1) NOT NULL
+);
+
+
+ALTER TABLE public.revisao_avaliacao OWNER TO postgres;
+
+--
 -- Name: secao_documento; Type: TABLE; Schema: public; Owner: sei_user
 --
 
@@ -2572,7 +2564,7 @@ CREATE TABLE public.secao_modelo (
 ALTER TABLE public.secao_modelo OWNER TO sei_user;
 
 --
--- Name: seq_acesso; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_acesso; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_acesso
@@ -2583,10 +2575,10 @@ CREATE SEQUENCE public.seq_acesso
     CACHE 1;
 
 
-ALTER TABLE public.seq_acesso OWNER TO postgres;
+ALTER TABLE public.seq_acesso OWNER TO sei_user;
 
 --
--- Name: seq_acesso_externo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_acesso_externo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_acesso_externo
@@ -2597,10 +2589,10 @@ CREATE SEQUENCE public.seq_acesso_externo
     CACHE 1;
 
 
-ALTER TABLE public.seq_acesso_externo OWNER TO postgres;
+ALTER TABLE public.seq_acesso_externo OWNER TO sei_user;
 
 --
--- Name: seq_acompanhamento; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_acompanhamento; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_acompanhamento
@@ -2611,10 +2603,10 @@ CREATE SEQUENCE public.seq_acompanhamento
     CACHE 1;
 
 
-ALTER TABLE public.seq_acompanhamento OWNER TO postgres;
+ALTER TABLE public.seq_acompanhamento OWNER TO sei_user;
 
 --
--- Name: seq_andamento_instalacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_andamento_instalacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_andamento_instalacao
@@ -2625,10 +2617,10 @@ CREATE SEQUENCE public.seq_andamento_instalacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_andamento_instalacao OWNER TO postgres;
+ALTER TABLE public.seq_andamento_instalacao OWNER TO sei_user;
 
 --
--- Name: seq_andamento_marcador; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_andamento_marcador; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_andamento_marcador
@@ -2639,10 +2631,10 @@ CREATE SEQUENCE public.seq_andamento_marcador
     CACHE 1;
 
 
-ALTER TABLE public.seq_andamento_marcador OWNER TO postgres;
+ALTER TABLE public.seq_andamento_marcador OWNER TO sei_user;
 
 --
--- Name: seq_andamento_plano_trabalho; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_andamento_plano_trabalho; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_andamento_plano_trabalho
@@ -2653,10 +2645,10 @@ CREATE SEQUENCE public.seq_andamento_plano_trabalho
     CACHE 1;
 
 
-ALTER TABLE public.seq_andamento_plano_trabalho OWNER TO postgres;
+ALTER TABLE public.seq_andamento_plano_trabalho OWNER TO sei_user;
 
 --
--- Name: seq_andamento_situacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_andamento_situacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_andamento_situacao
@@ -2667,10 +2659,10 @@ CREATE SEQUENCE public.seq_andamento_situacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_andamento_situacao OWNER TO postgres;
+ALTER TABLE public.seq_andamento_situacao OWNER TO sei_user;
 
 --
--- Name: seq_anexo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_anexo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_anexo
@@ -2681,10 +2673,10 @@ CREATE SEQUENCE public.seq_anexo
     CACHE 1;
 
 
-ALTER TABLE public.seq_anexo OWNER TO postgres;
+ALTER TABLE public.seq_anexo OWNER TO sei_user;
 
 --
--- Name: seq_anotacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_anotacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_anotacao
@@ -2695,10 +2687,10 @@ CREATE SEQUENCE public.seq_anotacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_anotacao OWNER TO postgres;
+ALTER TABLE public.seq_anotacao OWNER TO sei_user;
 
 --
--- Name: seq_arquivo_extensao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_arquivo_extensao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_arquivo_extensao
@@ -2709,10 +2701,10 @@ CREATE SEQUENCE public.seq_arquivo_extensao
     CACHE 1;
 
 
-ALTER TABLE public.seq_arquivo_extensao OWNER TO postgres;
+ALTER TABLE public.seq_arquivo_extensao OWNER TO sei_user;
 
 --
--- Name: seq_assinante; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_assinante; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_assinante
@@ -2723,10 +2715,10 @@ CREATE SEQUENCE public.seq_assinante
     CACHE 1;
 
 
-ALTER TABLE public.seq_assinante OWNER TO postgres;
+ALTER TABLE public.seq_assinante OWNER TO sei_user;
 
 --
--- Name: seq_assinatura; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_assinatura; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_assinatura
@@ -2737,10 +2729,10 @@ CREATE SEQUENCE public.seq_assinatura
     CACHE 1;
 
 
-ALTER TABLE public.seq_assinatura OWNER TO postgres;
+ALTER TABLE public.seq_assinatura OWNER TO sei_user;
 
 --
--- Name: seq_assunto; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_assunto; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_assunto
@@ -2751,10 +2743,10 @@ CREATE SEQUENCE public.seq_assunto
     CACHE 1;
 
 
-ALTER TABLE public.seq_assunto OWNER TO postgres;
+ALTER TABLE public.seq_assunto OWNER TO sei_user;
 
 --
--- Name: seq_assunto_proxy; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_assunto_proxy; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_assunto_proxy
@@ -2765,10 +2757,10 @@ CREATE SEQUENCE public.seq_assunto_proxy
     CACHE 1;
 
 
-ALTER TABLE public.seq_assunto_proxy OWNER TO postgres;
+ALTER TABLE public.seq_assunto_proxy OWNER TO sei_user;
 
 --
--- Name: seq_atividade; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_atividade; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_atividade
@@ -2779,10 +2771,10 @@ CREATE SEQUENCE public.seq_atividade
     CACHE 1;
 
 
-ALTER TABLE public.seq_atividade OWNER TO postgres;
+ALTER TABLE public.seq_atividade OWNER TO sei_user;
 
 --
--- Name: seq_atributo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_atributo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_atributo
@@ -2793,10 +2785,10 @@ CREATE SEQUENCE public.seq_atributo
     CACHE 1;
 
 
-ALTER TABLE public.seq_atributo OWNER TO postgres;
+ALTER TABLE public.seq_atributo OWNER TO sei_user;
 
 --
--- Name: seq_atributo_andam_plano_trab; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_atributo_andam_plano_trab; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_atributo_andam_plano_trab
@@ -2807,10 +2799,10 @@ CREATE SEQUENCE public.seq_atributo_andam_plano_trab
     CACHE 1;
 
 
-ALTER TABLE public.seq_atributo_andam_plano_trab OWNER TO postgres;
+ALTER TABLE public.seq_atributo_andam_plano_trab OWNER TO sei_user;
 
 --
--- Name: seq_atributo_andamento; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_atributo_andamento; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_atributo_andamento
@@ -2821,10 +2813,10 @@ CREATE SEQUENCE public.seq_atributo_andamento
     CACHE 1;
 
 
-ALTER TABLE public.seq_atributo_andamento OWNER TO postgres;
+ALTER TABLE public.seq_atributo_andamento OWNER TO sei_user;
 
 --
--- Name: seq_atributo_andamento_situaca; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_atributo_andamento_situaca; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_atributo_andamento_situaca
@@ -2835,10 +2827,10 @@ CREATE SEQUENCE public.seq_atributo_andamento_situaca
     CACHE 1;
 
 
-ALTER TABLE public.seq_atributo_andamento_situaca OWNER TO postgres;
+ALTER TABLE public.seq_atributo_andamento_situaca OWNER TO sei_user;
 
 --
--- Name: seq_atributo_instalacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_atributo_instalacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_atributo_instalacao
@@ -2849,10 +2841,10 @@ CREATE SEQUENCE public.seq_atributo_instalacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_atributo_instalacao OWNER TO postgres;
+ALTER TABLE public.seq_atributo_instalacao OWNER TO sei_user;
 
 --
--- Name: seq_auditoria_protocolo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_auditoria_protocolo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_auditoria_protocolo
@@ -2863,10 +2855,10 @@ CREATE SEQUENCE public.seq_auditoria_protocolo
     CACHE 1;
 
 
-ALTER TABLE public.seq_auditoria_protocolo OWNER TO postgres;
+ALTER TABLE public.seq_auditoria_protocolo OWNER TO sei_user;
 
 --
--- Name: seq_avaliacao_documental; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_avaliacao_documental; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_avaliacao_documental
@@ -2877,10 +2869,10 @@ CREATE SEQUENCE public.seq_avaliacao_documental
     CACHE 1;
 
 
-ALTER TABLE public.seq_avaliacao_documental OWNER TO postgres;
+ALTER TABLE public.seq_avaliacao_documental OWNER TO sei_user;
 
 --
--- Name: seq_aviso; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_aviso; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_aviso
@@ -2891,10 +2883,10 @@ CREATE SEQUENCE public.seq_aviso
     CACHE 1;
 
 
-ALTER TABLE public.seq_aviso OWNER TO postgres;
+ALTER TABLE public.seq_aviso OWNER TO sei_user;
 
 --
--- Name: seq_base_conhecimento; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_base_conhecimento; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_base_conhecimento
@@ -2905,10 +2897,10 @@ CREATE SEQUENCE public.seq_base_conhecimento
     CACHE 1;
 
 
-ALTER TABLE public.seq_base_conhecimento OWNER TO postgres;
+ALTER TABLE public.seq_base_conhecimento OWNER TO sei_user;
 
 --
--- Name: seq_bloco; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_bloco; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_bloco
@@ -2919,10 +2911,10 @@ CREATE SEQUENCE public.seq_bloco
     CACHE 1;
 
 
-ALTER TABLE public.seq_bloco OWNER TO postgres;
+ALTER TABLE public.seq_bloco OWNER TO sei_user;
 
 --
--- Name: seq_campo_pesquisa; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_campo_pesquisa; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_campo_pesquisa
@@ -2933,10 +2925,10 @@ CREATE SEQUENCE public.seq_campo_pesquisa
     CACHE 1;
 
 
-ALTER TABLE public.seq_campo_pesquisa OWNER TO postgres;
+ALTER TABLE public.seq_campo_pesquisa OWNER TO sei_user;
 
 --
--- Name: seq_cargo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_cargo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_cargo
@@ -2947,10 +2939,10 @@ CREATE SEQUENCE public.seq_cargo
     CACHE 1;
 
 
-ALTER TABLE public.seq_cargo OWNER TO postgres;
+ALTER TABLE public.seq_cargo OWNER TO sei_user;
 
 --
--- Name: seq_categoria; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_categoria; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_categoria
@@ -2961,10 +2953,10 @@ CREATE SEQUENCE public.seq_categoria
     CACHE 1;
 
 
-ALTER TABLE public.seq_categoria OWNER TO postgres;
+ALTER TABLE public.seq_categoria OWNER TO sei_user;
 
 --
--- Name: seq_cidade; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_cidade; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_cidade
@@ -2975,10 +2967,10 @@ CREATE SEQUENCE public.seq_cidade
     CACHE 1;
 
 
-ALTER TABLE public.seq_cidade OWNER TO postgres;
+ALTER TABLE public.seq_cidade OWNER TO sei_user;
 
 --
--- Name: seq_comentario; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_comentario; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_comentario
@@ -2989,38 +2981,38 @@ CREATE SEQUENCE public.seq_comentario
     CACHE 1;
 
 
-ALTER TABLE public.seq_comentario OWNER TO postgres;
+ALTER TABLE public.seq_comentario OWNER TO sei_user;
 
 --
--- Name: seq_conjunto_estilos; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_conjunto_estilos; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_conjunto_estilos
-    START WITH 82
+    START WITH 83
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
 
 
-ALTER TABLE public.seq_conjunto_estilos OWNER TO postgres;
+ALTER TABLE public.seq_conjunto_estilos OWNER TO sei_user;
 
 --
--- Name: seq_conjunto_estilos_item; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_conjunto_estilos_item; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_conjunto_estilos_item
-    START WITH 1643
+    START WITH 1682
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
 
 
-ALTER TABLE public.seq_conjunto_estilos_item OWNER TO postgres;
+ALTER TABLE public.seq_conjunto_estilos_item OWNER TO sei_user;
 
 --
--- Name: seq_contato; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_contato; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_contato
@@ -3031,10 +3023,10 @@ CREATE SEQUENCE public.seq_contato
     CACHE 1;
 
 
-ALTER TABLE public.seq_contato OWNER TO postgres;
+ALTER TABLE public.seq_contato OWNER TO sei_user;
 
 --
--- Name: seq_controle_interno; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_controle_interno; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_controle_interno
@@ -3045,10 +3037,10 @@ CREATE SEQUENCE public.seq_controle_interno
     CACHE 1;
 
 
-ALTER TABLE public.seq_controle_interno OWNER TO postgres;
+ALTER TABLE public.seq_controle_interno OWNER TO sei_user;
 
 --
--- Name: seq_controle_prazo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_controle_prazo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_controle_prazo
@@ -3059,10 +3051,10 @@ CREATE SEQUENCE public.seq_controle_prazo
     CACHE 1;
 
 
-ALTER TABLE public.seq_controle_prazo OWNER TO postgres;
+ALTER TABLE public.seq_controle_prazo OWNER TO sei_user;
 
 --
--- Name: seq_controle_unidade; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_controle_unidade; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_controle_unidade
@@ -3073,66 +3065,10 @@ CREATE SEQUENCE public.seq_controle_unidade
     CACHE 1;
 
 
-ALTER TABLE public.seq_controle_unidade OWNER TO postgres;
+ALTER TABLE public.seq_controle_unidade OWNER TO sei_user;
 
 --
--- Name: seq_cpad; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.seq_cpad
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.seq_cpad OWNER TO postgres;
-
---
--- Name: seq_cpad_avaliacao; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.seq_cpad_avaliacao
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.seq_cpad_avaliacao OWNER TO postgres;
-
---
--- Name: seq_cpad_composicao; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.seq_cpad_composicao
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.seq_cpad_composicao OWNER TO postgres;
-
---
--- Name: seq_cpad_versao; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.seq_cpad_versao
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.seq_cpad_versao OWNER TO postgres;
-
---
--- Name: seq_documento; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_documento; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_documento
@@ -3143,10 +3079,10 @@ CREATE SEQUENCE public.seq_documento
     CACHE 1;
 
 
-ALTER TABLE public.seq_documento OWNER TO postgres;
+ALTER TABLE public.seq_documento OWNER TO sei_user;
 
 --
--- Name: seq_dominio; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_dominio; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_dominio
@@ -3157,10 +3093,10 @@ CREATE SEQUENCE public.seq_dominio
     CACHE 1;
 
 
-ALTER TABLE public.seq_dominio OWNER TO postgres;
+ALTER TABLE public.seq_dominio OWNER TO sei_user;
 
 --
--- Name: seq_edital_eliminacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_edital_eliminacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_edital_eliminacao
@@ -3171,10 +3107,10 @@ CREATE SEQUENCE public.seq_edital_eliminacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_edital_eliminacao OWNER TO postgres;
+ALTER TABLE public.seq_edital_eliminacao OWNER TO sei_user;
 
 --
--- Name: seq_edital_eliminacao_conteudo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_edital_eliminacao_conteudo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_edital_eliminacao_conteudo
@@ -3185,10 +3121,10 @@ CREATE SEQUENCE public.seq_edital_eliminacao_conteudo
     CACHE 1;
 
 
-ALTER TABLE public.seq_edital_eliminacao_conteudo OWNER TO postgres;
+ALTER TABLE public.seq_edital_eliminacao_conteudo OWNER TO sei_user;
 
 --
--- Name: seq_edital_eliminacao_erro; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_edital_eliminacao_erro; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_edital_eliminacao_erro
@@ -3199,10 +3135,10 @@ CREATE SEQUENCE public.seq_edital_eliminacao_erro
     CACHE 1;
 
 
-ALTER TABLE public.seq_edital_eliminacao_erro OWNER TO postgres;
+ALTER TABLE public.seq_edital_eliminacao_erro OWNER TO sei_user;
 
 --
--- Name: seq_email_grupo_email; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_email_grupo_email; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_email_grupo_email
@@ -3213,10 +3149,10 @@ CREATE SEQUENCE public.seq_email_grupo_email
     CACHE 1;
 
 
-ALTER TABLE public.seq_email_grupo_email OWNER TO postgres;
+ALTER TABLE public.seq_email_grupo_email OWNER TO sei_user;
 
 --
--- Name: seq_email_sistema; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_email_sistema; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_email_sistema
@@ -3227,10 +3163,10 @@ CREATE SEQUENCE public.seq_email_sistema
     CACHE 1;
 
 
-ALTER TABLE public.seq_email_sistema OWNER TO postgres;
+ALTER TABLE public.seq_email_sistema OWNER TO sei_user;
 
 --
--- Name: seq_email_unidade; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_email_unidade; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_email_unidade
@@ -3241,10 +3177,10 @@ CREATE SEQUENCE public.seq_email_unidade
     CACHE 1;
 
 
-ALTER TABLE public.seq_email_unidade OWNER TO postgres;
+ALTER TABLE public.seq_email_unidade OWNER TO sei_user;
 
 --
--- Name: seq_email_utilizado; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_email_utilizado; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_email_utilizado
@@ -3255,10 +3191,10 @@ CREATE SEQUENCE public.seq_email_utilizado
     CACHE 1;
 
 
-ALTER TABLE public.seq_email_utilizado OWNER TO postgres;
+ALTER TABLE public.seq_email_utilizado OWNER TO sei_user;
 
 --
--- Name: seq_estatisticas; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_estatisticas; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_estatisticas
@@ -3269,10 +3205,10 @@ CREATE SEQUENCE public.seq_estatisticas
     CACHE 1;
 
 
-ALTER TABLE public.seq_estatisticas OWNER TO postgres;
+ALTER TABLE public.seq_estatisticas OWNER TO sei_user;
 
 --
--- Name: seq_estilo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_estilo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_estilo
@@ -3283,10 +3219,10 @@ CREATE SEQUENCE public.seq_estilo
     CACHE 1;
 
 
-ALTER TABLE public.seq_estilo OWNER TO postgres;
+ALTER TABLE public.seq_estilo OWNER TO sei_user;
 
 --
--- Name: seq_etapa_trabalho; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_etapa_trabalho; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_etapa_trabalho
@@ -3297,10 +3233,10 @@ CREATE SEQUENCE public.seq_etapa_trabalho
     CACHE 1;
 
 
-ALTER TABLE public.seq_etapa_trabalho OWNER TO postgres;
+ALTER TABLE public.seq_etapa_trabalho OWNER TO sei_user;
 
 --
--- Name: seq_feed; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_feed; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_feed
@@ -3311,10 +3247,10 @@ CREATE SEQUENCE public.seq_feed
     CACHE 1;
 
 
-ALTER TABLE public.seq_feed OWNER TO postgres;
+ALTER TABLE public.seq_feed OWNER TO sei_user;
 
 --
--- Name: seq_feriado; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_feriado; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_feriado
@@ -3325,10 +3261,10 @@ CREATE SEQUENCE public.seq_feriado
     CACHE 1;
 
 
-ALTER TABLE public.seq_feriado OWNER TO postgres;
+ALTER TABLE public.seq_feriado OWNER TO sei_user;
 
 --
--- Name: seq_grupo_acompanhamento; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_grupo_acompanhamento; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_grupo_acompanhamento
@@ -3339,10 +3275,10 @@ CREATE SEQUENCE public.seq_grupo_acompanhamento
     CACHE 1;
 
 
-ALTER TABLE public.seq_grupo_acompanhamento OWNER TO postgres;
+ALTER TABLE public.seq_grupo_acompanhamento OWNER TO sei_user;
 
 --
--- Name: seq_grupo_bloco; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_grupo_bloco; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_grupo_bloco
@@ -3353,10 +3289,10 @@ CREATE SEQUENCE public.seq_grupo_bloco
     CACHE 1;
 
 
-ALTER TABLE public.seq_grupo_bloco OWNER TO postgres;
+ALTER TABLE public.seq_grupo_bloco OWNER TO sei_user;
 
 --
--- Name: seq_grupo_contato; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_grupo_contato; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_grupo_contato
@@ -3367,10 +3303,10 @@ CREATE SEQUENCE public.seq_grupo_contato
     CACHE 1;
 
 
-ALTER TABLE public.seq_grupo_contato OWNER TO postgres;
+ALTER TABLE public.seq_grupo_contato OWNER TO sei_user;
 
 --
--- Name: seq_grupo_email; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_grupo_email; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_grupo_email
@@ -3381,10 +3317,10 @@ CREATE SEQUENCE public.seq_grupo_email
     CACHE 1;
 
 
-ALTER TABLE public.seq_grupo_email OWNER TO postgres;
+ALTER TABLE public.seq_grupo_email OWNER TO sei_user;
 
 --
--- Name: seq_grupo_federacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_grupo_federacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_grupo_federacao
@@ -3395,10 +3331,10 @@ CREATE SEQUENCE public.seq_grupo_federacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_grupo_federacao OWNER TO postgres;
+ALTER TABLE public.seq_grupo_federacao OWNER TO sei_user;
 
 --
--- Name: seq_grupo_protocolo_modelo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_grupo_protocolo_modelo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_grupo_protocolo_modelo
@@ -3409,10 +3345,10 @@ CREATE SEQUENCE public.seq_grupo_protocolo_modelo
     CACHE 1;
 
 
-ALTER TABLE public.seq_grupo_protocolo_modelo OWNER TO postgres;
+ALTER TABLE public.seq_grupo_protocolo_modelo OWNER TO sei_user;
 
 --
--- Name: seq_grupo_serie; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_grupo_serie; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_grupo_serie
@@ -3423,10 +3359,10 @@ CREATE SEQUENCE public.seq_grupo_serie
     CACHE 1;
 
 
-ALTER TABLE public.seq_grupo_serie OWNER TO postgres;
+ALTER TABLE public.seq_grupo_serie OWNER TO sei_user;
 
 --
--- Name: seq_grupo_unidade; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_grupo_unidade; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_grupo_unidade
@@ -3437,10 +3373,10 @@ CREATE SEQUENCE public.seq_grupo_unidade
     CACHE 1;
 
 
-ALTER TABLE public.seq_grupo_unidade OWNER TO postgres;
+ALTER TABLE public.seq_grupo_unidade OWNER TO sei_user;
 
 --
--- Name: seq_hipotese_legal; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_hipotese_legal; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_hipotese_legal
@@ -3451,10 +3387,10 @@ CREATE SEQUENCE public.seq_hipotese_legal
     CACHE 1;
 
 
-ALTER TABLE public.seq_hipotese_legal OWNER TO postgres;
+ALTER TABLE public.seq_hipotese_legal OWNER TO sei_user;
 
 --
--- Name: seq_imagem_formato; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_imagem_formato; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_imagem_formato
@@ -3465,10 +3401,10 @@ CREATE SEQUENCE public.seq_imagem_formato
     CACHE 1;
 
 
-ALTER TABLE public.seq_imagem_formato OWNER TO postgres;
+ALTER TABLE public.seq_imagem_formato OWNER TO sei_user;
 
 --
--- Name: seq_infra_auditoria; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_infra_auditoria; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_infra_auditoria
@@ -3479,10 +3415,10 @@ CREATE SEQUENCE public.seq_infra_auditoria
     CACHE 1;
 
 
-ALTER TABLE public.seq_infra_auditoria OWNER TO postgres;
+ALTER TABLE public.seq_infra_auditoria OWNER TO sei_user;
 
 --
--- Name: seq_infra_log; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_infra_log; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_infra_log
@@ -3493,24 +3429,24 @@ CREATE SEQUENCE public.seq_infra_log
     CACHE 1;
 
 
-ALTER TABLE public.seq_infra_log OWNER TO postgres;
+ALTER TABLE public.seq_infra_log OWNER TO sei_user;
 
 --
--- Name: seq_infra_navegador; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_infra_navegador; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_infra_navegador
-    START WITH 2
+    START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
 
 
-ALTER TABLE public.seq_infra_navegador OWNER TO postgres;
+ALTER TABLE public.seq_infra_navegador OWNER TO sei_user;
 
 --
--- Name: seq_item_etapa; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_item_etapa; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_item_etapa
@@ -3521,10 +3457,10 @@ CREATE SEQUENCE public.seq_item_etapa
     CACHE 1;
 
 
-ALTER TABLE public.seq_item_etapa OWNER TO postgres;
+ALTER TABLE public.seq_item_etapa OWNER TO sei_user;
 
 --
--- Name: seq_lembrete; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_lembrete; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_lembrete
@@ -3535,7 +3471,7 @@ CREATE SEQUENCE public.seq_lembrete
     CACHE 1;
 
 
-ALTER TABLE public.seq_lembrete OWNER TO postgres;
+ALTER TABLE public.seq_lembrete OWNER TO sei_user;
 
 --
 -- Name: seq_lixeira; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -3552,7 +3488,7 @@ CREATE SEQUENCE public.seq_lixeira
 ALTER TABLE public.seq_lixeira OWNER TO postgres;
 
 --
--- Name: seq_localizador; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_localizador; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_localizador
@@ -3563,10 +3499,10 @@ CREATE SEQUENCE public.seq_localizador
     CACHE 1;
 
 
-ALTER TABLE public.seq_localizador OWNER TO postgres;
+ALTER TABLE public.seq_localizador OWNER TO sei_user;
 
 --
--- Name: seq_lugar_localizador; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_lugar_localizador; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_lugar_localizador
@@ -3577,10 +3513,10 @@ CREATE SEQUENCE public.seq_lugar_localizador
     CACHE 1;
 
 
-ALTER TABLE public.seq_lugar_localizador OWNER TO postgres;
+ALTER TABLE public.seq_lugar_localizador OWNER TO sei_user;
 
 --
--- Name: seq_marcador; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_marcador; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_marcador
@@ -3591,10 +3527,10 @@ CREATE SEQUENCE public.seq_marcador
     CACHE 1;
 
 
-ALTER TABLE public.seq_marcador OWNER TO postgres;
+ALTER TABLE public.seq_marcador OWNER TO sei_user;
 
 --
--- Name: seq_modelo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_modelo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_modelo
@@ -3605,10 +3541,10 @@ CREATE SEQUENCE public.seq_modelo
     CACHE 1;
 
 
-ALTER TABLE public.seq_modelo OWNER TO postgres;
+ALTER TABLE public.seq_modelo OWNER TO sei_user;
 
 --
--- Name: seq_monitoramento_servico; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_monitoramento_servico; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_monitoramento_servico
@@ -3619,10 +3555,10 @@ CREATE SEQUENCE public.seq_monitoramento_servico
     CACHE 1;
 
 
-ALTER TABLE public.seq_monitoramento_servico OWNER TO postgres;
+ALTER TABLE public.seq_monitoramento_servico OWNER TO sei_user;
 
 --
--- Name: seq_nivel_acesso_permitido; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_nivel_acesso_permitido; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_nivel_acesso_permitido
@@ -3633,10 +3569,10 @@ CREATE SEQUENCE public.seq_nivel_acesso_permitido
     CACHE 1;
 
 
-ALTER TABLE public.seq_nivel_acesso_permitido OWNER TO postgres;
+ALTER TABLE public.seq_nivel_acesso_permitido OWNER TO sei_user;
 
 --
--- Name: seq_notificacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_notificacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_notificacao
@@ -3647,10 +3583,10 @@ CREATE SEQUENCE public.seq_notificacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_notificacao OWNER TO postgres;
+ALTER TABLE public.seq_notificacao OWNER TO sei_user;
 
 --
--- Name: seq_novidade; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_novidade; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_novidade
@@ -3661,10 +3597,10 @@ CREATE SEQUENCE public.seq_novidade
     CACHE 1;
 
 
-ALTER TABLE public.seq_novidade OWNER TO postgres;
+ALTER TABLE public.seq_novidade OWNER TO sei_user;
 
 --
--- Name: seq_numeracao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_numeracao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_numeracao
@@ -3675,10 +3611,10 @@ CREATE SEQUENCE public.seq_numeracao
     CACHE 1;
 
 
-ALTER TABLE public.seq_numeracao OWNER TO postgres;
+ALTER TABLE public.seq_numeracao OWNER TO sei_user;
 
 --
--- Name: seq_observacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_observacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_observacao
@@ -3689,10 +3625,10 @@ CREATE SEQUENCE public.seq_observacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_observacao OWNER TO postgres;
+ALTER TABLE public.seq_observacao OWNER TO sei_user;
 
 --
--- Name: seq_operacao_servico; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_operacao_servico; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_operacao_servico
@@ -3703,10 +3639,10 @@ CREATE SEQUENCE public.seq_operacao_servico
     CACHE 1;
 
 
-ALTER TABLE public.seq_operacao_servico OWNER TO postgres;
+ALTER TABLE public.seq_operacao_servico OWNER TO sei_user;
 
 --
--- Name: seq_ordenador_despesa; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_ordenador_despesa; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_ordenador_despesa
@@ -3717,10 +3653,10 @@ CREATE SEQUENCE public.seq_ordenador_despesa
     CACHE 1;
 
 
-ALTER TABLE public.seq_ordenador_despesa OWNER TO postgres;
+ALTER TABLE public.seq_ordenador_despesa OWNER TO sei_user;
 
 --
--- Name: seq_orgao_historico; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_orgao_historico; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_orgao_historico
@@ -3731,10 +3667,10 @@ CREATE SEQUENCE public.seq_orgao_historico
     CACHE 1;
 
 
-ALTER TABLE public.seq_orgao_historico OWNER TO postgres;
+ALTER TABLE public.seq_orgao_historico OWNER TO sei_user;
 
 --
--- Name: seq_pais; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_pais; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_pais
@@ -3745,10 +3681,10 @@ CREATE SEQUENCE public.seq_pais
     CACHE 1;
 
 
-ALTER TABLE public.seq_pais OWNER TO postgres;
+ALTER TABLE public.seq_pais OWNER TO sei_user;
 
 --
--- Name: seq_participante; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_participante; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_participante
@@ -3759,10 +3695,10 @@ CREATE SEQUENCE public.seq_participante
     CACHE 1;
 
 
-ALTER TABLE public.seq_participante OWNER TO postgres;
+ALTER TABLE public.seq_participante OWNER TO sei_user;
 
 --
--- Name: seq_pesquisa; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_pesquisa; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_pesquisa
@@ -3773,10 +3709,10 @@ CREATE SEQUENCE public.seq_pesquisa
     CACHE 1;
 
 
-ALTER TABLE public.seq_pesquisa OWNER TO postgres;
+ALTER TABLE public.seq_pesquisa OWNER TO sei_user;
 
 --
--- Name: seq_plano_trabalho; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_plano_trabalho; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_plano_trabalho
@@ -3787,10 +3723,10 @@ CREATE SEQUENCE public.seq_plano_trabalho
     CACHE 1;
 
 
-ALTER TABLE public.seq_plano_trabalho OWNER TO postgres;
+ALTER TABLE public.seq_plano_trabalho OWNER TO sei_user;
 
 --
--- Name: seq_protocolo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_protocolo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_protocolo
@@ -3801,10 +3737,10 @@ CREATE SEQUENCE public.seq_protocolo
     CACHE 1;
 
 
-ALTER TABLE public.seq_protocolo OWNER TO postgres;
+ALTER TABLE public.seq_protocolo OWNER TO sei_user;
 
 --
--- Name: seq_protocolo_modelo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_protocolo_modelo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_protocolo_modelo
@@ -3815,10 +3751,10 @@ CREATE SEQUENCE public.seq_protocolo_modelo
     CACHE 1;
 
 
-ALTER TABLE public.seq_protocolo_modelo OWNER TO postgres;
+ALTER TABLE public.seq_protocolo_modelo OWNER TO sei_user;
 
 --
--- Name: seq_publicacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_publicacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_publicacao
@@ -3829,10 +3765,10 @@ CREATE SEQUENCE public.seq_publicacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_publicacao OWNER TO postgres;
+ALTER TABLE public.seq_publicacao OWNER TO sei_user;
 
 --
--- Name: seq_reabertura_programada; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_reabertura_programada; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_reabertura_programada
@@ -3843,10 +3779,10 @@ CREATE SEQUENCE public.seq_reabertura_programada
     CACHE 1;
 
 
-ALTER TABLE public.seq_reabertura_programada OWNER TO postgres;
+ALTER TABLE public.seq_reabertura_programada OWNER TO sei_user;
 
 --
--- Name: seq_rel_protocolo_protocolo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_rel_protocolo_protocolo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_rel_protocolo_protocolo
@@ -3857,10 +3793,10 @@ CREATE SEQUENCE public.seq_rel_protocolo_protocolo
     CACHE 1;
 
 
-ALTER TABLE public.seq_rel_protocolo_protocolo OWNER TO postgres;
+ALTER TABLE public.seq_rel_protocolo_protocolo OWNER TO sei_user;
 
 --
--- Name: seq_rel_unidade_tipo_contato; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_rel_unidade_tipo_contato; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_rel_unidade_tipo_contato
@@ -3871,10 +3807,10 @@ CREATE SEQUENCE public.seq_rel_unidade_tipo_contato
     CACHE 1;
 
 
-ALTER TABLE public.seq_rel_unidade_tipo_contato OWNER TO postgres;
+ALTER TABLE public.seq_rel_unidade_tipo_contato OWNER TO sei_user;
 
 --
--- Name: seq_retorno_programado; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_retorno_programado; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_retorno_programado
@@ -3885,10 +3821,24 @@ CREATE SEQUENCE public.seq_retorno_programado
     CACHE 1;
 
 
-ALTER TABLE public.seq_retorno_programado OWNER TO postgres;
+ALTER TABLE public.seq_retorno_programado OWNER TO sei_user;
 
 --
--- Name: seq_secao_documento; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_revisao_avaliacao; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seq_revisao_avaliacao
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.seq_revisao_avaliacao OWNER TO postgres;
+
+--
+-- Name: seq_secao_documento; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_secao_documento
@@ -3899,10 +3849,10 @@ CREATE SEQUENCE public.seq_secao_documento
     CACHE 1;
 
 
-ALTER TABLE public.seq_secao_documento OWNER TO postgres;
+ALTER TABLE public.seq_secao_documento OWNER TO sei_user;
 
 --
--- Name: seq_secao_imprensa_nacional; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_secao_imprensa_nacional; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_secao_imprensa_nacional
@@ -3913,10 +3863,10 @@ CREATE SEQUENCE public.seq_secao_imprensa_nacional
     CACHE 1;
 
 
-ALTER TABLE public.seq_secao_imprensa_nacional OWNER TO postgres;
+ALTER TABLE public.seq_secao_imprensa_nacional OWNER TO sei_user;
 
 --
--- Name: seq_secao_modelo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_secao_modelo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_secao_modelo
@@ -3927,10 +3877,10 @@ CREATE SEQUENCE public.seq_secao_modelo
     CACHE 1;
 
 
-ALTER TABLE public.seq_secao_modelo OWNER TO postgres;
+ALTER TABLE public.seq_secao_modelo OWNER TO sei_user;
 
 --
--- Name: seq_serie; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_serie; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_serie
@@ -3941,10 +3891,10 @@ CREATE SEQUENCE public.seq_serie
     CACHE 1;
 
 
-ALTER TABLE public.seq_serie OWNER TO postgres;
+ALTER TABLE public.seq_serie OWNER TO sei_user;
 
 --
--- Name: seq_serie_publicacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_serie_publicacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_serie_publicacao
@@ -3955,10 +3905,10 @@ CREATE SEQUENCE public.seq_serie_publicacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_serie_publicacao OWNER TO postgres;
+ALTER TABLE public.seq_serie_publicacao OWNER TO sei_user;
 
 --
--- Name: seq_serie_restricao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_serie_restricao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_serie_restricao
@@ -3969,10 +3919,10 @@ CREATE SEQUENCE public.seq_serie_restricao
     CACHE 1;
 
 
-ALTER TABLE public.seq_serie_restricao OWNER TO postgres;
+ALTER TABLE public.seq_serie_restricao OWNER TO sei_user;
 
 --
--- Name: seq_servico; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_servico; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_servico
@@ -3983,10 +3933,10 @@ CREATE SEQUENCE public.seq_servico
     CACHE 1;
 
 
-ALTER TABLE public.seq_servico OWNER TO postgres;
+ALTER TABLE public.seq_servico OWNER TO sei_user;
 
 --
--- Name: seq_situacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_situacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_situacao
@@ -3997,10 +3947,10 @@ CREATE SEQUENCE public.seq_situacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_situacao OWNER TO postgres;
+ALTER TABLE public.seq_situacao OWNER TO sei_user;
 
 --
--- Name: seq_tabela_assuntos; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tabela_assuntos; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tabela_assuntos
@@ -4011,10 +3961,10 @@ CREATE SEQUENCE public.seq_tabela_assuntos
     CACHE 1;
 
 
-ALTER TABLE public.seq_tabela_assuntos OWNER TO postgres;
+ALTER TABLE public.seq_tabela_assuntos OWNER TO sei_user;
 
 --
--- Name: seq_tarefa; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tarefa; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tarefa
@@ -4025,10 +3975,10 @@ CREATE SEQUENCE public.seq_tarefa
     CACHE 1;
 
 
-ALTER TABLE public.seq_tarefa OWNER TO postgres;
+ALTER TABLE public.seq_tarefa OWNER TO sei_user;
 
 --
--- Name: seq_tarja_assinatura; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tarja_assinatura; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tarja_assinatura
@@ -4039,10 +3989,24 @@ CREATE SEQUENCE public.seq_tarja_assinatura
     CACHE 1;
 
 
-ALTER TABLE public.seq_tarja_assinatura OWNER TO postgres;
+ALTER TABLE public.seq_tarja_assinatura OWNER TO sei_user;
 
 --
--- Name: seq_texto_padrao_interno; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_termo_uso; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.seq_termo_uso
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.seq_termo_uso OWNER TO postgres;
+
+--
+-- Name: seq_texto_padrao_interno; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_texto_padrao_interno
@@ -4053,10 +4017,10 @@ CREATE SEQUENCE public.seq_texto_padrao_interno
     CACHE 1;
 
 
-ALTER TABLE public.seq_texto_padrao_interno OWNER TO postgres;
+ALTER TABLE public.seq_texto_padrao_interno OWNER TO sei_user;
 
 --
--- Name: seq_tipo_conferencia; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tipo_conferencia; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tipo_conferencia
@@ -4067,10 +4031,10 @@ CREATE SEQUENCE public.seq_tipo_conferencia
     CACHE 1;
 
 
-ALTER TABLE public.seq_tipo_conferencia OWNER TO postgres;
+ALTER TABLE public.seq_tipo_conferencia OWNER TO sei_user;
 
 --
--- Name: seq_tipo_contato; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tipo_contato; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tipo_contato
@@ -4081,10 +4045,10 @@ CREATE SEQUENCE public.seq_tipo_contato
     CACHE 1;
 
 
-ALTER TABLE public.seq_tipo_contato OWNER TO postgres;
+ALTER TABLE public.seq_tipo_contato OWNER TO sei_user;
 
 --
--- Name: seq_tipo_formulario; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tipo_formulario; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tipo_formulario
@@ -4095,10 +4059,10 @@ CREATE SEQUENCE public.seq_tipo_formulario
     CACHE 1;
 
 
-ALTER TABLE public.seq_tipo_formulario OWNER TO postgres;
+ALTER TABLE public.seq_tipo_formulario OWNER TO sei_user;
 
 --
--- Name: seq_tipo_localizador; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tipo_localizador; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tipo_localizador
@@ -4109,24 +4073,24 @@ CREATE SEQUENCE public.seq_tipo_localizador
     CACHE 1;
 
 
-ALTER TABLE public.seq_tipo_localizador OWNER TO postgres;
+ALTER TABLE public.seq_tipo_localizador OWNER TO sei_user;
 
 --
--- Name: seq_tipo_prioridade; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tipo_prioridade; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tipo_prioridade
-    START WITH 1
+    START WITH 7
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
 
 
-ALTER TABLE public.seq_tipo_prioridade OWNER TO postgres;
+ALTER TABLE public.seq_tipo_prioridade OWNER TO sei_user;
 
 --
--- Name: seq_tipo_proced_restricao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tipo_proced_restricao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tipo_proced_restricao
@@ -4137,10 +4101,10 @@ CREATE SEQUENCE public.seq_tipo_proced_restricao
     CACHE 1;
 
 
-ALTER TABLE public.seq_tipo_proced_restricao OWNER TO postgres;
+ALTER TABLE public.seq_tipo_proced_restricao OWNER TO sei_user;
 
 --
--- Name: seq_tipo_procedimento; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tipo_procedimento; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tipo_procedimento
@@ -4151,10 +4115,10 @@ CREATE SEQUENCE public.seq_tipo_procedimento
     CACHE 1;
 
 
-ALTER TABLE public.seq_tipo_procedimento OWNER TO postgres;
+ALTER TABLE public.seq_tipo_procedimento OWNER TO sei_user;
 
 --
--- Name: seq_tipo_suporte; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tipo_suporte; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tipo_suporte
@@ -4165,10 +4129,10 @@ CREATE SEQUENCE public.seq_tipo_suporte
     CACHE 1;
 
 
-ALTER TABLE public.seq_tipo_suporte OWNER TO postgres;
+ALTER TABLE public.seq_tipo_suporte OWNER TO sei_user;
 
 --
--- Name: seq_titulo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_titulo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_titulo
@@ -4179,10 +4143,10 @@ CREATE SEQUENCE public.seq_titulo
     CACHE 1;
 
 
-ALTER TABLE public.seq_titulo OWNER TO postgres;
+ALTER TABLE public.seq_titulo OWNER TO sei_user;
 
 --
--- Name: seq_tratamento; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_tratamento; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_tratamento
@@ -4193,10 +4157,10 @@ CREATE SEQUENCE public.seq_tratamento
     CACHE 1;
 
 
-ALTER TABLE public.seq_tratamento OWNER TO postgres;
+ALTER TABLE public.seq_tratamento OWNER TO sei_user;
 
 --
--- Name: seq_uf; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_uf; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_uf
@@ -4207,10 +4171,10 @@ CREATE SEQUENCE public.seq_uf
     CACHE 1;
 
 
-ALTER TABLE public.seq_uf OWNER TO postgres;
+ALTER TABLE public.seq_uf OWNER TO sei_user;
 
 --
--- Name: seq_unidade_historico; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_unidade_historico; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_unidade_historico
@@ -4221,10 +4185,10 @@ CREATE SEQUENCE public.seq_unidade_historico
     CACHE 1;
 
 
-ALTER TABLE public.seq_unidade_historico OWNER TO postgres;
+ALTER TABLE public.seq_unidade_historico OWNER TO sei_user;
 
 --
--- Name: seq_unidade_publicacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_unidade_publicacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_unidade_publicacao
@@ -4235,10 +4199,10 @@ CREATE SEQUENCE public.seq_unidade_publicacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_unidade_publicacao OWNER TO postgres;
+ALTER TABLE public.seq_unidade_publicacao OWNER TO sei_user;
 
 --
--- Name: seq_upload; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_upload; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_upload
@@ -4249,10 +4213,10 @@ CREATE SEQUENCE public.seq_upload
     CACHE 1;
 
 
-ALTER TABLE public.seq_upload OWNER TO postgres;
+ALTER TABLE public.seq_upload OWNER TO sei_user;
 
 --
--- Name: seq_veiculo_imprensa_nacional; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_veiculo_imprensa_nacional; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_veiculo_imprensa_nacional
@@ -4263,10 +4227,10 @@ CREATE SEQUENCE public.seq_veiculo_imprensa_nacional
     CACHE 1;
 
 
-ALTER TABLE public.seq_veiculo_imprensa_nacional OWNER TO postgres;
+ALTER TABLE public.seq_veiculo_imprensa_nacional OWNER TO sei_user;
 
 --
--- Name: seq_veiculo_publicacao; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_veiculo_publicacao; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_veiculo_publicacao
@@ -4277,10 +4241,10 @@ CREATE SEQUENCE public.seq_veiculo_publicacao
     CACHE 1;
 
 
-ALTER TABLE public.seq_veiculo_publicacao OWNER TO postgres;
+ALTER TABLE public.seq_veiculo_publicacao OWNER TO sei_user;
 
 --
--- Name: seq_versao_secao_documento; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_versao_secao_documento; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_versao_secao_documento
@@ -4291,10 +4255,10 @@ CREATE SEQUENCE public.seq_versao_secao_documento
     CACHE 1;
 
 
-ALTER TABLE public.seq_versao_secao_documento OWNER TO postgres;
+ALTER TABLE public.seq_versao_secao_documento OWNER TO sei_user;
 
 --
--- Name: seq_vocativo; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: seq_vocativo; Type: SEQUENCE; Schema: public; Owner: sei_user
 --
 
 CREATE SEQUENCE public.seq_vocativo
@@ -4305,7 +4269,7 @@ CREATE SEQUENCE public.seq_vocativo
     CACHE 1;
 
 
-ALTER TABLE public.seq_vocativo OWNER TO postgres;
+ALTER TABLE public.seq_vocativo OWNER TO sei_user;
 
 --
 -- Name: serie; Type: TABLE; Schema: public; Owner: sei_user
@@ -4514,6 +4478,26 @@ CREATE TABLE public.tarja_assinatura (
 
 
 ALTER TABLE public.tarja_assinatura OWNER TO sei_user;
+
+--
+-- Name: termo_uso; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.termo_uso (
+    id_termo_uso integer NOT NULL,
+    id_usuario integer NOT NULL,
+    id_unidade integer NOT NULL,
+    identificacao character varying(100) NOT NULL,
+    descricao character varying(4000),
+    conteudo text NOT NULL,
+    sin_liberado character(1) NOT NULL,
+    sin_bloqueado character(1) NOT NULL,
+    dth_inicial timestamp without time zone,
+    dth_final timestamp without time zone
+);
+
+
+ALTER TABLE public.termo_uso OWNER TO postgres;
 
 --
 -- Name: texto_padrao_interno; Type: TABLE; Schema: public; Owner: sei_user
@@ -4792,11 +4776,33 @@ CREATE TABLE public.usuario (
     senha character(60),
     nome_registro_civil character varying(100) NOT NULL,
     nome_social character varying(100),
-    id_usuario_federacao character varying(26)
+    id_usuario_federacao character varying(26),
+    sin_gov_br character(1) NOT NULL,
+    dth_termo_uso timestamp without time zone,
+    dth_politica_privacidade timestamp without time zone
 );
 
 
 ALTER TABLE public.usuario OWNER TO sei_user;
+
+--
+-- Name: usuario_configuracao; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.usuario_configuracao (
+    id_usuario integer NOT NULL,
+    pagina_inicial character varying(100) NOT NULL,
+    sin_filtrar_botoes character(1) NOT NULL,
+    botoes_processo character varying(4000),
+    botoes_documento character varying(4000),
+    botoes_controle character varying(4000),
+    sta_tipo_controle character(1) NOT NULL,
+    detalhe_controle character varying(4000),
+    dth_cadastro timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.usuario_configuracao OWNER TO postgres;
 
 --
 -- Name: usuario_federacao; Type: TABLE; Schema: public; Owner: sei_user
@@ -4992,48 +4998,48 @@ COPY public.arquivamento (id_protocolo, id_localizador, id_atividade_arquivament
 -- Data for Name: arquivo_extensao; Type: TABLE DATA; Schema: public; Owner: sei_user
 --
 
-COPY public.arquivo_extensao (id_arquivo_extensao, extensao, descricao, sin_ativo, tamanho_maximo, sin_interface, sin_servico) FROM stdin;
-1	pdf	Portable Document Format (Formato Portátil de Documento).	S	\N	S	S
-2	txt	Arquivo de texto sem formatação.	S	\N	S	S
-3	doc	Arquivo de documento de texto do Microsoft Word. -NÃO ADERENTE AO ePING!	N	\N	S	S
-4	docx	Arquivo de documento de texto do Microsoft Word 2007 ou superior. -NÃO ADERENTE AO ePING!	N	\N	S	S
-5	xls	Arquivo de planilha eletrônica do Microsoft Excel. -NÃO ADERENTE AO ePING!	N	\N	S	S
-6	xlsx	Arquivo de planilha eletrônica do Microsoft Excel 2007 ou superior. -NÃO ADERENTE AO ePING!	N	\N	S	S
-7	ppt	Arquivo de apresentação do Microsoft Power Point. -NÃO ADERENTE AO ePING!	N	\N	S	S
-8	pptx	Arquivo de apresentação do Microsoft Power Point 2007 ou superior. -NÃO ADERENTE AO ePING!	N	\N	S	S
-9	jpg	Arquivo de imagem digital tradicionalmente utilizado em câmaras digitais.	N	\N	S	S
-10	gif	Arquivo de imagem digital tradicionalmente utilizado em páginas web e que suporta transparência. -NÃO ADERENTE AO ePING!	N	\N	S	S
-11	png	Arquivo de imagem digital tradicionalmente utilizado em páginas web e que suporta transparência.	N	\N	S	S
-12	zip	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S
-13	rar	Arquivo compactado com outros arquivos ou pastas. -NÃO ADERENTE AO ePING!	N	\N	S	S
-14	mp3	Arquivo de áudio com compactação sem grandes perdas de qualidade. -NÃO ADERENTE AO ePING!	N	\N	S	S
-15	psd	Arquivo de imagem do Photoshop. -NÃO ADERENTE AO ePING!	N	\N	S	S
-16	cdr	Arquivo de imagem do Corel Draw. -NÃO ADERENTE AO ePING!	N	\N	S	S
-17	dwg	Arquivo de imagem do Autocad. -NÃO ADERENTE AO ePING!	N	\N	S	S
-18	rtf	Arquivo do tipo Rich Text Format, para intercâmbio de documentos entre diversas plataformas. -NÃO ADERENTE AO ePING!	N	\N	S	S
-19	odt	Arquivo de documento de texto do tipo OpenDocument.	N	\N	S	S
-20	ods	Arquivo de planilha eletrônica do tipo OpenDocument.	S	\N	S	S
-21	odp	Arquivo de apresentação do tipo OpenDocument.	S	\N	S	S
-22	avi	Arquivo de vídeo com compactação ou não, sem grandes perdas de qualidade. O formato é muito popular e pode ser reproduzido por quase qualquer player. -NÃO ADERENTE AO ePING!	N	\N	S	S
-23	mp4	Arquivo de vídeo referente ao MPEG-4 Part 14. Um padrão que é parte da especificação MPEG-4 desenvolvido pela ISO/IEC 14496-14.	S	\N	S	S
-24	wmv	Arquivo de vídeo em formato proprietário da Microsoft. -NÃO ADERENTE AO ePING!	N	\N	S	S
-25	mpeg	Arquivo de vídeo MPEG (Moving Picture Experts Group) é um formato de compressão mantido pela International Organization for Standardization. O formato é muito popular e pode ser reproduzido por quase qualquer player.	S	\N	S	S
-26	mpg	Arquivo de vídeo MPEG (Moving Picture Experts Group) é um formato de compressão mantido pela International Organization for Standardization. O formato é muito popular e pode ser reproduzido por quase qualquer player.	S	\N	S	S
-27	7z	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S
-28	csv	Arquivo de texto com dados separados por vírgula. Significa "Comma Separated Values".	S	\N	S	S
-29	xml	Arquivo capaz de descrever diversos tipos de dados, facilitando o compartilhamento, integração e interoperabilidade de dados. Significa "eXtensible Markup Language".	S	\N	S	S
-30	wav	Arquivo de áudio sem compactação que utiliza método PCM. -NÃO ADERENTE AO ePING!	N	\N	S	S
-31	amr	Arquivo de áudio em formato otimizado para gravação de voz. Significa "Adaptive Multi-Rate audio codec", sendo o formato de áudio padrão para gravação de voz pela 3GPP, muito utilizado em aparelhos de telefone celular. -NÃO ADERENTE AO ePING!	N	\N	S	S
-32	html	Arquivos padrão web, utilizados, inclusive, pelo SEI.	S	\N	S	S
-33	jpeg	Arquivo de imagem digital tradicionalmente utilizado em câmaras digitais.	N	\N	S	S
-34	ogg	Arquivo de áudio em formato livre muito utilizado na internet.	S	\N	S	S
-35	ogv	Arquivo de vídeo em formato livre muito utilizado na internet.	S	\N	S	S
-36	gz	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S
-37	tar	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S
-38	tgz	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S
-39	bz2	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S
-40	svg	Arquivo de imagens vetoriais ou gráficos bidimensionais em formato aberto.	S	\N	S	S
-41	json	Arquivo de notação de objeto JavaScript. Significa "JavaScript Object Notation".	S	\N	S	S
+COPY public.arquivo_extensao (id_arquivo_extensao, extensao, descricao, sin_ativo, tamanho_maximo, sin_interface, sin_servico, sin_ouvidoria, sin_usuario_externo) FROM stdin;
+1	pdf	Portable Document Format (Formato Portátil de Documento).	S	\N	S	S	N	S
+2	txt	Arquivo de texto sem formatação.	S	\N	S	S	N	S
+3	doc	Arquivo de documento de texto do Microsoft Word. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+4	docx	Arquivo de documento de texto do Microsoft Word 2007 ou superior. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+5	xls	Arquivo de planilha eletrônica do Microsoft Excel. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+6	xlsx	Arquivo de planilha eletrônica do Microsoft Excel 2007 ou superior. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+7	ppt	Arquivo de apresentação do Microsoft Power Point. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+8	pptx	Arquivo de apresentação do Microsoft Power Point 2007 ou superior. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+9	jpg	Arquivo de imagem digital tradicionalmente utilizado em câmaras digitais.	N	\N	S	S	N	S
+10	gif	Arquivo de imagem digital tradicionalmente utilizado em páginas web e que suporta transparência. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+11	png	Arquivo de imagem digital tradicionalmente utilizado em páginas web e que suporta transparência.	N	\N	S	S	N	S
+12	zip	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S	N	S
+13	rar	Arquivo compactado com outros arquivos ou pastas. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+14	mp3	Arquivo de áudio com compactação sem grandes perdas de qualidade. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+15	psd	Arquivo de imagem do Photoshop. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+16	cdr	Arquivo de imagem do Corel Draw. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+17	dwg	Arquivo de imagem do Autocad. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+18	rtf	Arquivo do tipo Rich Text Format, para intercâmbio de documentos entre diversas plataformas. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+19	odt	Arquivo de documento de texto do tipo OpenDocument.	N	\N	S	S	N	S
+20	ods	Arquivo de planilha eletrônica do tipo OpenDocument.	S	\N	S	S	N	S
+21	odp	Arquivo de apresentação do tipo OpenDocument.	S	\N	S	S	N	S
+22	avi	Arquivo de vídeo com compactação ou não, sem grandes perdas de qualidade. O formato é muito popular e pode ser reproduzido por quase qualquer player. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+23	mp4	Arquivo de vídeo referente ao MPEG-4 Part 14. Um padrão que é parte da especificação MPEG-4 desenvolvido pela ISO/IEC 14496-14.	S	\N	S	S	N	S
+24	wmv	Arquivo de vídeo em formato proprietário da Microsoft. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+25	mpeg	Arquivo de vídeo MPEG (Moving Picture Experts Group) é um formato de compressão mantido pela International Organization for Standardization. O formato é muito popular e pode ser reproduzido por quase qualquer player.	S	\N	S	S	N	S
+26	mpg	Arquivo de vídeo MPEG (Moving Picture Experts Group) é um formato de compressão mantido pela International Organization for Standardization. O formato é muito popular e pode ser reproduzido por quase qualquer player.	S	\N	S	S	N	S
+27	7z	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S	N	S
+28	csv	Arquivo de texto com dados separados por vírgula. Significa "Comma Separated Values".	S	\N	S	S	N	S
+29	xml	Arquivo capaz de descrever diversos tipos de dados, facilitando o compartilhamento, integração e interoperabilidade de dados. Significa "eXtensible Markup Language".	S	\N	S	S	N	S
+30	wav	Arquivo de áudio sem compactação que utiliza método PCM. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+31	amr	Arquivo de áudio em formato otimizado para gravação de voz. Significa "Adaptive Multi-Rate audio codec", sendo o formato de áudio padrão para gravação de voz pela 3GPP, muito utilizado em aparelhos de telefone celular. -NÃO ADERENTE AO ePING!	N	\N	S	S	N	S
+32	html	Arquivos padrão web, utilizados, inclusive, pelo SEI.	S	\N	S	S	N	S
+33	jpeg	Arquivo de imagem digital tradicionalmente utilizado em câmaras digitais.	N	\N	S	S	N	S
+34	ogg	Arquivo de áudio em formato livre muito utilizado na internet.	S	\N	S	S	N	S
+35	ogv	Arquivo de vídeo em formato livre muito utilizado na internet.	S	\N	S	S	N	S
+36	gz	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S	N	S
+37	tar	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S	N	S
+38	tgz	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S	N	S
+39	bz2	Arquivo compactado com outros arquivos ou pastas.	S	\N	S	S	N	S
+40	svg	Arquivo de imagens vetoriais ou gráficos bidimensionais em formato aberto.	S	\N	S	S	N	S
+41	json	Arquivo de notação de objeto JavaScript. Significa "JavaScript Object Notation".	S	\N	S	S	N	S
 \.
 
 
@@ -5079,83 +5085,6 @@ COPY public.assinatura (id_assinatura, id_documento, id_usuario, id_unidade, id_
 --
 
 COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descricao, observacao, idx_assunto, sin_ativo, prazo_intermediario, prazo_corrente, sta_destinacao, sin_estrutural) FROM stdin;
-172	1	024.52	PLANO DE ESTÁGIO	Incluem-se documentos referentes ao estabelecimento das atividades a serem realizadas pelos estudantes.	024.52 02452 Incluem-se documentos referentes ao estabelecimento das atividades a serem realizadas pelos estudantes.	S	2	\N	E	N
-173	1	025	PROMOÇÃO DA SAÚDE E BEM-ESTAR	Nas subdivisões deste descritor classificam-se documentos referentes às atividades de promoção da saúde e bem-estar do servidor.	025 025 Nas subdivisoes deste descritor classificam-se documentos referentes as atividades de promocao da saude e bem-estar do servidor.	S	\N	\N	\N	S
-174	1	025.1	ASSISTÊNCIA À SAÚDE	Nas subdivisões deste descritor classificam-se documentos referentes à celebraçãode convênios e ao desenvolvimento de ações voltadas para a saúde doservidor, bem como oregistro nosprontuáriosde pacientes sobre a assistência prestada.	025.1 0251 Nas subdivisoes deste descritor classificam-se documentos referentes a celebracaode convenios e ao desenvolvimento de acoes voltadas para a saude doservidor bem como oregistro nosprontuariosde pacientes sobre a assistencia prestada.	S	\N	\N	\N	S
-175	1	025.11	CELEBRAÇÃO DE CONVÊNIOS DE ASSISTÊNCIA À SAÚDE	Incluem-se documentos referentes à celebração de convênios firmados para a prestação de assistência à saúde destinados ao servidor e seus dependentes.	025.11 02511 Incluem-se documentos referentes a celebracao de convenios firmados para a prestacao de assistencia a saude destinados ao servidor e seus dependentes.	S	5	\N	E	N
-176	1	025.12	ORIENTAÇÃO PARA CUIDADOS COM A SAÚDE	Incluem-se documentos referentes às ações de orientação, acompanhamento e execução de iniciativas que visem o bem-estar do servidor.	025.12 02512 Incluem-se documentos referentes as acoes de orientacao acompanhamento e execucao de iniciativas que visem o bem-estar do servidor.	S	\N	2	E	N
-177	1	025.13	PROMOÇÃO DE ATIVIDADE FÍSICA	Incluem-se documentos referentes às ações de promoção e execução de iniciativas que visem a prática da ginástica laboral e incentivem o servidor à prática de atividades físicas.	025.13 02513 Incluem-se documentos referentes as acoes de promocao e execucao de iniciativas que visem a pratica da ginastica laboral e incentivem o servidor a pratica de atividades fisicas.	S	\N	2	E	N
-178	1	025.14	REGISTRO DE ASSISTÊNCIA À SAÚDE EM PRONTUÁRIO	Incluem-se documentos referentes aos registros de assistência à saúde em prontuário de paciente, prestada aos servidores, tais como pareceres, laudos, exames e inspeções periódicas de saúde, exames complementares e comunicação de alta e óbito. Quanto aos exames admissionais e demissionais do servidor, que deverão integrar o assentamento funcional, classificar nas subdivisões do código 020.1.	025.14 02514 Incluem-se documentos referentes aos registros de assistencia a saude em prontuario de paciente prestada aos servidores tais como pareceres laudos exames e inspecoes periodicas de saude exames complementares e comunicacao de alta e obito. Quanto aos exames admissionais e demissionais do servidor que deverao integrar o assentamento funcional classificar nas subdivisoes do codigo 020.1.	S	95	5	E	N
-179	1	025.2	PRESERVAÇÃO DA SAÚDE E HIGIENE	Nas subdivisões deste descritor classificam-se documentos referentes às iniciativas do órgão e entidade que visam à preservação da saúde e a garantia de condições satisfatórias, individuais e ambientais, nos locais de trabalho.	025.2 0252 Nas subdivisoes deste descritor classificam-se documentos referentes as iniciativas do orgao e entidade que visam a preservacao da saude e a garantia de condicoes satisfatorias individuais e ambientais nos locais de trabalho.	S	\N	\N	\N	S
-180	1	025.21	CONTROLE DE RISCOS AMBIENTAIS	Incluem-se documentos referentes ao perfil profissiográfico e ao levantamento, avaliação e controle da ocorrência de riscos ambientais (agentes químicos, físicos e biológicos) existentes nos locais de trabalho, bem como aqueles referentes aos programas de controle médico de saúde ocupacional e de prevenção de riscos ambientais e os laudos e certificados sobre inspeções sanitárias e equipamentos de proteção individual. Quanto à proteção ambiental interna, classificar no código 017.1.	025.21 02521 Incluem-se documentos referentes ao perfil profissiografico e ao levantamento avaliacao e controle da ocorrencia de riscos ambientais (agentes quimicos fisicos e biologicos) existentes nos locais de trabalho bem como aqueles referentes aos programas de controle medico de saude ocupacional e de prevencao de riscos ambientais e os laudos e certificados sobre inspecoes sanitarias e equipamentos de protecao individual. Quanto a protecao ambiental interna classificar no codigo 017.1.	S	15	5	G	N
-181	1	025.22	OFERTA DE SERVIÇOS DE REFEITÓRIOS, CANTINAS E COPAS	Incluem-se documentos referentes às regras gerais de uso e de funcionamento dos ambientes destinados às refeições.	025.22 02522 Incluem-se documentos referentes as regras gerais de uso e de funcionamento dos ambientes destinados as refeicoes.	S	2	\N	E	N
-182	1	025.3	SEGURANÇA DO TRABALHO. PREVENÇÃO DE ACIDENTES DE TRABALHO	Nas subdivisões deste descritor classificam-se documentos referentes às medidas preventivas relacionadas ao ambiente de trabalho, visando à redução de acidentes e doenças ocupacionais. Quanto ao pagamento dos adicionais de periculosidade, insalubridade e atividade penosa, classificar nos códigos 023.163, 023.164 e 023.165, respectivamente.	025.3 0253 Nas subdivisoes deste descritor classificam-se documentos referentes as medidas preventivas relacionadas ao ambiente de trabalho visando a reducao de acidentes e doencas ocupacionais. Quanto ao pagamento dos adicionais de periculosidade insalubridade e atividade penosa classificar nos codigos 023.163 023.164 e 023.165 respectivamente.	S	\N	\N	\N	S
-183	1	025.31	CONSTITUIÇÃO DA COMISSÃO INTERNA DE PREVENÇÃO DE ACIDENTES (CIPA)	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos para a constituição e atuação da comissão.	025.31 02531 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos para a constituicao e atuacao da comissao.	S	\N	\N	\N	S
-184	1	025.311	COMPOSIÇÃO E ATUAÇÃO	Incluem-se documentos referentes à constituição da Cipa, editais de convocação e divulgação das eleições, constituição da comissão eleitoral, folha de votação e atas da eleição (nos casos de realização de processo eleitoral) ou indicação e designação dos membros e instalação e posse da comissão (em outras situações que não envolvam processo eleitoral), bem como aqueles referentes aos estudos e às inspeções relativas à qualidade e segurança do ambiente de trabalho, mapas de riscos, laudos e pareceres técnicos, atas, relatórios e campanhas de divulgação.	025.311 025311 Incluem-se documentos referentes a constituicao da Cipa editais de convocacao e divulgacao das eleicoes constituicao da comissao eleitoral folha de votacao e atas da eleicao (nos casos de realizacao de processo eleitoral) ou indicacao e designacao dos membros e instalacao e posse da comissao (em outras situacoes que nao envolvam processo eleitoral) bem como aqueles referentes aos estudos e as inspecoes relativas a qualidade e seguranca do ambiente de trabalho mapas de riscos laudos e pareceres tecnicos atas relatorios e campanhas de divulgacao.	S	5	5	G	N
-534	1	082.24.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.24.a 08224a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
-535	1	082.3	AVALIAÇÃO	\N	082.3 0823 avaliacao	N	\N	5	E	N
-536	1	082.3.a	FICHAS/FOLHAS DE AVALIAÇÃO	\N	082.3.a 0823a fichas folhas de avaliacao	N	47	5	E	N
-537	1	082.4	REQUISITOS ESPECÍFICOS DE CARREIRA	\N	082.4 0824 requisitos especificos de carreira	N	\N	5	E	N
-538	1	082.4.a	MANOBRA, TEMPO DE TROPA, TEMPO DE EMBARQUE, VIVÊNCIA NACIONAL, DIAS DE MAR, ATIVIDADE BÉLICA, HORAS DE VOO	\N	082.4.a 0824a manobra tempo de tropa tempo de embarque vivencia nacional dias de mar atividade belica horas de voo	N	47	5	E	N
-539	1	082.5	CURSOS COMPLEMENTARES	\N	082.5 0825 cursos complementares	N	\N	\N	\N	S
-540	1	082.51	ADESTRAMENTO	\N	082.51 08251 adestramento	N	\N	5	E	N
-541	1	082.51.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS DIVERSOS TIPOS DE ADESTRAMENTO	\N	082.51.a 08251a designacao matricula conclusao cancelamento trancamento e ou desligamento dos diversos tipos de adestramento	N	47	5	E	N
-542	1	082.52	PÓS-GRADUAÇÃO LATO SENSU	\N	082.52 08252 pos-graduacao lato sensu	N	\N	5	E	N
-543	1	082.52.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.52.a 08252a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
-544	1	082.53	QUALIFICAÇÃO TÉCNICA ESPECIAL	\N	082.53 08253 qualificacao tecnica especial	N	\N	5	E	N
-545	1	082.53.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.53.a 08253a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
-546	1	082.54	PÓS-GRADUAÇÃO STRICTO SENSU	\N	082.54 08254 pos-graduacao stricto sensu	N	\N	5	E	N
-547	1	082.54.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.54.a 08254a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
-548	1	082.55	PÓS-DOUTORADO	\N	082.55 08255 pos-doutorado	N	\N	5	E	N
-549	1	082.55.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.55.a 08255a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
-550	1	082.6	PRORROGAÇÃO DE TEMPO DE SERVIÇO. REENGAJAMENTO	\N	082.6 0826 prorrogacao de tempo de servico reengajamento	N	\N	5	E	N
-551	1	082.6.a	REQUERIMENTOS, AVALIAÇÕES, PARECERES E DESPACHOS	\N	082.6.a 0826a requerimentos avaliacoes pareceres e despachos	N	47	5	E	N
-552	1	082.7	TRANSPOSIÇÃO DE QUADRO	\N	082.7 0827 transposicao de quadro	N	\N	5	E	N
-553	1	082.7.a	REQUERIMENTOS, AVALIAÇÕES, PARECERES E DESPACHOS	\N	082.7.a 0827a requerimentos avaliacoes pareceres e despachos	N	47	5	E	N
-554	1	082.9	OUTROS ASSUNTOS REFERENTES A PLANO DE CARREIRA	\N	082.9 0829 outros assuntos referentes a plano de carreira	N	\N	\N	\N	S
-555	1	083	MOVIMENTAÇÃO. DESTAQUE. ADIÇÃO. EXCLUSÃO DO SERVIÇO ATIVO: MAPAS DE LOTAÇÃO DE OFICIAIS E PRAÇAS	\N	083 083 movimentacao destaque adicao exclusao do servico ativo: mapas de lotacao de oficiais e pracas	N	\N	5	E	N
-556	1	083.1	MOVIMENTAÇÃO	\N	083.1 0831 movimentacao	N	\N	\N	\N	S
-557	1	083.11	MOTIVO DE SAÚDE	\N	083.11 08311 motivo de saude	N	\N	5	E	N
-558	1	083.11.a	SOLICITAÇÃO DA MOVIMENTAÇÃO, CÓPIA DA ATA DE INSPEÇÃO DE SAÚDE, TERMO DE INSPEÇÃO DE SAÚDE	\N	083.11.a 08311a solicitacao da movimentacao copia da ata de inspecao de saude termo de inspecao de saude	N	47	5	E	N
-559	1	083.12	INTERESSE DO MILITAR	\N	083.12 08312 interesse do militar	N	\N	5	E	N
-560	1	083.12.a	SOLICITAÇÃO DA MOVIMENTAÇÃO, ORDEM DE MOVIMENTAÇÃO, PORTARIA DE MOVIMENTAÇÃO	\N	083.12.a 08312a solicitacao da movimentacao ordem de movimentacao portaria de movimentacao	N	47	5	E	N
-561	1	083.13	NECESSIDADE DO SERVIÇO	\N	083.13 08313 necessidade do servico	N	\N	5	E	N
-562	1	083.13.a	PROPOSTA DE PLANO DE MOVIMENTAÇÃO, SOLICITAÇÕES DE ÓRGÃOS DE DIREÇÃO-GERAL OU SETORIAL, INCOMPATIBILIDADE DE POSTO, MATRÍCULA, TÉRMINO DE CURSO, INTERCÂMBIO E A BEM DA DISCIPLINA	\N	083.13.a 08313a proposta de plano de movimentacao solicitacoes de orgaos de direcao-geral ou setorial incompatibilidade de posto matricula termino de curso intercambio e a bem da disciplina	N	47	5	E	N
-563	1	083.14	MOTIVO DE JUSTIÇA	\N	083.14 08314 motivo de justica	N	\N	5	E	N
-564	1	083.14.a	ORDEM JUDICIAL	Condicional "Até o trânsito em julgado" convencionada para 1 ano no corrente, a contar do trânsito em julgado. Como o prazo de guarda total dos documentos é de 52 anos, o prazo no intermediário foi ajustado para 51 anos.	083.14.a 08314a ordem judicial condicional ate o transito em julgado convencionada para 1 ano no corrente a contar do transito em julgado como o prazo de guarda total dos documentos e de 52 anos o prazo no intermediario foi ajustado para 51 anos	N	51	1	E	N
-565	1	083.2	DESTAQUE. ADIÇÃO	\N	083.2 0832 destaque adicao	N	\N	5	E	N
-566	1	083.2.a	PARECERES, DESPACHOS	\N	083.2.a 0832a pareceres despachos	N	47	5	E	N
-567	1	083.3	EXCLUSÃO DO SERVIÇO ATIVO	\N	083.3 0833 exclusao do servico ativo	N	\N	5	E	N
-568	1	083.3.a	DEMISSÃO, PERDA DE POSTO E DA PATENTE, LICENCIAMENTO, ANULAÇÃO DE INCORPORAÇÃO, DESINCORPORAÇÃO, A BEM DA DISCIPLINA, FALECIMENTO	\N	083.3.a 0833a demissao perda de posto e da patente licenciamento anulacao de incorporacao desincorporacao a bem da disciplina falecimento	N	47	5	E	N
-569	1	083.3.b	DESERÇÃO. EXTRAVIO	Condicional "Até a apuração do fato" convencionada para 1 ano no corrente, a contar da conclusão da apruração.	083.3.b 0833b desercao extravio condicional ate a apuracao do fato convencionada para 1 ano no corrente a contar da conclusao da apruracao	N	100	1	E	N
-570	1	083.9	OUTROS ASSUNTOS REFERENTES À MOVIMENTAÇÃO.DESTAQUE. ADIÇÃO. EXCLUSÃO DO SERVIÇO ATIVO	\N	083.9 0839 outros assuntos referentes a movimentacaodestaque adicao exclusao do servico ativo	N	\N	5	E	N
-571	1	083.9.a	POSSE E NOMEAÇÃO PARA CARGOS PÚBLICOS	\N	083.9.a 0839a posse e nomeacao para cargos publicos	N	47	5	E	N
-572	1	083.a	PLANOS DE MOVIMENTAÇÃO	Condicional "Enquanto vigora" convencionado para 1 ano no corrente, a contar a partir da perda da vigência do documento.	083.a 083a planos de movimentacao condicional enquanto vigora convencionado para 1 ano no corrente a contar a partir da perda da vigencia do documento	N	5	1	G	N
-573	1	084	VIOLAÇÃO DAS OBRIGAÇÕES E DOS DEVERES	\N	084 084 violacao das obrigacoes e dos deveres	N	\N	\N	\N	S
-574	1	084.1	TRANSGRESSÕES E/OU CONTRAVENÇÕES DISCIPLINARES	\N	084.1 0841 transgressoes e ou contravencoes disciplinares	N	\N	5	E	N
-575	1	084.1.a	SINDICÂNCIA, ACAREAÇÃO E APURAÇÃO DAS TRANSGRESSÕES E/OU CONTRAVENÇÕES, APLICAÇÃO DAS PUNIÇÕES DISCIPLINARES	\N	084.1.a 0841a sindicancia acareacao e apuracao das transgressoes e ou contravencoes aplicacao das punicoes disciplinares	N	47	5	E	N
-576	1	084.2	CRIMES MILITARES	\N	084.2 0842 crimes militares	N	\N	5	E	N
-577	1	084.2.a	PORTARIA DE NOMEAÇÃO DO ENCARREGADO E ESCRIVÃO DO IPM, SOLUÇÃO DO IPM, OFÍCIO DE REMESSA DO IPM À JUSTIÇA MILITAR	Os autos dos Inquéritos Policiais Militares (IPM) serão encaminhados á Justiça Militar.	084.2.a 0842a portaria de nomeacao do encarregado e escrivao do ipm solucao do ipm oficio de remessa do ipm a justica militar os autos dos inqueritos policiais militares ipm serao encaminhados a justica militar	N	5	5	G	N
-578	1	084.3	CONSELHOS	\N	084.3 0843 conselhos	N	\N	\N	\N	S
-579	1	084.31	DE DISCIPLINA	\N	084.31 08431 de disciplina	N	\N	5	E	N
-580	1	084.31.a	NOMEAÇÃO DOS MEMBROS DO CONSELHO, ATOS DE AFASTAMENTO DO ACUSADO, AUTOS DO CONSELHO, CONCLUSÕES E DECISÕES	Caso seja considerado crime, os autos do processo do Conselho serão encaminhados à Justiça Militar.  Condicional "Até o despacho final do Comandante da Força" convencionada para 1 ano no arquivo corrente, a contar do despacho final do Comandante da Força.	084.31.a 08431a nomeacao dos membros do conselho atos de afastamento do acusado autos do conselho conclusoes e decisoes caso seja considerado crime os autos do processo do conselho serao encaminhados a justica militar condicional ate o despacho final do comandante da forca convencionada para 1 ano no arquivo corrente a contar do despacho final do comandante da forca	N	130	1	E	N
-581	1	084.32	DE JUSTIFICAÇÃO		084.32 08432 de justificacao	N	\N	5	E	N
-582	1	084.32.a	NOMEAÇÃO DOS MEMBROS DO CONSELHO, ATOS DE AFASTAMENTO DO ACUSADO, AUTOS DO CONSELHO, CONCLUSÕES E DECISÕES	Os autos do processo do Conselho serão encaminhados à Justiça Militar.  Condicional "Até o trânsito em julgado" convencionada para 1 ano no arquivo corrente, a contar do trânsito em julgado.	084.32.a 08432a nomeacao dos membros do conselho atos de afastamento do acusado autos do conselho conclusoes e decisoes os autos do processo do conselho serao encaminhados a justica militar condicional ate o transito em julgado convencionada para 1 ano no arquivo corrente a contar do transito em julgado	N	130	1	E	N
-583	1	085	DIREITOS E PRERROGATIVAS	\N	085 085 direitos e prerrogativas	N	\N	\N	 	S
-584	1	085.1	RECOMPENSAS. DISTINÇÕES. HONRARIAS	\N	085.1 0851 recompensas distincoes honrarias	N	\N	5	E	N
-585	1	085.1.a	PRÊMIOS DE HONRA AO MÉRITO, ELOGIOS, LOUVORES, REFERÊNCIAS ELOGIOSAS, DISTINTIVOS, DISPENSAS DE SERVIÇO	\N	085.1.a 0851a premios de honra ao merito elogios louvores referencias elogiosas distintivos dispensas de servico	N	47	5	E	N
-586	1	085.1.b	RELAÇÕES DE AGRACIADOS COM AS CONDECORAÇÕES, RELAÇÕES DAQUELES QUE TIVERAM AS CONDECORAÇÕES CASSADAS	\N	085.1.b 0851b relacoes de agraciados com as condecoracoes relacoes daqueles que tiveram as condecoracoes cassadas	N	5	5	G	N
-587	1	085.2	LICENÇAS	\N	085.2 0852 licencas	N	\N	5	E	N
-588	1	085.2.a	ADOTANTE, PARA ACOMPANHAR CÔNJUGE/COMPANHEIRO, CANDIDATO A CARGO ELETIVO, ESPECIAL, GESTANTE, PATERNIDADE, PARA TRATAR DE INTERESSE PARTICULAR, PARA TRATAMENTO DE SAÚDE DE PESSOA DA FAMÍLIA, PARA TRATAMENTO DE SAÚDE PRÓPRIA	\N	085.2.a 0852a adotante para acompanhar conjuge companheiro candidato a cargo eletivo especial gestante paternidade para tratar de interesse particular para tratamento de saude de pessoa da familia para tratamento de saude propria	N	47	5	E	N
-589	1	085.3	AFASTAMENTOS	\N	085.3 0853 afastamentos	N	\N	5	E	N
-590	1	085.3.a	INSTALAÇÃO (NO BRASIL E NO EXTERIOR), LUTO, NÚPCIAS, TRÂNSITO (NO BRASIL E NO EXTERIOR)	\N	085.3.a 0853a instalacao no brasil e no exterior luto nupcias transito no brasil e no exterior	N	47	5	E	N
-591	1	085.4	DISPENSAS DE SERVIÇO	\N	085.4 0854 dispensas de servico	N	\N	5	E	N
-592	1	085.4.a	PARA DESCONTO EM FÉRIAS, POR PRESCRIÇÃO MÉDICA	\N	085.4.a 0854a para desconto em ferias por prescricao medica	N	47	5	E	N
-593	1	085.5	FÉRIAS	\N	085.5 0855 ferias	N	\N	5	E	N
-594	1	085.5.a	PLANEJAMENTO, SOLICITAÇÃO, CONCESSÃO, CANCELAMENTO E PUBLICAÇÃO	\N	085.5.a 0855a planejamento solicitacao concessao cancelamento e publicacao	N	47	5	E	N
-595	1	085.6	REMUNERAÇÃO. PROVENTOS	\N	085.6 0856 remuneracao proventos	N	\N	\N	\N	S
-596	1	085.61	REMUNERAÇÃO NA ATIVA	\N	085.61 08561 remuneracao na ativa	N	\N	5	E	N
-597	1	085.61.a	FICHAS FINANCEIRAS E FOLHAS DE PAGAMENTO	\N	085.61.a 08561a fichas financeiras e folhas de pagamento	N	125	5	E	N
 598	1	085.611	ADICIONAIS	\N	085.611 085611 adicionais	N	\N	5	E	N
 599	1	085.611.a	MILITAR, DE HABILITAÇÃO, DE TEMPO DE SERVIÇO, DE COMPENSAÇÃO ORGÂNICA, DE PERMANÊNCIA	\N	085.611.a 085611a militar de habilitacao de tempo de servico de compensacao organica de permanencia	N	47	5	E	N
 600	1	085.612	GRATIFICAÇÕES	\N	085.612 085612 gratificacoes	N	\N	5	E	N
@@ -5184,48 +5113,22 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 623	1	086.121	POR INVALIDEZ	\N	086.121 086121 por invalidez	N	\N	5	E	N
 624	1	086.121.a	PROCESSO DE REFORMA POR INVALIDEZ	O processo é anexado ao processo de pensão militar.  Condicional "Até o falecimento do militar" convencionada para 125 anos, acompanhando o maior prazo determinado no intermediário para o processo de pensão militar.	086.121.a 086121a processo de reforma por invalidez o processo e anexado ao processo de pensao militar condicional ate o falecimento do militar convencionada para 125 anos acompanhando o maior prazo determinado no intermediario para o processo de pensao militar	N	125	5	E	N
 625	1	086.122	POR IDADES-LIMITE	\N	086.122 086122 por idades-limite	N	\N	5	E	N
-626	1	086.122.a	PROCESSO DE REFORMA POR IDADES-LIMITE	O processo é anexado ao processo de pensão militar.  Condicional "Até o falecimento do militar" convencionada para 125 anos, acompanhando o maior prazo determinado no intermediário para o processo de pensão militar.	086.122.a 086122a processo de reforma por idades-limite o processo e anexado ao processo de pensao militar condicional ate o falecimento do militar convencionada para 125 anos acompanhando o maior prazo determinado no intermediario para o processo de pensao militar	N	125	5	E	N
-627	1	086.13	DESIGNAÇÃO PARA O SERVIÇO ATIVO	\N	086.13 08613 designacao para o servico ativo	N	\N	5	E	N
-628	1	086.13.a	PROCESSO DE DESIGNAÇÃO PARA O SERVIÇO ATIVO	\N	086.13.a 08613a processo de designacao para o servico ativo	N	47	5	E	N
-629	1	086.14	TAREFA POR TEMPO CERTO	\N	086.14 08614 tarefa por tempo certo	N	\N	5	E	N
-630	1	086.14.a	PROCESSO DE DESIGNAÇÃO PARA TAREFA POR TEMPO CERTO	\N	086.14.a 08614a processo de designacao para tarefa por tempo certo	N	47	5	E	N
-631	1	086.2	PENSIONISTAS	\N	086.2 0862 pensionistas	N	\N	\N	\N	S
-632	1	086.21	PENSÕES	\N	086.21 08621 pensoes	N	\N	\N	\N	S
-633	1	086.211	TEMPORÁRIA	\N	086.211 086211 temporaria	N	\N	5	E	N
-634	1	086.211.a	PROCESSOS DE SOLICITAÇÃO/CONCESSÃO DE PENSÃO MILITAR TEMPORÁRIA	\N	086.211.a 086211a processos de solicitacao concessao de pensao militar temporaria	N	95	5	E	N
-635	1	086.212	VITALÍCIA	\N	086.212 086212 vitalicia	N	\N	5	E	N
-636	1	086.212.a	PROCESSOS DE SOLICITAÇÃO/CONCESSÃO DE PENSÃO MILITAR VITALÍCIA	\N	086.212.a 086212a processos de solicitacao concessao de pensao militar vitalicia	N	125	5	E	N
-637	1	086.213	ESPECIAL	\N	086.213 086213 especial	N	\N	5	E	N
-638	1	086.213.a	PROCESSOS DE SOLICITAÇÃO/CONCESSÃO DE PENSÃO MILITAR ESPECIAL	\N	086.213.a 086213a processos de solicitacao concessao de pensao militar especial	N	125	5	E	N
-639	1	087	ASSISTÊNCIA	\N	087 087 assistencia	N	\N	\N	\N	S
-640	1	087.1	MÉDICA	\N	087.1 0871 medica	N	\N	\N	\N	S
-641	1	087.11	HOSPITALAR	\N	087.11 08711 hospitalar	N	\N	5	E	N
-642	1	087.11.a	ATENDIMENTO AMBULATORIAL OU PRONTO-ATENDIMENTO	\N	087.11.a 08711a atendimento ambulatorial ou pronto-atendimento	N	20	5	E	N
-643	1	087.11.b	PRONTUÁRIOS MÉDICOS, FICHAS ODONTOLÓGICAS	\N	087.11.b 08711b prontuarios medicos fichas odontologicas	N	95	5	E	N
-644	1	087.12	PERICIAL	\N	087.12 08712 pericial	N	\N	5	E	N
-645	1	087.12.a	CONTROLE E VERIFICAÇÃO DE HIGIDEZ DO PESSOAL; ATESTADO E INQUÉRITO SANITÁRIO; RESULTADO DE EXAMES; CORPO DE DELITO; INSPEÇÃO; PROCESSOS DE PERÍCIA PARA REFORMA, ISENÇÃO DE IMPOSTO DE RENDA, MELHORIA DE REFORMA E MOVIMENTAÇÃO POR MOTIVO DE SAÚDE	Controle e verificação do estado de higidez (em estado saudável) do pessoal em serviço ativo, inativo e a ser selecionado para ingresso nas Forças Armadas; atestado sanitário de origem; inquérito sanitário de origem; resultado de exames; auto de corpo de delito; atas de inspeção de saúde; processos de perícia médica para reforma, isenção de imposto de renda, melhoria de reforma e movimentação por motivo de saúde.	087.12.a 08712a controle e verificacao de higidez do pessoal; atestado e inquerito sanitario; resultado de exames; corpo de delito; inspecao; processos de pericia para reforma isencao de imposto de renda melhoria de reforma e movimentacao por motivo de saude controle e verificacao do estado de higidez em estado saudavel do pessoal em servico ativo inativo e a ser selecionado para ingresso nas forcas armadas; atestado sanitario de origem; inquerito sanitario de origem; resultado de exames; auto de corpo de delito; atas de inspecao de saude; processos de pericia medica para reforma isencao de imposto de renda melhoria de reforma e movimentacao por motivo de saude	N	125	5	E	N
-646	1	087.2	SOCIAL	\N	087.2 0872 social	N	\N	5	E	N
-647	1	087.2.a	PROGRAMAS DE ASSISTÊNCIA SOCIAL COM VISTAS À CONCESSÃO DE LICENÇAS E BENEFÍCIOS; ATENDIMENTOS EDUCACIONAIS E ASSISTENCIAIS PRESTADOS POR EMPRESAS CONVENIADAS	\N	087.2.a 0872a programas de assistencia social com vistas a concessao de licencas e beneficios; atendimentos educacionais e assistenciais prestados por empresas conveniadas	N	95	5	E	N
-648	1	087.3	JURÍDICA	\N	087.3 0873 juridica	N	\N	5	E	N
-649	1	087.3.a	ORIENTAÇÃO DE CARÁTER PARTICULAR; ATENDIMENTOS JURÍDICOS PRESTADOS POR EMPRESAS CONVENIADAS	\N	087.3.a 0873a orientacao de carater particular; atendimentos juridicos prestados por empresas conveniadas	N	20	5	E	N
-650	1	087.4	PSICOLÓGICA	\N	087.4 0874 psicologica	N	\N	5	E	N
-651	1	087.4.a	TRIAGEM PARA ENCAMINHAMENTO AO SERVIÇO DE SAÚDE ESPECÍFICO; ORIENTAÇÃO E ACONSELHAMENTO PSICOLÓGICO; ATENDIMENTOS PSICOLÓGICOS PRESTADOS POR EMPRESAS CONVENIADAS	\N	087.4.a 0874a triagem para encaminhamento ao servico de saude especifico; orientacao e aconselhamento psicologico; atendimentos psicologicos prestados por empresas conveniadas	N	125	5	E	N
-652	1	087.5	RELIGIOSA	\N	087.5 0875 religiosa	N	\N	5	E	N
-653	1	087.5.a	CENSO RELIGIOSO	\N	087.5.a 0875a censo religioso	N	45	5	E	N
-654	1	087.5.b	PROCESSOS DE HABILITAÇÃO E REGISTROS DE CASAMENTO; BATIZADO E CRISMA; LIVRO TOMBO	\N	087.5.b 0875b processos de habilitacao e registros de casamento; batizado e crisma; livro tombo	N	15	15	G	N
-655	1	088	VAGA	\N	088 088 vaga	N	\N	\N	\N	S
-656	1	089	OUTROS ASSUNTOS REFERENTES A PESSOAL MILITAR	\N	089 089 outros assuntos referentes a pessoal militar	N	\N	\N	\N	S
-657	1	089.1	SERVIÇOS DE ESCALA	\N	089.1 0891 servicos de escala	N	\N	5	E	N
-658	1	089.1.a	ESCALAS DE SERVIÇO	\N	089.1.a 0891a escalas de servico	N	47	5	E	N
-659	1	089.2	TABELAS MESTRAS	\N	089.2 0892 tabelas mestras	N	\N	5	E	N
-660	1	089.2.a	TABELAS INDIVIDUAIS E GERAIS	Condicional "Enquanto vigora" convencionada para 1 ano no corrente, a contar da perda da validade do documento.	089.2.a 0892a tabelas individuais e gerais condicional enquanto vigora convencionada para 1 ano no corrente a contar da perda da validade do documento	N	5	1	E	N
-661	1	089.3	CONTROLE DE FREQUÊNCIA	\N	089.3 0893 controle de frequencia	N	\N	5	E	N
-662	1	089.3.a	FICHAS DE CONTROLE DE EFETIVOS; LIVROS DE LICENCIADOS	\N	089.3.a 0893a fichas de controle de efetivos; livros de licenciados	N	47	5	E	N
-663	1	089.4	DELEGAÇÕES DE COMPETÊNCIA	\N	089.4 0894 delegacoes de competencia	N	\N	5	E	N
-664	1	089.4.a	ATOS DE DELEGAÇÃO; RELAÇÃO DE ENCARGOS COLATERAIS	Condicional "Enquanto vigora" convencionada para 1 ano no corrente, a contar da perda da validade do documento.	089.4.a 0894a atos de delegacao; relacao de encargos colaterais condicional enquanto vigora convencionada para 1 ano no corrente a contar da perda da validade do documento	N	5	1	E	N
-665	1	900	ADMINISTRAÇÃO DE ATIVIDADES ACESSÓRIAS	Esta classe contempla documentos referentes ao desenvolvimento de atividades complementares, normalmente, vinculadas às atividades-meio, mas que não são essenciais para o funcionamento e cumprimento das competências finalísticas do órgão e entidade.	900 900 Esta classe contempla documentos referentes ao desenvolvimento de atividades complementares normalmente vinculadas as atividades-meio mas que nao sao essenciais para o funcionamento e cumprimento das competencias finalisticas do orgao e entidade.	S	\N	\N	\N	S
-666	1	910	GESTÃO DE EVENTOS	Nas subdivisões deste descritor classificam-se documentos referentes à gestão dos eventos promovidos e realizados pelo órgão e entidade, como: solenidades, comemorações, homenagens, congressos, conferências, seminários, simpósios, jornadas, oficinas, encontros, convenções, ciclos de palestras, mesas redondas, feiras, salões, exposições, mostras, exibição de filmes e vídeos, lançamentos de livros, festas e concursos culturais. Quanto às atividades de comunicação social no âmbito externo, classificar nas subdivisões do código 019.11.	910 910 Nas subdivisoes deste descritor classificam-se documentos referentes a gestao dos eventos promovidos e realizados pelo orgao e entidade como: solenidades comemoracoes homenagens congressos conferencias seminarios simposios jornadas oficinas encontros convencoes ciclos de palestras mesas redondas feiras saloes exposicoes mostras exibicao de filmes e videos lancamentos de livros festas e concursos culturais. Quanto as atividades de comunicacao social no ambito externo classificar nas subdivisoes do codigo 019.11.	S	\N	\N	\N	S
-86	1	020.13	RESIDENTES E ESTAGIÁRIOS	Incluem-se documentos referentes à vida funcional dos residentes e dos estagiários.	020.13 02013 Incluem-se documentos referentes a vida funcional dos residentes e dos estagiarios.	S	\N	\N	E	N
+101	1	022.4	REDISTRIBUIÇÃO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de redistribuição	022.4 0224 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de redistribuicao	S	52	5	E	N
+102	1	022.5	SUBSTITUIÇÃO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de substituição.	022.5 0225 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de substituicao.	S	52	5	E	N
+103	1	022.6	AVALIAÇÃO DE DESEMPENHO	Nas subdivisões deste descritor classificam-se documentos referentes ao cumprimento do estágio obrigatório pelo servidor público, à homologação de sua estabilidade e ao período de experiência a ser cumprido pelos contratados, bem como aqueles referentes às promoções e progressões funcionais.	022.6 0226 Nas subdivisoes deste descritor classificam-se documentos referentes ao cumprimento do estagio obrigatorio pelo servidor publico a homologacao de sua estabilidade e ao periodo de experiencia a ser cumprido pelos contratados bem como aqueles referentes as promocoes e progressoes funcionais.	S	\N	\N	\N	S
+104	1	022.61	CUMPRIMENTO DE ESTÁGIO PROBATÓRIO. HOMOLOGAÇÃO DA ESTABILIDADE.	Incluem-se documentos referentes ao cumprimento e à avaliação do estágio probatório e à homologação da estabilidade do servidor público.	022.61 02261 Incluem-se documentos referentes ao cumprimento e a avaliacao do estagio probatorio e a homologacao da estabilidade do servidor publico.	S	52	5	E	N
+105	1	022.62	CUMPRIMENTO DE PERÍODO DE EXPERIÊNCIA	Incluem-se documentos referentes ao período de experiência a ser cumprido pelos contratados.	022.62 02262 Incluem-se documentos referentes ao periodo de experiencia a ser cumprido pelos contratados.	S	52	5	E	N
+106	1	022.63	PROMOÇÃO E PROGRESSÃO FUNCIONAL	Incluem-se documentos referentes às avaliações de desempenho para promoção e progressão funcional dos servidores.  Quanto à reestruturação e alteração salarial decorrentes de promoção e progressão funcional, classificar no código 023.12.	022.63 02263 Incluem-se documentos referentes as avaliacoes de desempenho para promocao e progressao funcional dos servidores.  Quanto a reestruturacao e alteracao salarial decorrentes de promocao e progressao funcional classificar no codigo 023.12.	S	52	5	E	N
+107	1	022.7	VACÂNCIA	Incluem-se documentos referentes aos procedimentos que efetivam as ações de demissão, dispensa, exoneração, rescisão contratual, aviso prévio, posse em outro cargo não acumulável, promoção, readaptação, aposentadoria e falecimento, bem como aqueles referentes à adesão aos planos de demissão voluntária.	022.7 0227 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de demissao dispensa exoneracao rescisao contratual aviso previo posse em outro cargo nao acumulavel promocao readaptacao aposentadoria e falecimento bem como aqueles referentes a adesao aos planos de demissao voluntaria.	S	52	5	E	N
+108	1	023	CONCESSÃO DE DIREITOS E VANTAGENS	Nas subdivisões deste descritor classificam-se documentos referentes à percepção de pagamento de vencimentos, remunerações, salários e proventos e ao gozo de férias, licenças, afastamentos, concessões, auxílios e reembolso de despesas, bem como aqueles referentes aos descontos, obrigações trabalhistas e estatutárias, encargos patronais e recolhimentos.	023 023 Nas subdivisoes deste descritor classificam-se documentos referentes a percepcao de pagamento de vencimentos remuneracoes salarios e proventos e ao gozo de ferias licencas afastamentos concessoes auxilios e reembolso de despesas bem como aqueles referentes aos descontos obrigacoes trabalhistas e estatutarias encargos patronais e recolhimentos.	S	\N	\N	\N	S
+109	1	023.1	PAGAMENTO DE VENCIMENTOS. REMUNERAÇÕES. SALÁRIOS. PROVENTOS	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos que efetivam as ações de percepção de pagamento.	023.1 0231 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos que efetivam as acoes de percepcao de pagamento.	S	\N	\N	\N	S
+110	1	023.11	FOLHAS DE PAGAMENTO	Incluem-se folhas de pagamento, fichas financeiras e relação de pagamentos.	023.11 02311 Incluem-se folhas de pagamento, fichas financeiras e relacao de pagamentos.	S	95	5	E	N
+111	1	023.12	REESTRUTURAÇÃO E ALTERAÇÃO SALARIAL	Incluem-se documentos referentes a reestruturações e alterações salariais decorrentes de promoção e progressão funcional, enquadramento, equiparação, reajuste e reposição salarial, bem como aqueles decorrentes da redução de jornada de trabalho, remuneração proporcional, regime de trabalho integral e dedicação exclusiva. Quanto à criação, transformação e reestruturação de cargos, carreiras e remuneração, classificar no código 020.022. Quanto às avaliações de desempenho para promoção e progressão funcional, classificar no código 022.63.	023.12 02312 Incluem-se documentos referentes a reestruturacoes e alteracoes salariais decorrentes de promocao e progressao funcional enquadramento equiparacao reajuste e reposicao salarial bem como aqueles decorrentes da reducao de jornada de trabalho remuneracao proporcional regime de trabalho integral e dedicacao exclusiva. Quanto a criacao transformacao e reestruturacao de cargos carreiras e remuneracao classificar no codigo 020.022. Quanto as avaliacoes de desempenho para promocao e progressao funcional classificar no codigo 022.63.	S	52	5	E	N
+112	1	023.13	ABONO PROVISÓRIO	Incluem-se documentos referentes à comprovação do direito, à solicitação e ao pagamento de acréscimo financeiro provisório na remuneração.	023.13 02313 Incluem-se documentos referentes a comprovacao do direito a solicitacao e ao pagamento de acrescimo financeiro provisorio na remuneracao.	S	\N	7	E	N
+113	1	023.14	ABONO DE PERMANÊNCIA EM SERVIÇO	Incluem-se documentos referentes ao reembolso da contribuição previdenciária ao servidor público, que cumpriu os requisitos para aposentadoria, mas que optou por continuar na ativa. Quanto à contagem e averbação de tempo de serviço, classificar no código 026.02.	023.14 02314 Incluem-se documentos referentes ao reembolso da contribuicao previdenciaria ao servidor publico que cumpriu os requisitos para aposentadoria mas que optou por continuar na ativa. Quanto a contagem e averbacao de tempo de servico classificar no codigo 026.02.	S	\N	\N	E	N
+114	1	023.15	GRATIFICAÇÕES	Nas subdivisões deste descritor classificam-se os documentos referentes à solicitação, comprovação do direito, incorporação, pagamento e interrupção do pagamento das gratificações concedidas.	023.15 02315 Nas subdivisoes deste descritor classificam-se os documentos referentes a solicitacao comprovacao do direito incorporacao pagamento e interrupcao do pagamento das gratificacoes concedidas.	S	\N	\N	\N	S
+115	1	023.151	FUNÇÃO	Incluem-se documentos referentes à solicitação, comprovação do direito, incorporação de quintos e décimos, pagamento e interrupção do pagamento da gratificação.	023.151 023151 Incluem-se documentos referentes a solicitacao comprovacao do direito incorporacao de quintos e decimos pagamento e interrupcao do pagamento da gratificacao.	S	52	5	E	N
+18	1	004	ASSESSORAMENTO JURÍDICO	Nas subdivisões deste descritor classificam-se documentos referentes à análise jurídica de instrumentos e de atos normativos e ao acompanhamento de ações judiciais.	004 004 Nas subdivisoes deste descritor classificam-se documentos referentes a analise juridica de instrumentos e de atos normativos e ao acompanhamento de acoes judiciais.	S	\N	\N	\N	S
 1	1	000	ADMINISTRAÇÃO GERAL	Esta classe contempla documentos referentes às atividades relacionadas à administração interna do órgão e entidade, que viabilizam o seu funcionamento e o alcance dos  objetivos para os quais foram criados.	000 000 Esta classe contempla documentos referentes as atividades relacionadas a administracao interna do orgao e entidade que viabilizam o seu funcionamento e o alcance dos objetivos para os quais foram criados.	S	\N	\N	\N	S
 2	1	001	RELAÇÃO INTERINSTITUCIONAL	Incluem-se documentos referentes à formalização, execução e acompanhamento das relações entre o órgão e entidade e outros órgãos e entidades, públicos e privados, firmadas por meio de acordos, contratos, convênios, termos e outros atos de ajustes, que abranjam, ao mesmo tempo, a execução de várias atividades, bem como aqueles referentes à fiscalização, prestação e tomada de contas, relatórios técnicos e termos de aditamento.	001 001 Incluem-se documentos referentes a formalizacao execucao e acompanhamento das relacoes entre o orgao e entidade e outros orgaos e entidades publicos e privados firmadas por meio de acordos contratos convenios termos e outros atos de ajustes que abranjam ao mesmo tempo a execucao de varias atividades bem como aqueles referentes a fiscalizacao prestacao e tomada de contas relatorios tecnicos e termos de aditamento.	S	20	\N	G	N
 3	1	002	ATENDIMENTO AO CIDADÃO	Nas subdivisões deste descritor classificam-se documentos referentes às solicitações de informações e às comunicações enviadas ao órgão e entidade pelos canais de atendimento ao cidadão, tais como: Serviço de Informações ao Cidadão (SIC), ouvidoria e outros canais de comunicação.	002 002 Nas subdivisoes deste descritor classificam-se documentos referentes as solicitacoes de informacoes e as comunicacoes enviadas ao orgao e entidade pelos canais de atendimento ao cidadao tais como: Servico de Informacoes ao Cidadao (SIC) ouvidoria e outros canais de comunicacao.	S	\N	\N	\N	S
@@ -5234,23 +5137,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 6	1	002.11	PEDIDO DE ACESSO À INFORMAÇÃO E RECURSO	Incluem-se documentos referentes às solicitações, respostas e recursos referentes aos pedidos de acesso à informação, presenciais e não presenciais, realizados por intermédio do SIC, tais como: formulários com pedidos de acesso à informação e formulários de recursos.  Quanto ao acesso e ao controle das consultas aos documentos arquivísticos, bibliográficos e museológicos, classificar no código 063.1.	002.11 00211 Incluem-se documentos referentes as solicitacoes respostas e recursos referentes aos pedidos de acesso a informacao presenciais e nao presenciais realizados por intermedio do SIC tais como: formularios com pedidos de acesso a informacao e formularios de recursos.  Quanto ao acesso e ao controle das consultas aos documentos arquivisticos bibliograficos e museologicos classificar no codigo 063.1.	S	5	\N	E	N
 7	1	002.12	ACOMPANHAMENTO DO ATENDIMENTO AO CIDADÃO	Incluem-se documentos referentes ao acompanhamento das atividades desempenhadas pelo SIC, tais como: relatórios estatísticos, de atendimento, de controle de consultas e de perfil do usuário.	002.12 00212 Incluem-se documentos referentes ao acompanhamento das atividades desempenhadas pelo SIC, tais como: relatorios estatisticos, de atendimento, de controle de consultas e de perfil do usuario.	S	\N	2	G	N
 8	1	002.2	CONTROLE DE SATISFAÇÃO DO USUÁRIO	Incluem-se documentos referentes à pesquisa de satisfação dos usuários dos serviços públicos, decorrentes de pedidos de acesso à informação e de manifestações registradas na ouvidoria e nos demais canais de comunicação do órgão e entidade.  Quanto aos pedidos de acesso à informação e aos documentos institucionais, classificar nas subdivisões do código 002.1.  Quanto ao tratamento das demandas recebidas pela ouvidoria e por outros canais de comunicação, classificar nas subdivisões do código 002.3. Quanto às comunicações eventuais trocadas entre o órgão e entidade e demais instituições, classificar no código 991.	002.2 0022 Incluem-se documentos referentes a pesquisa de satisfacao dos usuarios dos servicos publicos decorrentes de pedidos de acesso a informacao e de manifestacoes registradas na ouvidoria e nos demais canais de comunicacao do orgao e entidade.  Quanto aos pedidos de acesso a informacao e aos documentos institucionais classificar nas subdivisoes do codigo 002.1.  Quanto ao tratamento das demandas recebidas pela ouvidoria e por outros canais de comunicacao classificar nas subdivisoes do codigo 002.3. Quanto as comunicacoes eventuais trocadas entre o orgao e entidade e demais instituicoes classificar no codigo 991.	S	\N	2	E	N
-21	1	004.12	ANÁLISE DOS INSTRUMENTOS ADMINISTRATIVOS	Incluem-se documentos referentes ao exame e à análise prévia ou conclusiva de textos de editais de licitação, de contratos e de instrumentos congêneres a serem publicados e celebrados pelo órgão e entidade.	004.12 00412 Incluem-se documentos referentes ao exame e a analise previa ou conclusiva de textos de editais de licitacao de contratos e de instrumentos congeneres a serem publicados e celebrados pelo orgao e entidade.	S	5	\N	E	N
 22	1	004.2	ATUAÇÃO EM CONTENCIOSO	Nas subdivisões deste descritor classificam-se documentos referentes à atuação contenciosa judicial e administrativa, nas hipóteses de contestação, conflito ou litígio, exercida pela assessoria ou consultoria jurídica do órgão e entidade.	004.2 0042 Nas subdivisoes deste descritor classificam-se documentos referentes a atuacao contenciosa judicial e administrativa nas hipoteses de contestacao conflito ou litigio exercida pela assessoria ou consultoria juridica do orgao e entidade.	S	\N	\N	\N	S
-87	1	020.14	OCUPANTES DE CARGO COMISSIONADO E DE FUNÇÃO DE CONFIANÇA	Incluem-se documentos referentes à vida funcional dos ocupantes de cargo comissionado e de função de confiança sem vínculo.	020.14 02014 Incluem-se documentos referentes a vida funcional dos ocupantes de cargo comissionado e de funcao de confianca sem vinculo.	S	\N	\N	E	N
-88	1	020.2	IDENTIFICAÇÃO FUNCIONAL	Incluem-se documentos referentes à requisição e ao controle de entrega de documentos de identificação funcional, tais como: carteira, cartão, identidade, crachá, credencial, passaporte de serviço ou diplomático.	020.2 0202 Incluem-se documentos referentes a requisicao e ao controle de entrega de documentos de identificacao funcional tais como: carteira cartao identidade cracha credencial passaporte de servico ou diplomatico.	S	\N	\N	E	N
-89	1	021	RECRUTAMENTO E SELEÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos desenvolvidos para a realização de concursos públicos para o provimento de cargos públicos, empregos públicos e contratação por tempo determinado ou para realização de processo seletivo, que ocorre entre instituições, para recrutamento de servidores e empregados públicos.	021 021 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos desenvolvidos para a realizacao de concursos publicos para o provimento de cargos publicos, empregos publicos e contratacao por tempo determinado ou para realizacao de processo seletivo, que ocorre entre instituicoes, para recrutamento de servidores e empregados publicos.	S	\N	\N	\N	S
-90	1	021.1	PLANEJAMENTO DO PROCESSO SELETIVO	Incluem-se estudos, propostas, constituição de bancas examinadoras, programas, editais, exemplares únicos de provas, gabaritos e critérios para correção de provas e para solicitação de recursos.	021.1 0211 Incluem-se estudos, propostas, constituicao de bancas examinadoras, programas, editais, exemplares unicos de provas, gabaritos e criterios para correcao de provas e para solicitacao de recursos.	S	2	\N	G	N
-91	1	021.2	INSCRIÇÃO	Incluem-se documentos exigidos no edital para a homologação da inscrição e fichas de inscrição.	021.2 0212 Incluem-se documentos exigidos no edital para a homologacao da inscricao e fichas de inscricao.	S	2	\N	E	N
-92	1	021.3	CONTROLE DE APLICAÇÃO DE PROVAS	Incluem-se documentos referentes ao controle de aplicação das provas, de acordo com os requisitos estipulados no edital.	021.3 0213 Incluem-se documentos referentes ao controle de aplicacao das provas, de acordo com os requisitos estipulados no edital.	S	2	\N	E	N
-93	1	021.4	CORREÇÃO DE PROVAS. AVALIAÇÃO	Incluem-se cadernos de prova utilizados pelos candidatos, folhas de resposta, provas de títulos, avaliação psicológica, testes psicotécnicos, exames médicos e de aptidão física, bem como currículos e entrevistas dos candidatos. Quanto às provas de títulos, avaliação psicológica, testes psicotécnicos, exames médicos e de aptidão física dos candidatos que vierem a ser nomeados, classificar nas subdivisões do código 020.1.	021.4 0214 Incluem-se cadernos de prova utilizados pelos candidatos folhas de resposta provas de titulos avaliacao psicologica testes psicotecnicos exames medicos e de aptidao fisica bem como curriculos e entrevistas dos candidatos. Quanto as provas de titulos avaliacao psicologica testes psicotecnicos exames medicos e de aptidao fisica dos candidatos que vierem a ser nomeados classificar nas subdivisoes do codigo 020.1.	S	2	\N	E	N
-94	1	021.5	DIVULGAÇÃO DOS RESULTADOS E INTERPOSIÇÃO DE RECURSOS	Incluem-se documentos referentes aos resultados das provas realizadas ou do processo seletivo interno, a classificação e a reclassificação dos candidatos, bem como aqueles referentes aos recursos impetrados em qualquer uma das fases do concurso.	021.5 0215 Incluem-se documentos referentes aos resultados das provas realizadas ou do processo seletivo interno, a classificacao e a reclassificacao dos candidatos, bem como aqueles referentes aos recursos impetrados em qualquer uma das fases do concurso.	S	2	\N	G	N
-95	1	022	PROVIMENTO, MOVIMENTAÇÃO E VACÂNCIA	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos que efetivam  as ações e as formas de ingresso, movimentação e desligamento na administração pública, bem como aqueles referentes às avaliações de desempenho dos servidores. Quanto aos atos específicos e individuais que deverão integrar o assentamento funcional, classificar nas subdivisões do código 020.1.	022 022 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos que efetivam  as acoes e as formas de ingresso movimentacao e desligamento na administracao publica bem como aqueles referentes as avaliacoes de desempenho dos servidores. Quanto aos atos especificos e individuais que deverao integrar o assentamento funcional classificar nas subdivisoes do codigo 020.1.	S	\N	\N	\N	S
-96	1	022.1	PROVIMENTO DE CARGO PÚBLICO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de admissão, contratação, nomeação, designação, posse, disponibilidade, aproveitamento, readmissão, readaptação, recondução, reintegração, reversão e promoção.	022.1 0221 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de admissao, contratacao, nomeacao, designacao, posse, disponibilidade, aproveitamento, readmissao, readaptacao, reconducao, reintegracao, reversao e promocao.	S	52	5	E	N
-97	1	022.2	MOVIMENTAÇÃO DE PESSOAL	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos que efetivam as ações de lotação, exercício, permuta, cessão e requisição.	022.2 0222 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos que efetivam as acoes de lotacao, exercicio, permuta, cessao e requisicao.	S	\N	\N	\N	S
-98	1	022.21	LOTAÇÃO, EXERCÍCIO E PERMUTA	Incluem-se documentos referentes aos procedimentos que efetivam as ações de lotação, exercício e permuta, bem como aqueles referentes à transferência.	022.21 02221 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de lotacao exercicio e permuta bem como aqueles referentes a transferencia.	S	5	4	E	N
-99	1	022.22	CESSÃO. REQUISIÇÃO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de cessão e requisição para a realização de serviços temporários em outro órgão e entidade.	022.22 02222 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de cessao e requisicao para a realizacao de servicos temporarios em outro orgao e entidade.	S	52	5	E	N
-100	1	022.3	REMOÇÃO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de remoção.	022.3 0223 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de remocao.	S	5	4	E	N
-101	1	022.4	REDISTRIBUIÇÃO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de redistribuição	022.4 0224 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de redistribuicao	S	52	5	E	N
 9	1	002.3	ACOMPANHAMENTO DE MANIFESTAÇÃO DO USUÁRIO	Nas subdivisões deste descritor classificam-se documentos referentes ao acompanhamento e tratamento de manifestações de usuários do órgão e entidade, recebidas pela ouvidoria e demais canais de comunicação institucional, abrangendo as reclamações, elogios, solicitações, sugestões ou denúncias, bem como às ações de ouvidoria ativa. Quanto aos pedidos de acesso à informação e aos documentos institucionais, classificar nas subdivisões do código 002.1. Quanto à conversão da demanda em processo administrativo, classificar de acordo com a atividade decorrente da manifestação ou da denúncia.	002.3 0023 Nas subdivisoes deste descritor classificam-se documentos referentes ao acompanhamento e tratamento de manifestacoes de usuarios do orgao e entidade recebidas pela ouvidoria e demais canais de comunicacao institucional abrangendo as reclamacoes elogios solicitacoes sugestoes ou denuncias bem como as acoes de ouvidoria ativa. Quanto aos pedidos de acesso a informacao e aos documentos institucionais classificar nas subdivisoes do codigo 002.1. Quanto a conversao da demanda em processo administrativo classificar de acordo com a atividade decorrente da manifestacao ou da denuncia.	S	\N	\N	\N	S
 10	1	002.31	TRATAMENTO DE MANIFESTAÇÃO 	Incluem-se documentos referentes à análise e tratamento de manifestações recebidas pela ouvidoria e demais canais de comunicação do órgão ou entidade, pertinentes às reclamações, elogios, solicitações e sugestões de usuários. Quanto ao tratamento de denúncias e comunicações de ilegalidade ou irregularidade, classificar no código 002.32.	002.31 00231 Incluem-se documentos referentes a analise e tratamento de manifestacoes recebidas pela ouvidoria e demais canais de comunicacao do orgao ou entidade pertinentes as reclamacoes elogios solicitacoes e sugestoes de usuarios. Quanto ao tratamento de denuncias e comunicacoes de ilegalidade ou irregularidade classificar no codigo 002.32.	S	5	5	E	N
 11	1	002.32	TRATAMENTO DE DENÚNCIA	Incluem-se documentos referentes à análise e tratamento de denúncias e comunicações de irregularidade ou ilegalidade, recebidas pela ouvidoria e demais canais de comunicação do órgão ou entidade.  Quanto ao tratamento de reclamações, elogios, solicitações e sugestões, classificar no código 002.31.	002.32 00232 Incluem-se documentos referentes a analise e tratamento de denuncias e comunicacoes de irregularidade ou ilegalidade recebidas pela ouvidoria e demais canais de comunicacao do orgao ou entidade.  Quanto ao tratamento de reclamacoes elogios solicitacoes e sugestoes classificar no codigo 002.31.	S	15	5	E	N
@@ -5260,19 +5147,22 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 15	1	003.1	CONTROLE INTERNO. AUDITORIA INTERNA	Incluem-se documentos referentes à avaliação das ações executadas pelo órgão e entidade, da legalidade dos procedimentos e da atuação do gestor público.	003.1 0031 Incluem-se documentos referentes a avaliacao das acoes executadas pelo orgao e entidade da legalidade dos procedimentos e da atuacao do gestor publico.	S	9	5	G	N
 16	1	003.2	AÇÃO PREVENTIVA	Incluem-se documentos referentes às ações implementadas por orientação dos órgãos fiscalizadores para prevenção da corrupção no órgão e entidade.	003.2 0032 Incluem-se documentos referentes as acoes implementadas por orientacao dos orgaos fiscalizadores para prevencao da corrupcao no orgao e entidade.	S	9	5	G	N
 17	1	003.3	CORREIÇÃO	Incluem-se documentos referentes à fiscalização e apuração de responsabilidades realizada pelos órgãos fiscalizadores em caso de irregularidades cometidas no órgão e entidade.	003.3 0033 Incluem-se documentos referentes a fiscalizacao e apuracao de responsabilidades realizada pelos orgaos fiscalizadores em caso de irregularidades cometidas no orgao e entidade.	S	9	5	G	N
-18	1	004	ASSESSORAMENTO JURÍDICO	Nas subdivisões deste descritor classificam-se documentos referentes à análise jurídica de instrumentos e de atos normativos e ao acompanhamento de ações judiciais.	004 004 Nas subdivisoes deste descritor classificam-se documentos referentes a analise juridica de instrumentos e de atos normativos e ao acompanhamento de acoes judiciais.	S	\N	\N	\N	S
 19	1	004.1	ORIENTAÇÃO TÉCNICA E NORMATIVA	Nas subdivisões deste descritor classificam-se documentos referentes à análise jurídica de instrumentos e de atos normativos elaborados pelo órgão e entidade.	004.1 0041 Nas subdivisoes deste descritor classificam-se documentos referentes a analise juridica de instrumentos e de atos normativos elaborados pelo orgao e entidade.	S	\N	\N	\N	S
 20	1	004.11	UNIFORMIZAÇÃO DO ENTENDIMENTO JURÍDICO	Incluem-se documentos referentes à  análise e à fixação de interpretação da Constituição, das leis, dos tratados e dos demais atos normativos, a serem seguidos, de modo uniforme, pelo órgão e entidade, quando não houver orientação normativa superior, tais como: instruções, pareceres e notas.	004.11 00411 Incluem-se documentos referentes a  analise e a fixacao de interpretacao da Constituicao das leis dos tratados e dos demais atos normativos a serem seguidos de modo uniforme pelo orgao e entidade quando nao houver orientacao normativa superior tais como: instrucoes pareceres e notas.	S	5	\N	G	N
-102	1	022.5	SUBSTITUIÇÃO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de substituição.	022.5 0225 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de substituicao.	S	52	5	E	N
+21	1	004.12	ANÁLISE DOS INSTRUMENTOS ADMINISTRATIVOS	Incluem-se documentos referentes ao exame e à análise prévia ou conclusiva de textos de editais de licitação, de contratos e de instrumentos congêneres a serem publicados e celebrados pelo órgão e entidade.	004.12 00412 Incluem-se documentos referentes ao exame e a analise previa ou conclusiva de textos de editais de licitacao de contratos e de instrumentos congeneres a serem publicados e celebrados pelo orgao e entidade.	S	5	\N	E	N
+86	1	020.13	RESIDENTES E ESTAGIÁRIOS	Incluem-se documentos referentes à vida funcional dos residentes e dos estagiários.	020.13 02013 Incluem-se documentos referentes a vida funcional dos residentes e dos estagiarios.	S	\N	\N	E	N
 23	1	004.21	REPRESENTAÇÃO EXTRAJUDICIAL	Incluem-se documentos referentes à solução extrajudicial dos litígios, visando à composição entre as partes em conflito de interesses, por meio de mediação, conciliação, arbitragem e demais técnicas de composição e administração de conflitos.	004.21 00421 Incluem-se documentos referentes a solucao extrajudicial dos litigios visando a composicao entre as partes em conflito de interesses por meio de mediacao conciliacao arbitragem e demais tecnicas de composicao e administracao de conflitos.	S	5	\N	G	N
 24	1	004.22	REPRESENTAÇÃO JUDICIAL	Incluem-se documentos referentes às ações defendidas pela assessoria ou consultoria jurídica em processos administrativos e judiciais, perante todas as instâncias, ordinárias ou extraordinárias, utilizando as medidas capazes de propiciar a efetiva defesa dos interesses do órgão e entidade.	004.22 00422 Incluem-se documentos referentes as acoes defendidas pela assessoria ou consultoria juridica em processos administrativos e judiciais perante todas as instancias ordinarias ou extraordinarias utilizando as medidas capazes de propiciar a efetiva defesa dos interesses do orgao e entidade.	S	5	\N	G	N
 25	1	005	PARTICIPAÇÃO EM ÓRGÃOS COLEGIADOS	Nas subdivisões deste descritor classificam-se documentos referentes à organização e ao funcionamento de colegiados, como comissões, conselhos, comitês, juntas e grupos de trabalho, criados pelo próprio órgão e entidade ou por outros órgãos de deliberação coletiva, que contem com a participação de servidores da instituição. Quanto aos documentos referentes às atividades do órgão colegiado, classificar no descritor referente ao objeto de sua atuação. Quanto aos documentos referentes ao processo eletivo, classificar nas subdivisões do código 014.	005 005 Nas subdivisoes deste descritor classificam-se documentos referentes a organizacao e ao funcionamento de colegiados como comissoes conselhos comites juntas e grupos de trabalho criados pelo proprio orgao e entidade ou por outros orgaos de deliberacao coletiva que contem com a participacao de servidores da instituicao. Quanto aos documentos referentes as atividades do orgao colegiado classificar no descritor referente ao objeto de sua atuacao. Quanto aos documentos referentes ao processo eletivo classificar nas subdivisoes do codigo 014.	S	\N	\N	\N	S
 26	1	005.1	CRIAÇÃO E ORGANIZAÇÃO	Incluem-se documentos referentes à implantação de órgãos colegiados, tais como: ato de instituição, regras para atuação, designação e substituição de membros.  Quanto aos documentos referentes à atuação do órgão colegiado, devem ser classifi-cados no descritor referente ao objeto de sua atuação.	005.1 0051 Incluem-se documentos referentes a implantacao de orgaos colegiados tais como: ato de instituicao regras para atuacao designacao e substituicao de membros.  Quanto aos documentos referentes a atuacao do orgao colegiado devem ser classifi-cados no descritor referente ao objeto de sua atuacao.	S	5	4	G	N
 27	1	005.2	OPERACIONALIZAÇÃO DE REUNIÕES	Incluem-se documentos referentes à organização das reuniões dos órgãos colegiados, bem como aqueles referentes ao agendamento, convocação, pauta e lista de participantes.	005.2 0052 Incluem-se documentos referentes a organizacao das reunioes dos orgaos colegiados bem como aqueles referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
 28	1	010	ORGANIZAÇÃO E FUNCIONAMENTO	Esta subclasse contempla documentos referentes à definição e alteração das políticas institucionais, à criação e modificação das estruturas organizacionais e aos registros que garantam a existência do órgão e entidade como pessoa jurídica e a sua atuação no meio público, privado, com o terceiro setor e com o cidadão, bem como aqueles referentes à contratação de prestação de serviços para o funcio-namento do órgão e entidade, e ao planejamento e acompanhamento das ações institucionais, da gestão ambiental e da comunicação social.	010 010 Esta subclasse contempla documentos referentes a definicao e alteracao das politicas institucionais a criacao e modificacao das estruturas organizacionais e aos registros que garantam a existencia do orgao e entidade como pessoa juridica e a sua atuacao no meio publico privado com o terceiro setor e com o cidadao bem como aqueles referentes a contratacao de prestacao de servicos para o funcio-namento do orgao e entidade e ao planejamento e acompanhamento das acoes institucionais da gestao ambiental e da comunicacao social.	S	\N	\N	\N	S
+39	1	014.4	DIVULGAÇÃO DOS RESULTADOS E INTERPOSIÇÃO DE RECURSOS	Incluem-se documentos referentes aos resultados finais da eleição realizada e à divulgação dos candidatos eleitos, bem como aqueles referentes aos recursos impetrados.	014.4 0144 Incluem-se documentos referentes aos resultados finais da eleicao realizada e a divulgacao dos candidatos eleitos bem como aqueles referentes aos recursos impetrados.	S	1	\N	G	N
+40	1	015	GESTÃO INSTITUCIONAL	Nas subdivisões deste descritor classificam-se documentos referentes ao planejamento, acompanhamento, avaliação, governança e acreditação das atividades do órgão e entidade.	015 015 Nas subdivisoes deste descritor classificam-se documentos referentes ao planejamento, acompanhamento, avaliacao, governanca e acreditacao das atividades do orgao e entidade.	S	\N	\N	\N	S
 29	1	010.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais internos e às decisões de caráter geral sobre a organização e funcionamento de todas as atividades do órgão e entidade, bem como os boletins administrativos e de serviço. Quanto aos boletins de pessoal, classificar no código 020.01. Quanto à publicação de matérias em boletins administrativos, de serviço, de pessoal, em diários oficiais e em periódicos de grande circulação, classificar no código 069.3. Quanto a documentos referentes à função de normatização e regulamentação de determinada atividade que alcancem os órgãos e entidades do Poder Executivo federal, classificar na atividade finalística.	010.01 01001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais internos e as decisoes de carater geral sobre a organizacao e funcionamento de todas as atividades do orgao e entidade bem como os boletins administrativos e de servico. Quanto aos boletins de pessoal classificar no codigo 020.01. Quanto a publicacao de materias em boletins administrativos de servico de pessoal em diarios oficiais e em periodicos de grande circulacao classificar no codigo 069.3. Quanto a documentos referentes a funcao de normatizacao e regulamentacao de determinada atividade que alcancem os orgaos e entidades do Poder Executivo federal classificar na atividade finalistica.	S	5	\N	G	N
+87	1	020.14	OCUPANTES DE CARGO COMISSIONADO E DE FUNÇÃO DE CONFIANÇA	Incluem-se documentos referentes à vida funcional dos ocupantes de cargo comissionado e de função de confiança sem vínculo.	020.14 02014 Incluem-se documentos referentes a vida funcional dos ocupantes de cargo comissionado e de funcao de confianca sem vinculo.	S	\N	\N	E	N
+301	1	041.53	BENS SEMOVENTES	Incluem-se documentos referentes à cessão e comodato de animais.	041.53 04153 Incluem-se documentos referentes a cessao e comodato de animais.	S	5	4	E	N
 30	1	011	ORGANIZAÇÃO ADMINISTRATIVA	Incluem-se documentos referentes aos estudos para a definição da estrutura e das atribuições do órgão e entidade e para as mudanças estratégicas (missão, finalidade e forma de atuação) e estruturais (hierarquia, distribuição formal de autoridade e responsabilidade, abertura ou encerramento de unidades administrativas), bem como aqueles resultantes da implantação de reformas administrativas ou de processos de modernização, com impacto no órgão e entidade, na forma de fusão, privatização, reestatização ou extinção.	011 011 Incluem-se documentos referentes aos estudos para a definicao da estrutura e das atribuicoes do orgao e entidade e para as mudancas estrategicas (missao, finalidade e forma de atuacao) e estruturais (hierarquia, distribuicao formal de autoridade e responsabilidade, abertura ou encerramento de unidades administrativas), bem como aqueles resultantes da implantacao de reformas administrativas ou de processos de modernizacao, com impacto no orgao e entidade, na forma de fusao, privatizacao, reestatizacao ou extincao.	S	5	\N	G	N
-104	1	022.61	CUMPRIMENTO DE ESTÁGIO PROBATÓRIO. HOMOLOGAÇÃO DA ESTABILIDADE.	Incluem-se documentos referentes ao cumprimento e à avaliação do estágio probatório e à homologação da estabilidade do servidor público.	022.61 02261 Incluem-se documentos referentes ao cumprimento e a avaliacao do estagio probatorio e a homologacao da estabilidade do servidor publico.	S	52	5	E	N
 31	1	012	HABILITAÇÃO JURÍDICA E REGULARIZAÇÃO FISCAL	Incluem-se documentos referentes à inscrição, baixa e cancelamento nos órgãos competentes, tais como: cadastro bancário, registros de inscrição no Cadastro Nacional de Pessoa Jurídica (CNPJ), no Sistema de Operações, Registro e Controle do Banco Central (Sisbacen), no Serviço de Proteção ao Crédito (SPC), no Cadastro Informativo de Créditos e não Quitados do Setor Público Federal (Cadin).	012 012 Incluem-se documentos referentes a inscricao baixa e cancelamento nos orgaos competentes tais como: cadastro bancario registros de inscricao no Cadastro Nacional de Pessoa Juridica (CNPJ) no Sistema de Operacoes Registro e Controle do Banco Central (Sisbacen) no Servico de Protecao ao Credito (SPC) no Cadastro Informativo de Creditos e nao Quitados do Setor Publico Federal (Cadin).	S	2	\N	E	N
 32	1	013	COORDENAÇÃO E GESTÃO DE REUNIÕES	Nas subdivisões deste descritor classificam-se documentos relativos às atividades necessárias para a realização de assembleias, audiências, despachos e reuniões, gerais e setoriais, do órgão e entidade, bem como aqueles referentes ao registro de suas deliberações.	013 013 Nas subdivisoes deste descritor classificam-se documentos relativos as atividades necessarias para a realizacao de assembleias audiencias despachos e reunioes gerais e setoriais do orgao e entidade bem como aqueles referentes ao registro de suas deliberacoes.	S	\N	\N	\N	S
 33	1	013.1	OPERACIONALIZAÇÃO	Incluem-se documentos referentes à organização das reuniões do órgão e entidade, bem como aqueles referentes ao agendamento, convocação, pauta e lista de participantes.	013.1 0131 Incluem-se documentos referentes a organizacao das reunioes do orgao e entidade bem como aqueles referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
@@ -5281,12 +5171,9 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 36	1	014.1	NOMEAÇÃO E ATUAÇÃO DA COMISSÃO ELEITORAL	Incluem-se documentos referentes à constituição e às atividades da comissão eleitoral, das mesas de votação e dos fiscais, tais como: indicação dos membros, regimento eleitoral, convocação, pauta, lista de participantes e registros e atas das reuniões.	014.1 0141 Incluem-se documentos referentes a constituicao e as atividades da comissao eleitoral das mesas de votacao e dos fiscais tais como: indicacao dos membros regimento eleitoral convocacao pauta lista de participantes e registros e atas das reunioes.	S	1	\N	G	N
 37	1	014.2	INSCRIÇÃO	Incluem-se documentos referentes à definição do calendário eleitoral, à inscrição de candidatos para participação no processo eletivo e à divulgação das atividades eletivas e dos candidatos, tais como: cronograma, cópia de documentos pessoais dos inscritos ou integrantes das chapas concorrentes, propaganda eleitoral e pedidos de impugnação de candidatura.	014.2 0142 Incluem-se documentos referentes a definicao do calendario eleitoral a inscricao de candidatos para participacao no processo eletivo e a divulgacao das atividades eletivas e dos candidatos tais como: cronograma copia de documentos pessoais dos inscritos ou integrantes das chapas concorrentes propaganda eleitoral e pedidos de impugnacao de candidatura.	S	1	\N	E	N
 38	1	014.3	VOTAÇÃO	Incluem-se documentos referentes à apuração do processo eletivo, tais como: relação de eleitores habilitados, cédulas de votação e contagem de votos.	014.3 0143 Incluem-se documentos referentes a apuracao do processo eletivo tais como: relacao de eleitores habilitados cedulas de votacao e contagem de votos.	S	1	\N	G	N
-39	1	014.4	DIVULGAÇÃO DOS RESULTADOS E INTERPOSIÇÃO DE RECURSOS	Incluem-se documentos referentes aos resultados finais da eleição realizada e à divulgação dos candidatos eleitos, bem como aqueles referentes aos recursos impetrados.	014.4 0144 Incluem-se documentos referentes aos resultados finais da eleicao realizada e a divulgacao dos candidatos eleitos bem como aqueles referentes aos recursos impetrados.	S	1	\N	G	N
-40	1	015	GESTÃO INSTITUCIONAL	Nas subdivisões deste descritor classificam-se documentos referentes ao planejamento, acompanhamento, avaliação, governança e acreditação das atividades do órgão e entidade.	015 015 Nas subdivisoes deste descritor classificam-se documentos referentes ao planejamento, acompanhamento, avaliacao, governanca e acreditacao das atividades do orgao e entidade.	S	\N	\N	\N	S
 41	1	015.1	PLANEJAMENTO INSTITUCIONAL	Incluem-se documentos referentes ao planejamento, às ações e aos programas e projetos de trabalho do órgão e entidade, tais como: planejamento plurianual, planejamento estratégico, plano de desenvolvimento institucional, plano de metas e definição de indicadores de desempenho.	015.1 0151 Incluem-se documentos referentes ao planejamento as acoes e aos programas e projetos de trabalho do orgao e entidade tais como: planejamento plurianual planejamento estrategico plano de desenvolvimento institucional plano de metas e definicao de indicadores de desempenho.	S	9	5	G	N
 42	1	015.2	ACOMPANHAMENTO DAS ATIVIDADES	Incluem-se documentos referentes aos registros das atividades desempenhadas pelo órgão e entidade, tais como: relatórios parciais (mensal, trimestral ou semestral), relatório anual e relatório de gestão.	015.2 0152 Incluem-se documentos referentes aos registros das atividades desempenhadas pelo orgao e entidade, tais como: relatorios parciais (mensal, trimestral ou semestral), relatorio anual e relatorio de gestao.	S	9	5	G	N
 43	1	015.3	AVALIAÇÃO DA GESTÃO INSTITUCIONAL	Nas subdivisões deste descritor classificam-se documentos referentes às ações de autoavaliação, para verificação do desempenho do órgão e entidade, visando o controle da qualidade e a melhoria na prestação do serviço público.	015.3 0153 Nas subdivisoes deste descritor classificam-se documentos referentes as acoes de autoavaliacao para verificacao do desempenho do orgao e entidade visando o controle da qualidade e a melhoria na prestacao do servico publico.	S	\N	\N	\N	S
-105	1	022.62	CUMPRIMENTO DE PERÍODO DE EXPERIÊNCIA	Incluem-se documentos referentes ao período de experiência a ser cumprido pelos contratados.	022.62 02262 Incluem-se documentos referentes ao periodo de experiencia a ser cumprido pelos contratados.	S	52	5	E	N
 44	1	015.31	ELABORAÇÃO DOS INSTRUMENTOS DE AVALIAÇÃO	Incluem-se documentos referentes ao planejamento das atividades de avaliação e aos programas e projetos de implementação do controle da qualidade da gestão do órgão e entidade, tais como: definição de indicadores e de instrumentos para avaliação dos aspectos gerenciais, diagnósticos e cronogramas.	015.31 01531 Incluem-se documentos referentes ao planejamento das atividades de avaliacao e aos programas e projetos de implementacao do controle da qualidade da gestao do orgao e entidade, tais como: definicao de indicadores e de instrumentos para avaliacao dos aspectos gerenciais, diagnosticos e cronogramas.	S	9	5	G	N
 45	1	015.32	EXECUÇÃO E ACOMPANHAMENTO	Incluem-se documentos referentes à implementação das atividades de avaliação e controle da qualidade da gestão institucional, bem como aqueles referentes à análise crítica e à verificação da compatibilidade entre o planejamento e os resultados obtidos na apuração das metas institucionais.	015.32 01532 Incluem-se documentos referentes a implementacao das atividades de avaliacao e controle da qualidade da gestao institucional bem como aqueles referentes a analise critica e a verificacao da compatibilidade entre o planejamento e os resultados obtidos na apuracao das metas institucionais.	S	9	5	G	N
 46	1	015.33	CERTIFICAÇÃO DA CONFORMIDADE	Incluem-se documentos referentes à certificação da conformidade, às propostas de ações corretivas e preventivas e ao tratamento da não conformidade, bem como relatórios estatísticos, demonstrativos de resultados, certificados e premiações.	015.33 01533 Incluem-se documentos referentes a certificacao da conformidade as propostas de acoes corretivas e preventivas e ao tratamento da nao conformidade bem como relatorios estatisticos demonstrativos de resultados certificados e premiacoes.	S	9	5	G	N
@@ -5301,13 +5188,16 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 55	1	016.4	MODELAGEM DE PROCESSOS	Incluem-se documentos referentes à definição de especificações para a modelagem de processos novos ou modificados.	016.4 0164 Incluem-se documentos referentes a definicao de especificacoes para a modelagem de processos novos ou modificados.	S	9	5	G	N
 56	1	016.5	GERENCIAMENTO DE DESEMPENHO	Incluem-se documentos referentes à medição e monitoramento de processos e propostas de ações corretivas ou preventivas, tais como: questionários, avaliações, propostas, análises e laudos.	016.5 0165 Incluem-se documentos referentes a medicao e monitoramento de processos e propostas de acoes corretivas ou preventivas tais como: questionarios avaliacoes propostas analises e laudos.	S	9	5	G	N
 57	1	017	GESTÃO AMBIENTAL	Nas subdivisões deste descritor classificam-se documentos referentes à gestão ambiental, visando à utilização racional e sustentável dos recursos naturais, envolvendo o uso de práticas e o desenvolvimento de hábitos que garantam a proteção, conservação e preservação da biodiversidade, a reciclagem das matérias-primas e a redução do impacto ambiental.	017 017 Nas subdivisoes deste descritor classificam-se documentos referentes a gestao ambiental visando a utilizacao racional e sustentavel dos recursos naturais envolvendo o uso de praticas e o desenvolvimento de habitos que garantam a protecao conservacao e preservacao da biodiversidade a reciclagem das materias-primas e a reducao do impacto ambiental.	S	\N	\N	\N	S
-121	1	023.157	TITULAÇÃO	Incluem-se documentos referentes à solicitação, comprovação do direito, incorporação e pagamento da retribuição por titulação, obtida pela conclusão de cursos de especialização, mestrado e doutorado.	023.157 023157 Incluem-se documentos referentes a solicitacao comprovacao do direito incorporacao e pagamento da retribuicao por titulacao obtida pela conclusao de cursos de especializacao mestrado e doutorado.	S	52	5	E	N
+88	1	020.2	IDENTIFICAÇÃO FUNCIONAL	Incluem-se documentos referentes à requisição e ao controle de entrega de documentos de identificação funcional, tais como: carteira, cartão, identidade, crachá, credencial, passaporte de serviço ou diplomático.	020.2 0202 Incluem-se documentos referentes a requisicao e ao controle de entrega de documentos de identificacao funcional tais como: carteira cartao identidade cracha credencial passaporte de servico ou diplomatico.	S	\N	\N	E	N
 58	1	017.1	PROTEÇÃO AMBIENTAL INTERNA	Incluem-se documentos referentes aos procedimentos de controle e preservação do ambiente de trabalho que envolve a conscientização dos servidores, tais como: campanhas de conscientização para redução do consumo de água e energia elétrica e programas de coleta seletiva solidária e reciclagem de resíduos descartáveis, bem como a produção de material de divulgação. Quanto ao controle de riscos ambientais, classificar no código 025.21. Quanto ao recolhimento de material inservível e de sucatas ao depósito, classificar no código 032.3.	017.1 0171 Incluem-se documentos referentes aos procedimentos de controle e preservacao do ambiente de trabalho que envolve a conscientizacao dos servidores, tais como: campanhas de conscientizacao para reducao do consumo de agua e energia eletrica e programas de coleta seletiva solidaria e reciclagem de residuos descartaveis, bem como a producao de material de divulgacao. Quanto ao controle de riscos ambientais, classificar no codigo 025.21. Quanto ao recolhimento de material inservivel e de sucatas ao deposito, classificar no codigo 032.3.	S	2	\N	E	N
 59	1	017.2	PROTEÇÃO AMBIENTAL EXTERNA	Incluem-se documentos referentes aos procedimentos de controle e preservação ambiental externa que envolve a coleta seletiva solidária, a reciclagem de resíduos descartáveis e o uso de fontes não poluentes, tais como: projetos, questionários, avaliações, análises, laudos, relatórios estatísticos e de destinação de resíduos. Quanto à alienação definitiva, por desfazimento, de material permanente e de consumo em razão de serem considerados inservíveis e irrecuperáveis, classificar nos códigos 033.41 e 033.42, respectivamente.	017.2 0172 Incluem-se documentos referentes aos procedimentos de controle e preservacao ambiental externa que envolve a coleta seletiva solidaria a reciclagem de residuos descartaveis e o uso de fontes nao poluentes tais como: projetos questionarios avaliacoes analises laudos relatorios estatisticos e de destinacao de residuos. Quanto a alienacao definitiva por desfazimento de material permanente e de consumo em razao de serem considerados inserviveis e irrecuperaveis classificar nos codigos 033.41 e 033.42 respectivamente.	S	9	5	G	N
 60	1	018	CONTRATAÇÃO DE PRESTAÇÃO DE SERVIÇOS	Nas subdivisões desse descritor classificam-se documentos referentes à contratação de pessoa jurídica ou pessoa física para a realização de serviços e/ou fornecimento de mão de obra terceirizada para o órgão ou entidade, com exceção dos referentes à execução de obras em bens imóveis. Quanto à contratação de pessoa jurídica ou física para execução de obras em bens imóveis do órgão e entidade, classificar nas subdivisões do código 045.3.	018 018 Nas subdivisoes desse descritor classificam-se documentos referentes a contratacao de pessoa juridica ou pessoa fisica para a realizacao de servicos e/ou fornecimento de mao de obra terceirizada para o orgao ou entidade com excecao dos referentes a execucao de obras em bens imoveis. Quanto a contratacao de pessoa juridica ou fisica para execucao de obras em bens imoveis do orgao e entidade classificar nas subdivisoes do codigo 045.3.	S	\N	\N	\N	S
 61	1	018.1	CONTRATAÇÃO DE PESSOA JURÍDICA	Incluem-se documentos referentes à contratação de pessoa jurídica para a realização de serviços e/ou fornecimento de mão de obra para o órgão ou entidade, tais como: planejamento da contratação, divulgação, seleção do fornecedor, contrato, indicação e designação do gestor e dos fiscais da execução do contrato para acompanhamento, fiscalização, avaliação e aferição dos resultados previstos na contratação e demais documentos comprobatórios da prestação de serviços.	018.1 0181 Incluem-se documentos referentes a contratacao de pessoa juridica para a realizacao de servicos e/ou fornecimento de mao de obra para o orgao ou entidade tais como: planejamento da contratacao divulgacao selecao do fornecedor contrato indicacao e designacao do gestor e dos fiscais da execucao do contrato para acompanhamento fiscalizacao avaliacao e afericao dos resultados previstos na contratacao e demais documentos comprobatorios da prestacao de servicos.	S	5	\N	E	N
 62	1	018.2	CONTRATAÇÃO DE PESSOA FÍSICA	Incluem-se documentos referentes à contratação de pessoas físicas (autônomos e colaboradores) para a realização de serviços técnicos profissionais especializados, transitórios, de caráter eventual, por prazo determinado e sem vínculo empregatício, tais como: planejamento da contratação, divulgação, seleção, contrato, indicação e designação do gestor e dos fiscais da execução do contrato para acompanhamento, fiscalização, avaliação e aferição dos resultados previstos na contratação e demais documentos comprobatórios da prestação de serviços.	018.2 0182 Incluem-se documentos referentes a contratacao de pessoas fisicas (autônomos e colaboradores) para a realizacao de servicos tecnicos profissionais especializados transitorios de carater eventual por prazo determinado e sem vinculo empregaticio tais como: planejamento da contratacao divulgacao selecao contrato indicacao e designacao do gestor e dos fiscais da execucao do contrato para acompanhamento fiscalizacao avaliacao e afericao dos resultados previstos na contratacao e demais documentos comprobatorios da prestacao de servicos.	S	5	\N	E	N
 63	1	019	OUTRAS AÇÕES REFERENTES À ORGANIZAÇÃO E FUNCIONAMENTO	Nas subdivisões deste descritor classificam-se documentos referentes a outras ações de organização e funcionamento não contempladas nos descritores anteriores.	019 019 Nas subdivisoes deste descritor classificam-se documentos referentes a outras acoes de organizacao e funcionamento nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
+99	1	022.22	CESSÃO. REQUISIÇÃO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de cessão e requisição para a realização de serviços temporários em outro órgão e entidade.	022.22 02222 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de cessao e requisicao para a realizacao de servicos temporarios em outro orgao e entidade.	S	52	5	E	N
+74	1	020	GESTÃO DE PESSOAS	Esta subclasse contempla documentos referentes aos direitos e obrigações dos servidores e empregados públicos, dos servidores temporários, dos residentes (aqueles inscritos nas residências médica, multiprofissional em saúde, pedagógica e jurídica, entre outras), dos estagiários, dos ocupantes de cargo comissionado e de função de confiança sem vínculo, lotados no órgão e entidade, bem como aqueles referentes aos direitos e obrigações do empregador.	020 020 Esta subclasse contempla documentos referentes aos direitos e obrigacoes dos servidores e empregados publicos, dos servidores temporarios, dos residentes (aqueles inscritos nas residencias medica, multiprofissional em saude, pedagogica e juridica, entre outras), dos estagiarios, dos ocupantes de cargo comissionado e de funcao de confianca sem vinculo, lotados no orgao e entidade, bem como aqueles referentes aos direitos e obrigacoes do empregador.	S	\N	\N	\N	S
+155	1	023.91	CONTRATAÇÃO DE SEGURO	Incluem-se documentos referentes à contratação de seguro de vida em grupo e seguro de acidentes pessoais. Quanto à contratação de seguro patrimonial, classificar no código 018.1.	023.91 02391 Incluem-se documentos referentes a contratacao de seguro de vida em grupo e seguro de acidentes pessoais. Quanto a contratacao de seguro patrimonial classificar no codigo 018.1.	S	5	\N	E	N
 64	1	019.1	GERENCIAMENTO DE ESTRATÉGIAS DE MARKETING E DE COMUNICAÇÃO SOCIAL	Nas subdivisões deste descritor classificam-se documentos referentes à administração da comunicação, à divulgação interna, ao planejamento, elaboração, acompanhamento, execução e avaliação das estratégias e ações de marketing (como o cultural, social, ambiental, de relacionamento, institucional e endomarketing) e de merchandising, alinhadas com o posicionamento institucional, desenvolvidos com meios próprios, por meio da contratação de empresas terceirizadas ou profissionais transitórios, bem como às atividadesde comunicação social nos âmbitos externo e interno, compreendendo a escolha e os usos de mídias empregadas. Quanto aos documentos referentes à contratação de empresas terceirizadas ou de autônomo, classificar nas subdivisões do código 018.	019.1 0191 Nas subdivisoes deste descritor classificam-se documentos referentes a administracao da comunicacao a divulgacao interna ao planejamento elaboracao acompanhamento execucao e avaliacao das estrategias e acoes de marketing (como o cultural social ambiental de relacionamento institucional e endomarketing) e de merchandising alinhadas com o posicionamento institucional desenvolvidos com meios proprios por meio da contratacao de empresas terceirizadas ou profissionais transitorios bem como as atividadesde comunicacao social nos ambitos externo e interno compreendendo a escolha e os usos de midias empregadas. Quanto aos documentos referentes a contratacao de empresas terceirizadas ou de autônomo classificar nas subdivisoes do codigo 018.	S	\N	\N	\N	S
 65	1	019.11	ADMINISTRAÇÃO DA COMUNICAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes ao credenciamento de jornalistas, relacionamento com a imprensa, elaboração de propagandas e campanhas publicitárias, elaboração e atualização de site institucional. Quanto ao assessoramento de cerimonial para a realização de solenidades oficiais e eventos do órgão e entidade, classificar nas subdivisões do código 910.	019.11 01911 Nas subdivisoes deste descritor classificam-se documentos referentes ao credenciamento de jornalistas, relacionamento com a imprensa, elaboracao de propagandas e campanhas publicitarias, elaboracao e atualizacao de site institucional. Quanto ao assessoramento de cerimonial para a realizacao de solenidades oficiais e eventos do orgao e entidade, classificar nas subdivisoes do codigo 910.	S	\N	\N	\N	S
 66	1	019.111	CREDENCIAMENTO DE JORNALISTAS	Incluem-se documentos referentes ao credenciamento de jornalistas, tais como: normas de credenciamento, formulários e credenciais.	019.111 019111 Incluem-se documentos referentes ao credenciamento de jornalistas, tais como: normas de credenciamento, formularios e credenciais.	S	1	\N	E	N
@@ -5318,8 +5208,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 71	1	019.13	PLANEJAMENTO, ELABORAÇÃO E ACOMPANHAMENTO	Incluem-se documentos referentes ao planejamento, elaboração e ao acompanhamento das estratégias e ações de marketing e de comunicação social, desenvolvidas pelo órgão ou entidade.	019.13 01913 Incluem-se documentos referentes ao planejamento, elaboracao e ao acompanhamento das estrategias e acoes de marketing e de comunicacao social, desenvolvidas pelo orgao ou entidade.	S	5	5	G	N
 72	1	019.14	EXECUÇÃO E AVALIAÇÃO DE ESTRATÉGIAS	Incluem-se documentos referentes à execução e avaliação das estratégias e ações de marketing e de comunicação social, desenvolvidas pelo órgão ou entidade.	019.14 01914 Incluem-se documentos referentes a execucao e avaliacao das estrategias e acoes de marketing e de comunicacao social desenvolvidas pelo orgao ou entidade.	S	5	5	E	N
 73	1	019.2	AÇÃO DE RESPONSABILIDADE SOCIAL	Incluem-se documentos referentes à participação em ações de incentivo ao esporte, à cultura e à educação, com possibilidade de dedução de imposto de renda, conforme especificado em legislação. Quanto às ações de marketing e de merchandising, classificar no código 019.113.	019.2 0192 Incluem-se documentos referentes a participacao em acoes de incentivo ao esporte a cultura e a educacao com possibilidade de deducao de imposto de renda conforme especificado em legislacao. Quanto as acoes de marketing e de merchandising classificar no codigo 019.113.	S	9	5	G	N
-74	1	020	GESTÃO DE PESSOAS	Esta subclasse contempla documentos referentes aos direitos e obrigações dos servidores e empregados públicos, dos servidores temporários, dos residentes (aqueles inscritos nas residências médica, multiprofissional em saúde, pedagógica e jurídica, entre outras), dos estagiários, dos ocupantes de cargo comissionado e de função de confiança sem vínculo, lotados no órgão e entidade, bem como aqueles referentes aos direitos e obrigações do empregador.	020 020 Esta subclasse contempla documentos referentes aos direitos e obrigacoes dos servidores e empregados publicos, dos servidores temporarios, dos residentes (aqueles inscritos nas residencias medica, multiprofissional em saude, pedagogica e juridica, entre outras), dos estagiarios, dos ocupantes de cargo comissionado e de funcao de confianca sem vinculo, lotados no orgao e entidade, bem como aqueles referentes aos direitos e obrigacoes do empregador.	S	\N	\N	\N	S
-103	1	022.6	AVALIAÇÃO DE DESEMPENHO	Nas subdivisões deste descritor classificam-se documentos referentes ao cumprimento do estágio obrigatório pelo servidor público, à homologação de sua estabilidade e ao período de experiência a ser cumprido pelos contratados, bem como aqueles referentes às promoções e progressões funcionais.	022.6 0226 Nas subdivisoes deste descritor classificam-se documentos referentes ao cumprimento do estagio obrigatorio pelo servidor publico a homologacao de sua estabilidade e ao periodo de experiencia a ser cumprido pelos contratados bem como aqueles referentes as promocoes e progressoes funcionais.	S	\N	\N	\N	S
+100	1	022.3	REMOÇÃO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de remoção.	022.3 0223 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de remocao.	S	5	4	E	N
 75	1	020.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais e às decisões de caráter geral sobre a gestão de pessoas do órgão e entidade, bem como os boletins de pessoal. Quanto aos boletins administrativos e de serviço, classificar no código 010.01. Quanto à publicação de matériasemboletins administrativos, de serviço, de pessoal, emdiários oficiais e em periódicos de grande circulação, classificar no código 069.3.	020.01 02001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais e as decisoes de carater geral sobre a gestao de pessoas do orgao e entidade bem como os boletins de pessoal. Quanto aos boletins administrativos e de servico classificar no codigo 010.01. Quanto a publicacao de materiasemboletins administrativos de servico de pessoal emdiarios oficiais e em periodicos de grande circulacao classificar no codigo 069.3.	S	5	\N	G	N
 76	1	020.02	IMPLEMENTAÇÃO DAS POLÍTICAS DE PESSOAL	Nas subdivisões deste descritor classificam-se documentos referentes ao planejamento, desenvolvimento e implantação das políticas de pessoal.	020.02 02002 Nas subdivisoes deste descritor classificam-se documentos referentes ao planejamento, desenvolvimento e implantacao das politicas de pessoal.	S	\N	\N	\N	S
 77	1	020.021	PLANEJAMENTO DA FORÇA DE TRABALHO. PREVISÃO DE PESSOAL	Incluem-se documentos referentes ao levantamento das habilidades e especificações necessárias para o exercício das funções e atividades rotineiras e eventuais, visando subsidiar a previsão de pessoal, definindo qualificação e quantitativo.	020.021 020021 Incluem-se documentos referentes ao levantamento das habilidades e especificacoes necessarias para o exercicio das funcoes e atividades rotineiras e eventuais, visando subsidiar a previsao de pessoal, definindo qualificacao e quantitativo.	S	5	5	G	N
@@ -5331,21 +5220,22 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 83	1	020.1	ASSENTAMENTO FUNCIONAL	Nas subdivisões deste descritor classificam-se documentos referentes à vida funcional dos servidores e empregados públicos, dos servidores temporários, dos residentes (aqueles inscritos nas residências médica, multiprofissional em saúde, pedagógica e jurídica, entre outras), dos estagiários, dos ocupantes de cargo comissionado e de função de confiança sem vínculo, bem como os registros e as anotações dos atos da administração pública a que tiveram direito ou lhe foram impostos como deveres.	020.1 0201 Nas subdivisoes deste descritor classificam-se documentos referentes a vida funcional dos servidores e empregados publicos dos servidores temporarios dos residentes (aqueles inscritos nas residencias medica multiprofissional em saude pedagogica e juridica entre outras) dos estagiarios dos ocupantes de cargo comissionado e de funcao de confianca sem vinculo bem como os registros e as anotacoes dos atos da administracao publica a que tiveram direito ou lhe foram impostos como deveres.	S	\N	\N	\N	S
 84	1	020.11	SERVIDORES E EMPREGADOS PÚBLICOS	Incluem-se documentos referentes à vida funcional dos servidores estatutários ativos (ou seja, ocupantes de cargos públicos) e inativos e dos empregados públicos (ou seja, ocupantes de empregos públicos) que são contratados e submetidos ao regime da legislação trabalhista.	020.11 02011 Incluem-se documentos referentes a vida funcional dos servidores estatutarios ativos (ou seja ocupantes de cargos publicos) e inativos e dos empregados publicos (ou seja ocupantes de empregos publicos) que sao contratados e submetidos ao regime da legislacao trabalhista.	S	\N	\N	E	N
 85	1	020.12	SERVIDORES TEMPORÁRIOS	Incluem-se documentos referentes à vida funcional dos servidores que são contratados por tempo determinado, em caráter excepcional para atender uma eventual necessidade de interesse público, sem que estejam vinculados a cargo ou emprego públicos. Quanto à contratação de pessoas físicas (autônomos e colaboradores), classificar no código 029.5.	020.12 02012 Incluem-se documentos referentes a vida funcional dos servidores que sao contratados por tempo determinado em carater excepcional para atender uma eventual necessidade de interesse publico sem que estejam vinculados a cargo ou emprego publicos. Quanto a contratacao de pessoas fisicas (autônomos e colaboradores) classificar no codigo 029.5.	S	\N	\N	E	N
-106	1	022.63	PROMOÇÃO E PROGRESSÃO FUNCIONAL	Incluem-se documentos referentes às avaliações de desempenho para promoção e progressão funcional dos servidores.  Quanto à reestruturação e alteração salarial decorrentes de promoção e progressão funcional, classificar no código 023.12.	022.63 02263 Incluem-se documentos referentes as avaliacoes de desempenho para promocao e progressao funcional dos servidores.  Quanto a reestruturacao e alteracao salarial decorrentes de promocao e progressao funcional classificar no codigo 023.12.	S	52	5	E	N
-107	1	022.7	VACÂNCIA	Incluem-se documentos referentes aos procedimentos que efetivam as ações de demissão, dispensa, exoneração, rescisão contratual, aviso prévio, posse em outro cargo não acumulável, promoção, readaptação, aposentadoria e falecimento, bem como aqueles referentes à adesão aos planos de demissão voluntária.	022.7 0227 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de demissao dispensa exoneracao rescisao contratual aviso previo posse em outro cargo nao acumulavel promocao readaptacao aposentadoria e falecimento bem como aqueles referentes a adesao aos planos de demissao voluntaria.	S	52	5	E	N
-108	1	023	CONCESSÃO DE DIREITOS E VANTAGENS	Nas subdivisões deste descritor classificam-se documentos referentes à percepção de pagamento de vencimentos, remunerações, salários e proventos e ao gozo de férias, licenças, afastamentos, concessões, auxílios e reembolso de despesas, bem como aqueles referentes aos descontos, obrigações trabalhistas e estatutárias, encargos patronais e recolhimentos.	023 023 Nas subdivisoes deste descritor classificam-se documentos referentes a percepcao de pagamento de vencimentos remuneracoes salarios e proventos e ao gozo de ferias licencas afastamentos concessoes auxilios e reembolso de despesas bem como aqueles referentes aos descontos obrigacoes trabalhistas e estatutarias encargos patronais e recolhimentos.	S	\N	\N	\N	S
-109	1	023.1	PAGAMENTO DE VENCIMENTOS. REMUNERAÇÕES. SALÁRIOS. PROVENTOS	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos que efetivam as ações de percepção de pagamento.	023.1 0231 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos que efetivam as acoes de percepcao de pagamento.	S	\N	\N	\N	S
-110	1	023.11	FOLHAS DE PAGAMENTO	Incluem-se folhas de pagamento, fichas financeiras e relação de pagamentos.	023.11 02311 Incluem-se folhas de pagamento, fichas financeiras e relacao de pagamentos.	S	95	5	E	N
-111	1	023.12	REESTRUTURAÇÃO E ALTERAÇÃO SALARIAL	Incluem-se documentos referentes a reestruturações e alterações salariais decorrentes de promoção e progressão funcional, enquadramento, equiparação, reajuste e reposição salarial, bem como aqueles decorrentes da redução de jornada de trabalho, remuneração proporcional, regime de trabalho integral e dedicação exclusiva. Quanto à criação, transformação e reestruturação de cargos, carreiras e remuneração, classificar no código 020.022. Quanto às avaliações de desempenho para promoção e progressão funcional, classificar no código 022.63.	023.12 02312 Incluem-se documentos referentes a reestruturacoes e alteracoes salariais decorrentes de promocao e progressao funcional enquadramento equiparacao reajuste e reposicao salarial bem como aqueles decorrentes da reducao de jornada de trabalho remuneracao proporcional regime de trabalho integral e dedicacao exclusiva. Quanto a criacao transformacao e reestruturacao de cargos carreiras e remuneracao classificar no codigo 020.022. Quanto as avaliacoes de desempenho para promocao e progressao funcional classificar no codigo 022.63.	S	52	5	E	N
-112	1	023.13	ABONO PROVISÓRIO	Incluem-se documentos referentes à comprovação do direito, à solicitação e ao pagamento de acréscimo financeiro provisório na remuneração.	023.13 02313 Incluem-se documentos referentes a comprovacao do direito a solicitacao e ao pagamento de acrescimo financeiro provisorio na remuneracao.	S	\N	7	E	N
-113	1	023.14	ABONO DE PERMANÊNCIA EM SERVIÇO	Incluem-se documentos referentes ao reembolso da contribuição previdenciária ao servidor público, que cumpriu os requisitos para aposentadoria, mas que optou por continuar na ativa. Quanto à contagem e averbação de tempo de serviço, classificar no código 026.02.	023.14 02314 Incluem-se documentos referentes ao reembolso da contribuicao previdenciaria ao servidor publico que cumpriu os requisitos para aposentadoria mas que optou por continuar na ativa. Quanto a contagem e averbacao de tempo de servico classificar no codigo 026.02.	S	\N	\N	E	N
-114	1	023.15	GRATIFICAÇÕES	Nas subdivisões deste descritor classificam-se os documentos referentes à solicitação, comprovação do direito, incorporação, pagamento e interrupção do pagamento das gratificações concedidas.	023.15 02315 Nas subdivisoes deste descritor classificam-se os documentos referentes a solicitacao comprovacao do direito incorporacao pagamento e interrupcao do pagamento das gratificacoes concedidas.	S	\N	\N	\N	S
-115	1	023.151	FUNÇÃO	Incluem-se documentos referentes à solicitação, comprovação do direito, incorporação de quintos e décimos, pagamento e interrupção do pagamento da gratificação.	023.151 023151 Incluem-se documentos referentes a solicitacao comprovacao do direito incorporacao de quintos e decimos pagamento e interrupcao do pagamento da gratificacao.	S	52	5	E	N
+89	1	021	RECRUTAMENTO E SELEÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos desenvolvidos para a realização de concursos públicos para o provimento de cargos públicos, empregos públicos e contratação por tempo determinado ou para realização de processo seletivo, que ocorre entre instituições, para recrutamento de servidores e empregados públicos.	021 021 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos desenvolvidos para a realizacao de concursos publicos para o provimento de cargos publicos, empregos publicos e contratacao por tempo determinado ou para realizacao de processo seletivo, que ocorre entre instituicoes, para recrutamento de servidores e empregados publicos.	S	\N	\N	\N	S
+90	1	021.1	PLANEJAMENTO DO PROCESSO SELETIVO	Incluem-se estudos, propostas, constituição de bancas examinadoras, programas, editais, exemplares únicos de provas, gabaritos e critérios para correção de provas e para solicitação de recursos.	021.1 0211 Incluem-se estudos, propostas, constituicao de bancas examinadoras, programas, editais, exemplares unicos de provas, gabaritos e criterios para correcao de provas e para solicitacao de recursos.	S	2	\N	G	N
+91	1	021.2	INSCRIÇÃO	Incluem-se documentos exigidos no edital para a homologação da inscrição e fichas de inscrição.	021.2 0212 Incluem-se documentos exigidos no edital para a homologacao da inscricao e fichas de inscricao.	S	2	\N	E	N
+92	1	021.3	CONTROLE DE APLICAÇÃO DE PROVAS	Incluem-se documentos referentes ao controle de aplicação das provas, de acordo com os requisitos estipulados no edital.	021.3 0213 Incluem-se documentos referentes ao controle de aplicacao das provas, de acordo com os requisitos estipulados no edital.	S	2	\N	E	N
+93	1	021.4	CORREÇÃO DE PROVAS. AVALIAÇÃO	Incluem-se cadernos de prova utilizados pelos candidatos, folhas de resposta, provas de títulos, avaliação psicológica, testes psicotécnicos, exames médicos e de aptidão física, bem como currículos e entrevistas dos candidatos. Quanto às provas de títulos, avaliação psicológica, testes psicotécnicos, exames médicos e de aptidão física dos candidatos que vierem a ser nomeados, classificar nas subdivisões do código 020.1.	021.4 0214 Incluem-se cadernos de prova utilizados pelos candidatos folhas de resposta provas de titulos avaliacao psicologica testes psicotecnicos exames medicos e de aptidao fisica bem como curriculos e entrevistas dos candidatos. Quanto as provas de titulos avaliacao psicologica testes psicotecnicos exames medicos e de aptidao fisica dos candidatos que vierem a ser nomeados classificar nas subdivisoes do codigo 020.1.	S	2	\N	E	N
+94	1	021.5	DIVULGAÇÃO DOS RESULTADOS E INTERPOSIÇÃO DE RECURSOS	Incluem-se documentos referentes aos resultados das provas realizadas ou do processo seletivo interno, a classificação e a reclassificação dos candidatos, bem como aqueles referentes aos recursos impetrados em qualquer uma das fases do concurso.	021.5 0215 Incluem-se documentos referentes aos resultados das provas realizadas ou do processo seletivo interno, a classificacao e a reclassificacao dos candidatos, bem como aqueles referentes aos recursos impetrados em qualquer uma das fases do concurso.	S	2	\N	G	N
+95	1	022	PROVIMENTO, MOVIMENTAÇÃO E VACÂNCIA	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos que efetivam  as ações e as formas de ingresso, movimentação e desligamento na administração pública, bem como aqueles referentes às avaliações de desempenho dos servidores. Quanto aos atos específicos e individuais que deverão integrar o assentamento funcional, classificar nas subdivisões do código 020.1.	022 022 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos que efetivam  as acoes e as formas de ingresso movimentacao e desligamento na administracao publica bem como aqueles referentes as avaliacoes de desempenho dos servidores. Quanto aos atos especificos e individuais que deverao integrar o assentamento funcional classificar nas subdivisoes do codigo 020.1.	S	\N	\N	\N	S
+96	1	022.1	PROVIMENTO DE CARGO PÚBLICO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de admissão, contratação, nomeação, designação, posse, disponibilidade, aproveitamento, readmissão, readaptação, recondução, reintegração, reversão e promoção.	022.1 0221 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de admissao, contratacao, nomeacao, designacao, posse, disponibilidade, aproveitamento, readmissao, readaptacao, reconducao, reintegracao, reversao e promocao.	S	52	5	E	N
+97	1	022.2	MOVIMENTAÇÃO DE PESSOAL	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos que efetivam as ações de lotação, exercício, permuta, cessão e requisição.	022.2 0222 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos que efetivam as acoes de lotacao, exercicio, permuta, cessao e requisicao.	S	\N	\N	\N	S
+98	1	022.21	LOTAÇÃO, EXERCÍCIO E PERMUTA	Incluem-se documentos referentes aos procedimentos que efetivam as ações de lotação, exercício e permuta, bem como aqueles referentes à transferência.	022.21 02221 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de lotacao exercicio e permuta bem como aqueles referentes a transferencia.	S	5	4	E	N
 116	1	023.152	JETONS	Incluem-se documentos referentes à solicitação, comprovação do direito, incorporação, pagamento e interrupção do pagamento da gratificação.	023.152 023152 Incluem-se documentos referentes a solicitacao comprovacao do direito incorporacao pagamento e interrupcao do pagamento da gratificacao.	S	\N	7	E	N
 117	1	023.153	CARGOS EM COMISSÃO	Incluem-se documentos referentes à solicitação, comprovação do direito, incorporação, pagamento e interrupção do pagamento da gratificação.	023.153 023153 Incluem-se documentos referentes a solicitacao comprovacao do direito incorporacao pagamento e interrupcao do pagamento da gratificacao.	S	52	5	E	N
 118	1	023.154	NATALINA. DÉCIMO TERCEIRO SALÁRIO	Incluem-se documentos referentes ao pagamento e adiantamento da gratificação.	023.154 023154 Incluem-se documentos referentes ao pagamento e adiantamento da gratificacao.	S	\N	7	E	N
 119	1	023.155	DESEMPENHO	Incluem-se documentos referentes às gratificações por desempenho de atividade, qualificação e produtividade, bem como aqueles referentes à solicitação de inclusão e ao cancelamento do pagamento da gratificação.	023.155 023155 Incluem-se documentos referentes as gratificacoes por desempenho de atividade qualificacao e produtividade bem como aqueles referentes a solicitacao de inclusao e ao cancelamento do pagamento da gratificacao.	S	52	5	E	N
 120	1	023.156	ENCARGO DE CURSO E CONCURSO	Incluem-se documentos referentes à solicitação e pagamento da gratificação por encargo de curso ministrado, bem como aqueles referentes à participação em bancas examinadoras e de fiscalização e aplicação de provas em concursos.	023.156 023156 Incluem-se documentos referentes a solicitacao e pagamento da gratificacao por encargo de curso ministrado bem como aqueles referentes a participacao em bancas examinadoras e de fiscalizacao e aplicacao de provas em concursos.	S	\N	7	E	N
+121	1	023.157	TITULAÇÃO	Incluem-se documentos referentes à solicitação, comprovação do direito, incorporação e pagamento da retribuição por titulação, obtida pela conclusão de cursos de especialização, mestrado e doutorado.	023.157 023157 Incluem-se documentos referentes a solicitacao comprovacao do direito incorporacao e pagamento da retribuicao por titulacao obtida pela conclusao de cursos de especializacao mestrado e doutorado.	S	52	5	E	N
 122	1	023.16	ADICIONAIS	Nas subdivisões deste descritor classificam-se documentos referentes à solicitação, comprovação do direito, pagamento e interrupção do pagamento dos adicionais concedidos.	023.16 02316 Nas subdivisoes deste descritor classificam-se documentos referentes a solicitacao comprovacao do direito pagamento e interrupcao do pagamento dos adicionais concedidos.	S	\N	\N	\N	S
 123	1	023.161	TEMPO DE SERVIÇO	Incluem-se documentos referentes ao acréscimo financeiro sobre a remuneração em razão do cumprimento de cada ano de serviço público efetivo, tais como: anuênios, biênios e quinquênios.	023.161 023161 Incluem-se documentos referentes ao acrescimo financeiro sobre a remuneracao em razao do cumprimento de cada ano de servico publico efetivo, tais como: anuenios, bienios e quinquenios.	S	52	5	E	N
 124	1	023.162	NOTURNO	Incluem-se documentos referentes ao acréscimo financeiro na remuneração em razão de trabalho noturno.	023.162 023162 Incluem-se documentos referentes ao acrescimo financeiro na remuneracao em razao de trabalho noturno.	S	52	5	E	N
@@ -5356,11 +5246,10 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 129	1	023.167	UM TERÇO DE FÉRIAS. ABONO PECUNIÁRIO	Incluem-se documentos referentes ao acréscimo financeiro na remuneração de um terço do seu valor no mês de férias, bem como aqueles referentes à conversão de um terço dos dias de férias em pecúnia. Quanto ao afastamento para gozo de férias, classificar no código 023.2.	023.167 023167 Incluem-se documentos referentes ao acrescimo financeiro na remuneracao de um terco do seu valor no mes de ferias bem como aqueles referentes a conversao de um terco dos dias de ferias em pecunia. Quanto ao afastamento para gozo de ferias classificar no codigo 023.2.	S	\N	7	E	N
 130	1	023.17	DESCONTOS	Nas subdivisões deste descritor classificam-se documentos referentes aos descontos que incidem na remuneração do servidor.	023.17 02317 Nas subdivisoes deste descritor classificam-se documentos referentes aos descontos que incidem na remuneracao do servidor.	S	\N	\N	\N	S
 131	1	023.171	CONTRIBUIÇÃO SINDICAL, ASSISTENCIAL E CONFEDERATIVA	Incluem-se documentos referentes à autorização para desconto incidente sobre a remuneração em razão de contribuição sindical, confederativa e retributiva, taxa assistencial e mensalidade sindical, bem como aqueles referentes à solicitação de cancelamento do desconto. Quanto à relação com sindicatos, classificar no código 020.031. Quanto à contribuição sindical do empregador, classificar no código 023.183.	023.171 023171 Incluem-se documentos referentes a autorizacao para desconto incidente sobre a remuneracao em razao de contribuicao sindical confederativa e retributiva taxa assistencial e mensalidade sindical bem como aqueles referentes a solicitacao de cancelamento do desconto. Quanto a relacao com sindicatos classificar no codigo 020.031. Quanto a contribuicao sindical do empregador classificar no codigo 023.183.	S	\N	7	E	N
+144	1	023.191	RETIFICAÇÃO DE PAGAMENTO	Incluem-se documentos referentes aos pedidos, feitos pelo servidor, para a retificação de erros efetuados no pagamento. Quanto aos casos de restituição de valores ao erário, classificar no código 059.4.	023.191 023191 Incluem-se documentos referentes aos pedidos, feitos pelo servidor, para a retificacao de erros efetuados no pagamento. Quanto aos casos de restituicao de valores ao erario, classificar no codigo 059.4.	S	\N	7	E	N
 132	1	023.172	CONTRIBUIÇÃO PARA O PLANO DE SEGURIDADE SOCIAL	Incluem-se documentos referentes ao desconto incidente sobre a remuneração em razão da contribuição para o plano de seguridade social, bem como aqueles referentes ao repasse do valor ao órgão competente. Quanto à contribuição para o plano de seguridade social recolhida pelo empregador, classificar no código 023.184.	023.172 023172 Incluem-se documentos referentes ao desconto incidente sobre a remuneracao em razao da contribuicao para o plano de seguridade social bem como aqueles referentes ao repasse do valor ao orgao competente. Quanto a contribuicao para o plano de seguridade social recolhida pelo empregador classificar no codigo 023.184.	S	52	5	E	N
 133	1	023.173	IMPOSTO DE RENDA RETIDO NA FONTE (IRRF)	Incluem-se documentos referentes ao desconto do imposto de renda retido na fonte, bem como aqueles referentes à solicitação de isenção de pagamento, por parte do servidor portador de doença específica ou aposentado por invalidez permanente. Quanto ao imposto de renda recolhido pela fonte pagadora, classificar no código 023.185.	023.173 023173 Incluem-se documentos referentes ao desconto do imposto de renda retido na fonte bem como aqueles referentes a solicitacao de isencao de pagamento por parte do servidor portador de doenca especifica ou aposentado por invalidez permanente. Quanto ao imposto de renda recolhido pela fonte pagadora classificar no codigo 023.185.	S	\N	7	E	N
 134	1	023.174	PENSÃO ALIMENTÍCIA	Incluem-se documentos referentes à autorização para desconto incidente sobre a remuneração em razão do pagamento de pensão alimentícia, bem como aqueles referentes à solicitação de cancelamento do desconto.	023.174 023174 Incluem-se documentos referentes a autorizacao para desconto incidente sobre a remuneracao em razao do pagamento de pensao alimenticia bem como aqueles referentes a solicitacao de cancelamento do desconto.	S	95	5	E	N
-155	1	023.91	CONTRATAÇÃO DE SEGURO	Incluem-se documentos referentes à contratação de seguro de vida em grupo e seguro de acidentes pessoais. Quanto à contratação de seguro patrimonial, classificar no código 018.1.	023.91 02391 Incluem-se documentos referentes a contratacao de seguro de vida em grupo e seguro de acidentes pessoais. Quanto a contratacao de seguro patrimonial classificar no codigo 018.1.	S	5	\N	E	N
-156	1	023.92	OCUPAÇÃO DE IMÓVEL FUNCIONAL	Incluem-se documentos referentes à ocupação de imóvel funcional, tais como: solicitação, termo de ocupação e de responsabilidade.	023.92 02392 Incluem-se documentos referentes a ocupacao de imovel funcional tais como: solicitacao termo de ocupacao e de responsabilidade.	S	5	\N	E	N
 135	1	023.175	CONSIGNAÇÕES FACULTATIVAS	Incluem-se documentos referentes à autorização para desconto incidente sobre a remuneração em razão de contribuição e coparticipação para plano de saúde, de contribuição e coparticipação para entidade de previdência complementar, de prêmio relativo a seguro de vida, de contribuição em favor de associação ou cooperativa, de empréstimo, de financiamento imobiliário e de despesa contraída e saque realizado por meio de cartão de crédito, bem como aqueles referentes à solicitação de cancelamento do desconto e devolução de descontos indevidos.	023.175 023175 Incluem-se documentos referentes a autorizacao para desconto incidente sobre a remuneracao em razao de contribuicao e coparticipacao para plano de saude de contribuicao e coparticipacao para entidade de previdencia complementar de premio relativo a seguro de vida de contribuicao em favor de associacao ou cooperativa de emprestimo de financiamento imobiliario e de despesa contraida e saque realizado por meio de cartao de credito bem como aqueles referentes a solicitacao de cancelamento do desconto e devolucao de descontos indevidos.	S	7	\N	E	N
 136	1	023.18	OBRIGAÇÕES TRABALHISTAS E ESTATUTÁRIAS, ENCARGOS PATRONAIS E RECOLHIMENTOS	Nas subdivisões deste descritor classificam-se documentos referentes aos encargos patronais e recolhimentos efetuados pelo empregador.	023.18 02318 Nas subdivisoes deste descritor classificam-se documentos referentes aos encargos patronais e recolhimentos efetuados pelo empregador.	S	\N	\N	\N	S
 137	1	023.181	PROGRAMA DE FORMAÇÃO DO PATRIMÔNIO DO SERVIDOR PÚBLICO (PASEP). PROGRAMA DE INTEGRAÇÃO SOCIAL (PIS)	Incluem-se documentos referentes às contribuições sociais, de natureza tributária, devidas pelo órgão e entidade, com o objetivo de financiar o pagamento do seguro-desemprego, do abono e da participação na receita do órgão e entidade e que são destinados aos servidores.	023.181 023181 Incluem-se documentos referentes as contribuicoes sociais de natureza tributaria devidas pelo orgao e entidade com o objetivo de financiar o pagamento do seguro-desemprego do abono e da participacao na receita do orgao e entidade e que sao destinados aos servidores.	S	5	5	E	N
@@ -5370,10 +5259,10 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 141	1	023.185	IMPOSTO DE RENDA	Incluem-se documentos referentes ao recolhimento, de natureza tributária, do valor retido da renda do beneficiário, que é efetuado pela fonte pagadora. Quanto ao imposto de renda descontado da remuneração do servidor, classificar no código 023.173.	023.185 023185 Incluem-se documentos referentes ao recolhimento, de natureza tributaria, do valor retido da renda do beneficiario, que e efetuado pela fonte pagadora. Quanto ao imposto de renda descontado da remuneracao do servidor, classificar no codigo 023.173.	S	\N	7	E	N
 142	1	023.186	LEI DOS DOIS TERÇOS. RELAÇÃO ANUAL DE INFORMAÇÕES SOCIAIS (RAIS)	Incluem-se documentos referentes ao cumprimento da lei dos 2/3 e às declarações de Rais, que subsidiam o controle das atividades trabalhistas no órgão e entidade.	023.186 023186 Incluem-se documentos referentes ao cumprimento da lei dos 2/3 e as declaracoes de Rais que subsidiam o controle das atividades trabalhistas no orgao e entidade.	S	5	5	E	N
 143	1	023.19	OUTRAS AÇÕES REFERENTES AO PAGAMENTO DE VENCIMENTOS. REMUNERAÇÕES. SALÁRIOS. PROVENTOS	Na subdivisão deste descritor classificam-se documentos referentes a outras ações de pagamento de vencimentos, remunerações, salários e proventos não contempladas nos descritores anteriores.	023.19 02319 Na subdivisao deste descritor classificam-se documentos referentes a outras acoes de pagamento de vencimentos, remuneracoes, salarios e proventos nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
-144	1	023.191	RETIFICAÇÃO DE PAGAMENTO	Incluem-se documentos referentes aos pedidos, feitos pelo servidor, para a retificação de erros efetuados no pagamento. Quanto aos casos de restituição de valores ao erário, classificar no código 059.4.	023.191 023191 Incluem-se documentos referentes aos pedidos, feitos pelo servidor, para a retificacao de erros efetuados no pagamento. Quanto aos casos de restituicao de valores ao erario, classificar no codigo 059.4.	S	\N	7	E	N
+294	1	041.3	DAÇÃO. ADJUDICAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição definitiva de bens imóveis e de veículos.	041.3 0413 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao definitiva de bens imoveis e de veiculos.	S	\N	\N	\N	S
 145	1	023.2	FÉRIAS	Incluem-se documentos referentes à concessão de férias, tais como: programação, alteração, cancelamento, suspensão, escala e aviso de férias. Quanto ao pagamento de adicional de um terço de férias e abono pecuniário, classificar no código 023.167.	023.2 0232 Incluem-se documentos referentes a concessao de ferias tais como: programacao alteracao cancelamento suspensao escala e aviso de ferias. Quanto ao pagamento de adicional de um terco de ferias e abono pecuniario classificar no codigo 023.167.	S	\N	7	E	N
+156	1	023.92	OCUPAÇÃO DE IMÓVEL FUNCIONAL	Incluem-se documentos referentes à ocupação de imóvel funcional, tais como: solicitação, termo de ocupação e de responsabilidade.	023.92 02392 Incluem-se documentos referentes a ocupacao de imovel funcional tais como: solicitacao termo de ocupacao e de responsabilidade.	S	5	\N	E	N
 157	1	023.93	FORNECIMENTO DE TRANSPORTE	Incluem-se documentos referentes à comprovação do fornecimento de serviço de transporte, oferecido pelo órgão e entidade, para que o servidor se desloque de sua residência para o local de trabalho e vice-versa. Quanto ao reembolso de despesas para locomoção, classificar no código 023.72. Quanto à prestação de serviço de transporte remunerado de passageiro(s) por demanda, classificar no código 018.1.	023.93 02393 Incluem-se documentos referentes a comprovacao do fornecimento de servico de transporte oferecido pelo orgao e entidade para que o servidor se desloque de sua residencia para o local de trabalho e vice-versa. Quanto ao reembolso de despesas para locomocao classificar no codigo 023.72. Quanto a prestacao de servico de transporte remunerado de passageiro(s) por demanda classificar no codigo 018.1.	S	5	\N	E	N
-302	1	041.6	LOCAÇÃO. ARRENDAMENTO MERCANTIL (LEASING). SUBLOCAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição temporária de bens imóveis e de veículos.	041.6 0416 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao temporaria de bens imoveis e de veiculos.	S	\N	\N	\N	S
 146	1	023.3	LICENÇAS	Incluem-se documentos referentes à concessão e à prorrogação de licenças para afastamento do cônjuge ou companheiro, atividade política, capacitação profissional, participação em programa de pós-graduação lato sensu, para desempenho de mandato classista, motivo de doença em pessoa da família, incentivada, sem remuneração, prêmio por assiduidade, serviço militar e tratamento de interesses particulares, bem como as perícias médicas realizadas para concessão e prorrogação das licenças, quando forem necessárias. Quanto às licenças referentes à concessão de benefícios de seguridade e previdência social (acidente em serviço, tratamento de saúde, gestante, paternidade e adotante), classificar no código 026.4.	023.3 0233 Incluem-se documentos referentes a concessao e a prorrogacao de licencas para afastamento do cônjuge ou companheiro atividade politica capacitacao profissional participacao em programa de pos-graduacao lato sensu para desempenho de mandato classista motivo de doenca em pessoa da familia incentivada sem remuneracao premio por assiduidade servico militar e tratamento de interesses particulares bem como as pericias medicas realizadas para concessao e prorrogacao das licencas quando forem necessarias. Quanto as licencas referentes a concessao de beneficios de seguridade e previdencia social (acidente em servico tratamento de saude gestante paternidade e adotante) classificar no codigo 026.4.	S	52	5	E	N
 147	1	023.4	AFASTAMENTOS	Incluem-se documentos referentes à suspensão de contrato de trabalho e concessão de afastamento para depor, exercer mandato eletivo, servir a Justiça Eleitoral, servir como jurado, participar em programas de pós-graduação stricto sensu, de pós-doutorado e em estudos, no país e no exterior. Quanto ao afastamento para o cumprimento de missões e viagens a serviço, no país e no exterior, e para servir em organismo internacional de que o Brasil participe ou com o qual coo-pere, classificar nas subdivisões do código 028. Quanto à participação em programa de pós-graduação lato sensu, classificar no código 023.3, no âmbito da capacitação profissional.	023.4 0234 Incluem-se documentos referentes a suspensao de contrato de trabalho e concessao de afastamento para depor exercer mandato eletivo servir a Justica Eleitoral servir como jurado participar em programas de pos-graduacao stricto sensu de pos-doutorado e em estudos no pais e no exterior. Quanto ao afastamento para o cumprimento de missoes e viagens a servico no pais e no exterior e para servir em organismo internacional de que o Brasil participe ou com o qual coo-pere classificar nas subdivisoes do codigo 028. Quanto a participacao em programa de pos-graduacao lato sensu classificar no codigo 023.3 no ambito da capacitacao profissional.	S	52	5	E	N
 148	1	023.5	CONCESSÕES	Incluem-se documentos referentes à comprovação de ausência no serviço em razão de alistamento eleitoral, casamento (gala), doação de sangue e falecimento de familiares (nojo), bem como aqueles referentes à concessão de horário especial para servidor estudante, servidor portador de deficiência e servidor que possua dependente portador de deficiência, com ou sem compensação de horas. Quanto à concessão de benefícios de seguridade e previdência social, classificar nas subdivisões do código 026.	023.5 0235 Incluem-se documentos referentes a comprovacao de ausencia no servico em razao de alistamento eleitoral casamento (gala) doacao de sangue e falecimento de familiares (nojo) bem como aqueles referentes a concessao de horario especial para servidor estudante servidor portador de deficiencia e servidor que possua dependente portador de deficiencia com ou sem compensacao de horas. Quanto a concessao de beneficios de seguridade e previdencia social classificar nas subdivisoes do codigo 026.	S	52	5	E	N
@@ -5393,10 +5282,26 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 165	1	024.3	PROMOÇÃO DE ESTÁGIOS PELO ÓRGÃO E ENTIDADE	Nas subdivisões deste descritor, classificam-se documentos referentes a promoção, pelo órgão e entidade, de estágios destinados ao servidor. Quanto aos documentos comprobatórios de participação do servidor, que deverão integrar o assentamento funcional, classificar nas subdivisões do código 020.1.	024.3 0243 Nas subdivisoes deste descritor, classificam-se documentos referentes a promocao, pelo orgao e entidade, de estagios destinados ao servidor. Quanto aos documentos comprobatorios de participacao do servidor, que deverao integrar o assentamento funcional, classificar nas subdivisoes do codigo 020.1.	S	\N	\N	\N	S
 166	1	024.31	PROGRAMAÇÃO	Incluem-se documentos referentes à divulgação do estágio e à definição do conteúdo programático.	024.31 02431 Incluem-se documentos referentes a divulgacao do estagio e a definicao do conteudo programatico.	S	5	5	G	N
 167	1	024.32	INSCRIÇÃO E FREQUÊNCIA	Incluem-se documentos referentes aos procedimentos para inscrição, controle de entrega de material e lista de frequência dos participantes, bem como aqueles referentes à concessão de bolsas de estágio.	024.32 02432 Incluem-se documentos referentes aos procedimentos para inscricao controle de entrega de material e lista de frequencia dos participantes bem como aqueles referentes a concessao de bolsas de estagio.	S	\N	5	E	N
+295	1	041.31	BENS IMÓVEIS	Incluem-se documentos referentes à dação e adjudicação de imóveis, para recebimento de parte ou totalidade de dívida.	041.31 04131 Incluem-se documentos referentes a dacao e adjudicacao de imoveis para recebimento de parte ou totalidade de divida.	S	5	\N	G	N
 168	1	024.33	AVALIAÇÃO E RESULTADOS	Incluem-se documentos referentes aos resultados alcançados, avaliação do estágio pelos participantes, controle de expedição e entrega de declaração de participação e relatórios.	024.33 02433 Incluem-se documentos referentes aos resultados alcancados, avaliacao do estagio pelos participantes, controle de expedicao e entrega de declaracao de participacao e relatorios.	S	5	5	G	N
 169	1	024.4	PARTICIPAÇÃO EM ESTÁGIOS PROMOVIDOS POR OUTROS ÓRGÃOS E ENTIDADES	Incluem-se documentos referentes à divulgação do estágio, programa, termo de compromisso e relatório de participação do servidor no estágio. Quanto aos documentos comprobatórios de participação do servidor, que deverão integrar o assentamento funcional, classificar nas subdivisões do código 020.1.	024.4 0244 Incluem-se documentos referentes a divulgacao do estagio programa termo de compromisso e relatorio de participacao do servidor no estagio. Quanto aos documentos comprobatorios de participacao do servidor que deverao integrar o assentamento funcional classificar nas subdivisoes do codigo 020.1.	S	\N	5	E	N
 170	1	024.5	CONCESSÃO DE ESTÁGIOS E BOLSAS PARA ESTUDANTES	Nas subdivisões deste descritor classificam-se documentos referentes à oferta de estágios, remunerados ou não, e à concessão de bolsas para estudantes (residentes médicos, multiprofissionais e estagiários), por parte do órgão e entidade.	024.5 0245 Nas subdivisoes deste descritor classificam-se documentos referentes a oferta de estagios remunerados ou nao e a concessao de bolsas para estudantes (residentes medicos multiprofissionais e estagiarios) por parte do orgao e entidade.	S	\N	\N	\N	S
+302	1	041.6	LOCAÇÃO. ARRENDAMENTO MERCANTIL (LEASING). SUBLOCAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição temporária de bens imóveis e de veículos.	041.6 0416 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao temporaria de bens imoveis e de veiculos.	S	\N	\N	\N	S
 171	1	024.51	RELAÇÃO COM INSTITUIÇÕES DE ENSINO E AGENTES DE INTEGRAÇÃO	Incluem-se documentos referentes à celebração de convênios com instituições de ensino superior e outras que visem à oferta de estágios, à integração da empresa-escola e à concessão de bolsas para estudantes.	024.51 02451 Incluem-se documentos referentes a celebracao de convenios com instituicoes de ensino superior e outras que visem a oferta de estagios a integracao da empresa-escola e a concessao de bolsas para estudantes.	S	2	\N	E	N
+172	1	024.52	PLANO DE ESTÁGIO	Incluem-se documentos referentes ao estabelecimento das atividades a serem realizadas pelos estudantes.	024.52 02452 Incluem-se documentos referentes ao estabelecimento das atividades a serem realizadas pelos estudantes.	S	2	\N	E	N
+173	1	025	PROMOÇÃO DA SAÚDE E BEM-ESTAR	Nas subdivisões deste descritor classificam-se documentos referentes às atividades de promoção da saúde e bem-estar do servidor.	025 025 Nas subdivisoes deste descritor classificam-se documentos referentes as atividades de promocao da saude e bem-estar do servidor.	S	\N	\N	\N	S
+174	1	025.1	ASSISTÊNCIA À SAÚDE	Nas subdivisões deste descritor classificam-se documentos referentes à celebraçãode convênios e ao desenvolvimento de ações voltadas para a saúde doservidor, bem como oregistro nosprontuáriosde pacientes sobre a assistência prestada.	025.1 0251 Nas subdivisoes deste descritor classificam-se documentos referentes a celebracaode convenios e ao desenvolvimento de acoes voltadas para a saude doservidor bem como oregistro nosprontuariosde pacientes sobre a assistencia prestada.	S	\N	\N	\N	S
+175	1	025.11	CELEBRAÇÃO DE CONVÊNIOS DE ASSISTÊNCIA À SAÚDE	Incluem-se documentos referentes à celebração de convênios firmados para a prestação de assistência à saúde destinados ao servidor e seus dependentes.	025.11 02511 Incluem-se documentos referentes a celebracao de convenios firmados para a prestacao de assistencia a saude destinados ao servidor e seus dependentes.	S	5	\N	E	N
+176	1	025.12	ORIENTAÇÃO PARA CUIDADOS COM A SAÚDE	Incluem-se documentos referentes às ações de orientação, acompanhamento e execução de iniciativas que visem o bem-estar do servidor.	025.12 02512 Incluem-se documentos referentes as acoes de orientacao acompanhamento e execucao de iniciativas que visem o bem-estar do servidor.	S	\N	2	E	N
+177	1	025.13	PROMOÇÃO DE ATIVIDADE FÍSICA	Incluem-se documentos referentes às ações de promoção e execução de iniciativas que visem a prática da ginástica laboral e incentivem o servidor à prática de atividades físicas.	025.13 02513 Incluem-se documentos referentes as acoes de promocao e execucao de iniciativas que visem a pratica da ginastica laboral e incentivem o servidor a pratica de atividades fisicas.	S	\N	2	E	N
+178	1	025.14	REGISTRO DE ASSISTÊNCIA À SAÚDE EM PRONTUÁRIO	Incluem-se documentos referentes aos registros de assistência à saúde em prontuário de paciente, prestada aos servidores, tais como pareceres, laudos, exames e inspeções periódicas de saúde, exames complementares e comunicação de alta e óbito. Quanto aos exames admissionais e demissionais do servidor, que deverão integrar o assentamento funcional, classificar nas subdivisões do código 020.1.	025.14 02514 Incluem-se documentos referentes aos registros de assistencia a saude em prontuario de paciente prestada aos servidores tais como pareceres laudos exames e inspecoes periodicas de saude exames complementares e comunicacao de alta e obito. Quanto aos exames admissionais e demissionais do servidor que deverao integrar o assentamento funcional classificar nas subdivisoes do codigo 020.1.	S	95	5	E	N
+179	1	025.2	PRESERVAÇÃO DA SAÚDE E HIGIENE	Nas subdivisões deste descritor classificam-se documentos referentes às iniciativas do órgão e entidade que visam à preservação da saúde e a garantia de condições satisfatórias, individuais e ambientais, nos locais de trabalho.	025.2 0252 Nas subdivisoes deste descritor classificam-se documentos referentes as iniciativas do orgao e entidade que visam a preservacao da saude e a garantia de condicoes satisfatorias individuais e ambientais nos locais de trabalho.	S	\N	\N	\N	S
+180	1	025.21	CONTROLE DE RISCOS AMBIENTAIS	Incluem-se documentos referentes ao perfil profissiográfico e ao levantamento, avaliação e controle da ocorrência de riscos ambientais (agentes químicos, físicos e biológicos) existentes nos locais de trabalho, bem como aqueles referentes aos programas de controle médico de saúde ocupacional e de prevenção de riscos ambientais e os laudos e certificados sobre inspeções sanitárias e equipamentos de proteção individual. Quanto à proteção ambiental interna, classificar no código 017.1.	025.21 02521 Incluem-se documentos referentes ao perfil profissiografico e ao levantamento avaliacao e controle da ocorrencia de riscos ambientais (agentes quimicos fisicos e biologicos) existentes nos locais de trabalho bem como aqueles referentes aos programas de controle medico de saude ocupacional e de prevencao de riscos ambientais e os laudos e certificados sobre inspecoes sanitarias e equipamentos de protecao individual. Quanto a protecao ambiental interna classificar no codigo 017.1.	S	15	5	G	N
+181	1	025.22	OFERTA DE SERVIÇOS DE REFEITÓRIOS, CANTINAS E COPAS	Incluem-se documentos referentes às regras gerais de uso e de funcionamento dos ambientes destinados às refeições.	025.22 02522 Incluem-se documentos referentes as regras gerais de uso e de funcionamento dos ambientes destinados as refeicoes.	S	2	\N	E	N
+182	1	025.3	SEGURANÇA DO TRABALHO. PREVENÇÃO DE ACIDENTES DE TRABALHO	Nas subdivisões deste descritor classificam-se documentos referentes às medidas preventivas relacionadas ao ambiente de trabalho, visando à redução de acidentes e doenças ocupacionais. Quanto ao pagamento dos adicionais de periculosidade, insalubridade e atividade penosa, classificar nos códigos 023.163, 023.164 e 023.165, respectivamente.	025.3 0253 Nas subdivisoes deste descritor classificam-se documentos referentes as medidas preventivas relacionadas ao ambiente de trabalho visando a reducao de acidentes e doencas ocupacionais. Quanto ao pagamento dos adicionais de periculosidade insalubridade e atividade penosa classificar nos codigos 023.163 023.164 e 023.165 respectivamente.	S	\N	\N	\N	S
+183	1	025.31	CONSTITUIÇÃO DA COMISSÃO INTERNA DE PREVENÇÃO DE ACIDENTES (CIPA)	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos para a constituição e atuação da comissão.	025.31 02531 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos para a constituicao e atuacao da comissao.	S	\N	\N	\N	S
+194	1	026.5	APOSENTADORIA	Nas subdivisões deste descritor classificam-se documentos referentes à solicitação e concessão de aposentadoria por invalidez permanente, por idade, por tempo de contribuição previdenciária e aposentadoria especial.	026.5 0265 Nas subdivisoes deste descritor classificam-se documentos referentes a solicitacao e concessao de aposentadoria por invalidez permanente por idade por tempo de contribuicao previdenciaria e aposentadoria especial.	S	\N	\N	\N	S
+184	1	025.311	COMPOSIÇÃO E ATUAÇÃO	Incluem-se documentos referentes à constituição da Cipa, editais de convocação e divulgação das eleições, constituição da comissão eleitoral, folha de votação e atas da eleição (nos casos de realização de processo eleitoral) ou indicação e designação dos membros e instalação e posse da comissão (em outras situações que não envolvam processo eleitoral), bem como aqueles referentes aos estudos e às inspeções relativas à qualidade e segurança do ambiente de trabalho, mapas de riscos, laudos e pareceres técnicos, atas, relatórios e campanhas de divulgação.	025.311 025311 Incluem-se documentos referentes a constituicao da Cipa editais de convocacao e divulgacao das eleicoes constituicao da comissao eleitoral folha de votacao e atas da eleicao (nos casos de realizacao de processo eleitoral) ou indicacao e designacao dos membros e instalacao e posse da comissao (em outras situacoes que nao envolvam processo eleitoral) bem como aqueles referentes aos estudos e as inspecoes relativas a qualidade e seguranca do ambiente de trabalho mapas de riscos laudos e pareceres tecnicos atas relatorios e campanhas de divulgacao.	S	5	5	G	N
 185	1	025.312	OPERACIONALIZAÇÃO DE REUNIÕES	Incluem-se documentos referentes à organização das reuniões da Cipa, bem como aqueles referentes ao agendamento, convocação, pauta e lista de participantes.	025.312 025312 Incluem-se documentos referentes a organizacao das reunioes da Cipa bem como aqueles referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
 186	1	025.32	REGISTRO DE OCORRÊNCIAS DE ACIDENTES DE TRABALHO	Incluem-se os comunicados e os registros das ocorrências e as sindicâncias instaladas para averiguação dos acidentes de trabalho.	025.32 02532 Incluem-se os comunicados e os registros das ocorrencias e as sindicancias instaladas para averiguacao dos acidentes de trabalho.	S	52	5	E	N
 187	1	026	CONCESSÃO DE BENEFÍCIOS DE SEGURIDADE E PREVIDÊNCIA SOCIAL	Nas subdivisões deste descritor classificam-se documentos referentes à concessão de benefícios previdenciários e assistenciais ao servidor. Quanto às concessões referentes aos direitos e vantagens (ausência no serviço em razão de alistamento eleitoral, casamento, doação de sangue, falecimento de familiares, horário especial para servidor estudante, servidor portador de deficiência e servidor que possua dependente portador de deficiência), classificar no código 023.5.	026 026 Nas subdivisoes deste descritor classificam-se documentos referentes a concessao de beneficios previdenciarios e assistenciais ao servidor. Quanto as concessoes referentes aos direitos e vantagens (ausencia no servico em razao de alistamento eleitoral casamento doacao de sangue falecimento de familiares horario especial para servidor estudante servidor portador de deficiencia e servidor que possua dependente portador de deficiencia) classificar no codigo 023.5.	S	\N	\N	\N	S
@@ -5405,8 +5310,8 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 190	1	026.1	SALÁRIO FAMÍLIA	Incluem-se documentos referentes à solicitação, comprovação do direito, pagamento e interrupção do pagamento do benefício.	026.1 0261 Incluem-se documentos referentes a solicitacao comprovacao do direito pagamento e interrupcao do pagamento do beneficio.	S	19	5	E	N
 191	1	026.2	SALÁRIO MATERNIDADE	Incluem-se documentos referentes à solicitação, comprovação do direito, pagamento e interrupção do pagamento do benefício.	026.2 0262 Incluem-se documentos referentes a solicitacao comprovacao do direito pagamento e interrupcao do pagamento do beneficio.	S	\N	7	E	N
 192	1	026.3	AUXÍLIOS	Incluem-se documentos referentes à solicitação, comprovação do direito, pagamento e interrupção do pagamento dos auxílios acidente, doença, funeral e natalidade. Quanto aos auxílios referentes à concessão de direitos e vantagens (alimentação ou refeição, assistência pré-escolar ou creche, moradia, vale-transporte e moradia de liquidante), classificar no código 023.6. Quanto ao auxílio-reclusão, classificar no código 026.91.	026.3 0263 Incluem-se documentos referentes a solicitacao comprovacao do direito pagamento e interrupcao do pagamento dos auxilios acidente doenca funeral e natalidade. Quanto aos auxilios referentes a concessao de direitos e vantagens (alimentacao ou refeicao assistencia pre-escolar ou creche moradia vale-transporte e moradia de liquidante) classificar no codigo 023.6. Quanto ao auxilio-reclusao classificar no codigo 026.91.	S	5	\N	E	N
+205	1	027.1	AVERIGUAÇÃO DE DENÚNCIAS	Incluem-se documentos referentes aos procedimentos disciplinares para a apuração de denúncias sobre possíveis infrações ou irregularidades praticadas pelos servidores no exercício de suas atribuições, bem como aqueles produzidos em decorrência da instauração de inquéritos, sindicâncias e processo administrativo disciplinar (PAD).	027.1 0271 Incluem-se documentos referentes aos procedimentos disciplinares para a apuracao de denuncias sobre possiveis infracoes ou irregularidades praticadas pelos servidores no exercicio de suas atribuicoes, bem como aqueles produzidos em decorrencia da instauracao de inqueritos, sindicancias e processo administrativo disciplinar (PAD).	S	95	5	G	N
 193	1	026.4	LICENÇAS	Incluem-se documentos referentes à concessão de licenças para acidente em serviço, tratamento de saúde, gestante, paternidade e adotante, bem como as perícias médicas realizadas para concessão e prorrogação das licenças, quando forem necessárias. Quanto às licenças referentes à concessão de direitos e vantagens (afastamento do cônjuge ou companheiro, atividade política, capacitação profissional, desempenho de mandato classista, motivo de doença em pessoa da família, incentivada sem remuneração, prêmio por assiduidade, serviço militar e tratamento de interesses particulares), classificar no código 023.3.	026.4 0264 Incluem-se documentos referentes a concessao de licencas para acidente em servico tratamento de saude gestante paternidade e adotante bem como as pericias medicas realizadas para concessao e prorrogacao das licencas quando forem necessarias. Quanto as licencas referentes a concessao de direitos e vantagens (afastamento do cônjuge ou companheiro atividade politica capacitacao profissional desempenho de mandato classista motivo de doenca em pessoa da familia incentivada sem remuneracao premio por assiduidade servico militar e tratamento de interesses particulares) classificar no codigo 023.3.	S	52	5	E	N
-194	1	026.5	APOSENTADORIA	Nas subdivisões deste descritor classificam-se documentos referentes à solicitação e concessão de aposentadoria por invalidez permanente, por idade, por tempo de contribuição previdenciária e aposentadoria especial.	026.5 0265 Nas subdivisoes deste descritor classificam-se documentos referentes a solicitacao e concessao de aposentadoria por invalidez permanente por idade por tempo de contribuicao previdenciaria e aposentadoria especial.	S	\N	\N	\N	S
 195	1	026.51	INVALIDEZ PERMANENTE	Incluem-se documentos referentes à solicitação e concessão de aposentadoria por invalidez permanente em decorrência de acidente em serviço, moléstia profissional e doença grave, contagiosa ou incurável, especificadas em legislação.	026.51 02651 Incluem-se documentos referentes a solicitacao e concessao de aposentadoria por invalidez permanente em decorrencia de acidente em servico molestia profissional e doenca grave contagiosa ou incuravel especificadas em legislacao.	S	95	5	E	N
 196	1	026.52	COMPULSÓRIA	Incluem-se documentos referentes à concessão de aposentadoria compulsória, de acordo com a legislação em vigor, com proventos proporcionais ao tempo de contribuição previdenciária.	026.52 02652 Incluem-se documentos referentes a concessao de aposentadoria compulsoria de acordo com a legislacao em vigor com proventos proporcionais ao tempo de contribuicao previdenciaria.	S	95	5	E	N
 197	1	026.53	VOLUNTÁRIA	Incluem-se documentos referentes à solicitação e concessão de aposentadoria voluntária, atendendo aos requisitos de tempo de contribuição previdenciária e de idade mínima.	026.53 02653 Incluem-se documentos referentes a solicitacao e concessao de aposentadoria voluntaria atendendo aos requisitos de tempo de contribuicao previdenciaria e de idade minima.	S	95	5	E	N
@@ -5417,21 +5322,20 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 202	1	026.9	OUTRAS AÇÕES REFERENTES À CONCESSÃO DE BENEFÍCIOS DE SEGURIDADE E PREVIDÊNCIA SOCIAL	Na subdivisão deste descritor classificam-se documentos referentes a outras ações de concessão de benefícios de seguridade e previdência social não contempladas nos descritores anteriores.	026.9 0269 Na subdivisao deste descritor classificam-se documentos referentes a outras acoes de concessao de beneficios de seguridade e previdencia social nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
 203	1	026.91	AUXÍLIO RECLUSÃO	Incluem-se documentos referentes à solicitação, comprovação do direito, pagamento e interrupção do pagamento do auxílio-reclusão aos dependentes do servidor. Quanto aos auxílios alimentação ou refeição, assistência pré-escolar ou creche, moradia, vale-transporte e moradia de liquidante, classificar no código 023.6. Quanto aos auxílios acidente, doença, funeral e natalidade, classificar no código 026.3.	026.91 02691 Incluem-se documentos referentes a solicitacao comprovacao do direito pagamento e interrupcao do pagamento do auxilio-reclusao aos dependentes do servidor. Quanto aos auxilios alimentacao ou refeicao assistencia pre-escolar ou creche moradia vale-transporte e moradia de liquidante classificar no codigo 023.6. Quanto aos auxilios acidente doenca funeral e natalidade classificar no codigo 026.3.	S	52	5	E	N
 204	1	027	APURAÇÃO DE RESPONSABILIDADE DISCIPLINAR	Nas subdivisões deste descritor classificam-se documentos referentes às apurações de responsabilidade que envolvem o servidor. Quanto ao extravio, roubo, desaparecimento, furto e avaria de material, classificar no código 033.6.	027 027 Nas subdivisoes deste descritor classificam-se documentos referentes as apuracoes de responsabilidade que envolvem o servidor. Quanto ao extravio roubo desaparecimento furto e avaria de material classificar no codigo 033.6.	S	\N	\N	\N	S
-205	1	027.1	AVERIGUAÇÃO DE DENÚNCIAS	Incluem-se documentos referentes aos procedimentos disciplinares para a apuração de denúncias sobre possíveis infrações ou irregularidades praticadas pelos servidores no exercício de suas atribuições, bem como aqueles produzidos em decorrência da instauração de inquéritos, sindicâncias e processo administrativo disciplinar (PAD).	027.1 0271 Incluem-se documentos referentes aos procedimentos disciplinares para a apuracao de denuncias sobre possiveis infracoes ou irregularidades praticadas pelos servidores no exercicio de suas atribuicoes, bem como aqueles produzidos em decorrencia da instauracao de inqueritos, sindicancias e processo administrativo disciplinar (PAD).	S	95	5	G	N
+214	1	028.22	COM ÔNUS LIMITADO	Incluem-se documentos referentes à solicitação e autorização de afastamento do país para participar de eventos ou cumprir missões e realizar viagens ao exterior.	028.22 02822 Incluem-se documentos referentes a solicitacao e autorizacao de afastamento do pais para participar de eventos ou cumprir missoes e realizar viagens ao exterior.	S	\N	7	E	N
 206	1	027.2	APLICAÇÃO DE PENALIDADES DISCIPLINARES	Incluem-se documentos referentes à imposição de penalidades em razão da conclusão da apuração de responsabilidade disciplinar, podendo se constituir em uma advertência, suspensão, demissão, cassação de aposentadoria, disponibilidade, destituição de cargo em comissão e destituição de função comissionada. Quanto ao registro das penalidades disciplinares aplicadas ao servidor, que deverão integrar o assentamento funcional, classificar nas subdivisões do código 020.1.	027.2 0272 Incluem-se documentos referentes a imposicao de penalidades em razao da conclusao da apuracao de responsabilidade disciplinar podendo se constituir em uma advertencia suspensao demissao cassacao de aposentadoria disponibilidade destituicao de cargo em comissao e destituicao de funcao comissionada. Quanto ao registro das penalidades disciplinares aplicadas ao servidor que deverao integrar o assentamento funcional classificar nas subdivisoes do codigo 020.1.	S	95	5	G	N
 207	1	027.3	AJUSTAMENTO DE CONDUTA	Incluem-se documentos referentes à celebração de termo de ajustamento de conduta (TAC) nos casos de infração disciplinar de menor potencial ofensivo e de desvios de conduta de baixa lesividade praticados pelo servidor.	027.3 0273 Incluem-se documentos referentes a celebracao de termo de ajustamento de conduta (TAC) nos casos de infracao disciplinar de menor potencial ofensivo e de desvios de conduta de baixa lesividade praticados pelo servidor.	S	52	5	E	N
-217	1	029.1	CONTROLE DE ASSIDUIDADE E PONTUALIDADE	Nas subdivisões deste descritor classificam-se documentos referentes ao controle de frequência dos servidores, ao estabelecimento do horário de expediente do órgão e entidade e ao controle do cumprimento da jornada de trabalho regular fora das dependências do órgão ou entidade.	029.1 0291 Nas subdivisoes deste descritor classificam-se documentos referentes ao controle de frequencia dos servidores, ao estabelecimento do horario de expediente do orgao e entidade e ao controle do cumprimento da jornada de trabalho regular fora das dependencias do orgao ou entidade.	S	\N	\N	\N	S
-218	1	029.11	CONTROLE DE FREQUÊNCIA	Incluem-se livros, cartões e folhas de ponto, bem como documentos referentes ao abono de faltas, cumprimento de horário especial e de horas extras, banco de horas, corte de ponto e registro de dias parados.	029.11 02911 Incluem-se livros, cartoes e folhas de ponto, bem como documentos referentes ao abono de faltas, cumprimento de horario especial e de horas extras, banco de horas, corte de ponto e registro de dias parados.	S	52	5	E	N
-406	1	053.1	PAGAMENTO EM MOEDA ESTRANGEIRA	Incluem-se documentos referentes aos pagamentos em moedas diferentes da moeda nacional.	053.1 0531 Incluem-se documentos referentes aos pagamentos em moedas diferentes da moeda nacional.	S	5	\N	E	N
+324	1	042.7	BAIXA. DESFAZIMENTO	Nas subdivisões deste descritor classificam-se documentos referentes à baixa e desfazimento de veículos e de bens semoventes.	042.7 0427 Nas subdivisoes deste descritor classificam-se documentos referentes a baixa e desfazimento de veiculos e de bens semoventes.	S	\N	\N	\N	S
 208	1	028	CUMPRIMENTO DE MISSÕES E VIAGENS A SERVIÇO	Nas subdivisões deste descritor classificam-se documentos referentes ao afastamento do servidor para o cumprimento de missões e a realização de viagens a serviço, no país e no exterior, para colaboração ou participação esporádica em assuntos que é especialista, e para servir em organismo internacional de que o Brasil participe ou com o qual coopere. Quanto ao planejamento, acompanhamento, execução, avaliação e relatório técnico, classificar no código específico relativo ao objeto da missão e da viagem a serviço. Quanto aos afastamentos referentes à concessão de direitos e vantagens (suspensão de contrato de trabalho, depor, exercer mandato legislativo, servir a Justiça Eleitoral, servir como jurado, participar em programas de pós-graduação stricto sensu e de pós-doutorado e em estudos, no país e no exterior), classificar no código 023.4.	028 028 Nas subdivisoes deste descritor classificam-se documentos referentes ao afastamento do servidor para o cumprimento de missoes e a realizacao de viagens a servico no pais e no exterior para colaboracao ou participacao esporadica em assuntos que e especialista e para servir em organismo internacional de que o Brasil participe ou com o qual coopere. Quanto ao planejamento acompanhamento execucao avaliacao e relatorio tecnico classificar no codigo especifico relativo ao objeto da missao e da viagem a servico. Quanto aos afastamentos referentes a concessao de direitos e vantagens (suspensao de contrato de trabalho depor exercer mandato legislativo servir a Justica Eleitoral servir como jurado participar em programas de pos-graduacao stricto sensu e de pos-doutorado e em estudos no pais e no exterior) classificar no codigo 023.4.	S	\N	\N	\N	S
 209	1	028.1	NO PAÍS	Nas subdivisões deste descritor classificam-se documentos referentes ao afastamento do servidor para o cumprimento de missões e a realização de viagens no país, podendo ser: com ônus (quando implicarem no direito à concessão de passagens e diárias e ao recebimento de vencimentos ou salários e demais vantagens) e com ônus limitado (quando implicarem, apenas, no direito ao recebimento de vencimentos e salários e demais vantagens).	028.1 0281 Nas subdivisoes deste descritor classificam-se documentos referentes ao afastamento do servidor para o cumprimento de missoes e a realizacao de viagens no pais podendo ser: com ônus (quando implicarem no direito a concessao de passagens e diarias e ao recebimento de vencimentos ou salarios e demais vantagens) e com ônus limitado (quando implicarem apenas no direito ao recebimento de vencimentos e salarios e demais vantagens).	S	\N	\N	\N	S
 210	1	028.11	COM ÔNUS	Incluem-se documentos referentes à solicitação e autorização de afastamento, ajudas de custo, diárias, passagens, reservas de ho-tel, pagamento de despesas de eventos, prestações de contas e relatórios de viagem, bem como lista de participantes (no caso de comitivas e delegações) e concessão de passagens e diárias para convidados. 	028.11 02811 Incluem-se documentos referentes a solicitacao e autorizacao de afastamento ajudas de custo diarias passagens reservas de ho-tel pagamento de despesas de eventos prestacoes de contas e relatorios de viagem bem como lista de participantes (no caso de comitivas e delegacoes) e concessao de passagens e diarias para convidados. 	S	5	\N	E	N
 211	1	028.12	COM ÔNUS LIMITADO	Incluem-se documentos referentes à solicitação e autorização de afastamento para participar de eventos ou cumprir missões e realizar viagens no país, bem como aqueles referentes à solicitação de afastamento para colaboração ou participação esporádica, (remunerada ou não), em assuntos que é especialista.	028.12 02812 Incluem-se documentos referentes a solicitacao e autorizacao de afastamento para participar de eventos ou cumprir missoes e realizar viagens no pais bem como aqueles referentes a solicitacao de afastamento para colaboracao ou participacao esporadica (remunerada ou nao) em assuntos que e especialista.	S	\N	7	E	N
 212	1	028.2	NO EXTERIOR	Nas subdivisões deste descritor classificam-se documentos referentes ao afastamento do país do servidor para o cumprimento de missões e a realização de viagens ao exterior, podendo ser: com ônus (quando implicarem no direito à concessão de passagens e diárias e ao recebimento de vencimentos ou salários e demais vantagens), com ônus limitado (quando implicarem, apenas, no direito ao recebimento de vencimentos e salários e demais vantagens) e sem ônus (quando implicarem a perda total dos vencimentos ou salários e demais vantagens, não acarretando qualquer despesa para o órgão e entidade).	028.2 0282 Nas subdivisoes deste descritor classificam-se documentos referentes ao afastamento do pais do servidor para o cumprimento de missoes e a realizacao de viagens ao exterior podendo ser: com ônus (quando implicarem no direito a concessao de passagens e diarias e ao recebimento de vencimentos ou salarios e demais vantagens) com ônus limitado (quando implicarem apenas no direito ao recebimento de vencimentos e salarios e demais vantagens) e sem ônus (quando implicarem a perda total dos vencimentos ou salarios e demais vantagens nao acarretando qualquer despesa para o orgao e entidade).	S	\N	\N	\N	S
 213	1	028.21	COM ÔNUS	Incluem-se documentos referentes à solicitação e autorização de afastamento do país, ajudas de custo, diárias, compra de moeda estrangeira, passagens, reservas de hotel, pagamento de despesas de eventos, prestações de contas e relatórios de viagem, bem como lista de participantes (no caso de comitivas e delegações) e concessão de passagens e diárias para convidados.	028.21 02821 Incluem-se documentos referentes a solicitacao e autorizacao de afastamento do pais ajudas de custo diarias compra de moeda estrangeira passagens reservas de hotel pagamento de despesas de eventos prestacoes de contas e relatorios de viagem bem como lista de participantes (no caso de comitivas e delegacoes) e concessao de passagens e diarias para convidados.	S	5	\N	E	N
-214	1	028.22	COM ÔNUS LIMITADO	Incluem-se documentos referentes à solicitação e autorização de afastamento do país para participar de eventos ou cumprir missões e realizar viagens ao exterior.	028.22 02822 Incluem-se documentos referentes a solicitacao e autorizacao de afastamento do pais para participar de eventos ou cumprir missoes e realizar viagens ao exterior.	S	\N	7	E	N
 215	1	028.23	SEM ÔNUS	Incluem-se documentos referentes à solicitação e autorização de afastamento do país para participar de eventos ou cumprir missões e realizar viagens ao exterior.	028.23 02823 Incluem-se documentos referentes a solicitacao e autorizacao de afastamento do pais para participar de eventos ou cumprir missoes e realizar viagens ao exterior.	S	\N	7	E	N
 216	1	029	OUTRAS AÇÕES REFERENTES À GESTÃO DE PESSOAS	Nas subdivisões deste descritor classificam-se documentos referentes a outras ações de gestão de pessoas não contempladas nos descritores anteriores.	029 029 Nas subdivisoes deste descritor classificam-se documentos referentes a outras acoes de gestao de pessoas nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
+217	1	029.1	CONTROLE DE ASSIDUIDADE E PONTUALIDADE	Nas subdivisões deste descritor classificam-se documentos referentes ao controle de frequência dos servidores, ao estabelecimento do horário de expediente do órgão e entidade e ao controle do cumprimento da jornada de trabalho regular fora das dependências do órgão ou entidade.	029.1 0291 Nas subdivisoes deste descritor classificam-se documentos referentes ao controle de frequencia dos servidores, ao estabelecimento do horario de expediente do orgao e entidade e ao controle do cumprimento da jornada de trabalho regular fora das dependencias do orgao ou entidade.	S	\N	\N	\N	S
+218	1	029.11	CONTROLE DE FREQUÊNCIA	Incluem-se livros, cartões e folhas de ponto, bem como documentos referentes ao abono de faltas, cumprimento de horário especial e de horas extras, banco de horas, corte de ponto e registro de dias parados.	029.11 02911 Incluem-se livros, cartoes e folhas de ponto, bem como documentos referentes ao abono de faltas, cumprimento de horario especial e de horas extras, banco de horas, corte de ponto e registro de dias parados.	S	52	5	E	N
 219	1	029.12	DEFINIÇÃO DO HORÁRIO DE EXPEDIENTE	Incluem-se documentos referentes à fixação e mudanças do horário de funcionamento do órgão e entidade e às escalas de plantão.	029.12 02912 Incluem-se documentos referentes a fixacao e mudancas do horario de funcionamento do orgao e entidade e as escalas de plantao.	S	\N	2	E	N
 220	1	029.13	REGISTRO DAS ATIVIDADES DE TELETRABALHO	Incluem-se documentosreferentes a definiçãoou aprestação de contasdasatividades realizadasremotamente,em substituição ao controle defrequência,tais como: plano de trabalho,tabela de atividades,relatórioou outra forma de prestação de contasdas atividades e/ou entregasrealizadas.	029.13 02913 Incluem-se documentosreferentes a definicaoou aprestacao de contasdasatividades realizadasremotamente,em substituicao ao controle defrequencia,tais como: plano de trabalho,tabela de atividades,relatorioou outra forma de prestacao de contasdas atividades e/ou entregasrealizadas.	S	52	5	E	N
 221	1	029.2	INSTITUIÇÃO DO PROGRAMA DE CRECHE	Nas subdivisões deste descritor classificam-se documentos referentes à implantação do programa de creche em decorrência da implementação de plano de assistência pré-escolar no órgão e entidade.	029.2 0292 Nas subdivisoes deste descritor classificam-se documentos referentes a implantacao do programa de creche em decorrencia da implementacao de plano de assistencia pre-escolar no orgao e entidade.	S	\N	\N	\N	S
@@ -5443,6 +5347,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 227	1	029.4	DELEGAÇÃO DE COMPETÊNCIA E PROCURAÇÃO	Incluem-se documentos referentes à autorização ou à delegação que a autoridade administrativa responsável pelo órgão e entidade pode conferir a um servidor para tratar de matéria de competência exclusiva, tais como: ordenação de despesas, decisões de recursos e casos de edição de atos de caráter normativo.	029.4 0294 Incluem-se documentos referentes a autorizacao ou a delegacao que a autoridade administrativa responsavel pelo orgao e entidade pode conferir a um servidor para tratar de materia de competencia exclusiva tais como: ordenacao de despesas decisoes de recursos e casos de edicao de atos de carater normativo.	S	5	\N	E	N
 228	1	029.5	CONTRATAÇÃO DE SERVIÇOS PROFISSIONAIS TRANSITÓRIOS	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa física para prestação de serviços devem ser classificados no código 018.2.	029.5 0295 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa fisica para prestacao de servicos devem ser classificados no codigo 018.2.	S	\N	\N	\N	S
 229	1	029.6	PETIÇÃO DE DIREITOS	Incluem-se requerimentos feitos pelo servidor em defesa de seus direitos ou interesses legítimos e pedidos de interposição de reconsideração ou de recurso.	029.6 0296 Incluem-se requerimentos feitos pelo servidor em defesa de seus direitos ou interesses legitimos e pedidos de interposicao de reconsideracao ou de recurso.	S	5	\N	G	N
+293	1	041.23	BENS SEMOVENTES	Incluem-se documentos referentes a doação, permuta e transferência de animais.	041.23 04123 Incluem-se documentos referentes a doacao, permuta e transferencia de animais.	S	5	4	E	N
 230	1	030	GESTÃO DE MATERIAIS	Esta subclasse contempla documentos referentes à aquisição, movimentação, alienação, baixa e inventário de material permanente (mobiliário, equipamentos, utensílios, aparelhos, ferramentas, máquinas, instrumentos técnicos e obras de arte) e de consumo (material destinado às atividades de expediente, limpeza, manutenção, alimentação e abastecimento de veículos, medicamentos, uniformes, peças de reposição, matérias-primas e cobaias para uso científico), bem como aqueles referentes ao cadastramento e qualificação de fornecedores para a prestação produtos e serviços, e à execução de serviços de instalação e manutenção.	030 030 Esta subclasse contempla documentos referentes a aquisicao movimentacao alienacao baixa e inventario de material permanente (mobiliario equipamentos utensilios aparelhos ferramentas maquinas instrumentos tecnicos e obras de arte) e de consumo (material destinado as atividades de expediente limpeza manutencao alimentacao e abastecimento de veiculos medicamentos uniformes pecas de reposicao materias-primas e cobaias para uso cientifico) bem como aqueles referentes ao cadastramento e qualificacao de fornecedores para a prestacao produtos e servicos e a execucao de servicos de instalacao e manutencao.	S	\N	\N	\N	S
 231	1	030.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais e às decisões de caráter geral sobre a gestão de material permanente e de consumo.	030.01 03001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais e as decisoes de carater geral sobre a gestao de material permanente e de consumo.	S	5	\N	G	N
 232	1	030.02	CADASTRAMENTO DE FORNECEDORES E DE PRESTADORES DE SERVIÇOS	Incluem-se documentos referentes ao registro cadastral de fornecedores em sistema específico da administração pública, visando verificar a capacidade técnica para aquisições e contratações de serviços relacionadas à gestão de material.	030.02 03002 Incluem-se documentos referentes ao registro cadastral de fornecedores em sistema especifico da administracao publica visando verificar a capacidade tecnica para aquisicoes e contratacoes de servicos relacionadas a gestao de material.	S	\N	5	E	N
@@ -5478,6 +5383,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 262	1	033.3	DAÇÃO. ADJUDICAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à alienação definitiva de material permanente e de consumo.	033.3 0333 Nas subdivisoes deste descritor classificam-se documentos referentes a alienacao definitiva de material permanente e de consumo.	S	\N	\N	\N	S
 263	1	033.31	MATERIAL PERMANENTE	Incluem-se documentos referentes à dação e adjudicação de material permanente, para pagamento de parte ou totalidade de dívida.	033.31 03331 Incluem-se documentos referentes a dacao e adjudicacao de material permanente para pagamento de parte ou totalidade de divida.	S	5	\N	E	N
 264	1	033.32	MATERIAL DE CONSUMO	Incluem-se documentos referentes à dação e adjudicação de material de consumo, para pagamento de parte ou totalidade de dívida.	033.32 03332 Incluem-se documentos referentes a dacao e adjudicacao de material de consumo para pagamento de parte ou totalidade de divida.	S	5	\N	E	N
+280	1	039.11	CRIAÇÃO E ATUAÇÃO DE GRUPOS DE TRABALHO	Incluem-se documentos referentes à criação de grupos de trabalho e comissões de racionalização do uso de material, aos registros das deliberações e às tomadas de decisão definidas nas reuniões, tais como: ato de instituição, regras para atuação, designação e substituição de membros, resoluções, atas e relatórios.	039.11 03911 Incluem-se documentos referentes a criacao de grupos de trabalho e comissoes de racionalizacao do uso de material aos registros das deliberacoes e as tomadas de decisao definidas nas reunioes tais como: ato de instituicao regras para atuacao designacao e substituicao de membros resolucoes atas e relatorios.	S	5	4	G	N
 265	1	033.4	DESFAZIMENTO	Nas subdivisões deste descritor classificam-se documentos referentes à alienação definitiva de material permanente e de consumo em razão de serem considerados inservíveis e irrecuperáveis, ocorrendo por meio de inutilização, eliminação ou destruição. Quanto ao monitoramento e avaliação dos procedimentos de controle e preservação ambiental externa, classificar no código 017.2. Quanto ao recolhimento de material inservível e de sucatas ao depósito, classificar no código 032.3.	033.4 0334 Nas subdivisoes deste descritor classificam-se documentos referentes a alienacao definitiva de material permanente e de consumo em razao de serem considerados inserviveis e irrecuperaveis ocorrendo por meio de inutilizacao eliminacao ou destruicao. Quanto ao monitoramento e avaliacao dos procedimentos de controle e preservacao ambiental externa classificar no codigo 017.2. Quanto ao recolhimento de material inservivel e de sucatas ao deposito classificar no codigo 032.3.	S	\N	\N	\N	S
 266	1	033.41	MATERIAL PERMANENTE	Incluem-se documentos referentes ao desfazimento de material permanente.	033.41 03341 Incluem-se documentos referentes ao desfazimento de material permanente.	S	5	4	E	N
 267	1	033.42	MATERIAL DE CONSUMO	Incluem-se documentos referentes ao desfazimento de material de consumo.	033.42 03342 Incluem-se documentos referentes ao desfazimento de material de consumo.	S	5	4	E	N
@@ -5493,11 +5399,8 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 277	1	036.2	INVENTÁRIO DE MATERIAL DE CONSUMO	Incluem-se documentos referentes à elaboração do inventário do  material de consumo do órgão e entidade.	036.2 0362 Incluem-se documentos referentes a elaboracao do inventario do  material de consumo do orgao e entidade.	S	5	\N	E	N
 278	1	039	OUTRAS AÇÕES REFERENTES À GESTÃO DE MATERIAIS	Nas subdivisões deste descritor classificam-se documentos referentes a outras ações de gestão de bens materiais não contempladas nos descritores anteriores.	039 039 Nas subdivisoes deste descritor classificam-se documentos referentes a outras acoes de gestao de bens materiais nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
 279	1	039.1	RACIONALIZAÇÃO DO USO DE MATERIAL	Nas subdivisões deste descritor classificam-se documentos referentes à criação, designação, gestão, divulgação e resultados da atuação de grupos de trabalho e de comissões de racionalização do uso de material.	039.1 0391 Nas subdivisoes deste descritor classificam-se documentos referentes a criacao designacao gestao divulgacao e resultados da atuacao de grupos de trabalho e de comissoes de racionalizacao do uso de material.	S	\N	\N	\N	S
-280	1	039.11	CRIAÇÃO E ATUAÇÃO DE GRUPOS DE TRABALHO	Incluem-se documentos referentes à criação de grupos de trabalho e comissões de racionalização do uso de material, aos registros das deliberações e às tomadas de decisão definidas nas reuniões, tais como: ato de instituição, regras para atuação, designação e substituição de membros, resoluções, atas e relatórios.	039.11 03911 Incluem-se documentos referentes a criacao de grupos de trabalho e comissoes de racionalizacao do uso de material aos registros das deliberacoes e as tomadas de decisao definidas nas reunioes tais como: ato de instituicao regras para atuacao designacao e substituicao de membros resolucoes atas e relatorios.	S	5	4	G	N
-281	1	039.12	OPERACIONALIZAÇÃO DE REUNIÕES	Incluem-se documentos referentes à organização das reuniões dos grupos de trabalhos e das comissões de racionalização do uso de material, bem como aqueles referentes ao agendamento, convocação, pauta e lista de participantes.	039.12 03912 Incluem-se documentos referentes a organizacao das reunioes dos grupos de trabalhos e das comissoes de racionalizacao do uso de material bem como aqueles referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
 299	1	041.51	BENS IMÓVEIS	Incluem-se documentos referentes à cessão e comodato de imóveis. Quanto ao uso de dependências do órgão e entidade, por servidores, classificar no código 043.7.	041.51 04151 Incluem-se documentos referentes a cessao e comodato de imoveis. Quanto ao uso de dependencias do orgao e entidade por servidores classificar no codigo 043.7.	S	5	4	G	N
-300	1	041.52	VEÍCULOS	Incluem-se documentos referentes à cessão e comodato de  veículos.	041.52 04152 Incluem-se documentos referentes a cessao e comodato de  veiculos.	S	5	4	E	N
-301	1	041.53	BENS SEMOVENTES	Incluem-se documentos referentes à cessão e comodato de animais.	041.53 04153 Incluem-se documentos referentes a cessao e comodato de animais.	S	5	4	E	N
+281	1	039.12	OPERACIONALIZAÇÃO DE REUNIÕES	Incluem-se documentos referentes à organização das reuniões dos grupos de trabalhos e das comissões de racionalização do uso de material, bem como aqueles referentes ao agendamento, convocação, pauta e lista de participantes.	039.12 03912 Incluem-se documentos referentes a organizacao das reunioes dos grupos de trabalhos e das comissoes de racionalizacao do uso de material bem como aqueles referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
 282	1	039.2	EMPRÉSTIMO E DEVOLUÇÃO DE MATERIAL PERMANENTE	Incluem-se documentos referentes ao empréstimo e devolução de material permanente, normalmente, disponibilizados aos servidores, para uso em atividades internas e externas do órgão e entidade, como computadores portáteis, filmadoras, câmeras fotográficas e telefones celulares funcionais. Quanto à autorização de entrada e saída de material do órgão e entidade, classificar no código 032.2. Quanto ao empréstimo de material permanente para outro órgão e entidade, classificar no código 033.51.	039.2 0392 Incluem-se documentos referentes ao emprestimo e devolucao de material permanente normalmente disponibilizados aos servidores para uso em atividades internas e externas do orgao e entidade como computadores portateis filmadoras cameras fotograficas e telefones celulares funcionais. Quanto a autorizacao de entrada e saida de material do orgao e entidade classificar no codigo 032.2. Quanto ao emprestimo de material permanente para outro orgao e entidade classificar no codigo 033.51.	S	1	\N	E	N
 283	1	040	GESTÃO DE BENS PATRIMONIAIS E DE SERVIÇOS	Esta subclasse contempla documentos referentes à aquisição, alienação e inventário de bens imóveis (terrenos, edifícios, residências  e  salas),  de  veículos  motorizados  (terrestres,  fluviais,  marítimos e aéreos) e não motorizados (propulsão humana e tração animal) e de bens semoventes (animais utilizados para patrulhamento, investigação e transporte), bem como aqueles referentes à contratação de prestação de serviços para o fornecimento de serviços públicos essenciais, para a execução de obras e ao controle, proteção, guarda e segurança patrimonial.	040 040 Esta subclasse contempla documentos referentes a aquisicao alienacao e inventario de bens imoveis (terrenos edificios residencias  e  salas)  de  veiculos  motorizados  (terrestres  fluviais  maritimos e aereos) e nao motorizados (propulsao humana e tracao animal) e de bens semoventes (animais utilizados para patrulhamento investigacao e transporte) bem como aqueles referentes a contratacao de prestacao de servicos para o fornecimento de servicos publicos essenciais para a execucao de obras e ao controle protecao guarda e seguranca patrimonial.	S	\N	\N	\N	S
 284	1	040.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais e às decisões de caráter geral sobre a gestão de bens patrimoniais.	040.01 04001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais e as decisoes de carater geral sobre a gestao de bens patrimoniais.	S	5	\N	G	N
@@ -5509,12 +5412,10 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 290	1	041.2	DOAÇÃO E PERMUTA	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição definitiva de bens imóveis, de veículos e de bens semoventes.	041.2 0412 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao definitiva de bens imoveis de veiculos e de bens semoventes.	S	\N	\N	\N	S
 291	1	041.21	BENS IMÓVEIS	Incluem-se documentos referentes a doação, permuta e transferência de imóveis.	041.21 04121 Incluem-se documentos referentes a doacao, permuta e transferencia de imoveis.	S	5	4	G	N
 292	1	041.22	VEÍCULOS	Incluem-se documentos referentes a doação, permuta e transferência de veículos.	041.22 04122 Incluem-se documentos referentes a doacao, permuta e transferencia de veiculos.	S	5	4	E	N
-293	1	041.23	BENS SEMOVENTES	Incluem-se documentos referentes a doação, permuta e transferência de animais.	041.23 04123 Incluem-se documentos referentes a doacao, permuta e transferencia de animais.	S	5	4	E	N
-294	1	041.3	DAÇÃO. ADJUDICAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição definitiva de bens imóveis e de veículos.	041.3 0413 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao definitiva de bens imoveis e de veiculos.	S	\N	\N	\N	S
-295	1	041.31	BENS IMÓVEIS	Incluem-se documentos referentes à dação e adjudicação de imóveis, para recebimento de parte ou totalidade de dívida.	041.31 04131 Incluem-se documentos referentes a dacao e adjudicacao de imoveis para recebimento de parte ou totalidade de divida.	S	5	\N	G	N
 296	1	041.32	VEÍCULOS	Incluem-se documentos referentes à dação e adjudicação de veículos, para recebimento de parte ou totalidade de dívida.	041.32 04132 Incluem-se documentos referentes a dacao e adjudicacao de veiculos para recebimento de parte ou totalidade de divida.	S	5	\N	E	N
 297	1	041.4	PROCRIAÇÃO	Incluem-se documentos referentes à aquisição definitiva de bens semoventes por procriação (animais nascidos no local de criação).	041.4 0414 Incluem-se documentos referentes a aquisicao definitiva de bens semoventes por procriacao (animais nascidos no local de criacao).	S	5	4	E	N
 298	1	041.5	CESSÃO E COMODATO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição temporária de bens imóveis, de veículos e de bens semoventes.	041.5 0415 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao temporaria de bens imoveis de veiculos e de bens semoventes.	S	\N	\N	\N	S
+300	1	041.52	VEÍCULOS	Incluem-se documentos referentes à cessão e comodato de  veículos.	041.52 04152 Incluem-se documentos referentes a cessao e comodato de  veiculos.	S	5	4	E	N
 303	1	041.61	BENS IMÓVEIS	Incluem-se documentos referentes à locação, arrendamento mercantil (leasing) e sublocação de imóveis. Quanto ao uso de dependências do órgão e entidade, por servidores, classificar no código 043.7. Quanto à locação temporária de salas e auditórios para realização de eventos, classificar no código 918.	041.61 04161 Incluem-se documentos referentes a locacao arrendamento mercantil (leasing) e sublocacao de imoveis. Quanto ao uso de dependencias do orgao e entidade por servidores classificar no codigo 043.7. Quanto a locacao temporaria de salas e auditorios para realizacao de eventos classificar no codigo 918.	S	5	\N	E	N
 304	1	041.62	VEÍCULOS	Incluem-se documentos referentes à locação, arrendamento mercantil (leasing) e sublocação de veículos.	041.62 04162 Incluem-se documentos referentes a locacao arrendamento mercantil (leasing) e sublocacao de veiculos.	S	5	\N	E	N
 305	1	041.7	DESMEMBRAMENTO	Incluem-se documentos referentes ao desmembramento de bem imóvel do órgão ou entidade, desvinculado da alienação. Quanto à alienação definitiva de bem imóvel por desmembramento, classificar no código 042.4.	041.7 0417 Incluem-se documentos referentes ao desmembramento de bem imovel do orgao ou entidade desvinculado da alienacao. Quanto a alienacao definitiva de bem imovel por desmembramento classificar no codigo 042.4.	S	5	4	G	N
@@ -5530,13 +5431,14 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 315	1	042.3	DAÇÃO. ADJUDICAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à alienação definitiva de bens imóveis e de veículos.	042.3 0423 Nas subdivisoes deste descritor classificam-se documentos referentes a alienacao definitiva de bens imoveis e de veiculos.	S	\N	\N	\N	S
 316	1	042.31	BENS IMÓVEIS	Incluem-se documentos referentes à dação e adjudicação de bens imóveis, para pagamento de parte ou totalidade de dívida.	042.31 04231 Incluem-se documentos referentes a dacao e adjudicacao de bens imoveis para pagamento de parte ou totalidade de divida.	S	5	\N	G	N
 317	1	042.32	VEÍCULOS	Incluem-se documentos referentes à dação e adjudicação de veículos, para pagamento de parte ou totalidade de dívida.	042.32 04232 Incluem-se documentos referentes a dacao e adjudicacao de veiculos para pagamento de parte ou totalidade de divida.	S	5	\N	E	N
+335	1	043.62	DENTRO DO MESMO IMÓVEL	Incluem-se documentos referentes à mudança de bens materiais realizada dentro do mesmo imóvel do órgão e entidade.	043.62 04362 Incluem-se documentos referentes a mudanca de bens materiais realizada dentro do mesmo imovel do orgao e entidade.	S	\N	1	E	N
 318	1	042.4	DESAPROPRIAÇÃO E DESMEMBRAMENTO	Incluem-se documentos referentes à alienação definitiva de bens imóveis por desapropriação e por desmembramento. Quanto ao desmembramento de bem imóvel, desvinculado da alienação, classificar no código 041.7.	042.4 0424 Incluem-se documentos referentes a alienacao definitiva de bens imoveis por desapropriacao e por desmembramento. Quanto ao desmembramento de bem imovel desvinculado da alienacao classificar no codigo 041.7.	S	5	\N	G	N
 319	1	042.5	CESSÃO E COMODATO	Nas subdivisões deste descritor classificam-se documentos referentes à alienação temporária de bens imóveis, de veículos e de bens semoventes.	042.5 0425 Nas subdivisoes deste descritor classificam-se documentos referentes a alienacao temporaria de bens imoveis de veiculos e de bens semoventes.	S	\N	\N	\N	S
 320	1	042.51	BENS IMÓVEIS	Incluem-se documentos referentes à cessão e comodato de imóveis.	042.51 04251 Incluem-se documentos referentes a cessao e comodato de imoveis.	S	5	4	G	N
 321	1	042.52	VEÍCULOS	Incluem-se documentos referentes à cessão e comodato de veículos.	042.52 04252 Incluem-se documentos referentes a cessao e comodato de veiculos.	S	5	4	E	N
 322	1	042.53	BENS SEMOVENTES	Incluem-se documentos referentes à cessão e comodato de animais.	042.53 04253 Incluem-se documentos referentes a cessao e comodato de animais.	S	5	4	E	N
 323	1	042.6	LOCAÇÃO. ARRENDAMENTO. SUBLOCAÇÃO	Incluem-se documentos referentes à alienação temporária de bens imóveis por locação, por arrendamento e por sublocação, bem como os termos de permissão remunerada de uso.	042.6 0426 Incluem-se documentos referentes a alienacao temporaria de bens imoveis por locacao por arrendamento e por sublocacao bem como os termos de permissao remunerada de uso.	S	5	\N	E	N
-324	1	042.7	BAIXA. DESFAZIMENTO	Nas subdivisões deste descritor classificam-se documentos referentes à baixa e desfazimento de veículos e de bens semoventes.	042.7 0427 Nas subdivisoes deste descritor classificam-se documentos referentes a baixa e desfazimento de veiculos e de bens semoventes.	S	\N	\N	\N	S
+534	1	082.24.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.24.a 08224a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
 325	1	042.71	VEÍCULOS	Incluem-se documentos referentes à baixa e desfazimento de veículos, quando o mesmo é retirado de circulação, por ser irrecuperável e inservível, definitivamente desmontado, sinistrado com laudo de perda total, vendido ou leiloado como sucata.	042.71 04271 Incluem-se documentos referentes a baixa e desfazimento de veiculos quando o mesmo e retirado de circulacao por ser irrecuperavel e inservivel definitivamente desmontado sinistrado com laudo de perda total vendido ou leiloado como sucata.	S	5	4	E	N
 326	1	042.72	BENS SEMOVENTES	Incluem-se documentos referentes à baixa de animais por incapacidade, inaptidão, invalidez, morte, sacrifício e aposentadoria.	042.72 04272 Incluem-se documentos referentes a baixa de animais por incapacidade inaptidao invalidez morte sacrificio e aposentadoria.	S	5	4	E	N
 327	1	043	ADMINISTRAÇÃO CONDOMINIAL	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos necessários para a administração, o registro e o controle dos bens patrimoniais do órgão e entidade.	043 043 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos necessarios para a administracao, o registro e o controle dos bens patrimoniais do orgao e entidade.	S	\N	\N	\N	S
@@ -5547,11 +5449,12 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 332	1	043.5	INSPEÇÃO PATRIMONIAL	Incluem-se documentos referentes às inspeções patrimoniais (preventivas e periódicas) realizadas nas propriedades do órgão e entidade, bem como a entrega de notificações sobre as infrações verificadas, como registro de invasões, grilagem, ações de vandalismo, obstrução de passagem, ocupação ilegal, utilização inadequada de imóvel, construção irregular e construção não autorizada.	043.5 0435 Incluem-se documentos referentes as inspecoes patrimoniais (preventivas e periodicas) realizadas nas propriedades do orgao e entidade bem como a entrega de notificacoes sobre as infracoes verificadas como registro de invasoes grilagem acoes de vandalismo obstrucao de passagem ocupacao ilegal utilizacao inadequada de imovel construcao irregular e construcao nao autorizada.	S	5	3	G	N
 333	1	043.6	MUDANÇA	Nas subdivisões deste descritor classificam-se documentos referentes à transferência de bens materiais do órgão e entidade. Quanto à contratação de serviços de mudanças, classificar no código 034.	043.6 0436 Nas subdivisoes deste descritor classificam-se documentos referentes a transferencia de bens materiais do orgao e entidade. Quanto a contratacao de servicos de mudancas classificar no codigo 034.	S	\N	\N	\N	S
 334	1	043.61	PARA OUTROS IMÓVEIS	Incluem-se documentos referentes à mudança de bens materiais realizada de um imóvel para outro imóvel do órgão e entidade.	043.61 04361 Incluem-se documentos referentes a mudanca de bens materiais realizada de um imovel para outro imovel do orgao e entidade.	S	5	\N	E	N
-335	1	043.62	DENTRO DO MESMO IMÓVEL	Incluem-se documentos referentes à mudança de bens materiais realizada dentro do mesmo imóvel do órgão e entidade.	043.62 04362 Incluem-se documentos referentes a mudanca de bens materiais realizada dentro do mesmo imovel do orgao e entidade.	S	\N	1	E	N
 336	1	043.7	USO DE DEPENDÊNCIAS	Incluem-se documentos referentes à requisição e utilização, por servidores, de dependências (salas e auditórios) de imóvel do órgão e entidade. Quanto ao uso de dependências do órgão e entidade, por terceiros, mediante cessão e comodato, classificar no código 041.51. Quanto ao uso de dependências do órgão e entidade, por terceiros, mediante locação, arrendamento mercantil (leasing) e sublocação, classificar no código 041.61.	043.7 0437 Incluem-se documentos referentes a requisicao e utilizacao por servidores de dependencias (salas e auditorios) de imovel do orgao e entidade. Quanto ao uso de dependencias do orgao e entidade por terceiros mediante cessao e comodato classificar no codigo 041.51. Quanto ao uso de dependencias do orgao e entidade por terceiros mediante locacao arrendamento mercantil (leasing) e sublocacao classificar no codigo 041.61.	S	\N	2	E	N
 337	1	044	ADMINISTRAÇÃO DA FROTA DE VEÍCULOS	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos necessários para a administração e o controle de uso dos veículos do órgão e entidade.	044 044 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos necessarios para a administracao e o controle de uso dos veiculos do orgao e entidade.	S	\N	\N	\N	S
 338	1	044.1	CADASTRAMENTO, LICENCIAMENTO E EMPLACAMENTO	Incluem-se documentos referentes ao cadastramento, licenciamento e emplacamento de veículos. Quanto ao pagamento de taxas e tributos dos veículos, como o imposto sobre a propriedade de veículos automotores, classificar no código 059.2.	044.1 0441 Incluem-se documentos referentes ao cadastramento, licenciamento e emplacamento de veiculos. Quanto ao pagamento de taxas e tributos dos veiculos, como o imposto sobre a propriedade de veiculos automotores, classificar no codigo 059.2.	S	5	\N	E	N
 339	1	044.2	TOMBAMENTO	Incluem-se documentos referentes ao tombamento de veículos, pertencentes ao órgão e entidade, quando se tornam peças de exposição.	044.2 0442 Incluem-se documentos referentes ao tombamento de veiculos, pertencentes ao orgao e entidade, quando se tornam pecas de exposicao.	S	5	\N	G	N
+535	1	082.3	AVALIAÇÃO	\N	082.3 0823 avaliacao	N	\N	5	E	N
+536	1	082.3.a	FICHAS/FOLHAS DE AVALIAÇÃO	\N	082.3.a 0823a fichas folhas de avaliacao	N	47	5	E	N
 340	1	044.3	OCORRÊNCIA DE SINISTROS	Incluem-se documentos referentes a acidentes, eventos inesperados e não premeditados ocorridos com veículos pertencentes ao órgão e entidade e com veículos locados, tais como: colisão, incêndio, roubo, furto, enchente e alagamento. Quanto à ocorrência de sinistros em imóveis do órgão e entidade, classificar no código 046.3.	044.3 0443 Incluem-se documentos referentes a acidentes eventos inesperados e nao premeditados ocorridos com veiculos pertencentes ao orgao e entidade e com veiculos locados tais como: colisao incendio roubo furto enchente e alagamento. Quanto a ocorrencia de sinistros em imoveis do orgao e entidade classificar no codigo 046.3.	S	5	\N	E	N
 341	1	044.4	CONTROLE DE USO	Incluem-se documentos referentes ao controle e a utilização de veículos, bem como aqueles referentes à requisição e autorização para uso, dentro e fora do horário de expediente. Quanto ao controle de entrada e saída de veículos de visitantes e prestadores de serviço, classificar no código 046.4.	044.4 0444 Incluem-se documentos referentes ao controle e a utilizacao de veiculos bem como aqueles referentes a requisicao e autorizacao para uso dentro e fora do horario de expediente. Quanto ao controle de entrada e saida de veiculos de visitantes e prestadores de servico classificar no codigo 046.4.	S	\N	2	E	N
 342	1	044.5	ESTACIONAMENTO. GARAGEM	Incluem-se documentos referentes à utilização de estacionamento e garagem, do órgão e entidade, por veículos oficiais e por veículos dos servidores. Quanto ao controle de entrada e saída de veículos de visitantes e de prestadores de serviço, classificar no código 046.4.	044.5 0445 Incluem-se documentos referentes a utilizacao de estacionamento e garagem do orgao e entidade por veiculos oficiais e por veiculos dos servidores. Quanto ao controle de entrada e saida de veiculos de visitantes e de prestadores de servico classificar no codigo 046.4.	S	\N	2	E	N
@@ -5560,10 +5463,12 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 345	1	045.01	SEGURO PATRIMONIAL	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1. Quanto aos seguros destinados aos servidores, classificar no código 023.91.	045.01 04501 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1. Quanto aos seguros destinados aos servidores classificar no codigo 023.91.	S	\N	\N	\N	S
 346	1	045.1	FORNECIMENTO DE SERVIÇOS PÚBLICOS ESSENCIAIS	Nas subdivisões deste descritor classificam-se documentos referentes à contratação de empresas concessionárias de serviços públicos essenciais.	045.1 0451 Nas subdivisoes deste descritor classificam-se documentos referentes a contratacao de empresas concessionarias de servicos publicos essenciais.	S	\N	\N	\N	S
 347	1	045.11	ÁGUA E ESGOTAMENTO SANITÁRIO	Incluem-se documentos referentes ao serviço contratado para fornecimento de água e esgotamento sanitário.	045.11 04511 Incluem-se documentos referentes ao servico contratado para fornecimento de agua e esgotamento sanitario.	S	5	\N	E	N
+361	1	045.6	ASSISTÊNCIA VETERINÁRIA	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.6 0456 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
 348	1	045.12	GÁS	Incluem-se documentos referentes ao serviço contratado para fornecimento de gás. Quanto à aquisição de gás e outros materiais engarrafados de uso industrial, para tratamento de água, iluminação e uso médico, bem como gases nobres para uso em laboratório científico, classificar no código 031.12.	045.12 04512 Incluem-se documentos referentes ao servico contratado para fornecimento de gas. Quanto a aquisicao de gas e outros materiais engarrafados de uso industrial para tratamento de agua iluminacao e uso medico bem como gases nobres para uso em laboratorio cientifico classificar no codigo 031.12.	S	5	\N	E	N
 349	1	045.13	ENERGIA ELÉTRICA	Incluem-se documentos referentes ao serviço contratado para fornecimento de energia elétrica.	045.13 04513 Incluem-se documentos referentes ao servico contratado para fornecimento de energia eletrica.	S	5	\N	E	N
 350	1	045.2	MANUTENÇÃO E REPARO DAS INSTALAÇÕES	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.2 0452 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
 351	1	045.21	ELEVADORES	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.21 04521 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
+421	1	061	GESTÃO DE DOCUMENTOS DE ARQUIVO	Nas subdivisões desse descritor classificam-se documentos referentes à elaboração e implantação de programas de gestão da documentação arquivística.	061 061 Nas subdivisoes desse descritor classificam-se documentos referentes a elaboracao e implantacao de programas de gestao da documentacao arquivistica.	S	\N	\N	\N	S
 352	1	045.22	SISTEMAS CENTRAIS DE AR CONDICIONADO	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.22 04522 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
 353	1	045.23	SUBESTAÇÕES ELÉTRICAS E GERADORES	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.23 04523 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
 354	1	045.24	CONSERVAÇÃO PREDIAL	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.24 04524 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
@@ -5573,11 +5478,11 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 358	1	045.33	ADAPTAÇÃO DE USO	Incluem-se documentos referentes às obras de adaptação de uso de bem imóvel do órgão e entidade, tombado ou não, inclusive para acessibilidade.	045.33 04533 Incluem-se documentos referentes as obras de adaptacao de uso de bem imovel do orgao e entidade tombado ou nao inclusive para acessibilidade.	S	5	\N	G	N
 359	1	045.4	VIGILÂNCIA PATRIMONIAL	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1. Quanto à contratação de bombeiro profissional civil como autônomo (pessoa física), classificar no código 018.2. Quanto à constituição de brigada voluntária de incêndio, classificar no código 046.12. Quanto ao funcionamento de sistemas eletrônicos de monitoramento e vigilância, classificar no código 046.2.	045.4 0454 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1. Quanto a contratacao de bombeiro profissional civil como autônomo (pessoa fisica) classificar no codigo 018.2. Quanto a constituicao de brigada voluntaria de incendio classificar no codigo 046.12. Quanto ao funcionamento de sistemas eletrônicos de monitoramento e vigilancia classificar no codigo 046.2.	S	\N	\N	\N	S
 360	1	045.5	ABASTECIMENTO E MANUTENÇÃO DE VEÍCULOS	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1. Quanto à aquisição de combustíveis, lubrificantes e peças de reposição de forma isolada, classificar no código 031.12.	045.5 0455 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1. Quanto a aquisicao de combustiveis lubrificantes e pecas de reposicao de forma isolada classificar no codigo 031.12.	S	\N	\N	\N	S
-361	1	045.6	ASSISTÊNCIA VETERINÁRIA	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.6 0456 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
 362	1	045.7	ADESTRAMENTO	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.7 0457 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
 363	1	046	PROTEÇÃO, GUARDA E SEGURANÇA PATRIMONIAL	Nas subdivisões deste descritor classificam-se documentos referentes às atividades para proteção, guarda e segurança das dependências do órgão e entidade.	046 046 Nas subdivisoes deste descritor classificam-se documentos referentes as atividades para protecao guarda e seguranca das dependencias do orgao e entidade.	S	\N	\N	\N	S
 364	1	046.1	PREVENÇÃO DE INCÊNDIO	Nas subdivisões deste descritor classificam-se documentos referentes ao treinamento de pessoal, instalação e manutenção de extintores, inspeções periódicas dos equipamentos de combate a incêndio e constituição de brigadas voluntárias de incêndio.	046.1 0461 Nas subdivisoes deste descritor classificam-se documentos referentes ao treinamento de pessoal, instalacao e manutencao de extintores, inspecoes periodicas dos equipamentos de combate a incendio e constituicao de brigadas voluntarias de incendio.	S	\N	\N	\N	S
 365	1	046.11	PLANEJAMENTO, ELABORAÇÃO E ACOMPANHAMENTO DE PROJETOS	Incluem-se documentos referentes ao planejamento, à elaboração e à execução de projetos para a prevenção de incêndios, bem como os relatórios de acompanhamento.	046.11 04611 Incluem-se documentos referentes ao planejamento a elaboracao e a execucao de projetos para a prevencao de incendios bem como os relatorios de acompanhamento.	S	5	4	G	N
+537	1	082.4	REQUISITOS ESPECÍFICOS DE CARREIRA	\N	082.4 0824 requisitos especificos de carreira	N	\N	5	E	N
 366	1	046.12	CONSTITUIÇÃO DE BRIGADA VOLUNTÁRIA	Incluem-se documentos referentes à constituição de brigada de incêndio, composta por servidores que se apresentam como voluntários. Quanto à contratação de bombeiro profissional civil como autônomo (pessoa física), classificar no código 029.5. Quanto à contratação de empresa terceirizada para execução de serviços de brigada de incêndio (bombeiro profissional civil), classificar no código 045.4.	046.12 04612 Incluem-se documentos referentes a constituicao de brigada de incendio composta por servidores que se apresentam como voluntarios. Quanto a contratacao de bombeiro profissional civil como autônomo (pessoa fisica) classificar no codigo 029.5. Quanto a contratacao de empresa terceirizada para execucao de servicos de brigada de incendio (bombeiro profissional civil) classificar no codigo 045.4.	S	5	4	G	N
 367	1	046.13	INSTALAÇÃO E MANUTENÇÃO DE EQUIPAMENTOS DE COMBATE A INCÊNDIO	Incluem-se documentos referentes à instalação e à manutenção de equipamentos e sistemas de combate a incêndio, como extintores, mangueiras, machados, luvas e capacetes.	046.13 04613 Incluem-se documentos referentes a instalacao e a manutencao de equipamentos e sistemas de combate a incendio como extintores mangueiras machados luvas e capacetes.	S	\N	2	E	N
 368	1	046.2	MONITORAMENTO. VIGILÂNCIA	Incluem-se documentos referentes ao funcionamento de sistemas eletrônicos de monitoramento e vigilância que utilizam câmeras de circuitos fechados de televisão, instalados nas dependências do órgão e entidade, bem como as gravações resultantes do mesmo. Quanto à instalação, conservação e reparo dos equipamentos, classificar no código 034. Quanto à contratação de empresa terceirizada para execução de serviços de guarda e segurança patrimonial, classificar no código 045.4.	046.2 0462 Incluem-se documentos referentes ao funcionamento de sistemas eletrônicos de monitoramento e vigilancia que utilizam cameras de circuitos fechados de televisao instalados nas dependencias do orgao e entidade bem como as gravacoes resultantes do mesmo. Quanto a instalacao conservacao e reparo dos equipamentos classificar no codigo 034. Quanto a contratacao de empresa terceirizada para execucao de servicos de guarda e seguranca patrimonial classificar no codigo 045.4.	S	\N	2	E	N
@@ -5585,11 +5490,12 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 370	1	046.4	CONTROLE DE PORTARIA	Incluem-se documentos referentes ao controle de entrada e saída de pessoas, materiais, veículos, visitantes e prestadores de serviço, à permissão para entrada e permanência fora do horário de expediente, ao controle de entrega e devolução de chaves e ao registro de ocorrências. Quanto ao controle de uso de veículos, classificar no código 044.4. Quanto à utilização de estacionamento e garagem, do órgão e entidade, por veículos oficiais e por veículos dos servidores, classificar no código 044.5.	046.4 0464 Incluem-se documentos referentes ao controle de entrada e saida de pessoas materiais veiculos visitantes e prestadores de servico a permissao para entrada e permanencia fora do horario de expediente ao controle de entrega e devolucao de chaves e ao registro de ocorrencias. Quanto ao controle de uso de veiculos classificar no codigo 044.4. Quanto a utilizacao de estacionamento e garagem do orgao e entidade por veiculos oficiais e por veiculos dos servidores classificar no codigo 044.5.	S	\N	2	E	N
 371	1	047	CONTROLE DE BENS PATRIMONIAIS	Nas subdivisões deste descritor classificam-se documentos referentes ao acompanhamento e ao controle de bens patrimoniais, que subsidiam a elaboração dos inventários.	047 047 Nas subdivisoes deste descritor classificam-se documentos referentes ao acompanhamento e ao controle de bens patrimoniais, que subsidiam a elaboracao dos inventarios.	S	\N	\N	\N	S
 372	1	047.01	COMISSÃO DE INVENTÁRIO	Incluem-se os documentos referentes à constituição das comissões de inventário, bem como aqueles referentes à definição dos procedimentos para a realização dos mesmos.	047.01 04701 Incluem-se os documentos referentes a constituicao das comissoes de inventario bem como aqueles referentes a definicao dos procedimentos para a realizacao dos mesmos.	S	\N	\N	G	N
+477	1	069.1	TRATAMENTO TÉCNICO DA DOCUMENTAÇÃO ARQUIVÍSTICA PERMANENTE	Nas subdivisões deste descritor classificam-se documentos referentes ao tratamento técnico da documentação arquivística de guarda permanente.	069.1 0691 Nas subdivisoes deste descritor classificam-se documentos referentes ao tratamento tecnico da documentacao arquivistica de guarda permanente.	S	\N	\N	\N	S
 373	1	047.1	INVENTÁRIO DE BENS IMÓVEIS	Incluem-se documentos referentes ao levantamento da situação dos imóveis que se encontram em uso e à verificação da disponibilidade dos imóveis do órgão e entidade, bem como aqueles referentes à emissão de relatórios.	047.1 0471 Incluem-se documentos referentes ao levantamento da situacao dos imoveis que se encontram em uso e a verificacao da disponibilidade dos imoveis do orgao e entidade bem como aqueles referentes a emissao de relatorios.	S	5	\N	G	N
 374	1	047.2	INVENTÁRIO DE VEÍCULOS	Incluem-se documentos referentes ao levantamento da situação dos veículos que se encontram em uso e à verificação da disponibilidade dos veículos do órgão e entidade, bem como aqueles referentes à emissão de relatórios.	047.2 0472 Incluem-se documentos referentes ao levantamento da situacao dos veiculos que se encontram em uso e a verificacao da disponibilidade dos veiculos do orgao e entidade bem como aqueles referentes a emissao de relatorios.	S	5	\N	G	N
 375	1	047.3	INVENTÁRIO DE BENS SEMOVENTES	Incluem-se documentos referentes ao levantamento dos animais que se encontram em uso e à verificação da disponibilidade dos animais do órgão e entidade, bem como aqueles referentes à emissão de relatórios.	047.3 0473 Incluem-se documentos referentes ao levantamento dos animais que se encontram em uso e a verificacao da disponibilidade dos animais do orgao e entidade bem como aqueles referentes a emissao de relatorios.	S	5	\N	G	N
+496	1	073.32	REGISTRO DE LIGAÇÕES	Incluem-se documentos referentes à autorização e ao controle das ligações interurbanas, internacionais e de telefonia móvel.	073.32 07332 Incluem-se documentos referentes a autorizacao e ao controle das ligacoes interurbanas internacionais e de telefonia movel.	S	\N	2	E	N
 376	1	049	OUTRAS AÇÕES REFERENTES À GESTÃO DE BENS PATRIMONIAIS E DE SERVIÇOS	Nas subdivisões deste grupo classificam-se documentos referentes a outras ações de gestão de bens patrimoniais não contempladas nos descritores anteriores.	049 049 Nas subdivisoes deste grupo classificam-se documentos referentes a outras acoes de gestao de bens patrimoniais nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
-681	1	922	CONTROLE DE VISITAS E VISITANTES	Incluem-se documentos referentes ao controle da entrada de visitantes e ao acompanhamento dos mesmos por ocasião das visitas.	922 922 Incluem-se documentos referentes ao controle da entrada de visitantes e ao acompanhamento dos mesmos por ocasiao das visitas.	S	\N	2	E	N
 377	1	049.1	RACIONALIZAÇÃO DO USO DE BENS E SERVIÇOS	Nas subdivisões deste descritor classificam-se documentos referentes à criação, designação, gestão, divulgação e resultados da atuação de grupos de estudo e de comissões de racionalização do uso dos bens patrimoniais e dos serviços públicos essenciais, como redução de uso de veículo oficial e a economia de água e de energia elétrica.	049.1 0491 Nas subdivisoes deste descritor classificam-se documentos referentes a criacao designacao gestao divulgacao e resultados da atuacao de grupos de estudo e de comissoes de racionalizacao do uso dos bens patrimoniais e dos servicos publicos essenciais como reducao de uso de veiculo oficial e a economia de agua e de energia eletrica.	S	\N	\N	\N	S
 378	1	049.11	CRIAÇÃO E ATUAÇÃO DE GRUPOS DE TRABALHO	Incluem-se documentos referentes à criação de grupos de trabalho e comissões de racionalização do uso de bens e serviços, aos registros das deliberações e às tomadas de decisão definidas nas reuniões, tais como: ato de instituição, regras para atuação, designação e substituição de membros, resoluções, atas e relatórios.	049.11 04911 Incluem-se documentos referentes a criacao de grupos de trabalho e comissoes de racionalizacao do uso de bens e servicos aos registros das deliberacoes e as tomadas de decisao definidas nas reunioes tais como: ato de instituicao regras para atuacao designacao e substituicao de membros resolucoes atas e relatorios.	S	5	4	G	N
 379	1	049.12	OPERACIONALIZAÇÃO DE REUNIÕES	Incluem-se documentos referentes à organização das reuniões dos grupos de trabalhos e das comissões de racionalização do uso de bens e serviços, bem como os referentes ao agendamento, convocação, pauta e lista de participantes.	049.12 04912 Incluem-se documentos referentes a organizacao das reunioes dos grupos de trabalhos e das comissoes de racionalizacao do uso de bens e servicos bem como os referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
@@ -5598,6 +5504,8 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 382	1	050.02	CONFORMIDADE DE REGISTRO DE GESTÃO	Incluem-se documentos referentes à conformidade diária e à conformidade de suporte documental, bem como aqueles que comprovam e dão suporte às operações registradas. Quanto à consolidação dos registros contábeis, classificar em 052.23.	050.02 05002 Incluem-se documentos referentes a conformidade diaria e a conformidade de suporte documental bem como aqueles que comprovam e dao suporte as operacoes registradas. Quanto a consolidacao dos registros contabeis classificar em 052.23.	S	5	\N	E	N
 383	1	050.03	CONFORMIDADE CONTÁBIL	Incluem-se documentos referentes aos demonstrativos contábeis decorrentes dos registros da execução orçamentária, financeira e patrimonial, gerados por meio dos sistemas de administração financeira da administração pública. Quanto à consolidação dos registros contábeis, classificar em 052.23.	050.03 05003 Incluem-se documentos referentes aos demonstrativos contabeis decorrentes dos registros da execucao orcamentaria financeira e patrimonial gerados por meio dos sistemas de administracao financeira da administracao publica. Quanto a consolidacao dos registros contabeis classificar em 052.23.	S	5	\N	E	N
 384	1	051	GESTÃO ORÇAMENTÁRIA	Nas subdivisões deste descritor classificam-se os documentos referentes às atividades de programação, gestão e execução do orçamento do órgão e entidade.	051 051 Nas subdivisoes deste descritor classificam-se os documentos referentes as atividades de programacao gestao e execucao do orcamento do orgao e entidade.	S	\N	\N	\N	S
+395	1	052.213	INGRESSO EXTRAORÇAMENTÁRIO	Incluem-se documentos referentes aos recursos financeiros de caráter temporário, que não estão previstos na lei orçamentária anual, como os depósitos em caução, as fianças, a antecipação de receita orçamentária, a emissão de moeda e as entradas compensatórias no ativo e passivo financeiro.	052.213 052213 Incluem-se documentos referentes aos recursos financeiros de carater temporario, que nao estao previstos na lei orcamentaria anual, como os depositos em caucao, as fiancas, a antecipacao de receita orcamentaria, a emissao de moeda e as entradas compensatorias no ativo e passivo financeiro.	S	5	\N	E	N
+559	1	083.12	INTERESSE DO MILITAR	\N	083.12 08312 interesse do militar	N	\N	5	E	N
 385	1	051.1	PROGRAMAÇÃO ORÇAMENTÁRIA	Incluem-se documentos referentes à elaboração do orçamento, como a programação, a previsão e a proposta orçamentária, os estudos de adequação da estrutura programática, a atualização e o aperfeiçoamento das informações constantes do cadastro de ações orçamentárias, a fixação dos referenciais monetários para apresentação das propostas orçamentárias e dos limites de movimentação, de empenho e de pagamento das unidades administrativas do órgão e entidade.	051.1 0511 Incluem-se documentos referentes a elaboracao do orcamento como a programacao a previsao e a proposta orcamentaria os estudos de adequacao da estrutura programatica a atualizacao e o aperfeicoamento das informacoes constantes do cadastro de acoes orcamentarias a fixacao dos referenciais monetarios para apresentacao das propostas orcamentarias e dos limites de movimentacao de empenho e de pagamento das unidades administrativas do orgao e entidade.	S	5	5	G	N
 386	1	051.2	DETALHAMENTO DE DESPESA	Incluem-se documentos referentes ao estabelecimento das metas e à destinação de recursos e receitas por fontes, bem como o detalhamento, a nível operacional, dos projetos e atividades a serem desenvolvidas no exercício, especificando os elementos de despesa e respectivos desdobramentos.	051.2 0512 Incluem-se documentos referentes ao estabelecimento das metas e a destinacao de recursos e receitas por fontes bem como o detalhamento a nivel operacional dos projetos e atividades a serem desenvolvidas no exercicio especificando os elementos de despesa e respectivos desdobramentos.	S	\N	2	E	N
 387	1	051.3	EXECUÇÃO ORÇAMENTÁRIA	Incluem-se documentos referentes à movimentação, interna e externa, e à descentralização de créditos orçamentários pelo órgão e entidade, bem como as transferências, provisões, destaques, estornos e subvenções.	051.3 0513 Incluem-se documentos referentes a movimentacao interna e externa e a descentralizacao de creditos orcamentarios pelo orgao e entidade bem como as transferencias provisoes destaques estornos e subvencoes.	S	5	\N	E	N
@@ -5608,11 +5516,11 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 392	1	052.21	RECEITA	Nas subdivisões deste descritor classificam-se documentos referentes aos ingressos de recursos nos cofres da administração pública, que se desdobram em receitas orçamentárias, quando representam disponibilidades de recursos financeiros para o erário, e em ingressos extraorçamentários, quando representam entradas compensatórias.	052.21 05221 Nas subdivisoes deste descritor classificam-se documentos referentes aos ingressos de recursos nos cofres da administracao publica, que se desdobram em receitas orcamentarias, quando representam disponibilidades de recursos financeiros para o erario, e em ingressos extraorcamentarios, quando representam entradas compensatorias.	S	\N	\N	\N	S
 393	1	052.211	RECEITA CORRENTE	Incluem-se documentos referentes às receitas provenientes de tributos, de contribuições, da exploração do patrimônio estatal (patrimonial), da exploração de atividades econômicas (agropecuária, industrial e de serviços) e de recursos financeiros recebidos de outras pessoas de direito público ou privado destinados a atender as despesas correntes do órgão e entidade. Quanto ao estabelecimento de preços e tarifas pela prestação de serviços por parte do órgão e entidade, classificar no código 059.3. Quanto à devolução ao erário, classificar no código 059.4. Quanto à restituição de rendas arrecadadas, classificar no código 059.5.	052.211 052211 Incluem-se documentos referentes as receitas provenientes de tributos de contribuicoes da exploracao do patrimônio estatal (patrimonial) da exploracao de atividades econômicas (agropecuaria industrial e de servicos) e de recursos financeiros recebidos de outras pessoas de direito publico ou privado destinados a atender as despesas correntes do orgao e entidade. Quanto ao estabelecimento de precos e tarifas pela prestacao de servicos por parte do orgao e entidade classificar no codigo 059.3. Quanto a devolucao ao erario classificar no codigo 059.4. Quanto a restituicao de rendas arrecadadas classificar no codigo 059.5.	S	5	\N	E	N
 394	1	052.212	RECEITA DE CAPITAL	Incluem-se documentos referentes às receitas provenientes de recursos financeiros oriundos da constituição de dívidas, da conversão, em espécie, de bens e direitos, da venda de ações e do recebimento de recursos de outras pessoas de direito público ou privado destinadas a atender despesas de capital e ao superávit do orçamento corrente. Quanto à compra e subscrição de ações, classificar no código 059.1.	052.212 052212 Incluem-se documentos referentes as receitas provenientes de recursos financeiros oriundos da constituicao de dividas da conversao em especie de bens e direitos da venda de acoes e do recebimento de recursos de outras pessoas de direito publico ou privado destinadas a atender despesas de capital e ao superavit do orcamento corrente. Quanto a compra e subscricao de acoes classificar no codigo 059.1.	S	5	\N	E	N
-395	1	052.213	INGRESSO EXTRAORÇAMENTÁRIO	Incluem-se documentos referentes aos recursos financeiros de caráter temporário, que não estão previstos na lei orçamentária anual, como os depósitos em caução, as fianças, a antecipação de receita orçamentária, a emissão de moeda e as entradas compensatórias no ativo e passivo financeiro.	052.213 052213 Incluem-se documentos referentes aos recursos financeiros de carater temporario, que nao estao previstos na lei orcamentaria anual, como os depositos em caucao, as fiancas, a antecipacao de receita orcamentaria, a emissao de moeda e as entradas compensatorias no ativo e passivo financeiro.	S	5	\N	E	N
+560	1	083.12.a	SOLICITAÇÃO DA MOVIMENTAÇÃO, ORDEM DE MOVIMENTAÇÃO, PORTARIA DE MOVIMENTAÇÃO	\N	083.12.a 08312a solicitacao da movimentacao ordem de movimentacao portaria de movimentacao	N	47	5	E	N
+561	1	083.13	NECESSIDADE DO SERVIÇO	\N	083.13 08313 necessidade do servico	N	\N	5	E	N
 396	1	052.22	DESPESA	Nas subdivisões deste descritor classificam-se documentos referentes à utilização de recursos, fixados e especificados na Lei Orçamentária Anual (LOA), para pagamento das despesas efetuadas pelo órgão e entidade.	052.22 05222 Nas subdivisoes deste descritor classificam-se documentos referentes a utilizacao de recursos fixados e especificados na Lei Orcamentaria Anual (LOA) para pagamento das despesas efetuadas pelo orgao e entidade.	S	\N	\N	\N	S
-407	1	053.2	GESTÃO DA CONTA ÚNICA	Incluem-se documentos referentes à transferência de recursos recebidos na rede bancária para a conta única, com os créditos das respectivas unidades gestoras, bem como aqueles referentes às assinaturas autorizadas, às ordens bancárias e aos extratos de contas.	053.2 0532 Incluem-se documentos referentes a transferencia de recursos recebidos na rede bancaria para a conta unica com os creditos das respectivas unidades gestoras bem como aqueles referentes as assinaturas autorizadas as ordens bancarias e aos extratos de contas.	S	5	\N	E	N
-408	1	053.3	GESTÃO DE CONTAS CORRENTES BANCÁRIAS: TIPO A, B, C, D e E	Incluem-se documentos referentes à abertura, movimentação e encerramento das contas correntes, bem como aqueles referentes às assinaturas autorizadas, às ordens bancárias e aos extratos de contas.	053.3 0533 Incluem-se documentos referentes a abertura movimentacao e encerramento das contas correntes bem como aqueles referentes as assinaturas autorizadas as ordens bancarias e aos extratos de contas.	S	5	\N	E	N
-409	1	053.4	GESTÃO DE CONTAS ESPECIAIS	Incluem-se documentos referentes à movimentação dos recursos advindos de empréstimos e créditos externos.	053.4 0534 Incluem-se documentos referentes a movimentacao dos recursos advindos de emprestimos e creditos externos.	S	5	\N	E	N
+404	1	053	OPERAÇÃO BANCÁRIA	Nas subdivisões deste descritor classificam-se documentos referentes às operações de conciliação bancária, aos pagamentos em moeda estrangeira e à movimentação de conta única do Tesouro Nacional e de outras contas correntes. Quanto à Conta-Depósito Vinculada - bloqueada para movimentação (instrumento de gestão de risco para as contratações de prestação de serviços continuados), classificar no código 018.1.	053 053 Nas subdivisoes deste descritor classificam-se documentos referentes as operacoes de conciliacao bancaria aos pagamentos em moeda estrangeira e a movimentacao de conta unica do Tesouro Nacional e de outras contas correntes. Quanto a Conta-Deposito Vinculada - bloqueada para movimentacao (instrumento de gestao de risco para as contratacoes de prestacao de servicos continuados) classificar no codigo 018.1.	S	\N	\N	\N	S
+529	1	082.22	APERFEIÇOAMENTO.ESPECIALIZAÇÃO	\N	082.22 08222 aperfeicoamentoespecializacao	N	\N	5	E	N
 397	1	052.221	DESPESA CORRENTE	Incluem-se documentos referentes à utilização dos recursos provenientes das dotações orçamentárias ordinárias destinadas à manutenção contínua dos serviços públicos, como as despesas de custeio reservadas ao pagamento de pessoal (ativos, inativos, pensionistas, civis e militares) e dos encargos sociais, bem como aqueles referentes às transferências correntes relacionadas às contribuições e subvenções que atendem à manifestação de outras entidades de direito público ou privado, entre elas as transferências de assistência e previdência social e os pagamentos dos juros e encargos da dívida pública. Quanto às despesas decorrentes da compra de material de consumo, classificar no código 031.12. Quanto às despesas decorrentes da contratação de empresas terceirizadas para a prestação de serviços, classificar nos códigos 018, 034, 045.1, 045.2, 045.4, 045.5, 045.6, 045.7, 067, 071 e 918, de acordo com o objeto da contratação.	052.221 052221 Incluem-se documentos referentes a utilizacao dos recursos provenientes das dotacoes orcamentarias ordinarias destinadas a manutencao continua dos servicos publicos como as despesas de custeio reservadas ao pagamento de pessoal (ativos inativos pensionistas civis e militares) e dos encargos sociais bem como aqueles referentes as transferencias correntes relacionadas as contribuicoes e subvencoes que atendem a manifestacao de outras entidades de direito publico ou privado entre elas as transferencias de assistencia e previdencia social e os pagamentos dos juros e encargos da divida publica. Quanto as despesas decorrentes da compra de material de consumo classificar no codigo 031.12. Quanto as despesas decorrentes da contratacao de empresas terceirizadas para a prestacao de servicos classificar nos codigos 018 034 045.1 045.2 045.4 045.5 045.6 045.7 067 071 e 918 de acordo com o objeto da contratacao.	S	5	\N	E	N
 398	1	052.222	DESPESA DE CAPITAL	Incluem-se documentos referentes à utilização dos recursos provenientes das dotações orçamentárias ordinárias destinadas aos investimentos, às inversões financeiras e à amortização da dívida interna e externa. Quanto às despesas decorrentes da compra de material permanente, classificar no código 031.11. Quanto às despesas decorrentes da compra de bens imóveis, classificar no código 041.11. Quanto às despesas decorrentes da contratação de empresas terceirizadas para a execução de obras em bens imóveis do órgão e entidade, classificar nas subdivisões do código 045.3.	052.222 052222 Incluem-se documentos referentes a utilizacao dos recursos provenientes das dotacoes orcamentarias ordinarias destinadas aos investimentos as inversoes financeiras e a amortizacao da divida interna e externa. Quanto as despesas decorrentes da compra de material permanente classificar no codigo 031.11. Quanto as despesas decorrentes da compra de bens imoveis classificar no codigo 041.11. Quanto as despesas decorrentes da contratacao de empresas terceirizadas para a execucao de obras em bens imoveis do orgao e entidade classificar nas subdivisoes do codigo 045.3.	S	5	\N	E	N
 399	1	052.23	DEMONSTRAÇÃO CONTÁBIL	Incluem-se os documentos referentes à consolidação dos registros contábeis, tais como: livro-razão, balanço patrimonial, balanço orçamentário, balanço financeiro, demonstração das variações patrimoniais, demonstrações dos fluxos de caixa, demonstração das mutações do patrimônio líquido, demonstração do resultado econômico e balancetes. Quanto à conformidade de registro de gestão, classificar no código 050.02. Quanto à conformidade contábil, classificar no código 050.03.	052.23 05223 Incluem-se os documentos referentes a consolidacao dos registros contabeis tais como: livro-razao balanco patrimonial balanco orcamentario balanco financeiro demonstracao das variacoes patrimoniais demonstracoes dos fluxos de caixa demonstracao das mutacoes do patrimônio liquido demonstracao do resultado econômico e balancetes. Quanto a conformidade de registro de gestao classificar no codigo 050.02. Quanto a conformidade contabil classificar no codigo 050.03.	S	5	\N	G	N
@@ -5620,8 +5528,12 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 401	1	052.25	GERENCIAMENTO DE BENEFÍCIOS, ESTÍMULOS E INCENTIVOS	Nas subdivisões deste descritor classificam-se documentos referentes aos benefícios, estímulos e incentivos concedidos ao órgão e entidade.	052.25 05225 Nas subdivisoes deste descritor classificam-se documentos referentes aos beneficios, estimulos e incentivos concedidos ao orgao e entidade.	S	\N	\N	\N	S
 402	1	052.251	FINANCEIROS	Incluem-se documentos referentes aos desembolsos efetivos realizados por meio das equalizações de juros e preços, bem como aqueles referentes à assunção das dívidas decorrentes de saldos de obrigações de responsabilidade do Tesouro Nacional, cujos valores constam da lei orçamentária da União.	052.251 052251 Incluem-se documentos referentes aos desembolsos efetivos realizados por meio das equalizacoes de juros e precos bem como aqueles referentes a assuncao das dividas decorrentes de saldos de obrigacoes de responsabilidade do Tesouro Nacional cujos valores constam da lei orcamentaria da Uniao.	S	5	\N	G	N
 403	1	052.252	CREDITÍCIOS	Incluem-se documentos referentes aos subsídios, incentivos fiscais e investimentos destinados ao financiamento de atividades produtivas e voltados ao desenvolvimento econômico regional e social, bem como aqueles referentes aos gastos decorrentes de programas oficiais de crédito, operacionalizados por meio de fundos ou programas com taxa de juros inferior ao custo de captação do governo federal.	052.252 052252 Incluem-se documentos referentes aos subsidios, incentivos fiscais e investimentos destinados ao financiamento de atividades produtivas e voltados ao desenvolvimento econômico regional e social, bem como aqueles referentes aos gastos decorrentes de programas oficiais de credito, operacionalizados por meio de fundos ou programas com taxa de juros inferior ao custo de captacao do governo federal.	S	5	\N	G	N
-404	1	053	OPERAÇÃO BANCÁRIA	Nas subdivisões deste descritor classificam-se documentos referentes às operações de conciliação bancária, aos pagamentos em moeda estrangeira e à movimentação de conta única do Tesouro Nacional e de outras contas correntes. Quanto à Conta-Depósito Vinculada - bloqueada para movimentação (instrumento de gestão de risco para as contratações de prestação de serviços continuados), classificar no código 018.1.	053 053 Nas subdivisoes deste descritor classificam-se documentos referentes as operacoes de conciliacao bancaria aos pagamentos em moeda estrangeira e a movimentacao de conta unica do Tesouro Nacional e de outras contas correntes. Quanto a Conta-Deposito Vinculada - bloqueada para movimentacao (instrumento de gestao de risco para as contratacoes de prestacao de servicos continuados) classificar no codigo 018.1.	S	\N	\N	\N	S
+418	1	059.5	RESTITUIÇÃO DE RENDAS ARRECADADAS	Incluem-se documentos referentes à solicitação de restituição, total ou parcial, ao cidadão, de receitas recolhidas a maior ou indevidamente, por meio de Guia de Recolhimento da União (GRU). Quanto à receita corrente, classificar no código 052.211.	059.5 0595 Incluem-se documentos referentes a solicitacao de restituicao total ou parcial ao cidadao de receitas recolhidas a maior ou indevidamente por meio de Guia de Recolhimento da Uniao (GRU). Quanto a receita corrente classificar no codigo 052.211.	S	5	\N	E	N
 405	1	053.01	CONCILIAÇÃO BANCÁRIA	Incluem-se documentos referentes às conciliações das contas correntes e contábeis, com o controle financeiro interno do órgão e entidade.	053.01 05301 Incluem-se documentos referentes as conciliacoes das contas correntes e contabeis com o controle financeiro interno do orgao e entidade.	S	5	\N	E	N
+406	1	053.1	PAGAMENTO EM MOEDA ESTRANGEIRA	Incluem-se documentos referentes aos pagamentos em moedas diferentes da moeda nacional.	053.1 0531 Incluem-se documentos referentes aos pagamentos em moedas diferentes da moeda nacional.	S	5	\N	E	N
+407	1	053.2	GESTÃO DA CONTA ÚNICA	Incluem-se documentos referentes à transferência de recursos recebidos na rede bancária para a conta única, com os créditos das respectivas unidades gestoras, bem como aqueles referentes às assinaturas autorizadas, às ordens bancárias e aos extratos de contas.	053.2 0532 Incluem-se documentos referentes a transferencia de recursos recebidos na rede bancaria para a conta unica com os creditos das respectivas unidades gestoras bem como aqueles referentes as assinaturas autorizadas as ordens bancarias e aos extratos de contas.	S	5	\N	E	N
+408	1	053.3	GESTÃO DE CONTAS CORRENTES BANCÁRIAS: TIPO A, B, C, D e E	Incluem-se documentos referentes à abertura, movimentação e encerramento das contas correntes, bem como aqueles referentes às assinaturas autorizadas, às ordens bancárias e aos extratos de contas.	053.3 0533 Incluem-se documentos referentes a abertura movimentacao e encerramento das contas correntes bem como aqueles referentes as assinaturas autorizadas as ordens bancarias e aos extratos de contas.	S	5	\N	E	N
+409	1	053.4	GESTÃO DE CONTAS ESPECIAIS	Incluem-se documentos referentes à movimentação dos recursos advindos de empréstimos e créditos externos.	053.4 0534 Incluem-se documentos referentes a movimentacao dos recursos advindos de emprestimos e creditos externos.	S	5	\N	E	N
 410	1	054	CONTROLE EXTERNO. AUDITORIA EXTERNA	Nas subdivisões deste descritor classificam-se documentos referentes às auditorias de contas do órgão e entidade, realizadas pelos órgãos de controle externo. Quanto ao controle interno e à auditoria interna, classificar no código 003.1.	054 054 Nas subdivisoes deste descritor classificam-se documentos referentes as auditorias de contas do orgao e entidade realizadas pelos orgaos de controle externo. Quanto ao controle interno e a auditoria interna classificar no codigo 003.1.	S	\N	\N	\N	S
 411	1	054.1	PRESTAÇÃO DE CONTAS. TOMADA DE CONTAS	Incluem-se documentos referentes à prestação e à tomada de contas realizadas em razão da solicitação do órgão responsável pela auditoria das contas da administração pública, bem como os relatórios, pareceres e certificados de julgamento das contas.	054.1 0541 Incluem-se documentos referentes a prestacao e a tomada de contas realizadas em razao da solicitacao do orgao responsavel pela auditoria das contas da administracao publica bem como os relatorios pareceres e certificados de julgamento das contas.	S	5	\N	G	N
 412	1	054.2	TOMADA DE CONTAS ESPECIAL	Incluem-se documentos referentes à instauração de tomada de contas especial pelo órgão responsável pela auditoria das contas da administração pública, bem como os relatórios, pareceres e certificados de julgamento das contas.	054.2 0542 Incluem-se documentos referentes a instauracao de tomada de contas especial pelo orgao responsavel pela auditoria das contas da administracao publica bem como os relatorios pareceres e certificados de julgamento das contas.	S	5	\N	G	N
@@ -5630,10 +5542,8 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 415	1	059.2	RECOLHIMENTO DE IMPOSTOS, TAXAS E DEMAIS TRIBUTOS	Incluem-se documentos referentes ao pagamento de impostos, taxas e demais tributos pelo órgão e entidade, tais como: taxa de incêndio, contribuição de melhoria, imposto predial e territorial urbano. Quanto ao pagamento dos encargos patronais e recolhimentos efetuados pelo empregador, classificar nas subdivisões do código 023.18. Quanto ao pagamento das despesas condominiais dos bens imóveis, classificar no código 043.2.	059.2 0592 Incluem-se documentos referentes ao pagamento de impostos, taxas e demais tributos pelo orgao e entidade, tais como: taxa de incendio, contribuicao de melhoria, imposto predial e territorial urbano. Quanto ao pagamento dos encargos patronais e recolhimentos efetuados pelo empregador, classificar nas subdivisoes do codigo 023.18. Quanto ao pagamento das despesas condominiais dos bens imoveis, classificar no codigo 043.2.	S	5	\N	E	N
 416	1	059.3	FIXAÇÃO DE CUSTOS DE SERVIÇOS	Incluem-se documentos referentes ao estabelecimento de preços e tarifas pela prestação de serviços por parte do órgão e entidade. Quanto ao recebimento de recursos financeiros recebidos da prestação de serviços por parte do órgão e entidade, classificar no código 052.211.	059.3 0593 Incluem-se documentos referentes ao estabelecimento de precos e tarifas pela prestacao de servicos por parte do orgao e entidade. Quanto ao recebimento de recursos financeiros recebidos da prestacao de servicos por parte do orgao e entidade, classificar no codigo 052.211.	S	5	\N	E	N
 417	1	059.4	DEVOLUÇÃO AO ERÁRIO	Incluem-se documentos referentes à restituição ao Erário de valores percebidos indevidamente pelo servidor. Quanto aos pedidos de retificação de pagamento feitos pelo servidor, classificar no código 023.191. Quanto à receita corrente, classificar no código 052.211.	059.4 0594 Incluem-se documentos referentes a restituicao ao Erario de valores percebidos indevidamente pelo servidor. Quanto aos pedidos de retificacao de pagamento feitos pelo servidor classificar no codigo 023.191. Quanto a receita corrente classificar no codigo 052.211.	S	5	\N	E	N
-418	1	059.5	RESTITUIÇÃO DE RENDAS ARRECADADAS	Incluem-se documentos referentes à solicitação de restituição, total ou parcial, ao cidadão, de receitas recolhidas a maior ou indevidamente, por meio de Guia de Recolhimento da União (GRU). Quanto à receita corrente, classificar no código 052.211.	059.5 0595 Incluem-se documentos referentes a solicitacao de restituicao total ou parcial ao cidadao de receitas recolhidas a maior ou indevidamente por meio de Guia de Recolhimento da Uniao (GRU). Quanto a receita corrente classificar no codigo 052.211.	S	5	\N	E	N
 419	1	060	GESTÃO DA DOCUMENTAÇÃO E DA INFORMAÇÃO	Esta subclasse contempla documentos referentes à produção, controle, classificação, avaliação, destinação e tratamento técnico da documentação arquivística, à aquisição, processamento técnico, controle, distribuição e acesso aos acervos bibliográfico e museológico, bem como aqueles referentes à conservação e preservação de acervos, à produção editorial e à gestão de sistemas e de infraestrutura tecnológica do órgão e entidade.	060 060 Esta subclasse contempla documentos referentes a producao controle classificacao avaliacao destinacao e tratamento tecnico da documentacao arquivistica a aquisicao processamento tecnico controle distribuicao e acesso aos acervos bibliografico e museologico bem como aqueles referentes a conservacao e preservacao de acervos a producao editorial e a gestao de sistemas e de infraestrutura tecnologica do orgao e entidade.	S	\N	\N	\N	S
 420	1	060.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais e às decisões de caráter geral sobre a gestão da documentação e da informação do órgão e entidade.	060.01 06001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais e as decisoes de carater geral sobre a gestao da documentacao e da informacao do orgao e entidade.	S	5	\N	G	N
-421	1	061	GESTÃO DE DOCUMENTOS DE ARQUIVO	Nas subdivisões desse descritor classificam-se documentos referentes à elaboração e implantação de programas de gestão da documentação arquivística.	061 061 Nas subdivisoes desse descritor classificam-se documentos referentes a elaboracao e implantacao de programas de gestao da documentacao arquivistica.	S	\N	\N	\N	S
 422	1	061.01	CONSTITUIÇÃO DA COMISSÃO PERMANENTE DE AVALIAÇÃO DE DOCUMENTOS (CPAD)	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos para a constituição e atuação da comissão.	061.01 06101 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos para a constituicao e atuacao da comissao.	S	\N	\N	\N	S
 423	1	061.011	COMPOSIÇÃO E ATUAÇÃO	Incluem-se documentos referentes à constituição da CPAD, à indicação, designação e substituição de membros e à instalação e posse da comissão, bem como aqueles referentes ao registro das deliberações e às tomadas de decisões, resoluções, atas e relatórios.	061.011 061011 Incluem-se documentos referentes a constituicao da CPAD a indicacao designacao e substituicao de membros e a instalacao e posse da comissao bem como aqueles referentes ao registro das deliberacoes e as tomadas de decisoes resolucoes atas e relatorios.	S	5	4	G	N
 424	1	061.012	OPERACIONALIZAÇÃO DE REUNIÕES	Incluem-se documentos referentes à organização das reuniões da CPAD, bem como aqueles referentes ao agendamento, convocação, pauta e lista de participantes.	061.012 061012 Incluem-se documentos referentes a organizacao das reunioes da CPAD bem como aqueles referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
@@ -5644,6 +5554,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 429	1	061.5	APLICAÇÃO DOS INSTRUMENTOS TÉCNICOS DE GESTÃO DE DOCUMENTOS	Nas subdivisões deste descritor classificam-se documentos referentes à aplicação do código de classificação e da tabela de temporalidade e destinação de documentos de arquivo relativos às atividades-meio e atividades-fim do órgão e entidade.	061.5 0615 Nas subdivisoes deste descritor classificam-se documentos referentes a aplicacao do codigo de classificacao e da tabela de temporalidade e destinacao de documentos de arquivo relativos as atividades-meio e atividades-fim do orgao e entidade.	S	\N	\N	\N	S
 430	1	061.51	CLASSIFICAÇÃO	Incluem-se documentos referentes aos procedimentos para aplicação dos códigos de classificação de documentos de arquivo relativos às atividades-meio e atividades-fim do órgão e entidade, bem como aqueles referentes à metodologia utilizada para a ordenação dos documentos.	061.51 06151 Incluem-se documentos referentes aos procedimentos para aplicacao dos codigos de classificacao de documentos de arquivo relativos as atividades-meio e atividades-fim do orgao e entidade bem como aqueles referentes a metodologia utilizada para a ordenacao dos documentos.	S	\N	2	E	N
 431	1	061.52	AVALIAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos para aplicação dos prazos de guarda e da destinação final definidos nas tabelas de temporalidade e destinação de documentos de arquivo relativas às atividades-meio e atividades-fim do órgão e entidade, bem como aqueles referentes à metodologia utilizada para a seleção dos documentos.	061.52 06152 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos para aplicacao dos prazos de guarda e da destinacao final definidos nas tabelas de temporalidade e destinacao de documentos de arquivo relativas as atividades-meio e atividades-fim do orgao e entidade bem como aqueles referentes a metodologia utilizada para a selecao dos documentos.	S	\N	\N	\N	S
+476	1	069	OUTRAS AÇÕES REFERENTES À GESTÃO DA DOCUMENTAÇÃO E DA INFORMAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes a outras ações de gestão da documentação e da informação não contempladas nos descritores anteriores.	069 069 Nas subdivisoes deste descritor classificam-se documentos referentes a outras acoes de gestao da documentacao e da informacao nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
 432	1	061.521	ELIMINAÇÃO	Incluem-se documentos referentes aos procedimentos para análise e seleção de documentos de arquivo, bem  como aqueles referentes à elaboração de listagens de eliminação, de planos de destinação, de editais de ciência de eliminação e de termos de eliminação.	061.521 061521 Incluem-se documentos referentes aos procedimentos para analise e selecao de documentos de arquivo bem  como aqueles referentes a elaboracao de listagens de eliminacao de planos de destinacao de editais de ciencia de eliminacao e de termos de eliminacao.	S	\N	5	G	N
 433	1	061.522	TRANSFERÊNCIA	Incluem-se documentos referentes aos procedimentos para controle da passagem de documentos do arquivo corrente (arquivos setoriais) para o arquivo intermediário (arquivo central ou geral), tais como: listagem descritiva do acervo, guia e termo de transferência.	061.522 061522 Incluem-se documentos referentes aos procedimentos para controle da passagem de documentos do arquivo corrente (arquivos setoriais) para o arquivo intermediario (arquivo central ou geral), tais como: listagem descritiva do acervo, guia e termo de transferencia.	S	\N	5	G	N
 434	1	061.523	RECOLHIMENTO	Incluem-se documentos referentes aos procedimentos para controle da passagem de documentos do arquivo intermediário para o arquivo permanente, tais como: listagem descritiva do acervo, guia e termo de recolhimento.	061.523 061523 Incluem-se documentos referentes aos procedimentos para controle da passagem de documentos do arquivo intermediario para o arquivo permanente, tais como: listagem descritiva do acervo, guia e termo de recolhimento.	S	\N	5	G	N
@@ -5662,6 +5573,8 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 447	1	063	CONTROLE DE ACESSO E DE MOVIMENTAÇÃO DE ACERVOS	Nas subdivisões deste descritor classificam-se documentos referentes ao acesso, às consultas e aos empréstimos de documentos arquivísticos, bibliográficos e museológicos, bem como aqueles referentes ao controle da movimentação dos acervos.	063 063 Nas subdivisoes deste descritor classificam-se documentos referentes ao acesso as consultas e aos emprestimos de documentos arquivisticos bibliograficos e museologicos bem como aqueles referentes ao controle da movimentacao dos acervos.	S	\N	\N	\N	S
 448	1	063.1	CONSULTAS	Incluem-se documentos referentes ao acesso e ao controle das consultas aos documentos arquivísticos, bibliográficos e museológicos, bem como aqueles referentes ao registro dos consulentes e usuários. Quanto aos pedidos de acesso à informação e aos documentos institucionais, encaminhados ao SIC, classificar no código 002.11.	063.1 0631 Incluem-se documentos referentes ao acesso e ao controle das consultas aos documentos arquivisticos bibliograficos e museologicos bem como aqueles referentes ao registro dos consulentes e usuarios. Quanto aos pedidos de acesso a informacao e aos documentos institucionais encaminhados ao SIC classificar no codigo 002.11.	S	\N	2	E	N
 449	1	063.2	EMPRÉSTIMOS	Incluem-se documentos referentes ao controle dos empréstimos de documentos arquivísticos, bibliográficos e museológicos.	063.2 0632 Incluem-se documentos referentes ao controle dos emprestimos de documentos arquivisticos, bibliograficos e museologicos.	S	1	\N	E	N
+530	1	082.22.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.22.a 08222a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
+531	1	082.23	ESTADO-MAIOR	\N	082.23 08223 estado-maior	N	\N	5	E	N
 450	1	063.3	MOVIMENTAÇÃO DE ACERVOS	Incluem-se documentos referentes à gestão de depósitos e ao controle da localização e da movimentação dos documentos arquivísticos, bibliográficos e museológicos entre as áreas de armazenamento e as áreas destinadas às consultas.	063.3 0633 Incluem-se documentos referentes a gestao de depositos e ao controle da localizacao e da movimentacao dos documentos arquivisticos bibliograficos e museologicos entre as areas de armazenamento e as areas destinadas as consultas.	S	\N	2	E	N
 451	1	063.4	MUDANÇA DE ACERVOS	Incluem-se documentos referentes ao controle da mudança de acervos arquivísticos, bibliográficos e museológicos, distinta da movimentação de acervos, motivado pela necessidade de mudança de imóvel ou dentro do mesmo imóvel.	063.4 0634 Incluem-se documentos referentes ao controle da mudanca de acervos arquivisticos, bibliograficos e museologicos, distinta da movimentacao de acervos, motivado pela necessidade de mudanca de imovel ou dentro do mesmo imovel.	S	5	5	E	N
 452	1	064	CONSERVAÇÃO E PRESERVAÇÃO DE ACERVOS	Nas subdivisões deste descritor classificam-se documentos referentes à desinfestação, higienização e controle das áreas de armazenamento, à encadernação e à reformatação e restauração dos documentos.	064 064 Nas subdivisoes deste descritor classificam-se documentos referentes a desinfestacao higienizacao e controle das areas de armazenamento a encadernacao e a reformatacao e restauracao dos documentos.	S	\N	\N	\N	S
@@ -5678,7 +5591,6 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 463	1	065.3	PROMOÇÃO, DIVULGAÇÃO E DISTRIBUIÇÃO	Incluem-se documentos referentes à promoção, à divulgação, à doação e à permuta da produção editorial do órgão e entidade. Quanto à aquisição de acervos bibliográficos por doação e permuta, classificar nos códigos 062.12 e 062.13, respectivamente.	065.3 0653 Incluem-se documentos referentes a promocao a divulgacao a doacao e a permuta da producao editorial do orgao e entidade. Quanto a aquisicao de acervos bibliograficos por doacao e permuta classificar nos codigos 062.12 e 062.13 respectivamente.	S	\N	5	E	N
 464	1	066	GESTÃO DE TECNOLOGIA DA INFORMAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes ao desenvolvimento de programas, instalação de equipamentos, implantação e controle de sistemas informatizados, bem como aqueles referentes à administração da infraestrutura tecnológica.	066 066 Nas subdivisoes deste descritor classificam-se documentos referentes ao desenvolvimento de programas instalacao de equipamentos implantacao e controle de sistemas informatizados bem como aqueles referentes a administracao da infraestrutura tecnologica.	S	\N	\N	\N	S
 465	1	066.1	DESENVOLVIMENTO E CONTROLE DE SISTEMAS INFORMATIZADOS	Incluem-se documentos referentes ao desenvolvimento, implantação, manutenção e controle de programas e sistemas informatizados, tais como: manual de usuário desenvolvido pelo órgão e entidade, código fonte, especificação de requisitos, diagramas, desenhos de telas, gerência de configuração e projetos de bancos de dados.	066.1 0661 Incluem-se documentos referentes ao desenvolvimento, implantacao, manutencao e controle de programas e sistemas informatizados, tais como: manual de usuario desenvolvido pelo orgao e entidade, codigo fonte, especificacao de requisitos, diagramas, desenhos de telas, gerencia de configuracao e projetos de bancos de dados.	S	5	\N	G	N
-496	1	073.32	REGISTRO DE LIGAÇÕES	Incluem-se documentos referentes à autorização e ao controle das ligações interurbanas, internacionais e de telefonia móvel.	073.32 07332 Incluem-se documentos referentes a autorizacao e ao controle das ligacoes interurbanas internacionais e de telefonia movel.	S	\N	2	E	N
 466	1	066.2	INSTALAÇÃO DE EQUIPAMENTOS	Incluem-se documentos referentes à instalação de equipamentos para a implementação de programas e sistemas, tais como: manual dos equipamentos, termo de garantia, manual de usuário desenvolvido pela empresa proprietária do equipamento, licença e registro de uso.	066.2 0662 Incluem-se documentos referentes a instalacao de equipamentos para a implementacao de programas e sistemas tais como: manual dos equipamentos termo de garantia manual de usuario desenvolvido pela empresa proprietaria do equipamento licenca e registro de uso.	S	5	\N	E	N
 467	1	066.3	ADMINISTRAÇÃO DA INFRAESTRUTURA TECNOLÓGICA	Nas subdivisões deste descritor classificam-se documentos referentes ao desenvolvimento do projeto de infraestrutura tecnológica, bem como aqueles referentes à manutenção, gerenciamento e uso da infraestrutura.	066.3 0663 Nas subdivisoes deste descritor classificam-se documentos referentes ao desenvolvimento do projeto de infraestrutura tecnologica bem como aqueles referentes a manutencao gerenciamento e uso da infraestrutura.	S	\N	\N	\N	S
 468	1	066.31	PROJETO DE MANUTENÇÃO	Incluem-se documentos referentes ao projeto de manutenção da infraestrutura tecnológica, tais como: projeto da rede e configuração dos servidores.	066.31 06631 Incluem-se documentos referentes ao projeto de manutencao da infraestrutura tecnologica, tais como: projeto da rede e configuracao dos servidores.	S	5	\N	G	N
@@ -5689,12 +5601,10 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 473	1	066.9	OUTRAS AÇÕES REFERENTES À GESTÃO DE TECNOLOGIA DA INFORMAÇÃO	Na subdivisão deste descritor classificam-se documentos referentes a outras ações de gestão de tecnologia da informação não contempladas nos descritores anteriores.	066.9 0669 Na subdivisao deste descritor classificam-se documentos referentes a outras acoes de gestao de tecnologia da informacao nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
 474	1	066.91	CONTROLE DO SUPORTE TÉCNICO	Incluem-se documentos referentes ao controle do suporte técnico prestado para utilização dos sistemas informatizados. Quanto a contratação de prestação de serviços por empresas terceirizadas para a gestão de sistemas e de infraestrutura tecnológica, classificar no código 018.1.	066.91 06691 Incluem-se documentos referentes ao controle do suporte tecnico prestado para utilizacao dos sistemas informatizados. Quanto a contratacao de prestacao de servicos por empresas terceirizadas para a gestao de sistemas e de infraestrutura tecnologica, classificar no codigo 018.1.	S	\N	5	E	N
 475	1	067	CONTRATAÇÃO DE PRESTAÇÃO DE SERVIÇOS	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	067 067 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
-476	1	069	OUTRAS AÇÕES REFERENTES À GESTÃO DA DOCUMENTAÇÃO E DA INFORMAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes a outras ações de gestão da documentação e da informação não contempladas nos descritores anteriores.	069 069 Nas subdivisoes deste descritor classificam-se documentos referentes a outras acoes de gestao da documentacao e da informacao nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
-477	1	069.1	TRATAMENTO TÉCNICO DA DOCUMENTAÇÃO ARQUIVÍSTICA PERMANENTE	Nas subdivisões deste descritor classificam-se documentos referentes ao tratamento técnico da documentação arquivística de guarda permanente.	069.1 0691 Nas subdivisoes deste descritor classificam-se documentos referentes ao tratamento tecnico da documentacao arquivistica de guarda permanente.	S	\N	\N	\N	S
 478	1	069.11	ARRANJO E DESCRIÇÃO	Incluem-se documentos referentes à metodologia adotada para o desenvolvimento das atividades de identificação, arranjo e descrição dos documentos arquivísticos de guarda permanente.	069.11 06911 Incluem-se documentos referentes a metodologia adotada para o desenvolvimento das atividades de identificacao arranjo e descricao dos documentos arquivisticos de guarda permanente.	S	2	\N	G	N
 479	1	069.12	ELABORAÇÃO DE INSTRUMENTOS DE PESQUISA	Incluem-se documentos referentes à elaboração dos instrumentos que permitem a identificação e a localização dos documentos arquivísticos de guarda permanente, tais como: catálogo, guia, inventário, listagem descritiva do acervo, repertório e tabela de equivalência.	069.12 06912 Incluem-se documentos referentes a elaboracao dos instrumentos que permitem a identificacao e a localizacao dos documentos arquivisticos de guarda permanente tais como: catalogo guia inventario listagem descritiva do acervo repertorio e tabela de equivalencia.	S	5	\N	G	N
 480	1	069.2	FORNECIMENTO DE CÓPIAS DE DOCUMENTOS	Incluem-se documentos referentes à requisição e ao controle da reprodução de documentos por impressão e por outros serviços reprográficos. Quanto à reformatação de acervos por microfilmagem e digitalização, classificar nas subdivisões do código 064.3.	069.2 0692 Incluem-se documentos referentes a requisicao e ao controle da reproducao de documentos por impressao e por outros servicos reprograficos. Quanto a reformatacao de acervos por microfilmagem e digitalizacao classificar nas subdivisoes do codigo 064.3.	S	\N	2	E	N
-533	1	082.24	ALTOS ESTUDOS MILITARES	\N	082.24 08224 altos estudos militares	N	\N	5	E	N
+532	1	082.23.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.23.a 08223a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
 481	1	069.3	PUBLICAÇÃO DE MATÉRIAS	Incluem-se documentos referentes à publicação de matérias, da competência do órgão e entidade, em diários oficiais, em periódicos de grande circulação e em boletins internos e similares. Quanto aos boletins administrativos e de serviço, classificar no código 010.01. Quanto aos boletins de pessoal, classificar no código 020.01.	069.3 0693 Incluem-se documentos referentes a publicacao de materias da competencia do orgao e entidade em diarios oficiais em periodicos de grande circulacao e em boletins internos e similares. Quanto aos boletins administrativos e de servico classificar no codigo 010.01. Quanto aos boletins de pessoal classificar no codigo 020.01.	S	5	\N	E	N
 482	1	070	GESTÃO DOS SERVIÇOS POSTAIS E DE TELECOMUNICAÇÕES	Esta subclasse contempla documentos referentes às atividades desenvolvidas pelo órgão e entidade para a gestão dos serviços postais e de telecomunicações (radiofrequência, telex, telefonia, fax e transmissão de dados, voz e imagem), bem como aqueles referentes à contratação de prestação de serviços de instalação, manutenção e reparo e à autorização e controle de uso.	070 070 Esta subclasse contempla documentos referentes as atividades desenvolvidas pelo orgao e entidade para a gestao dos servicos postais e de telecomunicacoes (radiofrequencia telex telefonia fax e transmissao de dados voz e imagem) bem como aqueles referentes a contratacao de prestacao de servicos de instalacao manutencao e reparo e a autorizacao e controle de uso.	S	\N	\N	\N	S
 483	1	070.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais e às decisões de caráter geral sobre a gestão dos serviços postais e de telecomunicações do órgão e entidade.	070.01 07001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais e as decisoes de carater geral sobre a gestao dos servicos postais e de telecomunicacoes do orgao e entidade.	S	5	\N	G	N
@@ -5710,6 +5620,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 493	1	073.2	SERVIÇO DE TELEX	Incluem-se documentos referentes à autorização e ao controle do uso dos serviços de telex.	073.2 0732 Incluem-se documentos referentes a autorizacao e ao controle do uso dos servicos de telex.	S	\N	2	E	N
 494	1	073.3	SERVIÇO DE TELEFONIA. SERVIÇO DE FAX	Nas subdivisões desse descritor classificam-se os documentos referentes à autorização e ao controle da utilização dos serviços de telefonia e de fax.	073.3 0733 Nas subdivisoes desse descritor classificam-se os documentos referentes a autorizacao e ao controle da utilizacao dos servicos de telefonia e de fax.	S	\N	\N	\N	S
 495	1	073.31	TRANSFERÊNCIA DE PROPRIEDADE OU TITULARIDADE	Incluem-se documentos referentes à transferência de propriedade ou titularidade das linhas telefônicas e dos serviços telefônicos fixo ou móvel.	073.31 07331 Incluem-se documentos referentes a transferencia de propriedade ou titularidade das linhas telefônicas e dos servicos telefônicos fixo ou movel.	S	2	\N	E	N
+533	1	082.24	ALTOS ESTUDOS MILITARES	\N	082.24 08224 altos estudos militares	N	\N	5	E	N
 497	1	073.33	DIVULGAÇÃO DE LISTAS TELEFÔNICAS INTERNAS	Incluem-se as listagens de servidores e unidades administrativas, com os respectivos ramais internos, elaboradas com o objetivo de facilitar e agilizar a comunicação interna no órgão e entidade.	073.33 07333 Incluem-se as listagens de servidores e unidades administrativas, com os respectivos ramais internos, elaboradas com o objetivo de facilitar e agilizar a comunicacao interna no orgao e entidade.	S	\N	\N	E	N
 498	1	073.4	SERVIÇO DE TRANSMISSÃO DE DADOS, VOZ E IMAGEM	Incluem-se documentos referentes à autorização e ao controle do uso dos serviços de acesso à internet, assinatura de televisão e videoconferência.	073.4 0734 Incluem-se documentos referentes a autorizacao e ao controle do uso dos servicos de acesso a internet assinatura de televisao e videoconferencia.	S	\N	2	E	N
 499	1	080	PESSOAL MILITAR - ver anexo 1	Aprovada pela Resolução n. 21, de 4 de agosto de 2004, do Conselho Nacional de Arquivos   (Conarq).	080 080 Aprovada pela Resolucao n. 21, de 4 de agosto de 2004, do Conselho Nacional de Arquivos   (Conarq).	S	\N	\N	\N	S
@@ -5721,6 +5632,8 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 505	1	080.21.c	IDENTIDADE PROVISÓRIA	Condicional "Enquanto vigora" convencionada para 1 ano no corrente, a contar da perda da validade do documento.	080.21.c 08021c identidade provisoria condicional enquanto vigora convencionada para 1 ano no corrente a contar da perda da validade do documento	N	1	1	E	N
 506	1	080.22	CONCESSÃO DE PASSAPORTE: DIPLOMÁTICO E/OU OFICIAL	Condicional "Enquanto vigora" convencionada para 1 ano no corrente, a contar da perda da validade do documento.	080.22 08022 concessao de passaporte: diplomatico e ou oficial condicional enquanto vigora convencionada para 1 ano no corrente a contar da perda da validade do documento	N	1	1	E	N
 507	1	080.3	ASSENTAMENTOS INDIVIDUAIS.CADASTRO (Incluem-se ficha de apresentação; ficha padrão Pasep e ficha de código de especialidade, bem como os documentos referentes à contagem de tempo de serviço e à concessão e cessação de porte de arma)	\N	080.3 0803 assentamentos individuaiscadastro incluem-se ficha de apresentacao; ficha padrao pasep e ficha de codigo de especialidade bem como os documentos referentes a contagem de tempo de servico e a concessao e cessacao de porte de arma	N	\N	5	E	N
+562	1	083.13.a	PROPOSTA DE PLANO DE MOVIMENTAÇÃO, SOLICITAÇÕES DE ÓRGÃOS DE DIREÇÃO-GERAL OU SETORIAL, INCOMPATIBILIDADE DE POSTO, MATRÍCULA, TÉRMINO DE CURSO, INTERCÂMBIO E A BEM DA DISCIPLINA	\N	083.13.a 08313a proposta de plano de movimentacao solicitacoes de orgaos de direcao-geral ou setorial incompatibilidade de posto matricula termino de curso intercambio e a bem da disciplina	N	47	5	E	N
+563	1	083.14	MOTIVO DE JUSTIÇA	\N	083.14 08314 motivo de justica	N	\N	5	E	N
 508	1	080.3.a	FOLHAS DE ALTERAÇÕES, CADERNETA REGISTRO CADASTRO, CADERNETA SANITÁRIA, DECLARAÇÃO/CADASTRO DE DEPENDENTES, FICHA INDIVIDUAL, DECLARAÇÃO/ALTERAÇÃO DE BENEFICIÁRIOS, TERMO DE OPÇÃO OU DE RETIFICAÇÃO DA LICENÇA ESPECIAL, TERMO DE RENÚNCIA DE PENSÃO	A Comissão Permanente de Avaliação de Documentos, findo o prazo total de guarda, poderá determinar a preservação de alguns conjuntos documentais de relevância para a Força.  Condicional "Enquanto o militar permanecer na ativa" convencionada para 1 ano no corrente, a contar da transferência do militar para a reserva.	080.3.a 0803a folhas de alteracoes caderneta registro cadastro caderneta sanitaria declaracao cadastro de dependentes ficha individual declaracao alteracao de beneficiarios termo de opcao ou de retificacao da licenca especial termo de renuncia de pensao a comissao permanente de avaliacao de documentos findo o prazo total de guarda podera determinar a preservacao de alguns conjuntos documentais de relevancia para a forca condicional enquanto o militar permanecer na ativa convencionada para 1 ano no corrente a contar da transferencia do militar para a reserva	N	130	1	E	N
 509	1	080.3.b	FICHA DE APRESENTAÇÃO, CONTAGEM DE TEMPO DE SERVIÇO, FICHA PADRÃO PASEP, FICHA DE CÓDIGO DE ESPECIALIDADE, CONCESSÃO E CESSAÇÃO DE PORTE DE ARMA	Condicional "Enquanto o militar permanecer na ativa" convencionada para 1 ano no corrente, a contar da transferência do militar para a reserva.	080.3.b 0803b ficha de apresentacao contagem de tempo de servico ficha padrao pasep ficha de codigo de especialidade concessao e cessacao de porte de arma condicional enquanto o militar permanecer na ativa convencionada para 1 ano no corrente a contar da transferencia do militar para a reserva	N	5	1	E	N
 510	1	081	INGRESSO NAS FORÇAS ARMADAS	Nas subdivisões deste descritor classificam-se os documentos referentes à promoção de visitas culturais, educativas e técnicas ao órgão e entidade.	081 081 ingresso nas forcas armadas nas subdivisoes deste descritor classificam-se os documentos referentes a promocao de visitas culturais educativas e tecnicas ao orgao e entidade	N	\N	\N	\N	S
@@ -5738,14 +5651,107 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 522	1	081.9	OUTROS ASSUNTOS REFERENTES A INGRESSO NAS FORÇAS ARMADAS	Nas subdivisões deste descritor classificam-se documentos referentes às comunicações ocasionais e genéricas efetuadas pelo órgão e entidade no relacionamento com outras instituições públicas e privadas e que não dizem respeito ao desenvolvimento de suas atividades específicas.	081.9 0819 outros assuntos referentes a ingresso nas forcas armadas nas subdivisoes deste descritor classificam-se documentos referentes as comunicacoes ocasionais e genericas efetuadas pelo orgao e entidade no relacionamento com outras instituicoes publicas e privadas e que nao dizem respeito ao desenvolvimento de suas atividades especificas	N	\N	\N	\N	S
 523	1	082	PLANO DE CARREIRA	Nas subdivisões deste descritor classificam-se documentos referentes à promoção, elaboração e execução de programas de capacitação, desenvolvimento e valorização do servidor.	082 082 plano de carreira nas subdivisoes deste descritor classificam-se documentos referentes a promocao elaboracao e execucao de programas de capacitacao desenvolvimento e valorizacao do servidor	N	\N	\N	\N	S
 524	1	082.1	PROMOÇÃO	\N	082.1 0821 promocao	N	\N	5	E	N
+597	1	085.61.a	FICHAS FINANCEIRAS E FOLHAS DE PAGAMENTO	\N	085.61.a 08561a fichas financeiras e folhas de pagamento	N	125	5	E	N
 525	1	082.1.a	ANTIGUIDADE, POSICIONAMENTO E COGITAÇÃO/INCLUSÃO QUADRO DE ACESSO, FAIXA DE COGITAÇÃO, LISTA DE ESCOLHA, ATO, RESSARCIMENTO/RECONSIDERAÇÃO, RECONTAGEM DE PONTOS, CORREÇÃO, RETIFICAÇÃO, MÉRITOS, INQUÉRITOS, PROMOÇÃO POST-MORTEM E POR MOTIVO DE JUSTIÇA	Antiguidade, posicionamento e cogitação/inclusão no quadro de acesso, faixa de cogitação, lista de escolha, ato de promoção, ressarcimento/reconsideração, recontagem de pontos, correção, retificação, méritos relativos, informações sobre a existência de inquéritos e ações judiciais envolvendo os avaliados, promoção post-mortem e por motivo de justiça.  Condicional "Enquanto o militar permanecer na ativa" convencionada para 1 ano no corrente, a contar da transferência do militar para a reserva.	082.1.a 0821a antiguidade posicionamento e cogitacao inclusao quadro de acesso faixa de cogitacao lista de escolha ato ressarcimento reconsideracao recontagem de pontos correcao retificacao meritos inqueritos promocao post-mortem e por motivo de justica antiguidade posicionamento e cogitacao inclusao no quadro de acesso faixa de cogitacao lista de escolha ato de promocao ressarcimento reconsideracao recontagem de pontos correcao retificacao meritos relativos informacoes sobre a existencia de inqueritos e acoes judiciais envolvendo os avaliados promocao post-mortem e por motivo de justica condicional enquanto o militar permanecer na ativa convencionada para 1 ano no corrente a contar da transferencia do militar para a reserva	N	130	1	E	N
 526	1	082.2	CURSOS	Nas subdivisões deste descritor classificam-se documentos referentes ao desenvolvimento de programas, instalação de equipamentos, implantação e controle de sistemas informatizados, bem como aqueles referentes à administração da infraestrutura tecnológica.	082.2 0822 cursos nas subdivisoes deste descritor classificam-se documentos referentes ao desenvolvimento de programas instalacao de equipamentos implantacao e controle de sistemas informatizados bem como aqueles referentes a administracao da infraestrutura tecnologica	N	\N	\N	\N	S
 527	1	082.21	FORMAÇÃO. ADAPTAÇÃO	\N	082.21 08221 formacao adaptacao	N	\N	5	E	N
 528	1	082.21.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CONCURSOS	\N	082.21.a 08221a designacao matricula conclusao cancelamento trancamento e ou desligamento dos concursos	N	47	5	E	N
-529	1	082.22	APERFEIÇOAMENTO.ESPECIALIZAÇÃO	\N	082.22 08222 aperfeicoamentoespecializacao	N	\N	5	E	N
-530	1	082.22.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.22.a 08222a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
-531	1	082.23	ESTADO-MAIOR	\N	082.23 08223 estado-maior	N	\N	5	E	N
-532	1	082.23.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.23.a 08223a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
+538	1	082.4.a	MANOBRA, TEMPO DE TROPA, TEMPO DE EMBARQUE, VIVÊNCIA NACIONAL, DIAS DE MAR, ATIVIDADE BÉLICA, HORAS DE VOO	\N	082.4.a 0824a manobra tempo de tropa tempo de embarque vivencia nacional dias de mar atividade belica horas de voo	N	47	5	E	N
+539	1	082.5	CURSOS COMPLEMENTARES	\N	082.5 0825 cursos complementares	N	\N	\N	\N	S
+540	1	082.51	ADESTRAMENTO	\N	082.51 08251 adestramento	N	\N	5	E	N
+541	1	082.51.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS DIVERSOS TIPOS DE ADESTRAMENTO	\N	082.51.a 08251a designacao matricula conclusao cancelamento trancamento e ou desligamento dos diversos tipos de adestramento	N	47	5	E	N
+542	1	082.52	PÓS-GRADUAÇÃO LATO SENSU	\N	082.52 08252 pos-graduacao lato sensu	N	\N	5	E	N
+543	1	082.52.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.52.a 08252a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
+544	1	082.53	QUALIFICAÇÃO TÉCNICA ESPECIAL	\N	082.53 08253 qualificacao tecnica especial	N	\N	5	E	N
+545	1	082.53.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.53.a 08253a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
+546	1	082.54	PÓS-GRADUAÇÃO STRICTO SENSU	\N	082.54 08254 pos-graduacao stricto sensu	N	\N	5	E	N
+547	1	082.54.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.54.a 08254a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
+548	1	082.55	PÓS-DOUTORADO	\N	082.55 08255 pos-doutorado	N	\N	5	E	N
+549	1	082.55.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.55.a 08255a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
+550	1	082.6	PRORROGAÇÃO DE TEMPO DE SERVIÇO. REENGAJAMENTO	\N	082.6 0826 prorrogacao de tempo de servico reengajamento	N	\N	5	E	N
+551	1	082.6.a	REQUERIMENTOS, AVALIAÇÕES, PARECERES E DESPACHOS	\N	082.6.a 0826a requerimentos avaliacoes pareceres e despachos	N	47	5	E	N
+552	1	082.7	TRANSPOSIÇÃO DE QUADRO	\N	082.7 0827 transposicao de quadro	N	\N	5	E	N
+553	1	082.7.a	REQUERIMENTOS, AVALIAÇÕES, PARECERES E DESPACHOS	\N	082.7.a 0827a requerimentos avaliacoes pareceres e despachos	N	47	5	E	N
+554	1	082.9	OUTROS ASSUNTOS REFERENTES A PLANO DE CARREIRA	\N	082.9 0829 outros assuntos referentes a plano de carreira	N	\N	\N	\N	S
+555	1	083	MOVIMENTAÇÃO. DESTAQUE. ADIÇÃO. EXCLUSÃO DO SERVIÇO ATIVO: MAPAS DE LOTAÇÃO DE OFICIAIS E PRAÇAS	\N	083 083 movimentacao destaque adicao exclusao do servico ativo: mapas de lotacao de oficiais e pracas	N	\N	5	E	N
+556	1	083.1	MOVIMENTAÇÃO	\N	083.1 0831 movimentacao	N	\N	\N	\N	S
+557	1	083.11	MOTIVO DE SAÚDE	\N	083.11 08311 motivo de saude	N	\N	5	E	N
+558	1	083.11.a	SOLICITAÇÃO DA MOVIMENTAÇÃO, CÓPIA DA ATA DE INSPEÇÃO DE SAÚDE, TERMO DE INSPEÇÃO DE SAÚDE	\N	083.11.a 08311a solicitacao da movimentacao copia da ata de inspecao de saude termo de inspecao de saude	N	47	5	E	N
+564	1	083.14.a	ORDEM JUDICIAL	Condicional "Até o trânsito em julgado" convencionada para 1 ano no corrente, a contar do trânsito em julgado. Como o prazo de guarda total dos documentos é de 52 anos, o prazo no intermediário foi ajustado para 51 anos.	083.14.a 08314a ordem judicial condicional ate o transito em julgado convencionada para 1 ano no corrente a contar do transito em julgado como o prazo de guarda total dos documentos e de 52 anos o prazo no intermediario foi ajustado para 51 anos	N	51	1	E	N
+565	1	083.2	DESTAQUE. ADIÇÃO	\N	083.2 0832 destaque adicao	N	\N	5	E	N
+566	1	083.2.a	PARECERES, DESPACHOS	\N	083.2.a 0832a pareceres despachos	N	47	5	E	N
+567	1	083.3	EXCLUSÃO DO SERVIÇO ATIVO	\N	083.3 0833 exclusao do servico ativo	N	\N	5	E	N
+568	1	083.3.a	DEMISSÃO, PERDA DE POSTO E DA PATENTE, LICENCIAMENTO, ANULAÇÃO DE INCORPORAÇÃO, DESINCORPORAÇÃO, A BEM DA DISCIPLINA, FALECIMENTO	\N	083.3.a 0833a demissao perda de posto e da patente licenciamento anulacao de incorporacao desincorporacao a bem da disciplina falecimento	N	47	5	E	N
+569	1	083.3.b	DESERÇÃO. EXTRAVIO	Condicional "Até a apuração do fato" convencionada para 1 ano no corrente, a contar da conclusão da apruração.	083.3.b 0833b desercao extravio condicional ate a apuracao do fato convencionada para 1 ano no corrente a contar da conclusao da apruracao	N	100	1	E	N
+570	1	083.9	OUTROS ASSUNTOS REFERENTES À MOVIMENTAÇÃO.DESTAQUE. ADIÇÃO. EXCLUSÃO DO SERVIÇO ATIVO	\N	083.9 0839 outros assuntos referentes a movimentacaodestaque adicao exclusao do servico ativo	N	\N	5	E	N
+571	1	083.9.a	POSSE E NOMEAÇÃO PARA CARGOS PÚBLICOS	\N	083.9.a 0839a posse e nomeacao para cargos publicos	N	47	5	E	N
+572	1	083.a	PLANOS DE MOVIMENTAÇÃO	Condicional "Enquanto vigora" convencionado para 1 ano no corrente, a contar a partir da perda da vigência do documento.	083.a 083a planos de movimentacao condicional enquanto vigora convencionado para 1 ano no corrente a contar a partir da perda da vigencia do documento	N	5	1	G	N
+573	1	084	VIOLAÇÃO DAS OBRIGAÇÕES E DOS DEVERES	\N	084 084 violacao das obrigacoes e dos deveres	N	\N	\N	\N	S
+574	1	084.1	TRANSGRESSÕES E/OU CONTRAVENÇÕES DISCIPLINARES	\N	084.1 0841 transgressoes e ou contravencoes disciplinares	N	\N	5	E	N
+575	1	084.1.a	SINDICÂNCIA, ACAREAÇÃO E APURAÇÃO DAS TRANSGRESSÕES E/OU CONTRAVENÇÕES, APLICAÇÃO DAS PUNIÇÕES DISCIPLINARES	\N	084.1.a 0841a sindicancia acareacao e apuracao das transgressoes e ou contravencoes aplicacao das punicoes disciplinares	N	47	5	E	N
+576	1	084.2	CRIMES MILITARES	\N	084.2 0842 crimes militares	N	\N	5	E	N
+577	1	084.2.a	PORTARIA DE NOMEAÇÃO DO ENCARREGADO E ESCRIVÃO DO IPM, SOLUÇÃO DO IPM, OFÍCIO DE REMESSA DO IPM À JUSTIÇA MILITAR	Os autos dos Inquéritos Policiais Militares (IPM) serão encaminhados á Justiça Militar.	084.2.a 0842a portaria de nomeacao do encarregado e escrivao do ipm solucao do ipm oficio de remessa do ipm a justica militar os autos dos inqueritos policiais militares ipm serao encaminhados a justica militar	N	5	5	G	N
+578	1	084.3	CONSELHOS	\N	084.3 0843 conselhos	N	\N	\N	\N	S
+579	1	084.31	DE DISCIPLINA	\N	084.31 08431 de disciplina	N	\N	5	E	N
+580	1	084.31.a	NOMEAÇÃO DOS MEMBROS DO CONSELHO, ATOS DE AFASTAMENTO DO ACUSADO, AUTOS DO CONSELHO, CONCLUSÕES E DECISÕES	Caso seja considerado crime, os autos do processo do Conselho serão encaminhados à Justiça Militar.  Condicional "Até o despacho final do Comandante da Força" convencionada para 1 ano no arquivo corrente, a contar do despacho final do Comandante da Força.	084.31.a 08431a nomeacao dos membros do conselho atos de afastamento do acusado autos do conselho conclusoes e decisoes caso seja considerado crime os autos do processo do conselho serao encaminhados a justica militar condicional ate o despacho final do comandante da forca convencionada para 1 ano no arquivo corrente a contar do despacho final do comandante da forca	N	130	1	E	N
+581	1	084.32	DE JUSTIFICAÇÃO		084.32 08432 de justificacao	N	\N	5	E	N
+582	1	084.32.a	NOMEAÇÃO DOS MEMBROS DO CONSELHO, ATOS DE AFASTAMENTO DO ACUSADO, AUTOS DO CONSELHO, CONCLUSÕES E DECISÕES	Os autos do processo do Conselho serão encaminhados à Justiça Militar.  Condicional "Até o trânsito em julgado" convencionada para 1 ano no arquivo corrente, a contar do trânsito em julgado.	084.32.a 08432a nomeacao dos membros do conselho atos de afastamento do acusado autos do conselho conclusoes e decisoes os autos do processo do conselho serao encaminhados a justica militar condicional ate o transito em julgado convencionada para 1 ano no arquivo corrente a contar do transito em julgado	N	130	1	E	N
+583	1	085	DIREITOS E PRERROGATIVAS	\N	085 085 direitos e prerrogativas	N	\N	\N	 	S
+584	1	085.1	RECOMPENSAS. DISTINÇÕES. HONRARIAS	\N	085.1 0851 recompensas distincoes honrarias	N	\N	5	E	N
+585	1	085.1.a	PRÊMIOS DE HONRA AO MÉRITO, ELOGIOS, LOUVORES, REFERÊNCIAS ELOGIOSAS, DISTINTIVOS, DISPENSAS DE SERVIÇO	\N	085.1.a 0851a premios de honra ao merito elogios louvores referencias elogiosas distintivos dispensas de servico	N	47	5	E	N
+586	1	085.1.b	RELAÇÕES DE AGRACIADOS COM AS CONDECORAÇÕES, RELAÇÕES DAQUELES QUE TIVERAM AS CONDECORAÇÕES CASSADAS	\N	085.1.b 0851b relacoes de agraciados com as condecoracoes relacoes daqueles que tiveram as condecoracoes cassadas	N	5	5	G	N
+587	1	085.2	LICENÇAS	\N	085.2 0852 licencas	N	\N	5	E	N
+588	1	085.2.a	ADOTANTE, PARA ACOMPANHAR CÔNJUGE/COMPANHEIRO, CANDIDATO A CARGO ELETIVO, ESPECIAL, GESTANTE, PATERNIDADE, PARA TRATAR DE INTERESSE PARTICULAR, PARA TRATAMENTO DE SAÚDE DE PESSOA DA FAMÍLIA, PARA TRATAMENTO DE SAÚDE PRÓPRIA	\N	085.2.a 0852a adotante para acompanhar conjuge companheiro candidato a cargo eletivo especial gestante paternidade para tratar de interesse particular para tratamento de saude de pessoa da familia para tratamento de saude propria	N	47	5	E	N
+589	1	085.3	AFASTAMENTOS	\N	085.3 0853 afastamentos	N	\N	5	E	N
+590	1	085.3.a	INSTALAÇÃO (NO BRASIL E NO EXTERIOR), LUTO, NÚPCIAS, TRÂNSITO (NO BRASIL E NO EXTERIOR)	\N	085.3.a 0853a instalacao no brasil e no exterior luto nupcias transito no brasil e no exterior	N	47	5	E	N
+591	1	085.4	DISPENSAS DE SERVIÇO	\N	085.4 0854 dispensas de servico	N	\N	5	E	N
+592	1	085.4.a	PARA DESCONTO EM FÉRIAS, POR PRESCRIÇÃO MÉDICA	\N	085.4.a 0854a para desconto em ferias por prescricao medica	N	47	5	E	N
+593	1	085.5	FÉRIAS	\N	085.5 0855 ferias	N	\N	5	E	N
+594	1	085.5.a	PLANEJAMENTO, SOLICITAÇÃO, CONCESSÃO, CANCELAMENTO E PUBLICAÇÃO	\N	085.5.a 0855a planejamento solicitacao concessao cancelamento e publicacao	N	47	5	E	N
+595	1	085.6	REMUNERAÇÃO. PROVENTOS	\N	085.6 0856 remuneracao proventos	N	\N	\N	\N	S
+596	1	085.61	REMUNERAÇÃO NA ATIVA	\N	085.61 08561 remuneracao na ativa	N	\N	5	E	N
+626	1	086.122.a	PROCESSO DE REFORMA POR IDADES-LIMITE	O processo é anexado ao processo de pensão militar.  Condicional "Até o falecimento do militar" convencionada para 125 anos, acompanhando o maior prazo determinado no intermediário para o processo de pensão militar.	086.122.a 086122a processo de reforma por idades-limite o processo e anexado ao processo de pensao militar condicional ate o falecimento do militar convencionada para 125 anos acompanhando o maior prazo determinado no intermediario para o processo de pensao militar	N	125	5	E	N
+627	1	086.13	DESIGNAÇÃO PARA O SERVIÇO ATIVO	\N	086.13 08613 designacao para o servico ativo	N	\N	5	E	N
+628	1	086.13.a	PROCESSO DE DESIGNAÇÃO PARA O SERVIÇO ATIVO	\N	086.13.a 08613a processo de designacao para o servico ativo	N	47	5	E	N
+629	1	086.14	TAREFA POR TEMPO CERTO	\N	086.14 08614 tarefa por tempo certo	N	\N	5	E	N
+630	1	086.14.a	PROCESSO DE DESIGNAÇÃO PARA TAREFA POR TEMPO CERTO	\N	086.14.a 08614a processo de designacao para tarefa por tempo certo	N	47	5	E	N
+631	1	086.2	PENSIONISTAS	\N	086.2 0862 pensionistas	N	\N	\N	\N	S
+632	1	086.21	PENSÕES	\N	086.21 08621 pensoes	N	\N	\N	\N	S
+633	1	086.211	TEMPORÁRIA	\N	086.211 086211 temporaria	N	\N	5	E	N
+634	1	086.211.a	PROCESSOS DE SOLICITAÇÃO/CONCESSÃO DE PENSÃO MILITAR TEMPORÁRIA	\N	086.211.a 086211a processos de solicitacao concessao de pensao militar temporaria	N	95	5	E	N
+635	1	086.212	VITALÍCIA	\N	086.212 086212 vitalicia	N	\N	5	E	N
+636	1	086.212.a	PROCESSOS DE SOLICITAÇÃO/CONCESSÃO DE PENSÃO MILITAR VITALÍCIA	\N	086.212.a 086212a processos de solicitacao concessao de pensao militar vitalicia	N	125	5	E	N
+637	1	086.213	ESPECIAL	\N	086.213 086213 especial	N	\N	5	E	N
+638	1	086.213.a	PROCESSOS DE SOLICITAÇÃO/CONCESSÃO DE PENSÃO MILITAR ESPECIAL	\N	086.213.a 086213a processos de solicitacao concessao de pensao militar especial	N	125	5	E	N
+639	1	087	ASSISTÊNCIA	\N	087 087 assistencia	N	\N	\N	\N	S
+640	1	087.1	MÉDICA	\N	087.1 0871 medica	N	\N	\N	\N	S
+641	1	087.11	HOSPITALAR	\N	087.11 08711 hospitalar	N	\N	5	E	N
+642	1	087.11.a	ATENDIMENTO AMBULATORIAL OU PRONTO-ATENDIMENTO	\N	087.11.a 08711a atendimento ambulatorial ou pronto-atendimento	N	20	5	E	N
+643	1	087.11.b	PRONTUÁRIOS MÉDICOS, FICHAS ODONTOLÓGICAS	\N	087.11.b 08711b prontuarios medicos fichas odontologicas	N	95	5	E	N
+644	1	087.12	PERICIAL	\N	087.12 08712 pericial	N	\N	5	E	N
+682	1	990	OUTRAS AÇÕES REFERENTES À ADMINISTRAÇÃO DE ATIVIDADES ACESSÓRIAS	Nas subdivisões deste descritor classificam-se documentos referentes às comunicações ocasionais e genéricas produzidas ou recebidas pelo órgão e entidade no relacionamento com outras instituições públicas e privadas e que não dizem respeito ao desenvolvimento de suas atividades específicas.	990 990 Nas subdivisoes deste descritor classificam-se documentos referentes as comunicacoes ocasionais e genericas produzidas ou recebidas pelo orgao e entidade no relacionamento com outras instituicoes publicas e privadas e que nao dizem respeito ao desenvolvimento de suas atividades especificas.	S	\N	\N	\N	S
+645	1	087.12.a	CONTROLE E VERIFICAÇÃO DE HIGIDEZ DO PESSOAL; ATESTADO E INQUÉRITO SANITÁRIO; RESULTADO DE EXAMES; CORPO DE DELITO; INSPEÇÃO; PROCESSOS DE PERÍCIA PARA REFORMA, ISENÇÃO DE IMPOSTO DE RENDA, MELHORIA DE REFORMA E MOVIMENTAÇÃO POR MOTIVO DE SAÚDE	Controle e verificação do estado de higidez (em estado saudável) do pessoal em serviço ativo, inativo e a ser selecionado para ingresso nas Forças Armadas; atestado sanitário de origem; inquérito sanitário de origem; resultado de exames; auto de corpo de delito; atas de inspeção de saúde; processos de perícia médica para reforma, isenção de imposto de renda, melhoria de reforma e movimentação por motivo de saúde.	087.12.a 08712a controle e verificacao de higidez do pessoal; atestado e inquerito sanitario; resultado de exames; corpo de delito; inspecao; processos de pericia para reforma isencao de imposto de renda melhoria de reforma e movimentacao por motivo de saude controle e verificacao do estado de higidez em estado saudavel do pessoal em servico ativo inativo e a ser selecionado para ingresso nas forcas armadas; atestado sanitario de origem; inquerito sanitario de origem; resultado de exames; auto de corpo de delito; atas de inspecao de saude; processos de pericia medica para reforma isencao de imposto de renda melhoria de reforma e movimentacao por motivo de saude	N	125	5	E	N
+646	1	087.2	SOCIAL	\N	087.2 0872 social	N	\N	5	E	N
+647	1	087.2.a	PROGRAMAS DE ASSISTÊNCIA SOCIAL COM VISTAS À CONCESSÃO DE LICENÇAS E BENEFÍCIOS; ATENDIMENTOS EDUCACIONAIS E ASSISTENCIAIS PRESTADOS POR EMPRESAS CONVENIADAS	\N	087.2.a 0872a programas de assistencia social com vistas a concessao de licencas e beneficios; atendimentos educacionais e assistenciais prestados por empresas conveniadas	N	95	5	E	N
+648	1	087.3	JURÍDICA	\N	087.3 0873 juridica	N	\N	5	E	N
+649	1	087.3.a	ORIENTAÇÃO DE CARÁTER PARTICULAR; ATENDIMENTOS JURÍDICOS PRESTADOS POR EMPRESAS CONVENIADAS	\N	087.3.a 0873a orientacao de carater particular; atendimentos juridicos prestados por empresas conveniadas	N	20	5	E	N
+650	1	087.4	PSICOLÓGICA	\N	087.4 0874 psicologica	N	\N	5	E	N
+651	1	087.4.a	TRIAGEM PARA ENCAMINHAMENTO AO SERVIÇO DE SAÚDE ESPECÍFICO; ORIENTAÇÃO E ACONSELHAMENTO PSICOLÓGICO; ATENDIMENTOS PSICOLÓGICOS PRESTADOS POR EMPRESAS CONVENIADAS	\N	087.4.a 0874a triagem para encaminhamento ao servico de saude especifico; orientacao e aconselhamento psicologico; atendimentos psicologicos prestados por empresas conveniadas	N	125	5	E	N
+652	1	087.5	RELIGIOSA	\N	087.5 0875 religiosa	N	\N	5	E	N
+653	1	087.5.a	CENSO RELIGIOSO	\N	087.5.a 0875a censo religioso	N	45	5	E	N
+654	1	087.5.b	PROCESSOS DE HABILITAÇÃO E REGISTROS DE CASAMENTO; BATIZADO E CRISMA; LIVRO TOMBO	\N	087.5.b 0875b processos de habilitacao e registros de casamento; batizado e crisma; livro tombo	N	15	15	G	N
+655	1	088	VAGA	\N	088 088 vaga	N	\N	\N	\N	S
+656	1	089	OUTROS ASSUNTOS REFERENTES A PESSOAL MILITAR	\N	089 089 outros assuntos referentes a pessoal militar	N	\N	\N	\N	S
+657	1	089.1	SERVIÇOS DE ESCALA	\N	089.1 0891 servicos de escala	N	\N	5	E	N
+658	1	089.1.a	ESCALAS DE SERVIÇO	\N	089.1.a 0891a escalas de servico	N	47	5	E	N
+659	1	089.2	TABELAS MESTRAS	\N	089.2 0892 tabelas mestras	N	\N	5	E	N
+660	1	089.2.a	TABELAS INDIVIDUAIS E GERAIS	Condicional "Enquanto vigora" convencionada para 1 ano no corrente, a contar da perda da validade do documento.	089.2.a 0892a tabelas individuais e gerais condicional enquanto vigora convencionada para 1 ano no corrente a contar da perda da validade do documento	N	5	1	E	N
+661	1	089.3	CONTROLE DE FREQUÊNCIA	\N	089.3 0893 controle de frequencia	N	\N	5	E	N
+662	1	089.3.a	FICHAS DE CONTROLE DE EFETIVOS; LIVROS DE LICENCIADOS	\N	089.3.a 0893a fichas de controle de efetivos; livros de licenciados	N	47	5	E	N
+663	1	089.4	DELEGAÇÕES DE COMPETÊNCIA	\N	089.4 0894 delegacoes de competencia	N	\N	5	E	N
+664	1	089.4.a	ATOS DE DELEGAÇÃO; RELAÇÃO DE ENCARGOS COLATERAIS	Condicional "Enquanto vigora" convencionada para 1 ano no corrente, a contar da perda da validade do documento.	089.4.a 0894a atos de delegacao; relacao de encargos colaterais condicional enquanto vigora convencionada para 1 ano no corrente a contar da perda da validade do documento	N	5	1	E	N
+665	1	900	ADMINISTRAÇÃO DE ATIVIDADES ACESSÓRIAS	Esta classe contempla documentos referentes ao desenvolvimento de atividades complementares, normalmente, vinculadas às atividades-meio, mas que não são essenciais para o funcionamento e cumprimento das competências finalísticas do órgão e entidade.	900 900 Esta classe contempla documentos referentes ao desenvolvimento de atividades complementares normalmente vinculadas as atividades-meio mas que nao sao essenciais para o funcionamento e cumprimento das competencias finalisticas do orgao e entidade.	S	\N	\N	\N	S
+666	1	910	GESTÃO DE EVENTOS	Nas subdivisões deste descritor classificam-se documentos referentes à gestão dos eventos promovidos e realizados pelo órgão e entidade, como: solenidades, comemorações, homenagens, congressos, conferências, seminários, simpósios, jornadas, oficinas, encontros, convenções, ciclos de palestras, mesas redondas, feiras, salões, exposições, mostras, exibição de filmes e vídeos, lançamentos de livros, festas e concursos culturais. Quanto às atividades de comunicação social no âmbito externo, classificar nas subdivisões do código 019.11.	910 910 Nas subdivisoes deste descritor classificam-se documentos referentes a gestao dos eventos promovidos e realizados pelo orgao e entidade como: solenidades comemoracoes homenagens congressos conferencias seminarios simposios jornadas oficinas encontros convencoes ciclos de palestras mesas redondas feiras saloes exposicoes mostras exibicao de filmes e videos lancamentos de livros festas e concursos culturais. Quanto as atividades de comunicacao social no ambito externo classificar nas subdivisoes do codigo 019.11.	S	\N	\N	\N	S
 667	1	910.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais e às decisões de caráter geral sobre a gestão de eventos promovidos e realizados pelo órgão e entidade.	910.01 91001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais e as decisoes de carater geral sobre a gestao de eventos promovidos e realizados pelo orgao e entidade.	S	5	\N	G	N
 668	1	911	PLANEJAMENTO E PROGRAMAÇÃO	Incluem-se documentos referentes ao planejamento e à programação do evento, tais como: a definição do tema, a programação prévia e final, a lista de palestrantes e convidados, o cronograma das atividades (dias, horários e sessões), as instruções para participantes e ouvintes, os contatos com parcerias, patrocinadores e fornecedores e a disponibilização de informações turísticas e sobre hospedagem, alimentação e transporte.	911 911 Incluem-se documentos referentes ao planejamento e a programacao do evento tais como: a definicao do tema a programacao previa e final a lista de palestrantes e convidados o cronograma das atividades (dias horarios e sessoes) as instrucoes para participantes e ouvintes os contatos com parcerias patrocinadores e fornecedores e a disponibilizacao de informacoes turisticas e sobre hospedagem alimentacao e transporte.	S	5	5	G	N
 669	1	912	DIVULGAÇÃO	Incluem-se documentos referentes à divulgação dos eventos, tais como: fôlderes, cartazes, folhetos, chamadas nas redes sociais e anúncios nas mídias de comunicação impressas e eletrônicas.	912 912 Incluem-se documentos referentes a divulgacao dos eventos tais como: fôlderes cartazes folhetos chamadas nas redes sociais e anuncios nas midias de comunicacao impressas e eletrônicas.	S	2	1	E	N
@@ -5760,7 +5766,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 678	1	920	PROMOÇÃO DE VISITAS	Nas subdivisões deste descritor classificam-se os documentos referentes à promoção de visitas culturais, educativas e técnicas ao órgão e entidade.	920 920 Nas subdivisoes deste descritor classificam-se os documentos referentes a promocao de visitas culturais educativas e tecnicas ao orgao e entidade.	S	\N	\N	\N	S
 679	1	920.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais e às decisões de caráter geral sobre a promoção de visitas ao órgão e entidade.	920.01 92001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais e as decisoes de carater geral sobre a promocao de visitas ao orgao e entidade.	S	5	\N	G	N
 680	1	921	PROGRAMAÇÃO DE VISITAS	Incluem-se documentos referentes ao atendimento de solicitação de visitas ao órgão e entidade, bem como aqueles referentes ao planejamento e à programação de visitas monitoradas, dirigidas a diferentes públicos.	921 921 Incluem-se documentos referentes ao atendimento de solicitacao de visitas ao orgao e entidade bem como aqueles referentes ao planejamento e a programacao de visitas monitoradas dirigidas a diferentes publicos.	S	5	5	G	N
-682	1	990	OUTRAS AÇÕES REFERENTES À ADMINISTRAÇÃO DE ATIVIDADES ACESSÓRIAS	Nas subdivisões deste descritor classificam-se documentos referentes às comunicações ocasionais e genéricas produzidas ou recebidas pelo órgão e entidade no relacionamento com outras instituições públicas e privadas e que não dizem respeito ao desenvolvimento de suas atividades específicas.	990 990 Nas subdivisoes deste descritor classificam-se documentos referentes as comunicacoes ocasionais e genericas produzidas ou recebidas pelo orgao e entidade no relacionamento com outras instituicoes publicas e privadas e que nao dizem respeito ao desenvolvimento de suas atividades especificas.	S	\N	\N	\N	S
+681	1	922	CONTROLE DE VISITAS E VISITANTES	Incluem-se documentos referentes ao controle da entrada de visitantes e ao acompanhamento dos mesmos por ocasião das visitas.	922 922 Incluem-se documentos referentes ao controle da entrada de visitantes e ao acompanhamento dos mesmos por ocasiao das visitas.	S	\N	2	E	N
 683	1	991	GESTÃO DE COMUNICAÇÕES EVENTUAIS	Incluem-se comunicados, informes, pedidos, solicitações e oferecimentos, trocados entre o órgão e entidade e demais instituições públicas e privadas, que não tiveram solução de con-tinuidade, como por exemplo: apresentação e recomendação de pessoas e de profissionais; comunicado de falecimento e envio de pêsames; informe de posse, afastamento e mudança de titular; comunicados de alterações de telefones e endereços; informe de luto oficial; envio de cumprimentos e felicitações; recebimento de convites para solenidade e eventos diversos. Quanto às solicitações de informações efetuadas pelos cidadãos por meio do SIC, classificar nas subdivisões do código 002.1. Quanto aos elogios e reclamações recebidos pela ouvidoria e outros canais de comunicação, classificar no código 002.2.	991 991 Incluem-se comunicados informes pedidos solicitacoes e oferecimentos trocados entre o orgao e entidade e demais instituicoes publicas e privadas que nao tiveram solucao de con-tinuidade como por exemplo: apresentacao e recomendacao de pessoas e de profissionais comunicado de falecimento e envio de pesames informe de posse afastamento e mudanca de titular comunicados de alteracoes de telefones e enderecos informe de luto oficial envio de cumprimentos e felicitacoes recebimento de convites para solenidade e eventos diversos. Quanto as solicitacoes de informacoes efetuadas pelos cidadaos por meio do SIC classificar nas subdivisoes do codigo 002.1. Quanto aos elogios e reclamacoes recebidos pela ouvidoria e outros canais de comunicacao classificar no codigo 002.2.	S	\N	1	E	N
 684	1	992	RELACIONAMENTO COM ASSOCIAÇÕES CULTURAIS, DE AMIGOS E DE SERVIDORES	Incluem-se documentos referentes ao relacionamento do órgão e entidade com associações culturais, de amigos e de servidores.	992 992 Incluem-se documentos referentes ao relacionamento do orgao e entidade com associacoes culturais, de amigos e de servidores.	S	\N	1	E	N
 \.
@@ -5772,70 +5778,85 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 
 COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 1	1
+598	598
+599	599
+600	600
+601	601
+602	602
+603	603
+604	604
+605	605
+606	606
+607	607
+608	608
+609	609
+611	611
+612	612
+613	613
+614	614
+618	618
+619	619
+620	620
+621	621
+623	623
+624	624
+625	625
+101	101
+102	102
+104	104
+105	105
+106	106
+107	107
+110	110
+111	111
+112	112
+113	113
+115	115
 2	2
-3	3
 4	4
-5	5
 6	6
 7	7
 8	8
-9	9
 10	10
 11	11
 12	12
-13	13
 14	14
 15	15
 16	16
 17	17
-18	18
-19	19
 20	20
 21	21
-22	22
 23	23
 24	24
-25	25
 26	26
 27	27
-28	28
+39	39
 29	29
 30	30
 31	31
-32	32
 33	33
 34	34
-35	35
 36	36
 37	37
 38	38
-39	39
-40	40
 41	41
 42	42
-43	43
 44	44
 45	45
 46	46
-47	47
 48	48
 49	49
 50	50
-51	51
 52	52
 53	53
 54	54
 55	55
 56	56
-57	57
 58	58
 59	59
-60	60
 61	61
 62	62
-63	63
-64	64
-65	65
+99	99
 66	66
 67	67
 68	68
@@ -5844,55 +5865,31 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 71	71
 72	72
 73	73
-74	74
+100	100
 75	75
-76	76
 77	77
 78	78
-79	79
 80	80
 81	81
 82	82
-83	83
 84	84
 85	85
 86	86
 87	87
 88	88
-89	89
 90	90
 91	91
 92	92
 93	93
 94	94
-95	95
 96	96
-97	97
 98	98
-99	99
-100	100
-101	101
-102	102
-103	103
-104	104
-105	105
-106	106
-107	107
-108	108
-109	109
-110	110
-111	111
-112	112
-113	113
-114	114
-115	115
 116	116
 117	117
 118	118
 119	119
 120	120
 121	121
-122	122
 123	123
 124	124
 125	125
@@ -5900,387 +5897,273 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 127	127
 128	128
 129	129
-130	130
 131	131
+144	144
 132	132
 133	133
 134	134
 135	135
-136	136
 137	137
 138	138
 139	139
 140	140
 141	141
 142	142
-143	143
-144	144
 145	145
 146	146
 147	147
 148	148
 149	149
-150	150
 151	151
 152	152
 153	153
-154	154
 155	155
 156	156
 157	157
-158	158
 159	159
-160	160
 161	161
 162	162
 163	163
 164	164
-165	165
 166	166
 167	167
+295	295
 168	168
 169	169
-170	170
 171	171
 172	172
-173	173
-174	174
 175	175
 176	176
 177	177
 178	178
-179	179
 180	180
 181	181
-182	182
-183	183
 184	184
 185	185
 186	186
-187	187
 188	188
 189	189
 190	190
 191	191
 192	192
+205	205
 193	193
-194	194
 195	195
 196	196
 197	197
 198	198
-199	199
 200	200
 201	201
-202	202
 203	203
-204	204
-205	205
+214	214
 206	206
 207	207
-208	208
-209	209
 210	210
 211	211
-212	212
 213	213
-214	214
 215	215
-216	216
-217	217
 218	218
 219	219
 220	220
-221	221
 222	222
 223	223
 224	224
 225	225
 226	226
 227	227
-228	228
 229	229
-230	230
+293	293
 231	231
 232	232
 233	233
 234	234
-235	235
-236	236
 237	237
 238	238
-239	239
 240	240
 241	241
-242	242
 243	243
 244	244
-245	245
 246	246
 247	247
 248	248
-249	249
 250	250
 251	251
 252	252
 253	253
 254	254
-255	255
-256	256
 257	257
 258	258
-259	259
 260	260
 261	261
-262	262
 263	263
 264	264
-265	265
 266	266
 267	267
-268	268
 269	269
 270	270
 271	271
-272	272
 273	273
-274	274
 275	275
 276	276
 277	277
-278	278
-279	279
 280	280
 281	281
 282	282
-283	283
 284	284
-285	285
-286	286
 287	287
 288	288
 289	289
-290	290
 291	291
 292	292
-293	293
-294	294
-295	295
 296	296
 297	297
-298	298
 299	299
 300	300
 301	301
-302	302
 303	303
 304	304
 305	305
-306	306
-307	307
 308	308
 309	309
 310	310
-311	311
 312	312
 313	313
 314	314
-315	315
 316	316
 317	317
+335	335
 318	318
-319	319
 320	320
 321	321
 322	322
 323	323
-324	324
 325	325
 326	326
-327	327
 328	328
 329	329
 330	330
 331	331
 332	332
-333	333
 334	334
-335	335
 336	336
-337	337
 338	338
 339	339
 340	340
 341	341
 342	342
 343	343
-344	344
-345	345
-346	346
 347	347
 348	348
 349	349
-350	350
-351	351
-352	352
-353	353
-354	354
-355	355
 356	356
 357	357
 358	358
-359	359
-360	360
-361	361
-362	362
-363	363
-364	364
 365	365
 366	366
 367	367
 368	368
 369	369
 370	370
-371	371
 372	372
 373	373
 374	374
 375	375
-376	376
-377	377
 378	378
 379	379
-380	380
 381	381
 382	382
 383	383
-384	384
+395	395
+559	559
 385	385
 386	386
 387	387
 388	388
-389	389
 390	390
-391	391
-392	392
 393	393
 394	394
-395	395
-396	396
+560	560
+561	561
 397	397
 398	398
 399	399
 400	400
-401	401
 402	402
 403	403
-404	404
+418	418
 405	405
 406	406
 407	407
 408	408
 409	409
-410	410
 411	411
 412	412
-413	413
 414	414
 415	415
 416	416
 417	417
-418	418
-419	419
 420	420
-421	421
-422	422
 423	423
 424	424
 425	425
 426	426
 427	427
 428	428
-429	429
 430	430
-431	431
 432	432
 433	433
 434	434
-435	435
-436	436
 437	437
 438	438
 439	439
-440	440
 441	441
 442	442
 443	443
-444	444
 445	445
 446	446
-447	447
 448	448
 449	449
 450	450
 451	451
-452	452
 453	453
 454	454
 455	455
-456	456
 457	457
 458	458
 459	459
-460	460
 461	461
 462	462
 463	463
-464	464
 465	465
 466	466
-467	467
 468	468
 469	469
-470	470
 471	471
 472	472
-473	473
 474	474
-475	475
-476	476
-477	477
 478	478
 479	479
 480	480
 481	481
-482	482
 483	483
-484	484
-485	485
-486	486
-487	487
-488	488
-489	489
 490	490
-491	491
 492	492
 493	493
-494	494
 495	495
 496	496
 497	497
 498	498
-499	499
 500	500
-501	501
 502	502
 503	503
 504	504
 505	505
 506	506
 507	507
+562	562
+563	563
 508	508
 509	509
-510	510
 511	511
 512	512
 513	513
@@ -6292,11 +6175,9 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 519	519
 520	520
 521	521
-522	522
-523	523
 524	524
+597	597
 525	525
-526	526
 527	527
 528	528
 529	529
@@ -6309,7 +6190,6 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 536	536
 537	537
 538	538
-539	539
 540	540
 541	541
 542	542
@@ -6324,16 +6204,9 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 551	551
 552	552
 553	553
-554	554
 555	555
-556	556
 557	557
 558	558
-559	559
-560	560
-561	561
-562	562
-563	563
 564	564
 565	565
 566	566
@@ -6343,17 +6216,14 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 570	570
 571	571
 572	572
-573	573
 574	574
 575	575
 576	576
 577	577
-578	578
 579	579
 580	580
 581	581
 582	582
-583	583
 584	584
 585	585
 586	586
@@ -6365,52 +6235,18 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 592	592
 593	593
 594	594
-595	595
 596	596
-597	597
-598	598
-599	599
-600	600
-601	601
-602	602
-603	603
-604	604
-605	605
-606	606
-607	607
-608	608
-609	609
-610	610
-611	611
-612	612
-613	613
-614	614
-615	615
-616	616
-617	617
-618	618
-619	619
-620	620
-621	621
-622	622
-623	623
-624	624
-625	625
 626	626
 627	627
 628	628
 629	629
 630	630
-631	631
-632	632
 633	633
 634	634
 635	635
 636	636
 637	637
 638	638
-639	639
-640	640
 641	641
 642	642
 643	643
@@ -6425,8 +6261,6 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 652	652
 653	653
 654	654
-655	655
-656	656
 657	657
 658	658
 659	659
@@ -6435,8 +6269,6 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 662	662
 663	663
 664	664
-665	665
-666	666
 667	667
 668	668
 669	669
@@ -6445,14 +6277,10 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 672	672
 673	673
 674	674
-675	675
-676	676
 677	677
-678	678
 679	679
 680	680
 681	681
-682	682
 683	683
 684	684
 \.
@@ -6527,6 +6355,14 @@ COPY public.aviso (id_aviso, sta_aviso, sin_liberado, dth_inicio, dth_fim, descr
 --
 
 COPY public.base_conhecimento (id_base_conhecimento, id_base_conhecimento_agrupador, id_base_conhecimento_origem, id_unidade, id_documento_edoc, id_usuario_gerador, id_usuario_liberacao, id_conjunto_estilos, descricao, conteudo, sta_estado, dth_geracao, dth_liberacao, sta_documento) FROM stdin;
+\.
+
+
+--
+-- Data for Name: base_conhecimento_idx; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.base_conhecimento_idx (id_base_conhecimento, id_anexo, dth_indexacao) FROM stdin;
 \.
 
 
@@ -12224,6 +12060,14 @@ COPY public.cidade (id_cidade, id_uf, id_pais, nome, codigo_ibge, sin_capital, l
 
 
 --
+-- Data for Name: codigo_acesso; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.codigo_acesso (id_codigo_acesso, id_usuario, dth_geracao, email, codigo, dth_utilizacao, sin_ativo) FROM stdin;
+\.
+
+
+--
 -- Data for Name: comentario; Type: TABLE DATA; Schema: public; Owner: sei_user
 --
 
@@ -12301,7 +12145,8 @@ COPY public.conjunto_estilos (id_conjunto_estilos, sin_ultimo) FROM stdin;
 78	N
 79	N
 80	N
-81	S
+81	N
+82	S
 \.
 
 
@@ -13950,8 +13795,47 @@ COPY public.conjunto_estilos_item (id_conjunto_estilos_item, id_conjunto_estilos
 1638	81	Item_Alinea_Letra:before	'content':'counter(letra_minuscula, lower-latin) ") "','display':'inline-block','width':'5mm','font-weight':'normal'
 1639	81	Texto_Justificado_Maiusculas	'font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0','margin':'6pt','text-transform':'uppercase'
 1640	81	Paragrafo_Numerado_Nivel4	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'paragrafo-n4','counter-reset':'romano_maiusculo letra_minuscula'
+1643	82	Texto_Alinhado_Esquerda	'font-size':'12pt','font-family':'Calibri','text-align':'left','word-wrap':'normal','margin':'6pt'
 1641	81	Paragrafo_Numerado_Nivel4:before	'content':'counter(paragrafo-n1) "." counter(paragrafo-n2) "." counter(paragrafo-n3) "." counter(paragrafo-n4) "."','display':'inline-block','width':'25mm','font-weight':'normal'
 1642	81	Texto_Justificado_Recuo_Primeira_Linha_Esp_Simples	'font-size':'12pt','font-family':'Calibri','text-indent':'25mm','text-align':'justify','word-wrap':'normal','margin':'0 0 0 6pt'
+1644	82	Texto_Alinhado_Direita	'font-size':'12pt','font-family':'Calibri','text-align':'right','word-wrap':'normal','margin':'6pt'
+1645	82	Texto_Centralizado	'font-size':'12pt','font-family':'Calibri','text-align':'center','word-wrap':'normal','margin':'6pt'
+1646	82	Texto_Justificado	'font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0','margin':'6pt'
+1647	82	Texto_Justificado_Recuo_Primeira_Linha	'font-size':'12pt','font-family':'Calibri','text-indent':'25mm','text-align':'justify','word-wrap':'normal','margin':'6pt'
+1648	82	Texto_Centralizado_Maiusculas	'font-size':'13pt','font-family':'Calibri','text-align':'center','text-transform':'uppercase','word-wrap':'normal'
+1649	82	Tabela_Texto_8	'font-size':'8pt','font-family':'Calibri','text-align':'left','word-wrap':'normal','margin':'0 3pt 0 3pt'
+1650	82	Tabela_Texto_Alinhado_Direita	'font-size':'11pt','font-family':'Calibri','text-align':'right','word-wrap':'normal','margin':'0 3pt 0 3pt'
+1651	82	Tabela_Texto_Alinhado_Esquerda	'font-size':'11pt','font-family':'Calibri','text-align':'left','word-wrap':'normal','margin':'0 3pt 0 3pt'
+1652	82	Tabela_Texto_Centralizado	'font-size':'11pt','font-family':'Calibri','text-align':'center','word-wrap':'normal','margin':'0 3pt 0'
+1653	82	Texto_Centralizado_Maiusculas_Negrito	'font-weight':'bold','font-size':'13pt','font-family':'Calibri','text-align':'center','text-transform':'uppercase','word-wrap':'normal'
+1654	82	Texto_Fundo_Cinza_Maiusculas_Negrito	'text-transform':'uppercase','font-weight':'bold','background-color':'#e6e6e6','font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0','margin':'6pt'
+1655	82	Texto_Fundo_Cinza_Negrito	'font-weight':'bold','background-color':'#e6e6e6','font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0','margin':'6pt'
+1656	82	Paragrafo_Numerado_Nivel1	'font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0mm','margin':'6pt','counter-increment':'paragrafo-n1','counter-reset':'paragrafo-n2 paragrafo-n3 paragrafo-n4 romano_maiusculo letra_minuscula'
+1657	82	Paragrafo_Numerado_Nivel1:before	'content':'counter(paragrafo-n1) "."','display':'inline-block','width':'25mm','font-weight':'normal'
+1658	82	Item_Nivel1	'text-transform':'uppercase','font-weight':'bold','background-color':'#e6e6e6','font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0','margin':'6pt','counter-increment':'item-n1','counter-reset':'item-n2 item-n3 item-n4 romano_maiusculo letra_minuscula'
+1659	82	Item_Nivel1:before	'content':'counter(item-n1) "."','display':'inline-block','width':'25mm','font-weight':'normal'
+1660	82	Item_Nivel2	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'item-n2','counter-reset':'item-n3 item-n4 romano_maiusculo letra_minuscula'
+1661	82	Item_Nivel2:before	'content':'counter(item-n1) "." counter(item-n2) "."','display':'inline-block','width':'25mm','font-weight':'normal'
+1662	82	Paragrafo_Numerado_Nivel2:before	'content':'counter(paragrafo-n1) "." counter(paragrafo-n2) "."','display':'inline-block','width':'25mm','font-weight':'normal'
+1663	82	Item_Nivel3:before	'content':'counter(item-n1) "." counter(item-n2) "." counter(item-n3) "."','display':'inline-block','width':'25mm','font-weight':'normal'
+1664	82	Item_Nivel4:before	'content':'counter(item-n1) "." counter(item-n2) "." counter(item-n3) "."  counter(item-n4) "."','display':'inline-block','width':'25mm','font-weight':'normal'
+1665	82	Paragrafo_Numerado_Nivel3:before	'content':'counter(paragrafo-n1) "." counter(paragrafo-n2) "." counter(paragrafo-n3) "."','display':'inline-block','width':'25mm','font-weight':'normal'
+1666	82	Item_Inciso_Romano	'font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0mm','margin':'6pt 6pt 6pt 120px','counter-increment':'romano_maiusculo','counter-reset':'letra_minuscula'
+1667	82	Item_Inciso_Romano:before	'content':'counter(romano_maiusculo, upper-roman) " - "','display':'inline-block','width':'15mm','font-weight':'normal'
+1668	82	Item_Alinea_Letra	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt 6pt 6pt 120px','counter-increment':'letra_minuscula'
+1669	82	Item_Alinea_Letra:before	'content':'counter(letra_minuscula, lower-latin) ") "','display':'inline-block','width':'5mm','font-weight':'normal'
+1670	82	Texto_Justificado_Maiusculas	'font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0','margin':'6pt','text-transform':'uppercase'
+1671	82	Texto_Alinhado_Esquerda_Espacamento_Simples	'font-size':'12pt','font-family':'Calibri','text-align':'left','word-wrap':'normal','margin':'0 0 0 6pt'
+1672	82	Texto_Alinhado_Esquerda_Espacamento_Simples_Maiusc	'font-size':'12pt','font-family':'Calibri','text-align':'left','text-transform':'uppercase','word-wrap':'normal','margin':'0 0 0 6pt'
+1673	82	Paragrafo_Numerado_Nivel2	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'paragrafo-n2','counter-reset':'paragrafo-n3 paragrafo-n4 romano_maiusculo letra_minuscula','margin-left':'40px'
+1674	82	Item_Nivel3	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'item-n3','counter-reset':'item-n4 romano_maiusculo letra_minuscula','margin-left':'40px'
+1675	82	Item_Nivel4	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'item-n4','counter-reset':'romano_maiusculo letra_minuscula','margin-left':'80px'
+1676	82	Paragrafo_Numerado_Nivel3	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'paragrafo-n3','counter-reset':'paragrafo-n4 romano_maiusculo letra_minuscula','margin-left':'80px'
+1677	82	Paragrafo_Numerado_Nivel4	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'paragrafo-n4','counter-reset':'romano_maiusculo letra_minuscula','margin-left':'120px'
+1678	82	Citacao	'font-size':'10pt','font-family':'Calibri','word-wrap':'normal','margin':'4pt 0 4pt 160px','text-align':'justify'
+1679	82	Paragrafo_Numerado_Nivel4:before	'content':'counter(paragrafo-n1) "." counter(paragrafo-n2) "." counter(paragrafo-n3) "." counter(paragrafo-n4) "."','display':'inline-block','width':'25mm','font-weight':'normal'
+1680	82	Texto_Justificado_Recuo_Primeira_Linha_Esp_Simples	'font-size':'12pt','font-family':'Calibri','text-indent':'25mm','text-align':'justify','word-wrap':'normal','margin':'0 0 0 6pt'
+1681	82	Texto_Espaco_Duplo_Recuo_Primeira_Linha	'letter-spacing':'1px','font-weight':'bold','font-size':'12pt','font-family':'Calibri','text-indent':'25mm','text-align':'justify','word-wrap':'normal','margin':'6pt'
 \.
 
 
@@ -13960,16 +13844,15 @@ COPY public.conjunto_estilos_item (id_conjunto_estilos_item, id_conjunto_estilos
 --
 
 COPY public.contato (id_contato, id_cargo, id_unidade_cadastro, id_usuario_cadastro, id_cidade, id_uf, id_pais, id_contato_associado, id_tipo_contato, id_pais_passaporte, nome, matricula_oab, cpf, matricula, email, sitio_internet, endereco, bairro, cep, observacao, idx_contato, dta_nascimento, sin_ativo, cnpj, sigla, dth_cadastro, rg, orgao_expedidor, complemento, sta_natureza, sin_endereco_associado, telefone_celular, sta_genero, numero_passaporte, id_titulo, telefone_comercial, telefone_residencial, conjuge, funcao, nome_registro_civil, nome_social, id_categoria) FROM stdin;
-100000002	\N	\N	\N	\N	\N	76	100000002	2	\N	Sistema Eletrônico de Informações	\N	\N	\N	\N	\N	\N	\N	\N	\N	sei sistema eletronico de informacoes	\N	S	\N	SEI	2013-11-08 17:20:00	\N	\N	\N	J	N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-100000003	\N	\N	\N	\N	\N	76	100000003	2	\N	Sistema de Permissões	\N	\N	\N	\N	\N	\N	\N	\N	\N	sip sistema de permissoes	\N	S	\N	SIP	2013-11-08 17:20:00	\N	\N	\N	J	N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-100000004	\N	\N	\N	\N	\N	76	100000004	2	\N	INTRANET	\N	\N	\N	\N	\N	\N	\N	\N	\N	intranet intranet	\N	S	\N	INTRANET	2013-11-08 17:20:00	\N	\N	\N	J	N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-100000005	\N	\N	\N	\N	\N	76	100000005	2	\N	INTERNET	\N	\N	\N	\N	\N	\N	\N	\N	\N	internet internet	\N	S	\N	INTERNET	2013-11-08 17:20:00	\N	\N	\N	J	N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
-100000006	\N	110000001	2	5564	27	76	100000010	5	\N	Unidade de Testes 1	\N	\N	\N	\N	http://www.dominio.gov.br	Rua ABC, Número 1	Bairro do órgão	00000-000	\N	teste unidade de testes 1	\N	S	\N	TESTE	2013-11-08 00:00:00	\N	\N	\N	J	N	\N	\N	\N	\N	(61) 2222-9999	\N	\N	\N	\N	\N	\N
-100000007	\N	110000001	2	5564	27	76	100000010	5	\N	Unidade de Testes 1.1	\N	\N	\N	\N	http://www.dominio.gov.br	Rua ABC, Número 1	Bairro do órgão	00000-000	\N	teste_1_1 unidade de testes 1.1	\N	S	\N	TESTE_1_1	2014-11-27 20:44:26	\N	\N	\N	J	N	\N	\N	\N	\N	(61) 2222-9999	\N	\N	\N	\N	\N	\N
-100000008	\N	110000001	2	5564	27	76	100000010	5	\N	Unidade de Testes 1.2	\N	\N	\N	\N	http://www.dominio.gov.br	Rua ABC, Número 1	Bairro do órgão	00000-000	\N	teste_1_2 unidade de testes 1.2	\N	S	\N	TESTE_1_2	2014-11-27 20:44:44	\N	\N	\N	J	N	\N	\N	\N	\N	(61) 2222-9999	\N	\N	\N	\N	\N	\N
-100000009	\N	110000001	2	\N	\N	76	100000010	1	\N	Usuário de Testes	\N	\N	\N	\N	\N	\N	\N	\N	\N	teste usuario de testes	\N	S	\N	teste	2016-11-28 08:27:37	\N	\N	\N	F	S	\N	\N	\N	\N	\N	\N	\N	\N	Usuário de Testes	\N	\N
-100000010	\N	\N	\N	5564	27	76	100000010	6	\N	ORGAO ABC	\N	\N	\N	email@dominio.gov.br	http://www.dominio.gov.br	Endereço completo órgão	Bairro do órgão	00000-000	\N	abc orgao abc	\N	S	\N	ABC	2016-11-30 14:13:08	\N	\N	\N	J	N	\N	\N	\N	\N	(61) 2222-9999	\N	\N	\N	\N	\N	\N
-100000011	\N	110000001	100000001	\N	\N	\N	100000011	4	\N	Paulo Nehme	\N	\N	\N	\N	\N	\N	\N	\N	\N	paulo nehme	\N	S	\N	\N	2022-11-16 11:08:49	\N	\N	\N	F	N	\N	\N	\N	\N	\N	\N	\N	\N	Paulo Nehme	\N	\N
+100000002	\N	\N	\N	\N	\N	76	100000002	2	\N	Sistema Eletrônico de Informações	\N	\N	\N	\N	\N	\N	\N	\N	\N	sei sistema eletronico de informacoes	\N	S	              	SEI	2013-11-08 17:20:00	\N	\N	\N	J	N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
+100000003	\N	\N	\N	\N	\N	76	100000003	2	\N	Sistema de Permissões	\N	\N	\N	\N	\N	\N	\N	\N	\N	sip sistema de permissoes	\N	S	              	SIP	2013-11-08 17:20:00	\N	\N	\N	J	N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
+100000004	\N	\N	\N	\N	\N	76	100000004	2	\N	INTRANET	\N	\N	\N	\N	\N	\N	\N	\N	\N	intranet intranet	\N	S	              	INTRANET	2013-11-08 17:20:00	\N	\N	\N	J	N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
+100000005	\N	\N	\N	\N	\N	76	100000005	2	\N	INTERNET	\N	\N	\N	\N	\N	\N	\N	\N	\N	internet internet	\N	S	              	INTERNET	2013-11-08 17:20:00	\N	\N	\N	J	N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N	\N
+100000006	\N	110000001	2	5564	27	76	100000010	5	\N	Unidade de Testes 1	\N	\N	\N	\N	http://www.dominio.gov.br	Rua ABC, Número 1	Bairro do órgão	00000-000	\N	teste unidade de testes 1	\N	S	              	TESTE	2013-11-08 00:00:00	\N	\N	\N	J	N	\N	\N	\N	\N	(61) 2222-9999	\N	\N	\N	\N	\N	\N
+100000007	\N	110000001	2	5564	27	76	100000010	5	\N	Unidade de Testes 1.1	\N	\N	\N	\N	http://www.dominio.gov.br	Rua ABC, Número 1	Bairro do órgão	00000-000	\N	teste_1_1 unidade de testes 1.1	\N	S	              	TESTE_1_1	2014-11-27 20:44:26	\N	\N	\N	J	N	\N	\N	\N	\N	(61) 2222-9999	\N	\N	\N	\N	\N	\N
+100000008	\N	110000001	2	5564	27	76	100000010	5	\N	Unidade de Testes 1.2	\N	\N	\N	\N	http://www.dominio.gov.br	Rua ABC, Número 1	Bairro do órgão	00000-000	\N	teste_1_2 unidade de testes 1.2	\N	S	              	TESTE_1_2	2014-11-27 20:44:44	\N	\N	\N	J	N	\N	\N	\N	\N	(61) 2222-9999	\N	\N	\N	\N	\N	\N
+100000009	\N	110000001	2	\N	\N	76	100000010	1	\N	Usuário de Testes	\N	\N	\N	\N	\N	\N	\N	\N	\N	teste usuario de testes	\N	S	              	teste	2016-11-28 08:27:37	\N	\N	\N	F	S	\N	\N	\N	\N	\N	\N	\N	\N	Usuário de Testes	\N	\N
+100000010	\N	\N	\N	5564	27	76	100000010	6	\N	ORGAO ABC	\N	\N	\N	email@dominio.gov.br	http://www.dominio.gov.br	Endereço completo órgão	Bairro do órgão	00000-000	\N	abc orgao abc	\N	S	              	ABC	2016-11-30 14:13:08	\N	\N	\N	J	N	\N	\N	\N	\N	(61) 2222-9999	\N	\N	\N	\N	\N	\N
 \.
 
 
@@ -13994,38 +13877,6 @@ COPY public.controle_prazo (id_controle_prazo, id_protocolo, id_unidade, id_usua
 --
 
 COPY public.controle_unidade (id_controle_unidade, id_procedimento, id_situacao, id_usuario, dth_snapshot, dth_execucao) FROM stdin;
-\.
-
-
---
--- Data for Name: cpad; Type: TABLE DATA; Schema: public; Owner: sei_user
---
-
-COPY public.cpad (id_cpad, id_orgao, sigla, descricao, sin_ativo) FROM stdin;
-\.
-
-
---
--- Data for Name: cpad_avaliacao; Type: TABLE DATA; Schema: public; Owner: sei_user
---
-
-COPY public.cpad_avaliacao (id_cpad_avaliacao, id_avaliacao_documental, id_cpad_composicao, dth_avaliacao, sta_cpad_avaliacao, motivo, justificativa, sin_ativo) FROM stdin;
-\.
-
-
---
--- Data for Name: cpad_composicao; Type: TABLE DATA; Schema: public; Owner: sei_user
---
-
-COPY public.cpad_composicao (id_cpad_composicao, id_cpad_versao, id_usuario, id_cargo, sin_presidente, ordem) FROM stdin;
-\.
-
-
---
--- Data for Name: cpad_versao; Type: TABLE DATA; Schema: public; Owner: sei_user
---
-
-COPY public.cpad_versao (id_cpad_versao, id_cpad, sigla, descricao, dth_versao, sin_editavel, sin_ativo, id_usuario, id_unidade) FROM stdin;
 \.
 
 
@@ -14108,6 +13959,7 @@ COPY public.email_sistema (id_email_sistema, id_email_sistema_modulo, descricao,
 8	\N	Geração de senha para usuário externo	@sigla_sistema@ <@email_sistema@>	@email_usuario_externo@	SEI - Geração de Senha para Usuário Externo	      :: Este é um e-mail automático ::\r\n\r\nPrezado(a) @nome_usuario_externo@,\r\n\r\nSua solicitação para geração de nova senha de acesso externo ao SEI-@sigla_orgao@ foi processada com sucesso.\r\n\r\n      - Sua nova senha é: @nova_senha_usuario_externo@\r\n\r\nPara alterá-la novamente, acesse a área destinada aos Usuários Externos no SEI-@sigla_orgao@ ou acesse o link a seguir: @link_login_usuario_externo@\r\n\r\n@descricao_orgao@ - @sigla_orgao@\r\n@sitio_internet_orgao@\r\n\r\n\r\nATENÇÃO: As informações contidas neste e-mail, incluindo seus anexos, podem ser restritas apenas à pessoa ou entidade para a qual foi endereçada. Se você não é o destinatário ou a pessoa responsável por encaminhar esta mensagem ao destinatário, você está, por meio desta, notificado que não deverá rever, retransmitir, imprimir, copiar, usar ou distribuir esta mensagem ou quaisquer anexos. Caso você tenha recebido esta mensagem por engano, por favor, contate o remetente imediatamente e em seguida apague esta mensagem.	S
 9	\N	Contato com Ouvidoria	Ouvidoria @sigla_orgao@ <ouvidoria@@sigla_orgao_minusculas@@sufixo_email@>	@nome_contato@ <@email_contato@>	Contato - Ouvidoria @sigla_orgao@	      :: Este é um e-mail automático ::\r\n\r\nPrezado(a) @nome_contato@,\r\n\r\nSeu contato foi recebido com sucesso pela Ouvidoria @sigla_orgao@ e registrado por meio do Processo nº @processo@ (@tipo_processo@).\r\n\r\nA resposta será encaminhada, com a maior brevidade possível, para este endereço de e-mail (@email_contato@).\r\n\r\nOuvidoria @sigla_orgao@\r\n@descricao_orgao@\r\n@sitio_internet_orgao@\r\n\r\n\r\n:: Abaixo, segue o conteúdo integral de sua demanda:\r\n\r\n@conteudo_formulario_ouvidoria@	S
 10	\N	Correção de encaminhamento de Ouvidoria	@sigla_orgao_origem@ <no-reply@@sigla_orgao_origem_minusculas@@sufixo_email@>	@nome_contato@ <@email_contato@>	Contato com OUVIDORIA/@sigla_orgao_origem@ - Correção de Encaminhamento	\r\nEste é um e-mail automático.\r\n\r\nA demanda abaixo, registrada na ouvidoria do órgão @sigla_orgao_origem@, deveria ter sido protocolada no órgão @sigla_orgao_destino@, motivo pelo qual foi realizada a correção de encaminhamento e o novo número do seu processo é @processo_destino@.\r\n\r\n@conteudo_formulario_ouvidoria@\r\n\r\n	S
+11	\N	Envio de código 2 fatores para usuário externo	@sigla_sistema@ <@email_sistema@>	@email_usuario_externo@	Sistema SEI - Código de Acesso	Sua solicitação de login como usuário externo foi processada.\r\n\r\nSeu código de acesso é: @codigo_acesso_usuario_externo@\r\n\r\nATENÇÃO: A informação contida nesta mensagem de e-mail, incluindo quaisquer anexos, pode ser confidencial e estar reservada apenas à pessoa ou entidade para a qual foi endereçada. Se você não é o destinatário ou a pessoa responsável por encaminhar esta mensagem ao destinatário, você está, por meio desta, notificado que não deverá rever, retransmitir, imprimir, copiar, usar ou distribuir esta mensagem de e-mail ou quaisquer anexos. Caso você tenha recebido esta mensagem por engano, por favor, contate o remetente imediatamente e apague esta mensagem de seu computador ou de qualquer outro banco de dados.\r\n\r\n@descricao_orgao@\r\n@sitio_internet_orgao@	S
 \.
 
 
@@ -14148,16 +14000,12 @@ COPY public.estilo (id_estilo, nome, formatacao) FROM stdin;
 12	Texto_Centralizado	'font-size':'12pt','font-family':'Calibri','text-align':'center','word-wrap':'normal','margin':'6pt'
 13	Texto_Justificado	'font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0','margin':'6pt'
 14	Texto_Justificado_Recuo_Primeira_Linha	'font-size':'12pt','font-family':'Calibri','text-indent':'25mm','text-align':'justify','word-wrap':'normal','margin':'6pt'
-15	Citacao	'font-size':'10pt','font-family':'Calibri','word-wrap':'normal','margin':'4pt 0 4pt 160px','text-align':'justify'
 24	Texto_Centralizado_Maiusculas	'font-size':'13pt','font-family':'Calibri','text-align':'center','text-transform':'uppercase','word-wrap':'normal'
 27	Tabela_Texto_8	'font-size':'8pt','font-family':'Calibri','text-align':'left','word-wrap':'normal','margin':'0 3pt 0 3pt'
-29	Texto_Alinhado_Esquerda_Espacamento_Simples	'font-size':'12pt','font-family':'Calibri','text-align':'left','word-wrap':'normal','margin':'0'
 30	Tabela_Texto_Alinhado_Direita	'font-size':'11pt','font-family':'Calibri','text-align':'right','word-wrap':'normal','margin':'0 3pt 0 3pt'
 31	Tabela_Texto_Alinhado_Esquerda	'font-size':'11pt','font-family':'Calibri','text-align':'left','word-wrap':'normal','margin':'0 3pt 0 3pt'
 32	Tabela_Texto_Centralizado	'font-size':'11pt','font-family':'Calibri','text-align':'center','word-wrap':'normal','margin':'0 3pt 0'
-33	Texto_Alinhado_Esquerda_Espacamento_Simples_Maiusc	'font-size':'12pt','font-family':'Calibri','text-align':'left','text-transform':'uppercase','word-wrap':'normal','margin':'0'
 34	Texto_Centralizado_Maiusculas_Negrito	'font-weight':'bold','font-size':'13pt','font-family':'Calibri','text-align':'center','text-transform':'uppercase','word-wrap':'normal'
-35	Texto_Espaco_Duplo_Recuo_Primeira_Linha	'letter-spacing':'0.2em','font-weight':'bold','font-size':'12pt','font-family':'Calibri','text-indent':'25mm','text-align':'justify','word-wrap':'normal','margin':'6pt'
 36	Texto_Fundo_Cinza_Maiusculas_Negrito	'text-transform':'uppercase','font-weight':'bold','background-color':'#e6e6e6','font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0','margin':'6pt'
 37	Texto_Fundo_Cinza_Negrito	'font-weight':'bold','background-color':'#e6e6e6','font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0','margin':'6pt'
 38	Paragrafo_Numerado_Nivel1	'font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0mm','margin':'6pt','counter-increment':'paragrafo-n1','counter-reset':'paragrafo-n2 paragrafo-n3 paragrafo-n4 romano_maiusculo letra_minuscula'
@@ -14166,22 +14014,26 @@ COPY public.estilo (id_estilo, nome, formatacao) FROM stdin;
 41	Item_Nivel1:before	'content':'counter(item-n1) "."','display':'inline-block','width':'25mm','font-weight':'normal'
 42	Item_Nivel2	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'item-n2','counter-reset':'item-n3 item-n4 romano_maiusculo letra_minuscula'
 43	Item_Nivel2:before	'content':'counter(item-n1) "." counter(item-n2) "."','display':'inline-block','width':'25mm','font-weight':'normal'
-44	Paragrafo_Numerado_Nivel2	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'paragrafo-n2','counter-reset':'paragrafo-n3 paragrafo-n4 romano_maiusculo letra_minuscula'
 45	Paragrafo_Numerado_Nivel2:before	'content':'counter(paragrafo-n1) "." counter(paragrafo-n2) "."','display':'inline-block','width':'25mm','font-weight':'normal'
-46	Item_Nivel3	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'item-n3','counter-reset':'item-n4 romano_maiusculo letra_minuscula'
 47	Item_Nivel3:before	'content':'counter(item-n1) "." counter(item-n2) "." counter(item-n3) "."','display':'inline-block','width':'25mm','font-weight':'normal'
-48	Item_Nivel4	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'item-n4','counter-reset':'romano_maiusculo letra_minuscula'
 49	Item_Nivel4:before	'content':'counter(item-n1) "." counter(item-n2) "." counter(item-n3) "."  counter(item-n4) "."','display':'inline-block','width':'25mm','font-weight':'normal'
-50	Paragrafo_Numerado_Nivel3	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'paragrafo-n3','counter-reset':'paragrafo-n4 romano_maiusculo letra_minuscula'
 51	Paragrafo_Numerado_Nivel3:before	'content':'counter(paragrafo-n1) "." counter(paragrafo-n2) "." counter(paragrafo-n3) "."','display':'inline-block','width':'25mm','font-weight':'normal'
 52	Item_Inciso_Romano	'font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0mm','margin':'6pt 6pt 6pt 120px','counter-increment':'romano_maiusculo','counter-reset':'letra_minuscula'
 53	Item_Inciso_Romano:before	'content':'counter(romano_maiusculo, upper-roman) " - "','display':'inline-block','width':'15mm','font-weight':'normal'
 54	Item_Alinea_Letra	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt 6pt 6pt 120px','counter-increment':'letra_minuscula'
 55	Item_Alinea_Letra:before	'content':'counter(letra_minuscula, lower-latin) ") "','display':'inline-block','width':'5mm','font-weight':'normal'
 56	Texto_Justificado_Maiusculas	'font-size':'12pt','font-family':'Calibri','text-align':'justify','word-wrap':'normal','text-indent':'0','margin':'6pt','text-transform':'uppercase'
-57	Paragrafo_Numerado_Nivel4	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'paragrafo-n4','counter-reset':'romano_maiusculo letra_minuscula'
+29	Texto_Alinhado_Esquerda_Espacamento_Simples	'font-size':'12pt','font-family':'Calibri','text-align':'left','word-wrap':'normal','margin':'0 0 0 6pt'
+33	Texto_Alinhado_Esquerda_Espacamento_Simples_Maiusc	'font-size':'12pt','font-family':'Calibri','text-align':'left','text-transform':'uppercase','word-wrap':'normal','margin':'0 0 0 6pt'
+44	Paragrafo_Numerado_Nivel2	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'paragrafo-n2','counter-reset':'paragrafo-n3 paragrafo-n4 romano_maiusculo letra_minuscula','margin-left':'40px'
+46	Item_Nivel3	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'item-n3','counter-reset':'item-n4 romano_maiusculo letra_minuscula','margin-left':'40px'
+48	Item_Nivel4	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'item-n4','counter-reset':'romano_maiusculo letra_minuscula','margin-left':'80px'
+50	Paragrafo_Numerado_Nivel3	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'paragrafo-n3','counter-reset':'paragrafo-n4 romano_maiusculo letra_minuscula','margin-left':'80px'
+57	Paragrafo_Numerado_Nivel4	'font-size':'12pt','font-family':'Calibri','text-indent':'0mm','text-align':'justify','word-wrap':'normal','margin':'6pt','counter-increment':'paragrafo-n4','counter-reset':'romano_maiusculo letra_minuscula','margin-left':'120px'
+15	Citacao	'font-size':'10pt','font-family':'Calibri','word-wrap':'normal','margin':'4pt 0 4pt 160px','text-align':'justify'
 58	Paragrafo_Numerado_Nivel4:before	'content':'counter(paragrafo-n1) "." counter(paragrafo-n2) "." counter(paragrafo-n3) "." counter(paragrafo-n4) "."','display':'inline-block','width':'25mm','font-weight':'normal'
 59	Texto_Justificado_Recuo_Primeira_Linha_Esp_Simples	'font-size':'12pt','font-family':'Calibri','text-indent':'25mm','text-align':'justify','word-wrap':'normal','margin':'0 0 0 6pt'
+35	Texto_Espaco_Duplo_Recuo_Primeira_Linha	'letter-spacing':'1px','font-weight':'bold','font-size':'12pt','font-family':'Calibri','text-indent':'25mm','text-align':'justify','word-wrap':'normal','margin':'6pt'
 \.
 
 
@@ -14343,7 +14195,7 @@ COPY public.infra_agendamento_tarefa (id_infra_agendamento_tarefa, descricao, co
 9	Processa reaberturas programadas de processos.	AgendamentoRN::reabrirProcessos	D	00:01,01:01	\N	\N	N	\N	\N	S
 5	Confirmar Publicações Internas.	AgendamentoRN::confirmarPublicacaoInterna	D	00:00,01:00	2014-11-25 00:00:01	2014-11-25 00:00:01	S	idOrgao=0	\N	S
 10	Limpar a lixeira.	AgendamentoRN::limparLixeira	D	00:02	\N	\N	N	\N	\N	S
-8	Processa replicações de sinalizações em processos e envia e-mails de aviso sobre solicitações do SEI Federação.	AgendamentoRN::processarFederacao	N	0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55	2024-12-05 09:15:01	2024-12-05 09:15:01	S	\N	\N	S
+8	Processa replicações de sinalizações em processos e envia e-mails de aviso sobre solicitações do SEI Federação.	AgendamentoRN::processarFederacao	N	0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55	2025-01-23 17:45:01	2025-01-23 17:45:01	S	\N	\N	S
 \.
 
 
@@ -14360,14 +14212,6 @@ COPY public.infra_auditoria (id_infra_auditoria, id_usuario, id_orgao_usuario, i
 --
 
 COPY public.infra_captcha (identificacao, dia, mes, ano, acertos, erros) FROM stdin;
-\.
-
-
---
--- Data for Name: infra_captcha_tentativa; Type: TABLE DATA; Schema: public; Owner: sei_user
---
-
-COPY public.infra_captcha_tentativa (identificacao, id_usuario_origem, tentativas, dth_tentativa, user_agent, ip) FROM stdin;
 \.
 
 
@@ -14392,7 +14236,7 @@ COPY public.infra_editor_comentario (id_infra_editor_comentario, id_documento_or
 -- Data for Name: infra_erro_php; Type: TABLE DATA; Schema: public; Owner: sei_user
 --
 
-COPY public.infra_erro_php (id_infra_erro_php, sta_tipo, arquivo, linha, erro, dth_cadastro) FROM stdin;
+COPY public.infra_erro_php (id_infra_erro_php, sta_tipo, arquivo, linha, erro, dth_cadastro, quantidade) FROM stdin;
 \.
 
 
@@ -14409,7 +14253,6 @@ COPY public.infra_log (id_infra_log, dth_log, texto_log, ip, sta_tipo) FROM stdi
 --
 
 COPY public.infra_navegador (id_infra_navegador, identificacao, versao, user_agent, ip, dth_acesso) FROM stdin;
-1	Chrome	109.0	Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36	172.26.0.1	2023-02-02 14:54:20
 \.
 
 
@@ -14445,7 +14288,6 @@ SEI_HABILITAR_GRAU_SIGILO	0
 SEI_HABILITAR_HIPOTESE_LEGAL	2
 SEI_HABILITAR_MOVER_DOCUMENTO	2
 SEI_HABILITAR_NUMERO_PROCESSO_INFORMADO	1
-SEI_HABILITAR_VALIDACAO_CPF_CERTIFICADO_DIGITAL	1
 SEI_HABILITAR_VALIDACAO_EXTENSAO_ARQUIVOS	1
 SEI_HABILITAR_VERIFICACAO_REPOSITORIO	0
 SEI_ID_SISTEMA	100000100
@@ -14477,7 +14319,17 @@ ID_PAIS_BRASIL	76
 SEI_HABILITAR_CONSULTA_PROCESSUAL	0
 SEI_NOVO_EDITOR_MODELOS	1
 SEI_NOVO_EDITOR_UNIDADES	*
+SEI_NUM_MAX_ANEXOS_OUVIDORIA	0
+SEI_FORMULARIO_CADASTRO_EXTERNO_HABILITADO	1
+SEI_EXTERNOS_POLITICA_PRIVACIDADE_LINK	
+SEI_EXTERNOS_POLITICA_PRIVACIDADE_DATA_HORA	
 SEI_NUM_DIAS_LIXEIRA	45
+SEI_2_FATORES_EXTERNO_HABILITADO	0
+SEI_2_FATORES_EXTERNO_TEMPO_MINUTOS_CODIGO	10
+SEI_GOV_BR_EXTERNO_HABILITADO	0
+SEI_GOV_BR_EXTERNO_CONFIABILIDADE	P
+SEI_NUM_REVISORES_AVALIACAO_DOCUMENTAL	1
+SEI_GOV_BR_EXTERNO_ASSINATURA	0
 SEI_VERSAO	5.0.0
 \.
 
@@ -15970,6 +15822,14 @@ COPY public.protocolo_federacao (id_protocolo_federacao, id_instalacao_federacao
 
 
 --
+-- Data for Name: protocolo_idx; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.protocolo_idx (id_protocolo, dth_indexacao) FROM stdin;
+\.
+
+
+--
 -- Data for Name: protocolo_modelo; Type: TABLE DATA; Schema: public; Owner: sei_user
 --
 
@@ -15982,6 +15842,14 @@ COPY public.protocolo_modelo (id_protocolo_modelo, id_grupo_protocolo_modelo, id
 --
 
 COPY public.publicacao (id_publicacao, id_unidade, id_usuario, id_documento, id_atividade, id_veiculo_publicacao, id_veiculo_io, id_secao_io, dth_agendamento, sta_motivo, dta_disponibilizacao, dta_publicacao_io, pagina_io, resumo, dta_publicacao, numero) FROM stdin;
+\.
+
+
+--
+-- Data for Name: publicacao_idx; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.publicacao_idx (id_publicacao, dth_indexacao) FROM stdin;
 \.
 
 
@@ -56937,6 +56805,2157 @@ COPY public.rel_secao_mod_cj_estilos_item (id_secao_modelo, id_conjunto_estilos_
 773	1636	N
 773	1637	N
 773	1638	N
+164	1643	N
+167	1643	N
+193	1643	N
+220	1643	N
+241	1643	N
+243	1643	N
+245	1643	N
+247	1643	N
+249	1643	N
+251	1643	N
+276	1643	N
+337	1643	S
+339	1643	S
+341	1643	N
+366	1643	S
+370	1643	N
+399	1643	N
+401	1643	N
+405	1643	S
+406	1643	N
+486	1643	N
+492	1643	N
+499	1643	N
+505	1643	N
+511	1643	N
+517	1643	N
+523	1643	N
+526	1643	N
+536	1643	N
+542	1643	N
+548	1643	N
+554	1643	N
+560	1643	N
+566	1643	N
+572	1643	N
+578	1643	N
+584	1643	N
+589	1643	N
+595	1643	N
+598	1643	N
+616	1643	N
+618	1643	N
+621	1643	S
+625	1643	N
+628	1643	S
+631	1643	N
+634	1643	S
+637	1643	N
+655	1643	N
+661	1643	N
+667	1643	N
+673	1643	N
+679	1643	N
+685	1643	N
+691	1643	N
+697	1643	N
+703	1643	N
+705	1643	N
+710	1643	N
+718	1643	N
+741	1643	N
+747	1643	N
+750	1643	N
+751	1643	N
+755	1643	N
+761	1643	N
+766	1643	N
+773	1643	N
+164	1644	N
+167	1644	N
+193	1644	N
+220	1644	N
+241	1644	N
+243	1644	N
+245	1644	N
+247	1644	N
+249	1644	N
+251	1644	N
+276	1644	N
+341	1644	N
+370	1644	N
+399	1644	N
+401	1644	N
+406	1644	N
+526	1644	N
+616	1644	N
+618	1644	N
+622	1644	S
+625	1644	N
+629	1644	S
+631	1644	N
+637	1644	N
+667	1644	N
+718	1644	N
+750	1644	N
+751	1644	N
+766	1644	N
+164	1645	N
+167	1645	N
+193	1645	N
+207	1645	N
+209	1645	N
+220	1645	N
+241	1645	N
+243	1645	N
+245	1645	N
+247	1645	N
+249	1645	N
+251	1645	N
+257	1645	N
+276	1645	N
+283	1645	N
+341	1645	N
+370	1645	N
+384	1645	N
+392	1645	N
+394	1645	N
+399	1645	N
+401	1645	N
+406	1645	N
+419	1645	N
+422	1645	N
+427	1645	N
+431	1645	N
+437	1645	N
+479	1645	N
+486	1645	N
+492	1645	N
+499	1645	N
+505	1645	N
+511	1645	N
+517	1645	N
+523	1645	N
+526	1645	N
+536	1645	N
+542	1645	N
+548	1645	N
+554	1645	N
+560	1645	N
+566	1645	N
+572	1645	N
+578	1645	N
+584	1645	N
+589	1645	N
+595	1645	N
+598	1645	N
+601	1645	N
+616	1645	N
+618	1645	N
+625	1645	N
+631	1645	N
+637	1645	N
+642	1645	N
+644	1645	N
+655	1645	N
+661	1645	N
+667	1645	S
+673	1645	N
+679	1645	N
+685	1645	N
+691	1645	N
+697	1645	N
+703	1645	N
+705	1645	N
+710	1645	N
+716	1645	N
+718	1645	N
+741	1645	N
+747	1645	N
+750	1645	N
+751	1645	N
+755	1645	N
+761	1645	N
+766	1645	N
+773	1645	N
+164	1646	N
+167	1646	N
+174	1646	N
+193	1646	N
+207	1646	N
+209	1646	N
+220	1646	N
+241	1646	S
+243	1646	S
+245	1646	S
+247	1646	S
+249	1646	S
+251	1646	S
+253	1646	S
+254	1646	S
+257	1646	N
+276	1646	N
+283	1646	N
+341	1646	S
+370	1646	S
+384	1646	N
+392	1646	N
+394	1646	N
+399	1646	N
+401	1646	S
+406	1646	S
+419	1646	N
+422	1646	N
+427	1646	N
+431	1646	N
+437	1646	N
+477	1646	S
+479	1646	N
+485	1646	S
+486	1646	N
+491	1646	S
+492	1646	N
+498	1646	S
+499	1646	N
+504	1646	S
+505	1646	N
+510	1646	S
+511	1646	N
+516	1646	S
+517	1646	N
+522	1646	S
+523	1646	N
+526	1646	S
+535	1646	S
+536	1646	N
+541	1646	S
+542	1646	N
+547	1646	S
+548	1646	N
+553	1646	S
+554	1646	N
+559	1646	S
+560	1646	N
+565	1646	S
+566	1646	N
+571	1646	S
+572	1646	N
+577	1646	S
+578	1646	N
+584	1646	S
+589	1646	N
+594	1646	S
+595	1646	N
+598	1646	N
+601	1646	N
+616	1646	N
+618	1646	S
+625	1646	S
+631	1646	S
+637	1646	S
+642	1646	N
+644	1646	N
+648	1646	S
+654	1646	S
+655	1646	N
+660	1646	S
+661	1646	N
+667	1646	N
+672	1646	S
+673	1646	N
+678	1646	S
+679	1646	N
+684	1646	S
+685	1646	N
+690	1646	S
+691	1646	N
+696	1646	S
+697	1646	N
+702	1646	S
+703	1646	N
+705	1646	N
+709	1646	S
+710	1646	N
+715	1646	S
+716	1646	N
+718	1646	S
+722	1646	S
+723	1646	N
+728	1646	S
+729	1646	N
+734	1646	S
+735	1646	N
+740	1646	S
+741	1646	N
+746	1646	S
+747	1646	N
+750	1646	S
+751	1646	S
+754	1646	S
+755	1646	N
+760	1646	S
+761	1646	N
+766	1646	N
+772	1646	S
+773	1646	N
+163	1647	S
+164	1647	S
+167	1647	S
+174	1647	N
+193	1647	S
+207	1647	N
+209	1647	S
+217	1647	S
+220	1647	S
+257	1647	S
+276	1647	S
+277	1647	S
+283	1647	S
+341	1647	N
+370	1647	N
+384	1647	S
+392	1647	S
+394	1647	S
+399	1647	S
+401	1647	N
+406	1647	N
+418	1647	S
+419	1647	S
+422	1647	S
+427	1647	S
+437	1647	S
+447	1647	S
+472	1647	S
+486	1647	N
+492	1647	N
+499	1647	N
+505	1647	N
+511	1647	N
+517	1647	N
+523	1647	N
+526	1647	N
+536	1647	N
+542	1647	N
+548	1647	N
+554	1647	N
+560	1647	N
+566	1647	N
+572	1647	N
+578	1647	N
+584	1647	N
+589	1647	N
+595	1647	N
+598	1647	N
+601	1647	S
+616	1647	S
+618	1647	N
+625	1647	N
+631	1647	N
+637	1647	N
+642	1647	S
+644	1647	S
+655	1647	N
+661	1647	N
+667	1647	N
+673	1647	N
+679	1647	N
+685	1647	N
+691	1647	N
+697	1647	N
+703	1647	N
+705	1647	N
+710	1647	N
+718	1647	N
+741	1647	N
+747	1647	N
+750	1647	N
+751	1647	N
+755	1647	N
+761	1647	N
+766	1647	S
+773	1647	N
+162	1648	S
+164	1648	N
+166	1648	S
+167	1648	N
+173	1648	S
+189	1648	S
+193	1648	N
+200	1648	S
+207	1648	N
+208	1648	S
+209	1648	N
+214	1648	S
+220	1648	N
+233	1648	S
+241	1648	N
+243	1648	N
+245	1648	N
+247	1648	N
+249	1648	N
+251	1648	N
+252	1648	S
+257	1648	N
+275	1648	S
+276	1648	N
+283	1648	N
+341	1648	N
+370	1648	N
+384	1648	N
+390	1648	S
+392	1648	N
+394	1648	N
+397	1648	S
+399	1648	N
+401	1648	N
+406	1648	N
+410	1648	S
+417	1648	S
+419	1648	N
+422	1648	N
+427	1648	N
+436	1648	S
+437	1648	N
+471	1648	S
+476	1648	S
+479	1648	N
+483	1648	S
+486	1648	N
+490	1648	S
+492	1648	N
+497	1648	S
+499	1648	N
+503	1648	S
+505	1648	N
+509	1648	S
+511	1648	N
+515	1648	S
+517	1648	N
+521	1648	S
+523	1648	N
+526	1648	N
+534	1648	S
+536	1648	N
+540	1648	S
+542	1648	N
+546	1648	S
+548	1648	N
+552	1648	S
+554	1648	N
+558	1648	S
+560	1648	N
+564	1648	S
+566	1648	N
+570	1648	S
+572	1648	N
+576	1648	S
+578	1648	N
+582	1648	S
+584	1648	N
+588	1648	S
+589	1648	N
+593	1648	S
+595	1648	N
+598	1648	N
+601	1648	N
+615	1648	S
+616	1648	N
+618	1648	N
+625	1648	N
+631	1648	N
+637	1648	N
+641	1648	S
+642	1648	N
+644	1648	N
+647	1648	S
+653	1648	S
+655	1648	N
+659	1648	S
+661	1648	N
+665	1648	S
+667	1648	N
+671	1648	S
+673	1648	N
+677	1648	S
+679	1648	N
+683	1648	S
+685	1648	N
+689	1648	S
+691	1648	N
+695	1648	S
+697	1648	N
+701	1648	S
+703	1648	N
+705	1648	N
+708	1648	S
+710	1648	N
+714	1648	S
+716	1648	N
+718	1648	N
+721	1648	S
+727	1648	S
+733	1648	S
+739	1648	S
+741	1648	N
+745	1648	S
+747	1648	N
+750	1648	N
+751	1648	N
+753	1648	S
+755	1648	N
+759	1648	S
+761	1648	N
+765	1648	S
+766	1648	N
+771	1648	S
+773	1648	N
+164	1649	N
+167	1649	N
+193	1649	N
+207	1649	N
+209	1649	N
+220	1649	N
+241	1649	N
+243	1649	N
+245	1649	N
+247	1649	N
+249	1649	N
+251	1649	N
+257	1649	N
+276	1649	N
+283	1649	N
+341	1649	N
+370	1649	N
+384	1649	N
+392	1649	N
+394	1649	N
+399	1649	N
+401	1649	N
+406	1649	N
+422	1649	N
+427	1649	N
+431	1649	N
+437	1649	N
+479	1649	N
+486	1649	N
+492	1649	N
+499	1649	N
+505	1649	N
+511	1649	N
+517	1649	N
+523	1649	N
+526	1649	N
+536	1649	N
+542	1649	N
+548	1649	N
+554	1649	N
+560	1649	N
+566	1649	N
+572	1649	N
+578	1649	N
+589	1649	N
+595	1649	N
+598	1649	N
+601	1649	N
+616	1649	N
+618	1649	N
+625	1649	N
+631	1649	N
+637	1649	N
+642	1649	N
+644	1649	N
+649	1649	N
+655	1649	N
+661	1649	N
+667	1649	N
+673	1649	N
+679	1649	N
+685	1649	N
+691	1649	N
+697	1649	N
+703	1649	N
+705	1649	N
+710	1649	N
+716	1649	N
+718	1649	N
+723	1649	N
+729	1649	N
+735	1649	N
+741	1649	N
+747	1649	N
+750	1649	N
+751	1649	N
+755	1649	N
+761	1649	N
+766	1649	N
+773	1649	N
+164	1650	N
+167	1650	N
+193	1650	N
+207	1650	N
+209	1650	N
+220	1650	N
+241	1650	N
+243	1650	N
+245	1650	N
+247	1650	N
+249	1650	N
+251	1650	N
+257	1650	N
+276	1650	N
+283	1650	N
+341	1650	N
+370	1650	N
+384	1650	N
+392	1650	N
+394	1650	N
+399	1650	N
+401	1650	N
+406	1650	N
+422	1650	N
+427	1650	N
+431	1650	N
+437	1650	N
+479	1650	N
+486	1650	N
+492	1650	N
+499	1650	N
+505	1650	N
+511	1650	N
+517	1650	N
+523	1650	N
+526	1650	N
+536	1650	N
+542	1650	N
+548	1650	N
+554	1650	N
+560	1650	N
+566	1650	N
+572	1650	N
+578	1650	N
+589	1650	N
+595	1650	N
+598	1650	N
+601	1650	N
+616	1650	N
+618	1650	N
+625	1650	N
+631	1650	N
+637	1650	N
+642	1650	N
+644	1650	N
+649	1650	N
+655	1650	N
+661	1650	N
+667	1650	N
+673	1650	N
+679	1650	N
+685	1650	N
+691	1650	N
+697	1650	N
+703	1650	N
+705	1650	N
+710	1650	N
+716	1650	N
+718	1650	N
+723	1650	N
+729	1650	N
+735	1650	N
+741	1650	N
+747	1650	N
+750	1650	N
+751	1650	N
+755	1650	N
+761	1650	N
+766	1650	N
+773	1650	N
+164	1651	N
+167	1651	N
+193	1651	N
+207	1651	N
+209	1651	N
+220	1651	N
+241	1651	N
+243	1651	N
+245	1651	N
+247	1651	N
+249	1651	N
+251	1651	N
+257	1651	N
+276	1651	N
+283	1651	N
+341	1651	N
+370	1651	N
+384	1651	N
+392	1651	N
+394	1651	N
+399	1651	N
+401	1651	N
+406	1651	N
+422	1651	N
+427	1651	N
+431	1651	N
+437	1651	N
+479	1651	N
+486	1651	N
+492	1651	N
+499	1651	N
+505	1651	N
+511	1651	N
+517	1651	N
+523	1651	N
+526	1651	N
+536	1651	N
+542	1651	N
+548	1651	N
+554	1651	N
+560	1651	N
+566	1651	N
+572	1651	N
+578	1651	N
+589	1651	N
+595	1651	N
+598	1651	N
+601	1651	N
+616	1651	N
+618	1651	N
+625	1651	N
+631	1651	N
+637	1651	N
+642	1651	N
+644	1651	N
+649	1651	S
+655	1651	N
+661	1651	N
+667	1651	N
+673	1651	N
+679	1651	N
+685	1651	N
+691	1651	N
+697	1651	N
+703	1651	N
+705	1651	N
+710	1651	N
+716	1651	N
+718	1651	N
+723	1651	S
+729	1651	S
+735	1651	S
+741	1651	N
+747	1651	N
+750	1651	N
+751	1651	N
+755	1651	N
+761	1651	N
+766	1651	N
+773	1651	N
+164	1652	N
+167	1652	N
+193	1652	N
+207	1652	N
+209	1652	N
+220	1652	N
+241	1652	N
+243	1652	N
+245	1652	N
+247	1652	N
+249	1652	N
+251	1652	N
+257	1652	N
+276	1652	N
+283	1652	N
+341	1652	N
+370	1652	N
+384	1652	N
+392	1652	N
+394	1652	N
+399	1652	N
+401	1652	N
+406	1652	N
+422	1652	N
+427	1652	N
+431	1652	N
+437	1652	N
+479	1652	N
+486	1652	N
+492	1652	N
+499	1652	N
+505	1652	N
+511	1652	N
+517	1652	N
+523	1652	N
+526	1652	N
+536	1652	N
+542	1652	N
+548	1652	N
+554	1652	N
+560	1652	N
+566	1652	N
+572	1652	N
+578	1652	N
+589	1652	N
+595	1652	N
+598	1652	N
+601	1652	N
+616	1652	N
+618	1652	N
+625	1652	N
+631	1652	N
+637	1652	N
+642	1652	N
+644	1652	N
+649	1652	N
+655	1652	N
+661	1652	N
+667	1652	N
+673	1652	N
+679	1652	N
+685	1652	N
+691	1652	N
+697	1652	N
+703	1652	N
+705	1652	N
+710	1652	N
+716	1652	N
+718	1652	N
+723	1652	N
+729	1652	N
+735	1652	N
+741	1652	N
+747	1652	N
+750	1652	N
+751	1652	N
+755	1652	N
+761	1652	N
+766	1652	N
+773	1652	N
+164	1653	N
+167	1653	N
+193	1653	N
+207	1653	N
+209	1653	N
+220	1653	N
+241	1653	N
+243	1653	N
+245	1653	N
+247	1653	N
+249	1653	N
+251	1653	N
+257	1653	N
+276	1653	N
+283	1653	N
+294	1653	S
+298	1653	S
+316	1653	S
+323	1653	S
+327	1653	S
+331	1653	S
+341	1653	N
+370	1653	N
+382	1653	S
+384	1653	N
+389	1653	S
+392	1653	N
+394	1653	N
+396	1653	S
+399	1653	N
+401	1653	N
+406	1653	N
+414	1653	S
+415	1653	S
+419	1653	N
+422	1653	N
+425	1653	S
+427	1653	N
+435	1653	S
+437	1653	N
+470	1653	S
+479	1653	N
+486	1653	N
+492	1653	N
+499	1653	N
+505	1653	N
+511	1653	N
+517	1653	N
+523	1653	N
+526	1653	N
+536	1653	N
+542	1653	N
+548	1653	N
+554	1653	N
+560	1653	N
+566	1653	N
+572	1653	N
+578	1653	N
+589	1653	N
+595	1653	N
+598	1653	N
+601	1653	N
+614	1653	S
+616	1653	N
+618	1653	N
+625	1653	N
+631	1653	N
+637	1653	N
+640	1653	S
+642	1653	N
+644	1653	N
+655	1653	N
+661	1653	N
+664	1653	S
+667	1653	N
+673	1653	N
+679	1653	N
+685	1653	N
+691	1653	N
+697	1653	N
+703	1653	N
+705	1653	N
+710	1653	N
+716	1653	N
+718	1653	N
+741	1653	N
+747	1653	N
+750	1653	N
+751	1653	N
+755	1653	N
+761	1653	N
+764	1653	S
+766	1653	N
+773	1653	N
+201	1654	S
+203	1654	S
+207	1654	N
+209	1654	N
+240	1654	S
+242	1654	S
+244	1654	S
+246	1654	S
+248	1654	S
+250	1654	S
+401	1654	N
+411	1654	S
+430	1654	S
+445	1654	S
+446	1654	S
+526	1654	N
+618	1654	N
+667	1654	N
+718	1654	N
+750	1654	N
+751	1654	N
+401	1655	N
+526	1655	N
+618	1655	N
+667	1655	N
+718	1655	N
+750	1655	N
+751	1655	N
+174	1656	S
+241	1656	N
+243	1656	N
+245	1656	N
+247	1656	N
+249	1656	N
+251	1656	N
+257	1656	N
+283	1656	N
+341	1656	N
+370	1656	N
+384	1656	N
+394	1656	N
+401	1656	N
+406	1656	N
+419	1656	N
+422	1656	N
+427	1656	N
+526	1656	N
+584	1656	N
+598	1656	N
+601	1656	N
+618	1656	N
+625	1656	N
+631	1656	N
+637	1656	N
+644	1656	N
+667	1656	N
+705	1656	N
+718	1656	N
+750	1656	N
+751	1656	N
+766	1656	N
+174	1657	N
+241	1657	N
+243	1657	N
+245	1657	N
+247	1657	N
+249	1657	N
+251	1657	N
+257	1657	N
+283	1657	N
+341	1657	N
+370	1657	N
+384	1657	N
+394	1657	N
+401	1657	N
+406	1657	N
+419	1657	N
+422	1657	N
+427	1657	N
+526	1657	N
+584	1657	N
+598	1657	N
+601	1657	N
+618	1657	N
+625	1657	N
+631	1657	N
+637	1657	N
+644	1657	N
+667	1657	N
+705	1657	N
+718	1657	N
+750	1657	N
+751	1657	N
+766	1657	N
+207	1658	N
+209	1658	N
+241	1658	N
+243	1658	N
+245	1658	N
+247	1658	N
+249	1658	N
+251	1658	N
+401	1658	N
+431	1658	N
+479	1658	N
+486	1658	N
+492	1658	N
+499	1658	N
+505	1658	N
+511	1658	N
+517	1658	N
+523	1658	N
+526	1658	N
+536	1658	N
+542	1658	N
+548	1658	N
+554	1658	N
+560	1658	N
+566	1658	N
+572	1658	N
+578	1658	N
+589	1658	N
+595	1658	N
+618	1658	N
+655	1658	N
+661	1658	N
+667	1658	N
+673	1658	N
+679	1658	N
+685	1658	N
+691	1658	N
+697	1658	N
+703	1658	N
+710	1658	N
+716	1658	N
+718	1658	N
+723	1658	N
+729	1658	N
+735	1658	N
+741	1658	N
+747	1658	N
+750	1658	N
+751	1658	N
+755	1658	N
+761	1658	N
+773	1658	N
+207	1659	N
+209	1659	N
+241	1659	N
+243	1659	N
+245	1659	N
+247	1659	N
+249	1659	N
+251	1659	N
+401	1659	N
+431	1659	N
+479	1659	N
+486	1659	N
+492	1659	N
+499	1659	N
+505	1659	N
+511	1659	N
+517	1659	N
+523	1659	N
+526	1659	N
+536	1659	N
+542	1659	N
+548	1659	N
+554	1659	N
+560	1659	N
+566	1659	N
+572	1659	N
+578	1659	N
+589	1659	N
+595	1659	N
+618	1659	N
+655	1659	N
+661	1659	N
+667	1659	N
+673	1659	N
+679	1659	N
+685	1659	N
+691	1659	N
+697	1659	N
+703	1659	N
+710	1659	N
+716	1659	N
+718	1659	N
+723	1659	N
+729	1659	N
+735	1659	N
+741	1659	N
+747	1659	N
+750	1659	N
+751	1659	N
+755	1659	N
+761	1659	N
+773	1659	N
+207	1660	S
+209	1660	N
+241	1660	N
+243	1660	N
+245	1660	N
+247	1660	N
+249	1660	N
+251	1660	N
+401	1660	N
+431	1660	S
+479	1660	S
+486	1660	S
+492	1660	S
+499	1660	S
+505	1660	S
+511	1660	S
+517	1660	S
+523	1660	S
+526	1660	N
+536	1660	S
+542	1660	S
+548	1660	S
+554	1660	S
+560	1660	S
+566	1660	S
+572	1660	S
+578	1660	S
+589	1660	S
+595	1660	S
+618	1660	N
+655	1660	S
+661	1660	S
+667	1660	N
+673	1660	S
+679	1660	S
+685	1660	S
+691	1660	S
+697	1660	S
+703	1660	S
+710	1660	S
+716	1660	S
+718	1660	N
+723	1660	N
+729	1660	N
+735	1660	N
+741	1660	S
+747	1660	S
+750	1660	N
+751	1660	N
+755	1660	S
+761	1660	S
+773	1660	S
+207	1661	N
+209	1661	N
+241	1661	N
+243	1661	N
+245	1661	N
+247	1661	N
+249	1661	N
+251	1661	N
+401	1661	N
+431	1661	N
+479	1661	N
+486	1661	N
+492	1661	N
+499	1661	N
+505	1661	N
+511	1661	N
+517	1661	N
+523	1661	N
+526	1661	N
+536	1661	N
+542	1661	N
+548	1661	N
+554	1661	N
+560	1661	N
+566	1661	N
+572	1661	N
+578	1661	N
+589	1661	N
+595	1661	N
+618	1661	N
+655	1661	N
+661	1661	N
+667	1661	N
+673	1661	N
+679	1661	N
+685	1661	N
+691	1661	N
+697	1661	N
+703	1661	N
+710	1661	N
+716	1661	N
+718	1661	N
+723	1661	N
+729	1661	N
+735	1661	N
+741	1661	N
+747	1661	N
+750	1661	N
+751	1661	N
+755	1661	N
+761	1661	N
+773	1661	N
+174	1662	N
+241	1662	N
+243	1662	N
+245	1662	N
+247	1662	N
+249	1662	N
+251	1662	N
+257	1662	N
+283	1662	N
+341	1662	N
+370	1662	N
+384	1662	N
+394	1662	N
+401	1662	N
+406	1662	N
+419	1662	N
+422	1662	N
+427	1662	N
+526	1662	N
+584	1662	N
+598	1662	N
+601	1662	N
+618	1662	N
+625	1662	N
+631	1662	N
+637	1662	N
+644	1662	N
+667	1662	N
+705	1662	N
+718	1662	N
+750	1662	N
+751	1662	N
+766	1662	N
+207	1663	N
+209	1663	N
+241	1663	N
+243	1663	N
+245	1663	N
+247	1663	N
+249	1663	N
+251	1663	N
+401	1663	N
+431	1663	N
+479	1663	N
+486	1663	N
+492	1663	N
+499	1663	N
+505	1663	N
+511	1663	N
+517	1663	N
+523	1663	N
+526	1663	N
+536	1663	N
+542	1663	N
+548	1663	N
+554	1663	N
+560	1663	N
+566	1663	N
+572	1663	N
+578	1663	N
+589	1663	N
+595	1663	N
+618	1663	N
+655	1663	N
+661	1663	N
+667	1663	N
+673	1663	N
+679	1663	N
+685	1663	N
+691	1663	N
+697	1663	N
+703	1663	N
+710	1663	N
+716	1663	N
+718	1663	N
+723	1663	N
+729	1663	N
+735	1663	N
+741	1663	N
+747	1663	N
+750	1663	N
+751	1663	N
+755	1663	N
+761	1663	N
+773	1663	N
+207	1664	N
+209	1664	N
+241	1664	N
+243	1664	N
+245	1664	N
+247	1664	N
+249	1664	N
+251	1664	N
+401	1664	N
+431	1664	N
+479	1664	N
+486	1664	N
+492	1664	N
+499	1664	N
+505	1664	N
+511	1664	N
+517	1664	N
+523	1664	N
+526	1664	N
+536	1664	N
+542	1664	N
+548	1664	N
+554	1664	N
+560	1664	N
+566	1664	N
+572	1664	N
+578	1664	N
+589	1664	N
+595	1664	N
+618	1664	N
+655	1664	N
+661	1664	N
+667	1664	N
+673	1664	N
+679	1664	N
+685	1664	N
+691	1664	N
+697	1664	N
+703	1664	N
+710	1664	N
+716	1664	N
+718	1664	N
+723	1664	N
+729	1664	N
+735	1664	N
+741	1664	N
+747	1664	N
+750	1664	N
+751	1664	N
+755	1664	N
+761	1664	N
+773	1664	N
+174	1665	N
+241	1665	N
+243	1665	N
+245	1665	N
+247	1665	N
+249	1665	N
+251	1665	N
+257	1665	N
+283	1665	N
+341	1665	N
+370	1665	N
+384	1665	N
+394	1665	N
+401	1665	N
+406	1665	N
+419	1665	N
+422	1665	N
+427	1665	N
+526	1665	N
+584	1665	N
+598	1665	N
+601	1665	N
+618	1665	N
+625	1665	N
+631	1665	N
+637	1665	N
+644	1665	N
+667	1665	N
+705	1665	N
+718	1665	N
+750	1665	N
+751	1665	N
+766	1665	N
+174	1666	N
+207	1666	N
+209	1666	N
+241	1666	N
+243	1666	N
+245	1666	N
+247	1666	N
+249	1666	N
+251	1666	N
+257	1666	N
+283	1666	N
+341	1666	N
+370	1666	N
+384	1666	N
+394	1666	N
+401	1666	N
+406	1666	N
+419	1666	N
+422	1666	N
+427	1666	N
+431	1666	N
+479	1666	N
+486	1666	N
+492	1666	N
+499	1666	N
+505	1666	N
+511	1666	N
+517	1666	N
+523	1666	N
+526	1666	N
+536	1666	N
+542	1666	N
+548	1666	N
+554	1666	N
+560	1666	N
+566	1666	N
+572	1666	N
+578	1666	N
+584	1666	N
+589	1666	N
+595	1666	N
+598	1666	N
+601	1666	N
+618	1666	N
+625	1666	N
+631	1666	N
+637	1666	N
+644	1666	N
+655	1666	N
+661	1666	N
+667	1666	N
+673	1666	N
+679	1666	N
+685	1666	N
+691	1666	N
+697	1666	N
+703	1666	N
+705	1666	N
+710	1666	N
+716	1666	N
+718	1666	N
+741	1666	N
+747	1666	N
+750	1666	N
+751	1666	N
+755	1666	N
+761	1666	N
+773	1666	N
+174	1667	N
+207	1667	N
+209	1667	N
+241	1667	N
+243	1667	N
+245	1667	N
+247	1667	N
+249	1667	N
+251	1667	N
+257	1667	N
+283	1667	N
+341	1667	N
+370	1667	N
+384	1667	N
+394	1667	N
+401	1667	N
+406	1667	N
+419	1667	N
+422	1667	N
+427	1667	N
+431	1667	N
+479	1667	N
+486	1667	N
+492	1667	N
+499	1667	N
+505	1667	N
+511	1667	N
+517	1667	N
+523	1667	N
+526	1667	N
+536	1667	N
+542	1667	N
+548	1667	N
+554	1667	N
+560	1667	N
+566	1667	N
+572	1667	N
+578	1667	N
+584	1667	N
+589	1667	N
+595	1667	N
+598	1667	N
+601	1667	N
+618	1667	N
+625	1667	N
+631	1667	N
+637	1667	N
+644	1667	N
+655	1667	N
+661	1667	N
+667	1667	N
+673	1667	N
+679	1667	N
+685	1667	N
+691	1667	N
+697	1667	N
+703	1667	N
+705	1667	N
+710	1667	N
+716	1667	N
+718	1667	N
+741	1667	N
+747	1667	N
+750	1667	N
+751	1667	N
+755	1667	N
+761	1667	N
+773	1667	N
+174	1668	N
+207	1668	N
+209	1668	N
+241	1668	N
+243	1668	N
+245	1668	N
+247	1668	N
+249	1668	N
+251	1668	N
+257	1668	N
+283	1668	N
+341	1668	N
+370	1668	N
+384	1668	N
+394	1668	N
+401	1668	N
+406	1668	N
+419	1668	N
+422	1668	N
+427	1668	N
+431	1668	N
+479	1668	N
+486	1668	N
+492	1668	N
+499	1668	N
+505	1668	N
+511	1668	N
+517	1668	N
+523	1668	N
+526	1668	N
+536	1668	N
+542	1668	N
+548	1668	N
+554	1668	N
+560	1668	N
+566	1668	N
+572	1668	N
+578	1668	N
+584	1668	N
+589	1668	N
+595	1668	N
+598	1668	N
+601	1668	N
+618	1668	N
+625	1668	N
+631	1668	N
+637	1668	N
+644	1668	N
+655	1668	N
+661	1668	N
+667	1668	N
+673	1668	N
+679	1668	N
+685	1668	N
+691	1668	N
+697	1668	N
+703	1668	N
+705	1668	N
+710	1668	N
+716	1668	N
+718	1668	N
+741	1668	N
+747	1668	N
+750	1668	N
+751	1668	N
+755	1668	N
+761	1668	N
+773	1668	N
+174	1669	N
+207	1669	N
+209	1669	N
+241	1669	N
+243	1669	N
+245	1669	N
+247	1669	N
+249	1669	N
+251	1669	N
+257	1669	N
+283	1669	N
+341	1669	N
+370	1669	N
+384	1669	N
+394	1669	N
+401	1669	N
+406	1669	N
+419	1669	N
+422	1669	N
+427	1669	N
+431	1669	N
+479	1669	N
+486	1669	N
+492	1669	N
+499	1669	N
+505	1669	N
+511	1669	N
+517	1669	N
+523	1669	N
+526	1669	N
+536	1669	N
+542	1669	N
+548	1669	N
+554	1669	N
+560	1669	N
+566	1669	N
+572	1669	N
+578	1669	N
+584	1669	N
+589	1669	N
+595	1669	N
+598	1669	N
+601	1669	N
+618	1669	N
+625	1669	N
+631	1669	N
+637	1669	N
+644	1669	N
+655	1669	N
+661	1669	N
+667	1669	N
+673	1669	N
+679	1669	N
+685	1669	N
+691	1669	N
+697	1669	N
+703	1669	N
+705	1669	N
+710	1669	N
+716	1669	N
+718	1669	N
+741	1669	N
+747	1669	N
+750	1669	N
+751	1669	N
+755	1669	N
+761	1669	N
+773	1669	N
+401	1670	N
+486	1670	N
+526	1670	N
+595	1670	N
+598	1670	N
+618	1670	N
+667	1670	N
+679	1670	N
+685	1670	N
+691	1670	N
+697	1670	N
+703	1670	N
+705	1670	N
+710	1670	N
+718	1670	N
+741	1670	N
+747	1670	N
+750	1670	N
+751	1670	N
+755	1670	N
+761	1670	N
+164	1671	N
+167	1671	N
+193	1671	N
+220	1671	N
+241	1671	N
+243	1671	N
+245	1671	N
+247	1671	N
+249	1671	N
+251	1671	N
+276	1671	N
+283	1671	N
+340	1671	S
+341	1671	N
+368	1671	S
+369	1671	S
+370	1671	N
+384	1671	N
+399	1671	N
+401	1671	N
+406	1671	N
+422	1671	N
+427	1671	N
+479	1671	N
+486	1671	N
+492	1671	N
+499	1671	N
+505	1671	N
+511	1671	N
+517	1671	N
+523	1671	N
+526	1671	N
+536	1671	N
+542	1671	N
+548	1671	N
+554	1671	N
+560	1671	N
+566	1671	N
+572	1671	N
+578	1671	N
+584	1671	N
+589	1671	N
+595	1671	N
+598	1671	N
+601	1671	N
+616	1671	N
+618	1671	N
+624	1671	S
+625	1671	N
+630	1671	S
+631	1671	N
+636	1671	S
+637	1671	N
+655	1671	N
+661	1671	N
+667	1671	N
+673	1671	N
+679	1671	N
+685	1671	N
+691	1671	N
+697	1671	N
+703	1671	N
+705	1671	N
+710	1671	N
+716	1671	N
+718	1671	N
+741	1671	N
+747	1671	N
+750	1671	N
+751	1671	N
+755	1671	N
+761	1671	N
+766	1671	N
+773	1671	N
+164	1672	N
+167	1672	N
+193	1672	N
+220	1672	N
+241	1672	N
+243	1672	N
+245	1672	N
+247	1672	N
+249	1672	N
+251	1672	N
+276	1672	N
+282	1672	S
+283	1672	N
+341	1672	N
+370	1672	N
+383	1672	S
+384	1672	N
+399	1672	N
+401	1672	N
+406	1672	N
+416	1672	S
+422	1672	N
+426	1672	S
+427	1672	N
+486	1672	N
+492	1672	N
+499	1672	N
+505	1672	N
+511	1672	N
+517	1672	N
+523	1672	N
+526	1672	N
+536	1672	N
+542	1672	N
+548	1672	N
+554	1672	N
+560	1672	N
+566	1672	N
+572	1672	N
+578	1672	N
+584	1672	N
+589	1672	N
+595	1672	N
+598	1672	N
+600	1672	S
+601	1672	N
+616	1672	N
+618	1672	N
+625	1672	N
+631	1672	N
+637	1672	N
+655	1672	N
+661	1672	N
+667	1672	N
+673	1672	N
+679	1672	N
+685	1672	N
+691	1672	N
+697	1672	N
+703	1672	N
+705	1672	N
+710	1672	N
+718	1672	N
+741	1672	N
+747	1672	N
+750	1672	N
+751	1672	N
+755	1672	N
+761	1672	N
+766	1672	N
+773	1672	N
+174	1673	N
+241	1673	N
+243	1673	N
+245	1673	N
+247	1673	N
+249	1673	N
+251	1673	N
+257	1673	N
+283	1673	N
+341	1673	N
+370	1673	N
+384	1673	N
+394	1673	N
+401	1673	N
+406	1673	N
+419	1673	N
+422	1673	N
+427	1673	N
+526	1673	N
+584	1673	N
+598	1673	N
+601	1673	N
+618	1673	N
+625	1673	N
+631	1673	N
+637	1673	N
+644	1673	N
+667	1673	N
+705	1673	N
+718	1673	N
+750	1673	N
+751	1673	N
+766	1673	N
+207	1674	N
+209	1674	N
+241	1674	N
+243	1674	N
+245	1674	N
+247	1674	N
+249	1674	N
+251	1674	N
+401	1674	N
+431	1674	N
+479	1674	N
+486	1674	N
+492	1674	N
+499	1674	N
+505	1674	N
+511	1674	N
+517	1674	N
+523	1674	N
+526	1674	N
+536	1674	N
+542	1674	N
+548	1674	N
+554	1674	N
+560	1674	N
+566	1674	N
+572	1674	N
+578	1674	N
+589	1674	N
+595	1674	N
+618	1674	N
+655	1674	N
+661	1674	N
+667	1674	N
+673	1674	N
+679	1674	N
+685	1674	N
+691	1674	N
+697	1674	N
+703	1674	N
+710	1674	N
+716	1674	N
+718	1674	N
+723	1674	N
+729	1674	N
+735	1674	N
+741	1674	N
+747	1674	N
+750	1674	N
+751	1674	N
+755	1674	N
+761	1674	N
+773	1674	N
+207	1675	N
+209	1675	N
+241	1675	N
+243	1675	N
+245	1675	N
+247	1675	N
+249	1675	N
+251	1675	N
+401	1675	N
+431	1675	N
+479	1675	N
+486	1675	N
+492	1675	N
+499	1675	N
+505	1675	N
+511	1675	N
+517	1675	N
+523	1675	N
+526	1675	N
+536	1675	N
+542	1675	N
+548	1675	N
+554	1675	N
+560	1675	N
+566	1675	N
+572	1675	N
+578	1675	N
+589	1675	N
+595	1675	N
+618	1675	N
+655	1675	N
+661	1675	N
+667	1675	N
+673	1675	N
+679	1675	N
+685	1675	N
+691	1675	N
+697	1675	N
+703	1675	N
+710	1675	N
+716	1675	N
+718	1675	N
+723	1675	N
+729	1675	N
+735	1675	N
+741	1675	N
+747	1675	N
+750	1675	N
+751	1675	N
+755	1675	N
+761	1675	N
+773	1675	N
+174	1676	N
+241	1676	N
+243	1676	N
+245	1676	N
+247	1676	N
+249	1676	N
+251	1676	N
+257	1676	N
+283	1676	N
+341	1676	N
+370	1676	N
+384	1676	N
+394	1676	N
+401	1676	N
+406	1676	N
+419	1676	N
+422	1676	N
+427	1676	N
+526	1676	N
+584	1676	N
+598	1676	N
+601	1676	N
+618	1676	N
+625	1676	N
+631	1676	N
+637	1676	N
+644	1676	N
+667	1676	N
+705	1676	N
+718	1676	N
+750	1676	N
+751	1676	N
+766	1676	N
+174	1677	N
+241	1677	N
+243	1677	N
+245	1677	N
+247	1677	N
+249	1677	N
+251	1677	N
+257	1677	N
+283	1677	N
+341	1677	N
+370	1677	N
+384	1677	N
+394	1677	N
+401	1677	N
+406	1677	N
+419	1677	N
+422	1677	N
+427	1677	N
+526	1677	N
+598	1677	N
+601	1677	N
+618	1677	N
+625	1677	N
+631	1677	N
+637	1677	N
+644	1677	N
+667	1677	N
+705	1677	N
+718	1677	N
+750	1677	N
+751	1677	N
+766	1677	N
+164	1678	N
+174	1678	N
+193	1678	N
+207	1678	N
+209	1678	N
+220	1678	N
+241	1678	N
+243	1678	N
+245	1678	N
+247	1678	N
+249	1678	N
+251	1678	N
+257	1678	N
+276	1678	N
+283	1678	N
+341	1678	N
+370	1678	N
+384	1678	N
+401	1678	N
+406	1678	N
+419	1678	N
+422	1678	N
+427	1678	N
+431	1678	N
+479	1678	N
+486	1678	N
+492	1678	N
+499	1678	N
+505	1678	N
+511	1678	N
+517	1678	N
+523	1678	N
+526	1678	N
+536	1678	N
+542	1678	N
+548	1678	N
+554	1678	N
+560	1678	N
+566	1678	N
+572	1678	N
+578	1678	N
+589	1678	N
+595	1678	N
+598	1678	N
+601	1678	N
+618	1678	N
+625	1678	N
+631	1678	N
+637	1678	N
+655	1678	N
+661	1678	N
+667	1678	N
+673	1678	N
+679	1678	N
+685	1678	N
+691	1678	N
+697	1678	N
+703	1678	N
+705	1678	N
+710	1678	N
+716	1678	N
+718	1678	N
+741	1678	N
+747	1678	N
+750	1678	N
+751	1678	N
+755	1678	N
+761	1678	N
+773	1678	N
+174	1679	N
+241	1679	N
+243	1679	N
+245	1679	N
+247	1679	N
+249	1679	N
+251	1679	N
+257	1679	N
+283	1679	N
+341	1679	N
+370	1679	N
+384	1679	N
+394	1679	N
+401	1679	N
+406	1679	N
+419	1679	N
+422	1679	N
+427	1679	N
+526	1679	N
+598	1679	N
+601	1679	N
+618	1679	N
+625	1679	N
+631	1679	N
+637	1679	N
+644	1679	N
+667	1679	N
+705	1679	N
+718	1679	N
+750	1679	N
+751	1679	N
+766	1679	N
+401	1680	N
+526	1680	N
+618	1680	N
+667	1680	N
+718	1680	N
+750	1680	N
+751	1680	N
+164	1681	N
+167	1681	N
+193	1681	N
+220	1681	N
+276	1681	N
+392	1681	N
+399	1681	N
+437	1681	N
+616	1681	N
+642	1681	N
+766	1681	N
 \.
 
 
@@ -59570,6 +61589,14 @@ COPY public.retorno_programado (id_retorno_programado, id_atividade_envio, id_at
 
 
 --
+-- Data for Name: revisao_avaliacao; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.revisao_avaliacao (id_revisao_avaliacao, id_avaliacao_documental, id_usuario, id_unidade, dth_revisao, sta_revisao_avaliacao, motivo, justificativa, sin_ativo) FROM stdin;
+\.
+
+
+--
 -- Data for Name: secao_documento; Type: TABLE DATA; Schema: public; Owner: sei_user
 --
 
@@ -60512,6 +62539,17 @@ COPY public.tarja_assinatura (id_tarja_assinatura, texto, logo, sin_ativo, sta_t
 5	<hr style="margin: 0 0 4px 0;" />  <table>    <tr>      <td>  @logo_assinatura@      </td>      <td>  <p style="margin:0;text-align: left; font-size:11pt;font-family: Calibri;">Documento autenticado eletronicamente por <b>@nome_assinante@</b>, <b>@tratamento_assinante@</b>, em @data_assinatura@, às @hora_assinatura@, conforme horário oficial de Brasília, com fundamento no art. 3º, caput, da <a title="Acesse a Lei" href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12682.htm" target="_blank">Lei nº 12.682, de 9 de julho de 2012</a>, a partir de @tipo_conferencia@.</p></td></tr></table>	iVBORw0KGgoAAAANSUhEUgAAAFkAAAA8CAMAAAA67OZ0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAADTtpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+Cjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDQuMi4yLWMwNjMgNTMuMzUyNjI0LCAyMDA4LzA3LzMwLTE4OjEyOjE4ICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICAgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIKICAgIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIKICAgIHhtbG5zOklwdGM0eG1wQ29yZT0iaHR0cDovL2lwdGMub3JnL3N0ZC9JcHRjNHhtcENvcmUvMS4wL3htbG5zLyIKICAgeG1wUmlnaHRzOldlYlN0YXRlbWVudD0iIgogICBwaG90b3Nob3A6QXV0aG9yc1Bvc2l0aW9uPSIiPgogICA8ZGM6cmlnaHRzPgogICAgPHJkZjpBbHQ+CiAgICAgPHJkZjpsaSB4bWw6bGFuZz0ieC1kZWZhdWx0Ii8+CiAgICA8L3JkZjpBbHQ+CiAgIDwvZGM6cmlnaHRzPgogICA8ZGM6Y3JlYXRvcj4KICAgIDxyZGY6U2VxPgogICAgIDxyZGY6bGk+QWxiZXJ0byBCaWdhdHRpPC9yZGY6bGk+CiAgICA8L3JkZjpTZXE+CiAgIDwvZGM6Y3JlYXRvcj4KICAgPGRjOnRpdGxlPgogICAgPHJkZjpBbHQ+CiAgICAgPHJkZjpsaSB4bWw6bGFuZz0ieC1kZWZhdWx0Ii8+CiAgICA8L3JkZjpBbHQ+CiAgIDwvZGM6dGl0bGU+CiAgIDx4bXBSaWdodHM6VXNhZ2VUZXJtcz4KICAgIDxyZGY6QWx0PgogICAgIDxyZGY6bGkgeG1sOmxhbmc9IngtZGVmYXVsdCIvPgogICAgPC9yZGY6QWx0PgogICA8L3htcFJpZ2h0czpVc2FnZVRlcm1zPgogICA8SXB0YzR4bXBDb3JlOkNyZWF0b3JDb250YWN0SW5mbwogICAgSXB0YzR4bXBDb3JlOkNpQWRyRXh0YWRyPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJDaXR5PSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJSZWdpb249IiIKICAgIElwdGM0eG1wQ29yZTpDaUFkclBjb2RlPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJDdHJ5PSIiCiAgICBJcHRjNHhtcENvcmU6Q2lUZWxXb3JrPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lFbWFpbFdvcms9IiIKICAgIElwdGM0eG1wQ29yZTpDaVVybFdvcms9IiIvPgogIDwvcmRmOkRlc2NyaXB0aW9uPgogPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgIAo8P3hwYWNrZXQgZW5kPSJ3Ij8+RO84nQAAAwBQTFRFamts+fn5mp6hc3Nz9fX1U1NTS0tKnaGk6unqzM3P7e3u8fHxuLm7/Pz8lZmc2dnZxcXGWlpavr29wsLCp6eniYmKhYaGZWZmkpaZ0dHS5eXlkZGSrq2utbW2XV1d4uHhfX1+sbGy1dXW3d3dqampgYGCjY2OyMnKYWJihYaIjY6RnZ2ejpGSra+xeHl7lZWVmJiYgoKFpKaptre5vb7Aurq8oaGikpSWmJufh4iKkZKVysrMtrq7ioyOdXZ4fn+ArrGywcLEzc7QiYqMt7W1/v/8mZqcxsbIpqqrZGFhztDSeXp7iIWGnJqalJKSf4CCg4B/amZmoaSm5+fmvLy6ys3OzMzL2tze3dzaa2hny8nH0M7NiYiGbG5v19jYWFVVcG5s2drcxMTD0dPUx8jJ/P79sbO1j46OmZWU1dfXhIKC1NLTd3h68fL0wsTGb3By+vf3YV1d2NjW7u7u6Ojpe3x9fHp54eLkxMLAvLq5/f39+vr63t7fXFtamZiW6urqzMnKwL+98PHvrKytq6qq7evpr62toKKkvr/BOzk42dvad3V06OjmpaSj5efnnZyblpWT/fz6ZWZo9/f3jYyKqquteXd47u3rhYSC5eTisbCueXh2qaimWlhXjImIY2Bfc3Bw////UFBP/v7+/v////7///3+g4SHaGlpYmNj8vPzZ2dn/vz9WFhYtbO0ztDPWltbbW9u/v7/xcPEiouLrayq4+Tms7S2VldX7/DyqKel+/z++Pj4+ff4cXBuuru7u7y+7+/vx8fH8/HysK+wXFxc/fv8s7OztrWzZWRio6Ohl5eZ1NTUZGRkraus2NbX4N/d0dDP3dzc9ff14ODg9/n4oaCg4eHf+/v76+vrQD4+7Ozs/f3/7evsRUJCvLy87vDtysvLXl9fzczNwsPDYGBgw7+/ysjJgH19gH9/29rbwMC/Tk1MlJCPoaCeX1tb6ufo4uPjx8fF5OPht7e3X15cuLe4tLKzn56f09TW1dXTYWJkh4eHZGJj3+Diq6urXLJJJAAAC8BJREFUeNqsmAtYE1cWgAcmJLwSwjMJAYxiQhIeITyEgCGiAioCaiqWaoCiFQVKtgWsJFRapEpFatuodetKHYaQkIiipZVWqqBQ64OqrduGuquVR1sDu62u69JdW/fOZCCJovjttyffl9yZ3PvfM2fOOffcC6UgJ1a5R1GeJI6OjvHx8TQgTCYzLiEsTCgU8qRSQcaN4VNsWWpsndep7u7u2NhY9+7UkpKSJFnqkApBIOTrufFgJDb2MUIQ4xLYAMnjSRf4+koEAoGupLcMdQtVRBs0JA3JImovpVKpUED6SAMCnZhLo1Dmrlzp8hhJxCQkJGRdGhA6nV5aWjrs7T08nJw8Ono6hD7aXZd2ml5ALygoGAb33QPvBs68ACsZIjXkAcBLmpH/RVC7H7xlaZ86qmTcgY47UsKbEW3LU4Mmx9tTJwWYGJFAeh4URXGc2/yUCqJTaGrLRlFi3khIAUMUCxl9Kjj4qFQo1WYeC27ie6KjSK+AMHIsuDu92qpq8wCK+P+6cdasGvRRM6G21yI9hJPdn+Z1vTCfJvZlNccIgQt6IIj2iZ0zjY+Q0SnfGvZ921EiMC645kKjxNOen06NTMaTdH5oklwhl8OHdyyhUWgJudOS+yG9HRl9RGWrzm/FKfRNHYZEWnyCdON0ZHa/Xv8kO9u9FJSlY3DNzclMmtD34rTkVr1xajKKpFgaVIcu9URkkKq7EFW3MEEiZk1L5hsfJqtfrP74lXK3LhTDqQy/r+uOTX7egIUVKbhKvmOGQ7dEKpaxpvN/Np/BsLdzWeJWkDMpi+reAv5NNftIsjjpEekXLgJ0bgUDapf2JIsFnIgj0+o8YkMGuQMtX8SkgbTpyGTSEcTkIuX6CsTcLJkyAlzmRvD1nR1lXhXcJNjl4fTxsBSO9Pfb6IwaFjG3UxxXrKDQHF9B0F+lAp5AOH5BnM5RyF5Gnk9vVbR3lMUmVcBHb05lDXwm4nbhYH/rJBmY1QWAKe65q+avX09CB1LFPMF4VZchWQxH6MdR834+1OZbFg0nKfQhdo5Dch0YcHYu7zFZ/Yk3yG+10blrHo3iGK4G/1JdUWoal6eLm4Hli25FEsSZcTVp0Nh5v+w4BBtbT9u4peFITF1dTMyN7ple8kkD8YL4fCv5mGZRPIWynhjRM0cs0bljHY9VySDo6OmP69sZTvfLZr6raA2iW5+/pjSKsvb34FWrqrZXsM0TobY7iD9iq3N4PLDyuhfxQTMWSHSSdSiJZHCokjIUrXdvw56tTX6uvXx9X9vwpM7Hopes2h7uHh14/LhIEiF0Jf7Y3TcyaGNndSITXDAD1oL/UVaWRCcIDZ8d1eATWgFBg1uD4c4RcpHrg3Z+Z97w5Bv7mFI3b3ag+73AwMAGXwFcSrWQO9oHrWTQ75M9NEdHmlAYdaRLlVYh0GUlgVXY2M+Ajur7onJhp0FA9ukMcsLJ+HM3r3WUht0mgixUnBTVRZA9bcmgc3k4M4FJCxNIujXrSnRiTokSLA16Bn8waGzcA27qI+9znUNuc3LyBp0t4b8yXrjiE2L4VhkcqrE0fduCgmysAeQT+oowaUKYQJecXcLlyETbx0NDIyNFIrZvmhkCZL9rqdedxsijk2QXmnROGUHew1FSSBPkwT47ncHK4UwPFUil4oQbHE4JJw3RdHVpcEGK9WN9ZG519vjs83OCJ1VxuSChlFmax/ZUKLdP6NzZ5/lIrnvh9rhOIpb0LigpgWfa+G0xoymILCt/KO7qhIK4UtYQVuzMT4AhHuEckjxPTxtrEM5IXVKhyxK4z1FEKGWzrOVAsbGpncypPrG2O61nYj6VSxxPKJX4+XFlsor0iJIkRUbPo2SAHPDH0qU6OV3HEbMS34WVUBa9vMvk0ONxcwC5aAR25pYvYQqSomoIdHXc9vmzWNnZiUNHbp6mh4TcPB9UgPvdfSc7skN0agzL7FEnzBKXSNxqeIPw0X6935ZQkS/EGEZYmM5+ueESiQJiEY/isSARxZ8UdbCULLf7A9TYtZ892ZCqE0jZPLFMXAIHHkNyZUFGqLU9z8mpiUz2QS7qgZ0lG1ekVwwGzSfywyrpOrwhj5L0GrCGf384npcIcny05dleEesEYhmHE6FMegC8R2Vm97e1tXViYPIu5Erbd+Q395bHQJ1kdg9R+ezwpWP2+0sql62IVYPprvID1FayI0FGetzHpTpAFqSmGfBnqykY58IKCL7FPvsVMkPkx/ZrMJBOZdZWEzlNtUNQipEN6RdmKSOBMujVwQdWMohnQmeE6hzMCkk8Eoy7vhYb3SU35+Z+Jce81ERyc6shqRCVxpqHPcSlKqwRKhNCoyYsjwXZkwMfrYhQrdam4kBtVyfU2jtXh+mMojWi/4Tj0VfVNwV5wp/BF6CabhSqrfUm+tln9lMT9Fxusgq/2Ws047/BbbU25HjacaK/CWO3oGhKi4n64zcqAnZIiw5EHp7QFEsXVCoB3wjiH7ea+0l/vK+8rcFhkhwfz7SsI2UiTuOlzxcWRbpd2VcYXDx+5nDGT2zDQObezKob3x34MGSraX7tzoLdmffG6wu/smi9sWS9BqWaTIj/SoMJ+50/5mOa9Od4moWM9Cz02r9JPpZhvpoPm3cG5LgeXJzh+aXmVOXBwtU/wzPG8x1q859dQ/7mtTs/LM50sEQAO4nH5nV0SDo6/Li3blVwRposRQ5OTqXFncW7/Xlh5smcr/curjS8nfcnUu1yZ/jtmk085HDm4qVvbArVhsLUXtjMLULdvsjIW2qw2OZqQ0eH732/fUXcW6Dk2Qune1mmtCNTh/NW716c0rOtafM7r3+w695y5/pxTdHu0Zw7t5a9AW/R7jK+tyUneFkm4nPyuYNFZyYqgoGBakxAVVBeLpdfI14HTqbR4nBrqH68viY/p3rpTwfunN/00vszR+T5W7r276aP7ftg2R8av/sh22nxq3Dwpkbko7w1efvcpq7iJ27h5AvMhHmW6V9beKRYQ194STMUkK3xH3JgVakuehxaXfmcBzJj5iztjwuHzGcumRFSQWVBlRqx2wXZxYKVHEYk+BbcFVuaX9CasLSAZ4bmQ+oW0L25GbW6MVX1GE2tgpNFcWHzrNO5iR5YulJVzRjboXd5LbEJHe2oslHv2BRA1J4cFxcWbg2sayd5WLPlzDe7QEy0IN9v/sKbZFG/+MtyEJ1EtKOP6os+rPMEGVF/eHDT6jP1mSnPHFz2cvb1po8ub2k8//Xfzq35x19rRQc3vDOU8d7Oxg+e8WjMKfRHp96IoXZ2jgsThuO9nv353vv/lHM2fPuS16fL/52zfEfBdU7Blpy6+qWXc/K3BHlXnnyZnV97h5V959zfU560H8QiBVsHE9jScGwuauX1xv2d5qK3R683wucuFxaleB0I/jZnA7ItZ3P9pzvza73g1+HzKSnv1S4dy6BOs43G10FA3ooZjup1/crOPzrvFXmTL/3yS/WyZSleL8nlOY0p53Oy92/7Hv7Iq35zfkbKO0s3FednTkO2WCNMKN2Kvxb5b78tTehRFrr+zCjaRY18s+HGgatow1iO57bL/bU9xk8rzz3bQH61IXPxMvIG6jRnCvcJ8h7LPed7hz3QWVVa/38trEJcn2H1DGkQUvb7qxFSsVx90f8ai6ShH/Ynfeh95bZqmvMK3M5Coe8eyyvVfq5WYYs8SlXjDo2AK0SlPgS8D7QRVIVlZrSZapr+xMLiG1LJnscnAIsrt9itUehjDmNsROLUxod8BJJQ1HYQShx1aK1orR1IO/2RRX2nUwW0VrxAQkf+vxLQ6Tl2AzoxO0si8ekG26OYmG7sQK/S3f3evbt3o6MDwebj7NmzMzHpBRIQELAVyIPa2trZPk+SfZ6eZD8HCCHNlnFBLSnjVIByEtSTQGAYVlqO9EDJrzcaGYz+Vj6fPzIY1Nfe7gnqpk5Qkz1WmpyamvxqECgFURX78HQ6MdgHZ+F8vF618MEER5VHIWwCI5igH5tgEEhfu+cTpN/PGzj8fwUYAEHf/4ET3ikCAAAAAElFTkSuQmCC	S	H
 1	<hr style="margin: 0 0 4px 0;" />  <table>    <tr>      <td>  @logo_assinatura@      </td>      <td>  <p style="margin:0;text-align: left; font-size:11pt;font-family: Calibri;">Documento assinado eletronicamente por <b>@nome_assinante@</b>, <b>@tratamento_assinante@</b>, em @data_assinatura@, às @hora_assinatura@, conforme horário oficial de Brasília, com o emprego de certificado digital emitido no âmbito da ICP-Brasil, com fundamento no art. 6º do <a title="Acesse o Decreto" href="http://www.planalto.gov.br/ccivil_03/_Ato2015-2018/2015/Decreto/D8539.htm" target="_blank">Decreto nº 8.539, de 8 de outubro de 2015</a>.<br />Nº de Série do Certificado: @numero_serie_certificado_digital@</p>      </td>    </tr>  </table>	iVBORw0KGgoAAAANSUhEUgAAAFkAAAA8CAMAAAA67OZ0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAADTtpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+Cjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDQuMi4yLWMwNjMgNTMuMzUyNjI0LCAyMDA4LzA3LzMwLTE4OjEyOjE4ICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICAgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIKICAgIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIKICAgIHhtbG5zOklwdGM0eG1wQ29yZT0iaHR0cDovL2lwdGMub3JnL3N0ZC9JcHRjNHhtcENvcmUvMS4wL3htbG5zLyIKICAgeG1wUmlnaHRzOldlYlN0YXRlbWVudD0iIgogICBwaG90b3Nob3A6QXV0aG9yc1Bvc2l0aW9uPSIiPgogICA8ZGM6cmlnaHRzPgogICAgPHJkZjpBbHQ+CiAgICAgPHJkZjpsaSB4bWw6bGFuZz0ieC1kZWZhdWx0Ii8+CiAgICA8L3JkZjpBbHQ+CiAgIDwvZGM6cmlnaHRzPgogICA8ZGM6Y3JlYXRvcj4KICAgIDxyZGY6U2VxPgogICAgIDxyZGY6bGk+QWxiZXJ0byBCaWdhdHRpPC9yZGY6bGk+CiAgICA8L3JkZjpTZXE+CiAgIDwvZGM6Y3JlYXRvcj4KICAgPGRjOnRpdGxlPgogICAgPHJkZjpBbHQ+CiAgICAgPHJkZjpsaSB4bWw6bGFuZz0ieC1kZWZhdWx0Ii8+CiAgICA8L3JkZjpBbHQ+CiAgIDwvZGM6dGl0bGU+CiAgIDx4bXBSaWdodHM6VXNhZ2VUZXJtcz4KICAgIDxyZGY6QWx0PgogICAgIDxyZGY6bGkgeG1sOmxhbmc9IngtZGVmYXVsdCIvPgogICAgPC9yZGY6QWx0PgogICA8L3htcFJpZ2h0czpVc2FnZVRlcm1zPgogICA8SXB0YzR4bXBDb3JlOkNyZWF0b3JDb250YWN0SW5mbwogICAgSXB0YzR4bXBDb3JlOkNpQWRyRXh0YWRyPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJDaXR5PSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJSZWdpb249IiIKICAgIElwdGM0eG1wQ29yZTpDaUFkclBjb2RlPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJDdHJ5PSIiCiAgICBJcHRjNHhtcENvcmU6Q2lUZWxXb3JrPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lFbWFpbFdvcms9IiIKICAgIElwdGM0eG1wQ29yZTpDaVVybFdvcms9IiIvPgogIDwvcmRmOkRlc2NyaXB0aW9uPgogPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgIAo8P3hwYWNrZXQgZW5kPSJ3Ij8+RO84nQAAAwBQTFRFamts+fn5mp6hc3Nz9fX1U1NTS0tKnaGk6unqzM3P7e3u8fHxuLm7/Pz8lZmc2dnZxcXGWlpavr29wsLCp6eniYmKhYaGZWZmkpaZ0dHS5eXlkZGSrq2utbW2XV1d4uHhfX1+sbGy1dXW3d3dqampgYGCjY2OyMnKYWJihYaIjY6RnZ2ejpGSra+xeHl7lZWVmJiYgoKFpKaptre5vb7Aurq8oaGikpSWmJufh4iKkZKVysrMtrq7ioyOdXZ4fn+ArrGywcLEzc7QiYqMt7W1/v/8mZqcxsbIpqqrZGFhztDSeXp7iIWGnJqalJKSf4CCg4B/amZmoaSm5+fmvLy6ys3OzMzL2tze3dzaa2hny8nH0M7NiYiGbG5v19jYWFVVcG5s2drcxMTD0dPUx8jJ/P79sbO1j46OmZWU1dfXhIKC1NLTd3h68fL0wsTGb3By+vf3YV1d2NjW7u7u6Ojpe3x9fHp54eLkxMLAvLq5/f39+vr63t7fXFtamZiW6urqzMnKwL+98PHvrKytq6qq7evpr62toKKkvr/BOzk42dvad3V06OjmpaSj5efnnZyblpWT/fz6ZWZo9/f3jYyKqquteXd47u3rhYSC5eTisbCueXh2qaimWlhXjImIY2Bfc3Bw////UFBP/v7+/v////7///3+g4SHaGlpYmNj8vPzZ2dn/vz9WFhYtbO0ztDPWltbbW9u/v7/xcPEiouLrayq4+Tms7S2VldX7/DyqKel+/z++Pj4+ff4cXBuuru7u7y+7+/vx8fH8/HysK+wXFxc/fv8s7OztrWzZWRio6Ohl5eZ1NTUZGRkraus2NbX4N/d0dDP3dzc9ff14ODg9/n4oaCg4eHf+/v76+vrQD4+7Ozs/f3/7evsRUJCvLy87vDtysvLXl9fzczNwsPDYGBgw7+/ysjJgH19gH9/29rbwMC/Tk1MlJCPoaCeX1tb6ufo4uPjx8fF5OPht7e3X15cuLe4tLKzn56f09TW1dXTYWJkh4eHZGJj3+Diq6urXLJJJAAAC8BJREFUeNqsmAtYE1cWgAcmJLwSwjMJAYxiQhIeITyEgCGiAioCaiqWaoCiFQVKtgWsJFRapEpFatuodetKHYaQkIiipZVWqqBQ64OqrduGuquVR1sDu62u69JdW/fOZCCJovjttyffl9yZ3PvfM2fOOffcC6UgJ1a5R1GeJI6OjvHx8TQgTCYzLiEsTCgU8qRSQcaN4VNsWWpsndep7u7u2NhY9+7UkpKSJFnqkApBIOTrufFgJDb2MUIQ4xLYAMnjSRf4+koEAoGupLcMdQtVRBs0JA3JImovpVKpUED6SAMCnZhLo1Dmrlzp8hhJxCQkJGRdGhA6nV5aWjrs7T08nJw8Ono6hD7aXZd2ml5ALygoGAb33QPvBs68ACsZIjXkAcBLmpH/RVC7H7xlaZ86qmTcgY47UsKbEW3LU4Mmx9tTJwWYGJFAeh4URXGc2/yUCqJTaGrLRlFi3khIAUMUCxl9Kjj4qFQo1WYeC27ie6KjSK+AMHIsuDu92qpq8wCK+P+6cdasGvRRM6G21yI9hJPdn+Z1vTCfJvZlNccIgQt6IIj2iZ0zjY+Q0SnfGvZ921EiMC645kKjxNOen06NTMaTdH5oklwhl8OHdyyhUWgJudOS+yG9HRl9RGWrzm/FKfRNHYZEWnyCdON0ZHa/Xv8kO9u9FJSlY3DNzclMmtD34rTkVr1xajKKpFgaVIcu9URkkKq7EFW3MEEiZk1L5hsfJqtfrP74lXK3LhTDqQy/r+uOTX7egIUVKbhKvmOGQ7dEKpaxpvN/Np/BsLdzWeJWkDMpi+reAv5NNftIsjjpEekXLgJ0bgUDapf2JIsFnIgj0+o8YkMGuQMtX8SkgbTpyGTSEcTkIuX6CsTcLJkyAlzmRvD1nR1lXhXcJNjl4fTxsBSO9Pfb6IwaFjG3UxxXrKDQHF9B0F+lAp5AOH5BnM5RyF5Gnk9vVbR3lMUmVcBHb05lDXwm4nbhYH/rJBmY1QWAKe65q+avX09CB1LFPMF4VZchWQxH6MdR834+1OZbFg0nKfQhdo5Dch0YcHYu7zFZ/Yk3yG+10blrHo3iGK4G/1JdUWoal6eLm4Hli25FEsSZcTVp0Nh5v+w4BBtbT9u4peFITF1dTMyN7ple8kkD8YL4fCv5mGZRPIWynhjRM0cs0bljHY9VySDo6OmP69sZTvfLZr6raA2iW5+/pjSKsvb34FWrqrZXsM0TobY7iD9iq3N4PLDyuhfxQTMWSHSSdSiJZHCokjIUrXdvw56tTX6uvXx9X9vwpM7Hopes2h7uHh14/LhIEiF0Jf7Y3TcyaGNndSITXDAD1oL/UVaWRCcIDZ8d1eATWgFBg1uD4c4RcpHrg3Z+Z97w5Bv7mFI3b3ag+73AwMAGXwFcSrWQO9oHrWTQ75M9NEdHmlAYdaRLlVYh0GUlgVXY2M+Ajur7onJhp0FA9ukMcsLJ+HM3r3WUht0mgixUnBTVRZA9bcmgc3k4M4FJCxNIujXrSnRiTokSLA16Bn8waGzcA27qI+9znUNuc3LyBp0t4b8yXrjiE2L4VhkcqrE0fduCgmysAeQT+oowaUKYQJecXcLlyETbx0NDIyNFIrZvmhkCZL9rqdedxsijk2QXmnROGUHew1FSSBPkwT47ncHK4UwPFUil4oQbHE4JJw3RdHVpcEGK9WN9ZG519vjs83OCJ1VxuSChlFmax/ZUKLdP6NzZ5/lIrnvh9rhOIpb0LigpgWfa+G0xoymILCt/KO7qhIK4UtYQVuzMT4AhHuEckjxPTxtrEM5IXVKhyxK4z1FEKGWzrOVAsbGpncypPrG2O61nYj6VSxxPKJX4+XFlsor0iJIkRUbPo2SAHPDH0qU6OV3HEbMS34WVUBa9vMvk0ONxcwC5aAR25pYvYQqSomoIdHXc9vmzWNnZiUNHbp6mh4TcPB9UgPvdfSc7skN0agzL7FEnzBKXSNxqeIPw0X6935ZQkS/EGEZYmM5+ueESiQJiEY/isSARxZ8UdbCULLf7A9TYtZ892ZCqE0jZPLFMXAIHHkNyZUFGqLU9z8mpiUz2QS7qgZ0lG1ekVwwGzSfywyrpOrwhj5L0GrCGf384npcIcny05dleEesEYhmHE6FMegC8R2Vm97e1tXViYPIu5Erbd+Q395bHQJ1kdg9R+ezwpWP2+0sql62IVYPprvID1FayI0FGetzHpTpAFqSmGfBnqykY58IKCL7FPvsVMkPkx/ZrMJBOZdZWEzlNtUNQipEN6RdmKSOBMujVwQdWMohnQmeE6hzMCkk8Eoy7vhYb3SU35+Z+Jce81ERyc6shqRCVxpqHPcSlKqwRKhNCoyYsjwXZkwMfrYhQrdam4kBtVyfU2jtXh+mMojWi/4Tj0VfVNwV5wp/BF6CabhSqrfUm+tln9lMT9Fxusgq/2Ws047/BbbU25HjacaK/CWO3oGhKi4n64zcqAnZIiw5EHp7QFEsXVCoB3wjiH7ea+0l/vK+8rcFhkhwfz7SsI2UiTuOlzxcWRbpd2VcYXDx+5nDGT2zDQObezKob3x34MGSraX7tzoLdmffG6wu/smi9sWS9BqWaTIj/SoMJ+50/5mOa9Od4moWM9Cz02r9JPpZhvpoPm3cG5LgeXJzh+aXmVOXBwtU/wzPG8x1q859dQ/7mtTs/LM50sEQAO4nH5nV0SDo6/Li3blVwRposRQ5OTqXFncW7/Xlh5smcr/curjS8nfcnUu1yZ/jtmk085HDm4qVvbArVhsLUXtjMLULdvsjIW2qw2OZqQ0eH732/fUXcW6Dk2Qune1mmtCNTh/NW716c0rOtafM7r3+w695y5/pxTdHu0Zw7t5a9AW/R7jK+tyUneFkm4nPyuYNFZyYqgoGBakxAVVBeLpdfI14HTqbR4nBrqH68viY/p3rpTwfunN/00vszR+T5W7r276aP7ftg2R8av/sh22nxq3Dwpkbko7w1efvcpq7iJ27h5AvMhHmW6V9beKRYQ194STMUkK3xH3JgVakuehxaXfmcBzJj5iztjwuHzGcumRFSQWVBlRqx2wXZxYKVHEYk+BbcFVuaX9CasLSAZ4bmQ+oW0L25GbW6MVX1GE2tgpNFcWHzrNO5iR5YulJVzRjboXd5LbEJHe2oslHv2BRA1J4cFxcWbg2sayd5WLPlzDe7QEy0IN9v/sKbZFG/+MtyEJ1EtKOP6os+rPMEGVF/eHDT6jP1mSnPHFz2cvb1po8ub2k8//Xfzq35x19rRQc3vDOU8d7Oxg+e8WjMKfRHp96IoXZ2jgsThuO9nv353vv/lHM2fPuS16fL/52zfEfBdU7Blpy6+qWXc/K3BHlXnnyZnV97h5V959zfU560H8QiBVsHE9jScGwuauX1xv2d5qK3R683wucuFxaleB0I/jZnA7ItZ3P9pzvza73g1+HzKSnv1S4dy6BOs43G10FA3ooZjup1/crOPzrvFXmTL/3yS/WyZSleL8nlOY0p53Oy92/7Hv7Iq35zfkbKO0s3FednTkO2WCNMKN2Kvxb5b78tTehRFrr+zCjaRY18s+HGgatow1iO57bL/bU9xk8rzz3bQH61IXPxMvIG6jRnCvcJ8h7LPed7hz3QWVVa/38trEJcn2H1DGkQUvb7qxFSsVx90f8ai6ShH/Ynfeh95bZqmvMK3M5Coe8eyyvVfq5WYYs8SlXjDo2AK0SlPgS8D7QRVIVlZrSZapr+xMLiG1LJnscnAIsrt9itUehjDmNsROLUxod8BJJQ1HYQShx1aK1orR1IO/2RRX2nUwW0VrxAQkf+vxLQ6Tl2AzoxO0si8ekG26OYmG7sQK/S3f3evbt3o6MDwebj7NmzMzHpBRIQELAVyIPa2trZPk+SfZ6eZD8HCCHNlnFBLSnjVIByEtSTQGAYVlqO9EDJrzcaGYz+Vj6fPzIY1Nfe7gnqpk5Qkz1WmpyamvxqECgFURX78HQ6MdgHZ+F8vF618MEER5VHIWwCI5igH5tgEEhfu+cTpN/PGzj8fwUYAEHf/4ET3ikCAAAAAElFTkSuQmCC	S	C
 2	<hr style="margin: 0 0 4px 0;" />  <table>    <tr>      <td>  @logo_assinatura@      </td>      <td>  <p style="margin:0;text-align: left; font-size:11pt;font-family: Calibri;">Documento assinado eletronicamente por <b>@nome_assinante@</b>, <b>@tratamento_assinante@</b>, em @data_assinatura@, às @hora_assinatura@, conforme horário oficial de Brasília, com fundamento no art. 6º do <a title="Acesse o Decreto" href="http://www.planalto.gov.br/ccivil_03/_Ato2015-2018/2015/Decreto/D8539.htm" target="_blank">Decreto nº 8.539, de 8 de outubro de 2015</a>.</p>      </td>    </tr>  </table>	iVBORw0KGgoAAAANSUhEUgAAAFkAAAA8CAMAAAA67OZ0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAADTtpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+Cjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDQuMi4yLWMwNjMgNTMuMzUyNjI0LCAyMDA4LzA3LzMwLTE4OjEyOjE4ICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICAgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIKICAgIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIKICAgIHhtbG5zOklwdGM0eG1wQ29yZT0iaHR0cDovL2lwdGMub3JnL3N0ZC9JcHRjNHhtcENvcmUvMS4wL3htbG5zLyIKICAgeG1wUmlnaHRzOldlYlN0YXRlbWVudD0iIgogICBwaG90b3Nob3A6QXV0aG9yc1Bvc2l0aW9uPSIiPgogICA8ZGM6cmlnaHRzPgogICAgPHJkZjpBbHQ+CiAgICAgPHJkZjpsaSB4bWw6bGFuZz0ieC1kZWZhdWx0Ii8+CiAgICA8L3JkZjpBbHQ+CiAgIDwvZGM6cmlnaHRzPgogICA8ZGM6Y3JlYXRvcj4KICAgIDxyZGY6U2VxPgogICAgIDxyZGY6bGk+QWxiZXJ0byBCaWdhdHRpPC9yZGY6bGk+CiAgICA8L3JkZjpTZXE+CiAgIDwvZGM6Y3JlYXRvcj4KICAgPGRjOnRpdGxlPgogICAgPHJkZjpBbHQ+CiAgICAgPHJkZjpsaSB4bWw6bGFuZz0ieC1kZWZhdWx0Ii8+CiAgICA8L3JkZjpBbHQ+CiAgIDwvZGM6dGl0bGU+CiAgIDx4bXBSaWdodHM6VXNhZ2VUZXJtcz4KICAgIDxyZGY6QWx0PgogICAgIDxyZGY6bGkgeG1sOmxhbmc9IngtZGVmYXVsdCIvPgogICAgPC9yZGY6QWx0PgogICA8L3htcFJpZ2h0czpVc2FnZVRlcm1zPgogICA8SXB0YzR4bXBDb3JlOkNyZWF0b3JDb250YWN0SW5mbwogICAgSXB0YzR4bXBDb3JlOkNpQWRyRXh0YWRyPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJDaXR5PSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJSZWdpb249IiIKICAgIElwdGM0eG1wQ29yZTpDaUFkclBjb2RlPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJDdHJ5PSIiCiAgICBJcHRjNHhtcENvcmU6Q2lUZWxXb3JrPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lFbWFpbFdvcms9IiIKICAgIElwdGM0eG1wQ29yZTpDaVVybFdvcms9IiIvPgogIDwvcmRmOkRlc2NyaXB0aW9uPgogPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgIAo8P3hwYWNrZXQgZW5kPSJ3Ij8+RO84nQAAAwBQTFRFamts+fn5mp6hc3Nz9fX1U1NTS0tKnaGk6unqzM3P7e3u8fHxuLm7/Pz8lZmc2dnZxcXGWlpavr29wsLCp6eniYmKhYaGZWZmkpaZ0dHS5eXlkZGSrq2utbW2XV1d4uHhfX1+sbGy1dXW3d3dqampgYGCjY2OyMnKYWJihYaIjY6RnZ2ejpGSra+xeHl7lZWVmJiYgoKFpKaptre5vb7Aurq8oaGikpSWmJufh4iKkZKVysrMtrq7ioyOdXZ4fn+ArrGywcLEzc7QiYqMt7W1/v/8mZqcxsbIpqqrZGFhztDSeXp7iIWGnJqalJKSf4CCg4B/amZmoaSm5+fmvLy6ys3OzMzL2tze3dzaa2hny8nH0M7NiYiGbG5v19jYWFVVcG5s2drcxMTD0dPUx8jJ/P79sbO1j46OmZWU1dfXhIKC1NLTd3h68fL0wsTGb3By+vf3YV1d2NjW7u7u6Ojpe3x9fHp54eLkxMLAvLq5/f39+vr63t7fXFtamZiW6urqzMnKwL+98PHvrKytq6qq7evpr62toKKkvr/BOzk42dvad3V06OjmpaSj5efnnZyblpWT/fz6ZWZo9/f3jYyKqquteXd47u3rhYSC5eTisbCueXh2qaimWlhXjImIY2Bfc3Bw////UFBP/v7+/v////7///3+g4SHaGlpYmNj8vPzZ2dn/vz9WFhYtbO0ztDPWltbbW9u/v7/xcPEiouLrayq4+Tms7S2VldX7/DyqKel+/z++Pj4+ff4cXBuuru7u7y+7+/vx8fH8/HysK+wXFxc/fv8s7OztrWzZWRio6Ohl5eZ1NTUZGRkraus2NbX4N/d0dDP3dzc9ff14ODg9/n4oaCg4eHf+/v76+vrQD4+7Ozs/f3/7evsRUJCvLy87vDtysvLXl9fzczNwsPDYGBgw7+/ysjJgH19gH9/29rbwMC/Tk1MlJCPoaCeX1tb6ufo4uPjx8fF5OPht7e3X15cuLe4tLKzn56f09TW1dXTYWJkh4eHZGJj3+Diq6urXLJJJAAAC8BJREFUeNqsmAtYE1cWgAcmJLwSwjMJAYxiQhIeITyEgCGiAioCaiqWaoCiFQVKtgWsJFRapEpFatuodetKHYaQkIiipZVWqqBQ64OqrduGuquVR1sDu62u69JdW/fOZCCJovjttyffl9yZ3PvfM2fOOffcC6UgJ1a5R1GeJI6OjvHx8TQgTCYzLiEsTCgU8qRSQcaN4VNsWWpsndep7u7u2NhY9+7UkpKSJFnqkApBIOTrufFgJDb2MUIQ4xLYAMnjSRf4+koEAoGupLcMdQtVRBs0JA3JImovpVKpUED6SAMCnZhLo1Dmrlzp8hhJxCQkJGRdGhA6nV5aWjrs7T08nJw8Ono6hD7aXZd2ml5ALygoGAb33QPvBs68ACsZIjXkAcBLmpH/RVC7H7xlaZ86qmTcgY47UsKbEW3LU4Mmx9tTJwWYGJFAeh4URXGc2/yUCqJTaGrLRlFi3khIAUMUCxl9Kjj4qFQo1WYeC27ie6KjSK+AMHIsuDu92qpq8wCK+P+6cdasGvRRM6G21yI9hJPdn+Z1vTCfJvZlNccIgQt6IIj2iZ0zjY+Q0SnfGvZ921EiMC645kKjxNOen06NTMaTdH5oklwhl8OHdyyhUWgJudOS+yG9HRl9RGWrzm/FKfRNHYZEWnyCdON0ZHa/Xv8kO9u9FJSlY3DNzclMmtD34rTkVr1xajKKpFgaVIcu9URkkKq7EFW3MEEiZk1L5hsfJqtfrP74lXK3LhTDqQy/r+uOTX7egIUVKbhKvmOGQ7dEKpaxpvN/Np/BsLdzWeJWkDMpi+reAv5NNftIsjjpEekXLgJ0bgUDapf2JIsFnIgj0+o8YkMGuQMtX8SkgbTpyGTSEcTkIuX6CsTcLJkyAlzmRvD1nR1lXhXcJNjl4fTxsBSO9Pfb6IwaFjG3UxxXrKDQHF9B0F+lAp5AOH5BnM5RyF5Gnk9vVbR3lMUmVcBHb05lDXwm4nbhYH/rJBmY1QWAKe65q+avX09CB1LFPMF4VZchWQxH6MdR834+1OZbFg0nKfQhdo5Dch0YcHYu7zFZ/Yk3yG+10blrHo3iGK4G/1JdUWoal6eLm4Hli25FEsSZcTVp0Nh5v+w4BBtbT9u4peFITF1dTMyN7ple8kkD8YL4fCv5mGZRPIWynhjRM0cs0bljHY9VySDo6OmP69sZTvfLZr6raA2iW5+/pjSKsvb34FWrqrZXsM0TobY7iD9iq3N4PLDyuhfxQTMWSHSSdSiJZHCokjIUrXdvw56tTX6uvXx9X9vwpM7Hopes2h7uHh14/LhIEiF0Jf7Y3TcyaGNndSITXDAD1oL/UVaWRCcIDZ8d1eATWgFBg1uD4c4RcpHrg3Z+Z97w5Bv7mFI3b3ag+73AwMAGXwFcSrWQO9oHrWTQ75M9NEdHmlAYdaRLlVYh0GUlgVXY2M+Ajur7onJhp0FA9ukMcsLJ+HM3r3WUht0mgixUnBTVRZA9bcmgc3k4M4FJCxNIujXrSnRiTokSLA16Bn8waGzcA27qI+9znUNuc3LyBp0t4b8yXrjiE2L4VhkcqrE0fduCgmysAeQT+oowaUKYQJecXcLlyETbx0NDIyNFIrZvmhkCZL9rqdedxsijk2QXmnROGUHew1FSSBPkwT47ncHK4UwPFUil4oQbHE4JJw3RdHVpcEGK9WN9ZG519vjs83OCJ1VxuSChlFmax/ZUKLdP6NzZ5/lIrnvh9rhOIpb0LigpgWfa+G0xoymILCt/KO7qhIK4UtYQVuzMT4AhHuEckjxPTxtrEM5IXVKhyxK4z1FEKGWzrOVAsbGpncypPrG2O61nYj6VSxxPKJX4+XFlsor0iJIkRUbPo2SAHPDH0qU6OV3HEbMS34WVUBa9vMvk0ONxcwC5aAR25pYvYQqSomoIdHXc9vmzWNnZiUNHbp6mh4TcPB9UgPvdfSc7skN0agzL7FEnzBKXSNxqeIPw0X6935ZQkS/EGEZYmM5+ueESiQJiEY/isSARxZ8UdbCULLf7A9TYtZ892ZCqE0jZPLFMXAIHHkNyZUFGqLU9z8mpiUz2QS7qgZ0lG1ekVwwGzSfywyrpOrwhj5L0GrCGf384npcIcny05dleEesEYhmHE6FMegC8R2Vm97e1tXViYPIu5Erbd+Q395bHQJ1kdg9R+ezwpWP2+0sql62IVYPprvID1FayI0FGetzHpTpAFqSmGfBnqykY58IKCL7FPvsVMkPkx/ZrMJBOZdZWEzlNtUNQipEN6RdmKSOBMujVwQdWMohnQmeE6hzMCkk8Eoy7vhYb3SU35+Z+Jce81ERyc6shqRCVxpqHPcSlKqwRKhNCoyYsjwXZkwMfrYhQrdam4kBtVyfU2jtXh+mMojWi/4Tj0VfVNwV5wp/BF6CabhSqrfUm+tln9lMT9Fxusgq/2Ws047/BbbU25HjacaK/CWO3oGhKi4n64zcqAnZIiw5EHp7QFEsXVCoB3wjiH7ea+0l/vK+8rcFhkhwfz7SsI2UiTuOlzxcWRbpd2VcYXDx+5nDGT2zDQObezKob3x34MGSraX7tzoLdmffG6wu/smi9sWS9BqWaTIj/SoMJ+50/5mOa9Od4moWM9Cz02r9JPpZhvpoPm3cG5LgeXJzh+aXmVOXBwtU/wzPG8x1q859dQ/7mtTs/LM50sEQAO4nH5nV0SDo6/Li3blVwRposRQ5OTqXFncW7/Xlh5smcr/curjS8nfcnUu1yZ/jtmk085HDm4qVvbArVhsLUXtjMLULdvsjIW2qw2OZqQ0eH732/fUXcW6Dk2Qune1mmtCNTh/NW716c0rOtafM7r3+w695y5/pxTdHu0Zw7t5a9AW/R7jK+tyUneFkm4nPyuYNFZyYqgoGBakxAVVBeLpdfI14HTqbR4nBrqH68viY/p3rpTwfunN/00vszR+T5W7r276aP7ftg2R8av/sh22nxq3Dwpkbko7w1efvcpq7iJ27h5AvMhHmW6V9beKRYQ194STMUkK3xH3JgVakuehxaXfmcBzJj5iztjwuHzGcumRFSQWVBlRqx2wXZxYKVHEYk+BbcFVuaX9CasLSAZ4bmQ+oW0L25GbW6MVX1GE2tgpNFcWHzrNO5iR5YulJVzRjboXd5LbEJHe2oslHv2BRA1J4cFxcWbg2sayd5WLPlzDe7QEy0IN9v/sKbZFG/+MtyEJ1EtKOP6os+rPMEGVF/eHDT6jP1mSnPHFz2cvb1po8ub2k8//Xfzq35x19rRQc3vDOU8d7Oxg+e8WjMKfRHp96IoXZ2jgsThuO9nv353vv/lHM2fPuS16fL/52zfEfBdU7Blpy6+qWXc/K3BHlXnnyZnV97h5V959zfU560H8QiBVsHE9jScGwuauX1xv2d5qK3R683wucuFxaleB0I/jZnA7ItZ3P9pzvza73g1+HzKSnv1S4dy6BOs43G10FA3ooZjup1/crOPzrvFXmTL/3yS/WyZSleL8nlOY0p53Oy92/7Hv7Iq35zfkbKO0s3FednTkO2WCNMKN2Kvxb5b78tTehRFrr+zCjaRY18s+HGgatow1iO57bL/bU9xk8rzz3bQH61IXPxMvIG6jRnCvcJ8h7LPed7hz3QWVVa/38trEJcn2H1DGkQUvb7qxFSsVx90f8ai6ShH/Ynfeh95bZqmvMK3M5Coe8eyyvVfq5WYYs8SlXjDo2AK0SlPgS8D7QRVIVlZrSZapr+xMLiG1LJnscnAIsrt9itUehjDmNsROLUxod8BJJQ1HYQShx1aK1orR1IO/2RRX2nUwW0VrxAQkf+vxLQ6Tl2AzoxO0si8ekG26OYmG7sQK/S3f3evbt3o6MDwebj7NmzMzHpBRIQELAVyIPa2trZPk+SfZ6eZD8HCCHNlnFBLSnjVIByEtSTQGAYVlqO9EDJrzcaGYz+Vj6fPzIY1Nfe7gnqpk5Qkz1WmpyamvxqECgFURX78HQ6MdgHZ+F8vF618MEER5VHIWwCI5igH5tgEEhfu+cTpN/PGzj8fwUYAEHf/4ET3ikCAAAAAElFTkSuQmCC	S	S
+7	<hr style="margin: 0 0 4px 0;" /><table><tr><td>@logo_assinatura@</td><td><p style="margin:0;text-align: left; font-size:11pt;font-family: Times New Roman;">Documento assinado eletronicamente, com assinatura avançada, por <b>@nome_assinante@</b>, <b>@tratamento_assinante@</b>, em @data_assinatura@, às @hora_assinatura@, conforme art. 1º, III, "a", da Lei 11.419/2006.<br />Nº de Série do Certificado: @numero_serie_certificado_digital@</p></td></tr></table>	iVBORw0KGgoAAAANSUhEUgAAAFkAAAA8CAMAAAA67OZ0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAADTtpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+Cjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDQuMi4yLWMwNjMgNTMuMzUyNjI0LCAyMDA4LzA3LzMwLTE4OjEyOjE4ICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICAgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIKICAgIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIKICAgIHhtbG5zOklwdGM0eG1wQ29yZT0iaHR0cDovL2lwdGMub3JnL3N0ZC9JcHRjNHhtcENvcmUvMS4wL3htbG5zLyIKICAgeG1wUmlnaHRzOldlYlN0YXRlbWVudD0iIgogICBwaG90b3Nob3A6QXV0aG9yc1Bvc2l0aW9uPSIiPgogICA8ZGM6cmlnaHRzPgogICAgPHJkZjpBbHQ+CiAgICAgPHJkZjpsaSB4bWw6bGFuZz0ieC1kZWZhdWx0Ii8+CiAgICA8L3JkZjpBbHQ+CiAgIDwvZGM6cmlnaHRzPgogICA8ZGM6Y3JlYXRvcj4KICAgIDxyZGY6U2VxPgogICAgIDxyZGY6bGk+QWxiZXJ0byBCaWdhdHRpPC9yZGY6bGk+CiAgICA8L3JkZjpTZXE+CiAgIDwvZGM6Y3JlYXRvcj4KICAgPGRjOnRpdGxlPgogICAgPHJkZjpBbHQ+CiAgICAgPHJkZjpsaSB4bWw6bGFuZz0ieC1kZWZhdWx0Ii8+CiAgICA8L3JkZjpBbHQ+CiAgIDwvZGM6dGl0bGU+CiAgIDx4bXBSaWdodHM6VXNhZ2VUZXJtcz4KICAgIDxyZGY6QWx0PgogICAgIDxyZGY6bGkgeG1sOmxhbmc9IngtZGVmYXVsdCIvPgogICAgPC9yZGY6QWx0PgogICA8L3htcFJpZ2h0czpVc2FnZVRlcm1zPgogICA8SXB0YzR4bXBDb3JlOkNyZWF0b3JDb250YWN0SW5mbwogICAgSXB0YzR4bXBDb3JlOkNpQWRyRXh0YWRyPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJDaXR5PSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJSZWdpb249IiIKICAgIElwdGM0eG1wQ29yZTpDaUFkclBjb2RlPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJDdHJ5PSIiCiAgICBJcHRjNHhtcENvcmU6Q2lUZWxXb3JrPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lFbWFpbFdvcms9IiIKICAgIElwdGM0eG1wQ29yZTpDaVVybFdvcms9IiIvPgogIDwvcmRmOkRlc2NyaXB0aW9uPgogPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgIAo8P3hwYWNrZXQgZW5kPSJ3Ij8+RO84nQAAAwBQTFRFamts+fn5mp6hc3Nz9fX1U1NTS0tKnaGk6unqzM3P7e3u8fHxuLm7/Pz8lZmc2dnZxcXGWlpavr29wsLCp6eniYmKhYaGZWZmkpaZ0dHS5eXlkZGSrq2utbW2XV1d4uHhfX1+sbGy1dXW3d3dqampgYGCjY2OyMnKYWJihYaIjY6RnZ2ejpGSra+xeHl7lZWVmJiYgoKFpKaptre5vb7Aurq8oaGikpSWmJufh4iKkZKVysrMtrq7ioyOdXZ4fn+ArrGywcLEzc7QiYqMt7W1/v/8mZqcxsbIpqqrZGFhztDSeXp7iIWGnJqalJKSf4CCg4B/amZmoaSm5+fmvLy6ys3OzMzL2tze3dzaa2hny8nH0M7NiYiGbG5v19jYWFVVcG5s2drcxMTD0dPUx8jJ/P79sbO1j46OmZWU1dfXhIKC1NLTd3h68fL0wsTGb3By+vf3YV1d2NjW7u7u6Ojpe3x9fHp54eLkxMLAvLq5/f39+vr63t7fXFtamZiW6urqzMnKwL+98PHvrKytq6qq7evpr62toKKkvr/BOzk42dvad3V06OjmpaSj5efnnZyblpWT/fz6ZWZo9/f3jYyKqquteXd47u3rhYSC5eTisbCueXh2qaimWlhXjImIY2Bfc3Bw////UFBP/v7+/v////7///3+g4SHaGlpYmNj8vPzZ2dn/vz9WFhYtbO0ztDPWltbbW9u/v7/xcPEiouLrayq4+Tms7S2VldX7/DyqKel+/z++Pj4+ff4cXBuuru7u7y+7+/vx8fH8/HysK+wXFxc/fv8s7OztrWzZWRio6Ohl5eZ1NTUZGRkraus2NbX4N/d0dDP3dzc9ff14ODg9/n4oaCg4eHf+/v76+vrQD4+7Ozs/f3/7evsRUJCvLy87vDtysvLXl9fzczNwsPDYGBgw7+/ysjJgH19gH9/29rbwMC/Tk1MlJCPoaCeX1tb6ufo4uPjx8fF5OPht7e3X15cuLe4tLKzn56f09TW1dXTYWJkh4eHZGJj3+Diq6urXLJJJAAAC8BJREFUeNqsmAtYE1cWgAcmJLwSwjMJAYxiQhIeITyEgCGiAioCaiqWaoCiFQVKtgWsJFRapEpFatuodetKHYaQkIiipZVWqqBQ64OqrduGuquVR1sDu62u69JdW/fOZCCJovjttyffl9yZ3PvfM2fOOffcC6UgJ1a5R1GeJI6OjvHx8TQgTCYzLiEsTCgU8qRSQcaN4VNsWWpsndep7u7u2NhY9+7UkpKSJFnqkApBIOTrufFgJDb2MUIQ4xLYAMnjSRf4+koEAoGupLcMdQtVRBs0JA3JImovpVKpUED6SAMCnZhLo1Dmrlzp8hhJxCQkJGRdGhA6nV5aWjrs7T08nJw8Ono6hD7aXZd2ml5ALygoGAb33QPvBs68ACsZIjXkAcBLmpH/RVC7H7xlaZ86qmTcgY47UsKbEW3LU4Mmx9tTJwWYGJFAeh4URXGc2/yUCqJTaGrLRlFi3khIAUMUCxl9Kjj4qFQo1WYeC27ie6KjSK+AMHIsuDu92qpq8wCK+P+6cdasGvRRM6G21yI9hJPdn+Z1vTCfJvZlNccIgQt6IIj2iZ0zjY+Q0SnfGvZ921EiMC645kKjxNOen06NTMaTdH5oklwhl8OHdyyhUWgJudOS+yG9HRl9RGWrzm/FKfRNHYZEWnyCdON0ZHa/Xv8kO9u9FJSlY3DNzclMmtD34rTkVr1xajKKpFgaVIcu9URkkKq7EFW3MEEiZk1L5hsfJqtfrP74lXK3LhTDqQy/r+uOTX7egIUVKbhKvmOGQ7dEKpaxpvN/Np/BsLdzWeJWkDMpi+reAv5NNftIsjjpEekXLgJ0bgUDapf2JIsFnIgj0+o8YkMGuQMtX8SkgbTpyGTSEcTkIuX6CsTcLJkyAlzmRvD1nR1lXhXcJNjl4fTxsBSO9Pfb6IwaFjG3UxxXrKDQHF9B0F+lAp5AOH5BnM5RyF5Gnk9vVbR3lMUmVcBHb05lDXwm4nbhYH/rJBmY1QWAKe65q+avX09CB1LFPMF4VZchWQxH6MdR834+1OZbFg0nKfQhdo5Dch0YcHYu7zFZ/Yk3yG+10blrHo3iGK4G/1JdUWoal6eLm4Hli25FEsSZcTVp0Nh5v+w4BBtbT9u4peFITF1dTMyN7ple8kkD8YL4fCv5mGZRPIWynhjRM0cs0bljHY9VySDo6OmP69sZTvfLZr6raA2iW5+/pjSKsvb34FWrqrZXsM0TobY7iD9iq3N4PLDyuhfxQTMWSHSSdSiJZHCokjIUrXdvw56tTX6uvXx9X9vwpM7Hopes2h7uHh14/LhIEiF0Jf7Y3TcyaGNndSITXDAD1oL/UVaWRCcIDZ8d1eATWgFBg1uD4c4RcpHrg3Z+Z97w5Bv7mFI3b3ag+73AwMAGXwFcSrWQO9oHrWTQ75M9NEdHmlAYdaRLlVYh0GUlgVXY2M+Ajur7onJhp0FA9ukMcsLJ+HM3r3WUht0mgixUnBTVRZA9bcmgc3k4M4FJCxNIujXrSnRiTokSLA16Bn8waGzcA27qI+9znUNuc3LyBp0t4b8yXrjiE2L4VhkcqrE0fduCgmysAeQT+oowaUKYQJecXcLlyETbx0NDIyNFIrZvmhkCZL9rqdedxsijk2QXmnROGUHew1FSSBPkwT47ncHK4UwPFUil4oQbHE4JJw3RdHVpcEGK9WN9ZG519vjs83OCJ1VxuSChlFmax/ZUKLdP6NzZ5/lIrnvh9rhOIpb0LigpgWfa+G0xoymILCt/KO7qhIK4UtYQVuzMT4AhHuEckjxPTxtrEM5IXVKhyxK4z1FEKGWzrOVAsbGpncypPrG2O61nYj6VSxxPKJX4+XFlsor0iJIkRUbPo2SAHPDH0qU6OV3HEbMS34WVUBa9vMvk0ONxcwC5aAR25pYvYQqSomoIdHXc9vmzWNnZiUNHbp6mh4TcPB9UgPvdfSc7skN0agzL7FEnzBKXSNxqeIPw0X6935ZQkS/EGEZYmM5+ueESiQJiEY/isSARxZ8UdbCULLf7A9TYtZ892ZCqE0jZPLFMXAIHHkNyZUFGqLU9z8mpiUz2QS7qgZ0lG1ekVwwGzSfywyrpOrwhj5L0GrCGf384npcIcny05dleEesEYhmHE6FMegC8R2Vm97e1tXViYPIu5Erbd+Q395bHQJ1kdg9R+ezwpWP2+0sql62IVYPprvID1FayI0FGetzHpTpAFqSmGfBnqykY58IKCL7FPvsVMkPkx/ZrMJBOZdZWEzlNtUNQipEN6RdmKSOBMujVwQdWMohnQmeE6hzMCkk8Eoy7vhYb3SU35+Z+Jce81ERyc6shqRCVxpqHPcSlKqwRKhNCoyYsjwXZkwMfrYhQrdam4kBtVyfU2jtXh+mMojWi/4Tj0VfVNwV5wp/BF6CabhSqrfUm+tln9lMT9Fxusgq/2Ws047/BbbU25HjacaK/CWO3oGhKi4n64zcqAnZIiw5EHp7QFEsXVCoB3wjiH7ea+0l/vK+8rcFhkhwfz7SsI2UiTuOlzxcWRbpd2VcYXDx+5nDGT2zDQObezKob3x34MGSraX7tzoLdmffG6wu/smi9sWS9BqWaTIj/SoMJ+50/5mOa9Od4moWM9Cz02r9JPpZhvpoPm3cG5LgeXJzh+aXmVOXBwtU/wzPG8x1q859dQ/7mtTs/LM50sEQAO4nH5nV0SDo6/Li3blVwRposRQ5OTqXFncW7/Xlh5smcr/curjS8nfcnUu1yZ/jtmk085HDm4qVvbArVhsLUXtjMLULdvsjIW2qw2OZqQ0eH732/fUXcW6Dk2Qune1mmtCNTh/NW716c0rOtafM7r3+w695y5/pxTdHu0Zw7t5a9AW/R7jK+tyUneFkm4nPyuYNFZyYqgoGBakxAVVBeLpdfI14HTqbR4nBrqH68viY/p3rpTwfunN/00vszR+T5W7r276aP7ftg2R8av/sh22nxq3Dwpkbko7w1efvcpq7iJ27h5AvMhHmW6V9beKRYQ194STMUkK3xH3JgVakuehxaXfmcBzJj5iztjwuHzGcumRFSQWVBlRqx2wXZxYKVHEYk+BbcFVuaX9CasLSAZ4bmQ+oW0L25GbW6MVX1GE2tgpNFcWHzrNO5iR5YulJVzRjboXd5LbEJHe2oslHv2BRA1J4cFxcWbg2sayd5WLPlzDe7QEy0IN9v/sKbZFG/+MtyEJ1EtKOP6os+rPMEGVF/eHDT6jP1mSnPHFz2cvb1po8ub2k8//Xfzq35x19rRQc3vDOU8d7Oxg+e8WjMKfRHp96IoXZ2jgsThuO9nv353vv/lHM2fPuS16fL/52zfEfBdU7Blpy6+qWXc/K3BHlXnnyZnV97h5V959zfU560H8QiBVsHE9jScGwuauX1xv2d5qK3R683wucuFxaleB0I/jZnA7ItZ3P9pzvza73g1+HzKSnv1S4dy6BOs43G10FA3ooZjup1/crOPzrvFXmTL/3yS/WyZSleL8nlOY0p53Oy92/7Hv7Iq35zfkbKO0s3FednTkO2WCNMKN2Kvxb5b78tTehRFrr+zCjaRY18s+HGgatow1iO57bL/bU9xk8rzz3bQH61IXPxMvIG6jRnCvcJ8h7LPed7hz3QWVVa/38trEJcn2H1DGkQUvb7qxFSsVx90f8ai6ShH/Ynfeh95bZqmvMK3M5Coe8eyyvVfq5WYYs8SlXjDo2AK0SlPgS8D7QRVIVlZrSZapr+xMLiG1LJnscnAIsrt9itUehjDmNsROLUxod8BJJQ1HYQShx1aK1orR1IO/2RRX2nUwW0VrxAQkf+vxLQ6Tl2AzoxO0si8ekG26OYmG7sQK/S3f3evbt3o6MDwebj7NmzMzHpBRIQELAVyIPa2trZPk+SfZ6eZD8HCCHNlnFBLSnjVIByEtSTQGAYVlqO9EDJrzcaGYz+Vj6fPzIY1Nfe7gnqpk5Qkz1WmpyamvxqECgFURX78HQ6MdgHZ+F8vF618MEER5VHIWwCI5igH5tgEEhfu+cTpN/PGzj8fwUYAEHf/4ET3ikCAAAAAElFTkSuQmCC	S	I
+8	<hr style="margin: 0 0 4px 0;" /><table><tr><td>@logo_assinatura@</td><td><p style="margin:0;text-align: left; font-size:11pt;font-family: Times New Roman;">Autenticado eletronicamente, com assinatura avançada, por <b>@nome_assinante@</b>, <b>@tratamento_assinante@</b>, em @data_assinatura@, às @hora_assinatura@, conforme art. 1º, III, "a", da Lei 11.419/2006, a partir de @tipo_conferencia@.<br />Nº de Série do Certificado: @numero_serie_certificado_digital@</p></td></tr></table>	iVBORw0KGgoAAAANSUhEUgAAAFkAAAA8CAMAAAA67OZ0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAADTtpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+Cjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDQuMi4yLWMwNjMgNTMuMzUyNjI0LCAyMDA4LzA3LzMwLTE4OjEyOjE4ICAgICAgICAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICAgeG1sbnM6eG1wUmlnaHRzPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvcmlnaHRzLyIKICAgIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIKICAgIHhtbG5zOklwdGM0eG1wQ29yZT0iaHR0cDovL2lwdGMub3JnL3N0ZC9JcHRjNHhtcENvcmUvMS4wL3htbG5zLyIKICAgeG1wUmlnaHRzOldlYlN0YXRlbWVudD0iIgogICBwaG90b3Nob3A6QXV0aG9yc1Bvc2l0aW9uPSIiPgogICA8ZGM6cmlnaHRzPgogICAgPHJkZjpBbHQ+CiAgICAgPHJkZjpsaSB4bWw6bGFuZz0ieC1kZWZhdWx0Ii8+CiAgICA8L3JkZjpBbHQ+CiAgIDwvZGM6cmlnaHRzPgogICA8ZGM6Y3JlYXRvcj4KICAgIDxyZGY6U2VxPgogICAgIDxyZGY6bGk+QWxiZXJ0byBCaWdhdHRpPC9yZGY6bGk+CiAgICA8L3JkZjpTZXE+CiAgIDwvZGM6Y3JlYXRvcj4KICAgPGRjOnRpdGxlPgogICAgPHJkZjpBbHQ+CiAgICAgPHJkZjpsaSB4bWw6bGFuZz0ieC1kZWZhdWx0Ii8+CiAgICA8L3JkZjpBbHQ+CiAgIDwvZGM6dGl0bGU+CiAgIDx4bXBSaWdodHM6VXNhZ2VUZXJtcz4KICAgIDxyZGY6QWx0PgogICAgIDxyZGY6bGkgeG1sOmxhbmc9IngtZGVmYXVsdCIvPgogICAgPC9yZGY6QWx0PgogICA8L3htcFJpZ2h0czpVc2FnZVRlcm1zPgogICA8SXB0YzR4bXBDb3JlOkNyZWF0b3JDb250YWN0SW5mbwogICAgSXB0YzR4bXBDb3JlOkNpQWRyRXh0YWRyPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJDaXR5PSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJSZWdpb249IiIKICAgIElwdGM0eG1wQ29yZTpDaUFkclBjb2RlPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lBZHJDdHJ5PSIiCiAgICBJcHRjNHhtcENvcmU6Q2lUZWxXb3JrPSIiCiAgICBJcHRjNHhtcENvcmU6Q2lFbWFpbFdvcms9IiIKICAgIElwdGM0eG1wQ29yZTpDaVVybFdvcms9IiIvPgogIDwvcmRmOkRlc2NyaXB0aW9uPgogPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgIAo8P3hwYWNrZXQgZW5kPSJ3Ij8+RO84nQAAAwBQTFRFamts+fn5mp6hc3Nz9fX1U1NTS0tKnaGk6unqzM3P7e3u8fHxuLm7/Pz8lZmc2dnZxcXGWlpavr29wsLCp6eniYmKhYaGZWZmkpaZ0dHS5eXlkZGSrq2utbW2XV1d4uHhfX1+sbGy1dXW3d3dqampgYGCjY2OyMnKYWJihYaIjY6RnZ2ejpGSra+xeHl7lZWVmJiYgoKFpKaptre5vb7Aurq8oaGikpSWmJufh4iKkZKVysrMtrq7ioyOdXZ4fn+ArrGywcLEzc7QiYqMt7W1/v/8mZqcxsbIpqqrZGFhztDSeXp7iIWGnJqalJKSf4CCg4B/amZmoaSm5+fmvLy6ys3OzMzL2tze3dzaa2hny8nH0M7NiYiGbG5v19jYWFVVcG5s2drcxMTD0dPUx8jJ/P79sbO1j46OmZWU1dfXhIKC1NLTd3h68fL0wsTGb3By+vf3YV1d2NjW7u7u6Ojpe3x9fHp54eLkxMLAvLq5/f39+vr63t7fXFtamZiW6urqzMnKwL+98PHvrKytq6qq7evpr62toKKkvr/BOzk42dvad3V06OjmpaSj5efnnZyblpWT/fz6ZWZo9/f3jYyKqquteXd47u3rhYSC5eTisbCueXh2qaimWlhXjImIY2Bfc3Bw////UFBP/v7+/v////7///3+g4SHaGlpYmNj8vPzZ2dn/vz9WFhYtbO0ztDPWltbbW9u/v7/xcPEiouLrayq4+Tms7S2VldX7/DyqKel+/z++Pj4+ff4cXBuuru7u7y+7+/vx8fH8/HysK+wXFxc/fv8s7OztrWzZWRio6Ohl5eZ1NTUZGRkraus2NbX4N/d0dDP3dzc9ff14ODg9/n4oaCg4eHf+/v76+vrQD4+7Ozs/f3/7evsRUJCvLy87vDtysvLXl9fzczNwsPDYGBgw7+/ysjJgH19gH9/29rbwMC/Tk1MlJCPoaCeX1tb6ufo4uPjx8fF5OPht7e3X15cuLe4tLKzn56f09TW1dXTYWJkh4eHZGJj3+Diq6urXLJJJAAAC8BJREFUeNqsmAtYE1cWgAcmJLwSwjMJAYxiQhIeITyEgCGiAioCaiqWaoCiFQVKtgWsJFRapEpFatuodetKHYaQkIiipZVWqqBQ64OqrduGuquVR1sDu62u69JdW/fOZCCJovjttyffl9yZ3PvfM2fOOffcC6UgJ1a5R1GeJI6OjvHx8TQgTCYzLiEsTCgU8qRSQcaN4VNsWWpsndep7u7u2NhY9+7UkpKSJFnqkApBIOTrufFgJDb2MUIQ4xLYAMnjSRf4+koEAoGupLcMdQtVRBs0JA3JImovpVKpUED6SAMCnZhLo1Dmrlzp8hhJxCQkJGRdGhA6nV5aWjrs7T08nJw8Ono6hD7aXZd2ml5ALygoGAb33QPvBs68ACsZIjXkAcBLmpH/RVC7H7xlaZ86qmTcgY47UsKbEW3LU4Mmx9tTJwWYGJFAeh4URXGc2/yUCqJTaGrLRlFi3khIAUMUCxl9Kjj4qFQo1WYeC27ie6KjSK+AMHIsuDu92qpq8wCK+P+6cdasGvRRM6G21yI9hJPdn+Z1vTCfJvZlNccIgQt6IIj2iZ0zjY+Q0SnfGvZ921EiMC645kKjxNOen06NTMaTdH5oklwhl8OHdyyhUWgJudOS+yG9HRl9RGWrzm/FKfRNHYZEWnyCdON0ZHa/Xv8kO9u9FJSlY3DNzclMmtD34rTkVr1xajKKpFgaVIcu9URkkKq7EFW3MEEiZk1L5hsfJqtfrP74lXK3LhTDqQy/r+uOTX7egIUVKbhKvmOGQ7dEKpaxpvN/Np/BsLdzWeJWkDMpi+reAv5NNftIsjjpEekXLgJ0bgUDapf2JIsFnIgj0+o8YkMGuQMtX8SkgbTpyGTSEcTkIuX6CsTcLJkyAlzmRvD1nR1lXhXcJNjl4fTxsBSO9Pfb6IwaFjG3UxxXrKDQHF9B0F+lAp5AOH5BnM5RyF5Gnk9vVbR3lMUmVcBHb05lDXwm4nbhYH/rJBmY1QWAKe65q+avX09CB1LFPMF4VZchWQxH6MdR834+1OZbFg0nKfQhdo5Dch0YcHYu7zFZ/Yk3yG+10blrHo3iGK4G/1JdUWoal6eLm4Hli25FEsSZcTVp0Nh5v+w4BBtbT9u4peFITF1dTMyN7ple8kkD8YL4fCv5mGZRPIWynhjRM0cs0bljHY9VySDo6OmP69sZTvfLZr6raA2iW5+/pjSKsvb34FWrqrZXsM0TobY7iD9iq3N4PLDyuhfxQTMWSHSSdSiJZHCokjIUrXdvw56tTX6uvXx9X9vwpM7Hopes2h7uHh14/LhIEiF0Jf7Y3TcyaGNndSITXDAD1oL/UVaWRCcIDZ8d1eATWgFBg1uD4c4RcpHrg3Z+Z97w5Bv7mFI3b3ag+73AwMAGXwFcSrWQO9oHrWTQ75M9NEdHmlAYdaRLlVYh0GUlgVXY2M+Ajur7onJhp0FA9ukMcsLJ+HM3r3WUht0mgixUnBTVRZA9bcmgc3k4M4FJCxNIujXrSnRiTokSLA16Bn8waGzcA27qI+9znUNuc3LyBp0t4b8yXrjiE2L4VhkcqrE0fduCgmysAeQT+oowaUKYQJecXcLlyETbx0NDIyNFIrZvmhkCZL9rqdedxsijk2QXmnROGUHew1FSSBPkwT47ncHK4UwPFUil4oQbHE4JJw3RdHVpcEGK9WN9ZG519vjs83OCJ1VxuSChlFmax/ZUKLdP6NzZ5/lIrnvh9rhOIpb0LigpgWfa+G0xoymILCt/KO7qhIK4UtYQVuzMT4AhHuEckjxPTxtrEM5IXVKhyxK4z1FEKGWzrOVAsbGpncypPrG2O61nYj6VSxxPKJX4+XFlsor0iJIkRUbPo2SAHPDH0qU6OV3HEbMS34WVUBa9vMvk0ONxcwC5aAR25pYvYQqSomoIdHXc9vmzWNnZiUNHbp6mh4TcPB9UgPvdfSc7skN0agzL7FEnzBKXSNxqeIPw0X6935ZQkS/EGEZYmM5+ueESiQJiEY/isSARxZ8UdbCULLf7A9TYtZ892ZCqE0jZPLFMXAIHHkNyZUFGqLU9z8mpiUz2QS7qgZ0lG1ekVwwGzSfywyrpOrwhj5L0GrCGf384npcIcny05dleEesEYhmHE6FMegC8R2Vm97e1tXViYPIu5Erbd+Q395bHQJ1kdg9R+ezwpWP2+0sql62IVYPprvID1FayI0FGetzHpTpAFqSmGfBnqykY58IKCL7FPvsVMkPkx/ZrMJBOZdZWEzlNtUNQipEN6RdmKSOBMujVwQdWMohnQmeE6hzMCkk8Eoy7vhYb3SU35+Z+Jce81ERyc6shqRCVxpqHPcSlKqwRKhNCoyYsjwXZkwMfrYhQrdam4kBtVyfU2jtXh+mMojWi/4Tj0VfVNwV5wp/BF6CabhSqrfUm+tln9lMT9Fxusgq/2Ws047/BbbU25HjacaK/CWO3oGhKi4n64zcqAnZIiw5EHp7QFEsXVCoB3wjiH7ea+0l/vK+8rcFhkhwfz7SsI2UiTuOlzxcWRbpd2VcYXDx+5nDGT2zDQObezKob3x34MGSraX7tzoLdmffG6wu/smi9sWS9BqWaTIj/SoMJ+50/5mOa9Od4moWM9Cz02r9JPpZhvpoPm3cG5LgeXJzh+aXmVOXBwtU/wzPG8x1q859dQ/7mtTs/LM50sEQAO4nH5nV0SDo6/Li3blVwRposRQ5OTqXFncW7/Xlh5smcr/curjS8nfcnUu1yZ/jtmk085HDm4qVvbArVhsLUXtjMLULdvsjIW2qw2OZqQ0eH732/fUXcW6Dk2Qune1mmtCNTh/NW716c0rOtafM7r3+w695y5/pxTdHu0Zw7t5a9AW/R7jK+tyUneFkm4nPyuYNFZyYqgoGBakxAVVBeLpdfI14HTqbR4nBrqH68viY/p3rpTwfunN/00vszR+T5W7r276aP7ftg2R8av/sh22nxq3Dwpkbko7w1efvcpq7iJ27h5AvMhHmW6V9beKRYQ194STMUkK3xH3JgVakuehxaXfmcBzJj5iztjwuHzGcumRFSQWVBlRqx2wXZxYKVHEYk+BbcFVuaX9CasLSAZ4bmQ+oW0L25GbW6MVX1GE2tgpNFcWHzrNO5iR5YulJVzRjboXd5LbEJHe2oslHv2BRA1J4cFxcWbg2sayd5WLPlzDe7QEy0IN9v/sKbZFG/+MtyEJ1EtKOP6os+rPMEGVF/eHDT6jP1mSnPHFz2cvb1po8ub2k8//Xfzq35x19rRQc3vDOU8d7Oxg+e8WjMKfRHp96IoXZ2jgsThuO9nv353vv/lHM2fPuS16fL/52zfEfBdU7Blpy6+qWXc/K3BHlXnnyZnV97h5V959zfU560H8QiBVsHE9jScGwuauX1xv2d5qK3R683wucuFxaleB0I/jZnA7ItZ3P9pzvza73g1+HzKSnv1S4dy6BOs43G10FA3ooZjup1/crOPzrvFXmTL/3yS/WyZSleL8nlOY0p53Oy92/7Hv7Iq35zfkbKO0s3FednTkO2WCNMKN2Kvxb5b78tTehRFrr+zCjaRY18s+HGgatow1iO57bL/bU9xk8rzz3bQH61IXPxMvIG6jRnCvcJ8h7LPed7hz3QWVVa/38trEJcn2H1DGkQUvb7qxFSsVx90f8ai6ShH/Ynfeh95bZqmvMK3M5Coe8eyyvVfq5WYYs8SlXjDo2AK0SlPgS8D7QRVIVlZrSZapr+xMLiG1LJnscnAIsrt9itUehjDmNsROLUxod8BJJQ1HYQShx1aK1orR1IO/2RRX2nUwW0VrxAQkf+vxLQ6Tl2AzoxO0si8ekG26OYmG7sQK/S3f3evbt3o6MDwebj7NmzMzHpBRIQELAVyIPa2trZPk+SfZ6eZD8HCCHNlnFBLSnjVIByEtSTQGAYVlqO9EDJrzcaGYz+Vj6fPzIY1Nfe7gnqpk5Qkz1WmpyamvxqECgFURX78HQ6MdgHZ+F8vF618MEER5VHIWwCI5igH5tgEEhfu+cTpN/PGzj8fwUYAEHf/4ET3ikCAAAAAElFTkSuQmCC	S	E
+\.
+
+
+--
+-- Data for Name: termo_uso; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.termo_uso (id_termo_uso, id_usuario, id_unidade, identificacao, descricao, conteudo, sin_liberado, sin_bloqueado, dth_inicial, dth_final) FROM stdin;
+1	1	110000001	SEI Padrão	\N	<p style="text-align:center;">\r\n    <strong>Termo de Uso do Sistema Eletrônico de Informações (SEI)</strong>\r\n</p>\r\n<p>\r\n    Este termo de uso se aplica a usuários externos do <strong>Sistema Eletrônico de Informações (SEI)</strong>, integrado ou não à plataforma Acesso.gov.br, independentemente da entidade ou órgão responsável por sua instalação.\r\n</p>\r\n<p>\r\n    <strong>1. Aceitação</strong>\r\n</p>\r\n<p>\r\n    Ao se cadastrar para utilizar o acesso externo do SEI, o usuário confirma que leu, compreendeu e concorda com estes termos de uso e políticas aplicáveis. Também concorda com o tratamento de seus dados pessoais, limitado ao mínimo necessário para manter seu login ou qualificá-lo nos processos em que atuar, seja como interessado ou representante. A aceitação deste termo de uso é única e válida para qualquer SEI.\r\n</p>\r\n<p>\r\n    O cadastro como usuário externo é pessoal, intransferível, indelegável e irrevogável, implicando a aceitação de todos os termos e condições que regem o processo eletrônico, conforme a legislação e normas aplicáveis. A assinatura eletrônica na modalidade cadastrada (login/senha) e outras modalidades previstas em lei são consideradas válidas. O usuário será responsável pelo uso indevido do sistema, podendo suas ações serem apuradas nas esferas civil, penal e administrativa.\r\n</p>\r\n<p>\r\n    <strong>2. Sobre o sistema</strong>\r\n</p>\r\n<p>\r\n    O SEI permite a realização de processos administrativos em meio eletrônico, promovendo rapidez, economia de recursos, segurança no trâmite, maior transparência e agilidade nos processos. Também oferece diversos recursos para uso direto pelos usuários externos.\r\n</p>\r\n<p>\r\n    O cadastro para acesso externo ao SEI destina-se a usuários que participem de processos administrativos eletrônicos, independentemente de quem possam representar, para fins de peticionamento e intimação eletrônicos, visualização de processos com restrição de acesso aos interessados, vinculação de responsável legal a pessoa jurídica, emissão e gestão de procurações eletrônicas e assinatura de contratos, convênios, termos, acordos e outros instrumentos congêneres.\r\n</p>\r\n<p>\r\n    <strong>3. Definições</strong>\r\n</p>\r\n<p>\r\n    Para os fins deste instrumento, consideram-se:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Usuário Externo: pessoa natural que, mediante cadastro prévio, está autorizada à prática de atos processuais em nome próprio ou na qualidade de representante de pessoa jurídica ou de pessoa natural.\r\n    </li>\r\n    <li>\r\n        Peticionamento Eletrônico: envio, diretamente por usuário externo, de documentos digitais, visando a formar processo novo ou a compor processo já existente.\r\n    </li>\r\n    <li>\r\n        Procuração Eletrônica: instrumento gerado pelo sistema de processo eletrônico, por meio do qual um usuário externo designa outro usuário externo como seu representante ou representante de pessoa jurídica pela qual é responsável legal perante a Receita Federal, a fim de agir em seu nome dentro dos limites ali especificados.\r\n    </li>\r\n    <li>\r\n        Responsável Legal: pessoa natural identificada como Responsável Legal por Pessoa Jurídica na Receita Federal do Brasil.\r\n    </li>\r\n    <li>\r\n        Informação Restrita: informação submetida à restrição de acesso público em razão de hipótese legal específica.\r\n    </li>\r\n    <li>\r\n        Dado pessoal: informação relacionada a pessoa natural identificada ou identificável.\r\n    </li>\r\n    <li>\r\n        Dado pessoal sensível: dado pessoal sobre origem racial ou étnica, convicção religiosa, opinião política, filiação a sindicato ou a organização de caráter religioso, filosófico ou político, dado referente à saúde ou à vida sexual, dado genético ou biométrico, quando vinculado a uma pessoa natural.\r\n    </li>\r\n    <li>\r\n        Dados de Qualificação: conjunto predeterminado de atributos biográficos e de dados cadastrais necessários à prática de um ato jurídico, compreendendo, exemplificativamente, nome completo (os nomes e os prenomes), nacionalidade, endereço e número de inscrição no Cadastro de Pessoas Físicas (CPF) ou no Cadastro Nacional da Pessoa Jurídica (CNPJ), nunca incluindo dados pessoais sensíveis.\r\n    </li>\r\n    <li>\r\n        Dados cadastrais: dados pessoais fornecidos pelo usuário externo para realização de seu cadastro no sistema.\r\n    </li>\r\n</ol>\r\n<p>\r\n    <strong>4. Arcabouço Legal</strong>\r\n</p>\r\n<p>\r\n    O arcabouço legal aplicável aos serviços disponibilizados no âmbito do SEI compreende:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/leis/l8159.htm">Lei nº 8.159, de 8 de janeiro de 1991</a>: que dispõe sobre a política nacional de arquivos públicos e privados e dá outras providências.\r\n    </li>\r\n    <li>\r\n        <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/leis/l9784.htm">Lei nº 9.784, de 29 de janeiro de 1999</a>: Lei de Processo Administrativo Federal (LPA), que regula o processo administrativo no âmbito da Administração Pública Federal.\r\n    </li>\r\n    <li>\r\n        <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/_Ato2004-2006/2006/Lei/L11419.htm">Lei nº 11.419, de 19 de dezembro de 2006</a>: que dispõe sobre a informatização do processo judicial; altera a Lei nº 5.869, de 11 de janeiro de 1973 - Código de Processo Civil; e dá outras providências.\r\n    </li>\r\n    <li>\r\n        <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm">Lei nº 12.527, de 18 de novembro de 2011</a>: Lei de Acesso à Informação (LAI), que regula o acesso a informações previsto na Constituição Federal.\r\n    </li>\r\n    <li>\r\n        <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/_ato2011-2014/2014/lei/l12965.htm">Lei nº 12.965, de 23 de abril de 2014</a>: Marco Civil da Internet, que estabelece princípios, garantias, direitos e deveres para o uso da Internet no Brasil.\r\n    </li>\r\n    <li>\r\n        <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/l13460.htm">Lei nº 13.460, de 26 de junho de 2017</a>: que dispõe sobre participação, proteção e defesa dos direitos do usuário dos serviços públicos da administração pública.\r\n    </li>\r\n    <li>\r\n        <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709compilado.htm">Lei nº 13.709, de 14 de agosto de 2018</a>: Lei Geral de Proteção de Dados Pessoais (LGPD), que dispõe sobre a proteção de dados pessoais.\r\n    </li>\r\n    <li>\r\n        <a target="_blank" rel="noopener noreferrer" href="https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/L14534.htm">Lei nº 14.534, de 11 de janeiro de 2023</a>: Altera as Leis nºs 7.116, de 29 de agosto de 1983, 9.454, de 7 de abril de 1997, 13.444, de 11 de maio de 2017, e 13.460, de 26 de junho de 2017, para adotar número único para os documentos que especifica e para estabelecer o Cadastro de Pessoas Físicas (CPF) como número suficiente para identificação do cidadão nos bancos de dados de serviços públicos.\r\n    </li>\r\n</ol>\r\n<p>\r\n    <strong>5. Descrição dos Serviços Disponibilizados</strong>\r\n</p>\r\n<p>\r\n    O SEI permite produzir e assinar documentos eletronicamente e controlar seu nível de acesso. Os serviços oferecidos visam à economia no consumo de papel, material de escritório e serviços de postagem, redução de custos em logística e transporte de documentos e proporcionam maior produtividade, rapidez, transparência e segurança aos trâmites administrativos.\r\n</p>\r\n<p>\r\n    Cada instalação do SEI é um sistema autônomo, cuja manutenção e tratamento das informações são de responsabilidade da entidade ou órgão correspondente. Portanto, os serviços disponibilizados podem variar.\r\n</p>\r\n<p>\r\n    Os níveis de acesso indicados nos documentos pelo usuário externo serão analisados por servidor público, que poderá alterá-los a qualquer momento sem aviso prévio.\r\n</p>\r\n<p>\r\n    Serviços disponibilizados aos usuários externos:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Funcionalidades padrão:\r\n    </li>\r\n    <li>\r\n        Ambiente de Usuário Externo: espaço privativo acessível pelo login pessoal do usuário, onde é possível acessar documentos restritos, assinar documentos e utilizar outras funcionalidades conforme o sistema e módulos adotados pela entidade ou órgão.\r\n    </li>\r\n    <li>\r\n        Peticionamento, intimação e procuração eletrônicos:\r\n    </li>\r\n    <li>\r\n        Peticionamento Eletrônico: permite ao usuário externo enviar documentos digitais para iniciar um novo processo ou integrar um processo já existente, caso a entidade ou órgão utilize peticionamento eletrônico.\r\n    </li>\r\n    <li>\r\n        Intimação Eletrônica: permite que a entidade ou órgão envie documentos digitais ao usuário externo para dar ciência de atos de um processo, caso a entidade ou órgão utilize intimação eletrônica.\r\n    </li>\r\n    <li>\r\n        Vinculação de Responsável Legal a Pessoa Jurídica: formaliza a vinculação de um usuário externo como Responsável Legal de uma Pessoa Jurídica perante a Receita Federal, caso a entidade ou órgão utilize procuração eletrônica.\r\n    </li>\r\n    <li>\r\n        Procuração Eletrônica: permite a emissão de procuração eletrônica para conceder poderes de representação de uma Pessoa Jurídica ou Pessoa Física a outro usuário externo, para atuar em âmbito geral ou específica, por tempo indeterminado ou determinado, podendo ser revogada ou renunciada a qualquer momento, caso a entidade ou órgão utilize procuração eletrônica.\r\n    </li>\r\n</ol>\r\n<p>\r\n    Serviços que não exigem cadastro como usuário externo:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Boletim de Serviço Eletrônico (Publicações Eletrônicas): permite consultar documentos eletrônicos publicados oficialmente pela entidade ou órgão.\r\n    </li>\r\n    <li>\r\n        Autenticidade de Documento Digital: permite verificar a autenticidade de documentos digitais produzidos no SEI.\r\n    </li>\r\n    <li>\r\n        Pesquisa Pública: permite pesquisar processos eletrônicos, visualizar seus andamentos e acessar documentos públicos, caso a entidade ou órgão utilize pesquisa pública.\r\n    </li>\r\n    <li>\r\n        Indisponibilidade do Sistema: informa as indisponibilidades por motivo técnica, indicando data e horário de início e fim, e se a indisponibilidade resultou na prorrogação automática de prazos externos para o primeiro dia útil seguinte ao fim da indisponibilidade, caso a entidade ou órgão utilize peticionamento e intimação eletrônicos.\r\n    </li>\r\n</ol>\r\n<p>\r\n    <strong>6. Direitos do Usuário Externo</strong>\r\n</p>\r\n<p>\r\n    O usuário externo tem o direito de obter, a qualquer momento e mediante requisição, em relação ao tratamento de seus dados pessoais:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Confirmação da existência de tratamento.\r\n    </li>\r\n    <li>\r\n        Acesso aos dados.\r\n    </li>\r\n    <li>\r\n        Correção de dados incompletos, inexatos ou desatualizados.\r\n    </li>\r\n</ol>\r\n<p>\r\n    É assegurado que o tratamento de seus dados pessoais terá sempre como finalidade:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Manter seu login ou destinar intimações eletrônicas e comunicações congêneres, nas diversas instalações do SEI, integradas ou não à plataforma Acesso.gov.br.\r\n    </li>\r\n    <li>\r\n        Qualificá-lo nos processos em que atue ou figure como interessado ou representante, inclusive em contratos, convênios, termos, acordos e outros instrumentos congêneres que seja signatário, e quando houver tramitação para outras entidades ou órgãos.\r\n    </li>\r\n</ol>\r\n<p>\r\n    Seus dados cadastrais:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Não serão compartilhados com entidades privadas.\r\n    </li>\r\n    <li>\r\n        Não serão utilizados para fins de marketing direto ou indireto.\r\n    </li>\r\n</ol>\r\n<p>\r\n    Devido ao tratamento de dados pessoais estar respaldado nas hipóteses legais previstas nos incisos II e VI do art. 7º e inciso I do art. 16 da <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709compilado.htm">LGPD</a>, e considerando o interesse público na integridade dos processos administrativos e na atuação direta dos interessados ou seus representantes, os usuários externos não terão direito a:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Anonimização, bloqueio ou eliminação de seus dados pessoais relativos ao seu cadastro ou aos processos nos quais atuem ou figurem como interessado ou representante; e\r\n    </li>\r\n    <li>\r\n        Portabilidade dos dados a outro fornecedor.\r\n    </li>\r\n</ol>\r\n<p>\r\n    Documentos que contenham dados pessoais sensíveis, em regra, não terão acesso público.\r\n</p>\r\n<p>\r\n    <strong>7. Responsabilidades</strong>\r\n</p>\r\n<p>\r\n    <strong>7.1. Usuário Externo</strong>\r\n</p>\r\n<p>\r\n    O usuário externo é exclusivamente responsável por:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Manter o sigilo de sua senha de acesso, não podendo alegar uso indevido em nenhuma circunstância;\r\n    </li>\r\n    <li>\r\n        Garantir que os dados informados no formulário eletrônico de peticionamento correspondem aos contidos no documento protocolado, incluindo o preenchimento correto dos campos obrigatórios e a anexação dos documentos essenciais e complementares;\r\n    </li>\r\n    <li>\r\n        Preparar a petição e os documentos digitais de acordo com os requisitos do sistema, especialmente no que diz respeito ao formato e ao tamanho dos arquivos enviados eletronicamente;\r\n    </li>\r\n    <li>\r\n        Guardar os originais em papel dos documentos digitalizados e enviados por peticionamento eletrônico até que expire o prazo para a Administração rever os atos do processo; caso solicitado, deve apresentá-los para conferência, sob pena de perda de direito caso não o faça;\r\n    </li>\r\n    <li>\r\n        Se utilizando o módulo de Peticionamento Eletrônico, verificar, por meio do recibo eletrônico de protocolo, o recebimento dos documentos transmitidos eletronicamente, não sendo admitida a alegação de peticionamento de documento que não conste no recibo;\r\n    </li>\r\n    <li>\r\n        Realizar todos os atos e comunicações processuais por meio eletrônico, atuando em interesse próprio ou como representante de outros usuários externos ou pessoas jurídicas; não serão aceitas intimações ou protocolizações por outros meios, exceto quando tecnicamente inviável ou em caso de indisponibilidade do meio eletrônico que cause dano relevante à celeridade ou instrução do processo, ou outra exceção prevista em norma específica;\r\n    </li>\r\n    <li>\r\n        Observar que os atos processuais realizados eletronicamente são considerados efetuados na data e hora de recebimento pelo sistema, sendo considerados tempestivos os atos praticados até as 23h59min59s do último dia do prazo, conforme horário oficial de Brasília, independentemente do fuso horário em que se encontre;\r\n    </li>\r\n    <li>\r\n        Consultar periodicamente o sistema e o e-mail de sua conta para verificar o recebimento de intimações eletrônicas de qualquer entidade ou órgão; as intimações são consideradas cumpridas na data em que efetuar sua consulta no sistema correspondente ou, não efetuada a consulta, ao final do prazo para considerar a intimação tacitamente cumprida após a data de sua expedição, conforme legislação aplicável;\r\n    </li>\r\n    <li>\r\n        Assegurar as condições adequadas de sua rede de comunicação, acesso ao provedor de internet e configuração do computador utilizado nas transmissões eletrônicas; e\r\n    </li>\r\n    <li>\r\n        Observar os períodos de manutenção programada ou qualquer outro tipo de indisponibilidade do SEI e dos sistemas da entidade ou do órgão.\r\n    </li>\r\n</ol>\r\n<p>\r\n    O usuário externo também é responsável por:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Atualizar e manter precisos e verídicos os dados informados em seu cadastro, reconhecendo que a omissão ou inconsistência desses dados poderá impedir o uso dos serviços disponibilizados.\r\n    </li>\r\n    <li>\r\n        Caso a instalação do SEI esteja integrada à plataforma Acesso.gov.br, a atualização de dados de seu cadastro deve ser mantida unicamente na referida plataforma, pelo endereço <a target="_blank" rel="noopener noreferrer" href="https://servicos.acesso.gov.br/">https://servicos.acesso.gov.br/</a>.\r\n    </li>\r\n    <li>\r\n        Reparar todos os danos, diretos ou indiretos, causados por atos praticados a partir de seu acesso, inclusive decorrentes de violação de direitos de terceiros, como direitos de propriedade intelectual, sigilo e personalidade, em virtude do descumprimento deste Termo de Uso.\r\n    </li>\r\n</ol>\r\n<p>\r\n    O usuário externo não poderá:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Atuar como usuário vinculado a uma entidade sem estar devidamente habilitado.\r\n    </li>\r\n    <li>\r\n        Inserir informações falsas ou incorretas no sistema; usar endereços de computador, rede ou e-mail falsos; fornecer informações parcialmente ou totalmente falsas, ou cuja procedência não possa ser verificada.\r\n    </li>\r\n    <li>\r\n        Enviar, no campo de anexos, arquivos com vírus, conteúdo invasivo ou destrutivo, ou que causem danos temporários ou permanentes aos equipamentos da entidade ou órgão; ou materiais protegidos por direitos de propriedade intelectual ou sigilo comercial, exceto se a entidade vinculada ou o próprio usuário for o detentor desses direitos.\r\n    </li>\r\n    <li>\r\n        Utilizar, nos campos de texto, termos ou materiais ilegais, agressivos, caluniosos, abusivos, difamatórios, obscenos, que invadam a privacidade de terceiros, que atentem contra os bons costumes, a moral ou que contrariem a ordem pública.\r\n    </li>\r\n    <li>\r\n        Alterar, excluir ou corromper dados e informações do sistema com o intuito de dificultar ou obstruir a atuação da entidade ou órgão.\r\n    </li>\r\n    <li>\r\n        Difamar, abusar, assediar, perseguir, ameaçar ou violar quaisquer direitos individuais.\r\n    </li>\r\n</ol>\r\n<p>\r\n    <strong>7.2. Administração Pública</strong>\r\n</p>\r\n<p>\r\n    A entidade ou órgão correspondente ao SEI em uso é responsável pela administração, disponibilização e manutenção do sistema.\r\n</p>\r\n<p>\r\n    A entidade ou órgão deve cumprir toda a legislação relacionada ao tratamento de dados pessoais para proteger os dados e a privacidade dos usuários externos, especialmente em relação a dados pessoais sensíveis, observadas as exceções previstas para dados de qualificação de interessados ou de seus representantes e dados de endereçamento de correspondências.\r\n</p>\r\n<p>\r\n    A entidade ou órgão não será responsabilizada por:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Equipamentos do usuário externo infectados ou invadidos por atacantes.\r\n    </li>\r\n    <li>\r\n        Equipamentos do usuário externo avariados durante o uso do sistema.\r\n    </li>\r\n    <li>\r\n        Proteção dos computadores do usuário externo.\r\n    </li>\r\n    <li>\r\n        Proteção das informações armazenadas no computador do usuário externo.\r\n    </li>\r\n    <li>\r\n        Uso indevido do computador do usuário externo.\r\n    </li>\r\n    <li>\r\n        Monitoração clandestina do computador do usuário externo.\r\n    </li>\r\n    <li>\r\n        Vulnerabilidades ou instabilidades nos sistemas do usuário externo.\r\n    </li>\r\n    <li>\r\n        Segurança da rede do usuário externo.\r\n    </li>\r\n    <li>\r\n        Perímetro inseguro.\r\n    </li>\r\n</ol>\r\n<p>\r\n    Em nenhuma hipótese, a entidade ou órgão será responsabilizada pela instalação de códigos maliciosos (como vírus, trojans, malware, worms, bots, backdoors, spyware, rootkits ou quaisquer outros) no equipamento do usuário externo, decorrentes de sua navegação na Internet.\r\n</p>\r\n<p>\r\n    <strong>8. Política de Uso de Dados Pessoais</strong>\r\n</p>\r\n<p>\r\n    A política de uso de dados pessoais visa esclarecer como serão utilizados os dados pessoais disponibilizados pelos usuários externos, especificando o conteúdo dos registros efetuados e as modalidades de tratamento das informações custodiadas.\r\n</p>\r\n<p>\r\n    Em razão do tratamento em processos administrativos estar respaldada nas hipóteses legais previstas nos incisos II e VI do art. 7º e no inciso I do art. 16 da <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709compilado.htm">LGPD</a>, e considerando os preceitos, princípios, deveres e critérios estabelecidos na <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/constituicao/ConstituicaoCompilado.htm">Constituição da República de 1988</a>, na <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/leis/l9784.htm">Lei nº 9.784, de 29 de janeiro de 1999</a> (Lei do Processo Administrativo - LPA), e na <a target="_blank" rel="noopener noreferrer" href="http://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm">Lei nº 12.527, de 18 de novembro de 2011</a> (Lei de Acesso à Informação - LAI) relativos à proteção de interesse público e geral preponderante de transparência nos processos administrativos, por não serem dados pessoais sensíveis, os dados de qualificação dos interessados ou de seus representantes, inclusive em preâmbulo de contratos, convênios, termos, acordos e outros instrumentos congêneres que seja signatário, e os dados de endereçamento de correspondências nos processos administrativos poderão ter nível de acesso público e não configurará quebra do dever à proteção de dados pessoais e de privacidade, como forma de garantir os preceitos de transparência administrativa e de viabilização de controle social.\r\n</p>\r\n<p>\r\n    Os dados cadastrais dos usuários externos:\r\n</p>\r\n<ol class="infra-editor__lista">\r\n    <li>\r\n        Poderão ser compartilhados com outras entidades ou órgãos, para fins de login ou destinação de intimações eletrônicas e comunicações congêneres, nas diversas instalações do SEI, integradas ou não à plataforma Acesso.gov.br.\r\n    </li>\r\n    <li>\r\n        Poderão ser utilizados em sua qualificação nos processos nos quais atue ou figure como interessado ou representante, inclusive no preâmbulo de contratos, convênios, termos, acordos e outros instrumentos congêneres que seja signatário, e quando ocorrer tramitação para outras entidades ou órgãos.\r\n    </li>\r\n</ol>\r\n<p>\r\n    Documentos que possuam apenas dados de qualificação do interessado ou de seus representantes e dados de endereçamento de correspondências poderão ter nível de acesso público e não configuram quebra do dever à proteção de dados pessoais e de privacidade.\r\n</p>\r\n<p>\r\n    Os dados poderão ser utilizados de forma agregada, não individualizada, para fins estatísticos ou estudos da entidade ou órgão.\r\n</p>\r\n<p>\r\n    As informações fornecidas pelos usuários externos são registradas e armazenadas nos bancos de dados da entidade ou órgão correspondente ao SEI em uso, observados os necessários padrões de segurança, confidencialidade e integridade, e somente serão utilizadas para as finalidades próprias, bem como para fins estatísticos, geração de indicadores e realização de estudos pela entidade ou órgão correspondente.\r\n</p>\r\n<p>\r\n    As informações restritas serão tratadas de acordo com a legislação vigente e com as legítimas expectativas de respeito à finalidade, boa-fé e interesse público.\r\n</p>\r\n<p>\r\n    As entidades ou órgãos, seus gestores, servidores ou qualquer usuário interno que, por qualquer motivo, usarem indevidamente as informações às quais tiveram acesso, estão sujeitos às penalidades e sanções legais, regulamentares e disciplinares aplicáveis.\r\n</p>\r\n<p>\r\n    As entidades ou órgãos e o sistema poderá enviar mensagens ao endereço de e-mail cadastrado sempre que for oportuno ou necessário e nas hipóteses relacionadas com os serviços disponibilizados.\r\n</p>\r\n<p>\r\n    <strong>9. Mudanças no Termo de Uso</strong>\r\n</p>\r\n<p>\r\n    O presente termo vigorará por tempo indeterminado ou durante o período em que o sistema estiver disponível, podendo ser modificado a qualquer tempo, observando sua publicação atualizada para conhecimentos dos usuários externos.\r\n</p>\r\n<p>\r\n    <strong>10. Informações para Contato</strong>\r\n</p>\r\n<p>\r\n    Informações de contato com a entidade ou órgão correspondente poderão ser obtidas em seu Portal na Internet.\r\n</p>\r\n<p>\r\n    <strong>11. Foro</strong>\r\n</p>\r\n<p>\r\n    Quaisquer disputas ou controvérsias oriundas de atos praticados pelos usuários externos, inclusive com relação ao descumprimento dos Termos de Uso ou pela violação dos direitos da Administração Pública ou de terceiros, inclusive direitos de propriedade intelectual, de sigilo e de personalidade, serão processadas no juízo competente relativo à sede da entidade ou órgão correspondente.\r\n</p>	N	N	\N	\N
 \.
 
 
@@ -60570,6 +62608,12 @@ COPY public.tipo_localizador (id_tipo_localizador, id_unidade, sigla, nome, sin_
 --
 
 COPY public.tipo_prioridade (id_tipo_prioridade, nome, descricao, sin_ativo) FROM stdin;
+4	Pessoa com Doença Grave (inciso IV do art. 69-A da LPA)	Portadora de tuberculose ativa, esclerose múltipla, neoplasia maligna, hanseníase, paralisia irreversível e incapacitante, cardiopatia grave, doença de Parkinson, espondiloartrose anquilosante, nefropatia grave, hepatopatia grave, estados avançados da doença de Paget (osteíte deformante), contaminação por radiação, síndrome de imunodeficiência adquirida, ou outra doença grave, com base em conclusão da medicina especializada, mesmo que a doença tenha sido contraída após o início do processo	S
+1	Pessoa com Deficiência - PcD (art. 9º, inciso VII, da Lei nº 13.146/2015 c/c art. 69-A da LPA)	Art. 9º A pessoa com deficiência tem direito a receber atendimento prioritário, sobretudo com a finalidade de:\r\n[...]\r\nVII - tramitação processual e procedimentos judiciais e administrativos em que for parte ou interessada, em todos os atos e diligências.\r\n\r\nArt. 69-A. Terão prioridade na tramitação, em qualquer órgão ou instância, os procedimentos administrativos em que figure como parte ou interessado:\r\n[...]\r\nII - pessoa portadora de deficiência, física ou mental;	S
+2	Idoso entre 60 e 80 anos (art. 3º, § 1º, inciso I, da Lei nº 10.741/2003 c/c art. 69-A da LPA)	Art. 3º [...]\r\n§ 1º A garantia de prioridade compreende:\r\nI - atendimento preferencial imediato e individualizado junto aos órgãos públicos e privados prestadores de serviços à população;\r\n\r\nArt. 69-A. Terão prioridade na tramitação, em qualquer órgão ou instância, os procedimentos administrativos em que figure como parte ou interessado:\r\nI - pessoa com idade igual ou superior a 60 (sessenta) anos;\r\n[...]	S
+3	Idoso com mais de 80 anos - ESPECIAL (art. 3º, § 2º, da Lei nº 10.741/2003 c/c art. 69-A da LPA)	Art. 3º [...]\r\n§ 2º Entre as pessoas idosas, é assegurada prioridade especial aos maiores de 80 (oitenta) anos, atendendo-se suas necessidades sempre preferencialmente em relação às demais pessoas idosas.\r\n\r\nArt. 69-A. Terão prioridade na tramitação, em qualquer órgão ou instância, os procedimentos administrativos em que figure como parte ou interessado:\r\nI - pessoa com idade igual ou superior a 60 (sessenta) anos;\r\n[...]	S
+5	Processos e procedimentos previstos no Estatuto da Criança e do Adolescente (ECA)	Art. 152. Aos procedimentos regulados nesta Lei aplicam-se subsidiariamente as normas gerais previstas na legislação processual pertinente.\r\n\r\n§ 1º É assegurada, sob pena de responsabilidade, prioridade absoluta na tramitação dos processos e procedimentos previstos nesta Lei, assim como na execução dos atos e diligências judiciais a eles referentes.\r\n[...]	S
+6	Licença Ambiental nos órgãos do Sisnama - contratos públicos (art. 25, § 6º, da Lei 14.133/2021)	Art. 25. [...]\r\n§ 6º Os licenciamentos ambientais de obras e serviços de engenharia licitados e contratados nos termos desta Lei terão prioridade de tramitação nos órgãos e entidades integrantes do Sistema Nacional do Meio Ambiente (Sisnama) e deverão ser orientados pelos princípios da celeridade, da cooperação, da economicidade e da eficiência.	S
 \.
 
 
@@ -61028,12 +63072,20 @@ COPY public.unidade_publicacao (id_unidade_publicacao, id_unidade) FROM stdin;
 -- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: sei_user
 --
 
-COPY public.usuario (id_usuario, id_contato, id_orgao, id_origem, sin_ativo, sigla, nome, idx_usuario, sta_tipo, senha, nome_registro_civil, nome_social, id_usuario_federacao) FROM stdin;
-1	100000002	0	\N	S	SEI	Sistema Eletrônico de Informações	sei sistema eletronico de informacoes	1	\N	Sistema Eletrônico de Informações	\N	\N
-2	100000003	0	\N	S	SIP	Sistema de Permissões	sip sistema de permissoes	1	\N	Sistema de Permissões	\N	\N
-3	100000004	0	\N	S	INTRANET	INTRANET	intranet intranet	1	\N	INTRANET	\N	\N
-4	100000005	0	\N	S	INTERNET	INTERNET	internet internet	1	\N	INTERNET	\N	\N
-100000001	100000009	0	\N	S	teste	Usuário de Testes	teste usuario de testes	0	\N	Usuário de Testes	\N	\N
+COPY public.usuario (id_usuario, id_contato, id_orgao, id_origem, sin_ativo, sigla, nome, idx_usuario, sta_tipo, senha, nome_registro_civil, nome_social, id_usuario_federacao, sin_gov_br, dth_termo_uso, dth_politica_privacidade) FROM stdin;
+1	100000002	0	\N	S	SEI	Sistema Eletrônico de Informações	sei sistema eletronico de informacoes	1	\N	Sistema Eletrônico de Informações	\N	\N	N	\N	\N
+2	100000003	0	\N	S	SIP	Sistema de Permissões	sip sistema de permissoes	1	\N	Sistema de Permissões	\N	\N	N	\N	\N
+3	100000004	0	\N	S	INTRANET	INTRANET	intranet intranet	1	\N	INTRANET	\N	\N	N	\N	\N
+4	100000005	0	\N	S	INTERNET	INTERNET	internet internet	1	\N	INTERNET	\N	\N	N	\N	\N
+100000001	100000009	0	\N	S	teste	Usuário de Testes	teste usuario de testes	0	\N	Usuário de Testes	\N	\N	N	\N	\N
+\.
+
+
+--
+-- Data for Name: usuario_configuracao; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.usuario_configuracao (id_usuario, pagina_inicial, sin_filtrar_botoes, botoes_processo, botoes_documento, botoes_controle, sta_tipo_controle, detalhe_controle, dth_cadastro) FROM stdin;
 \.
 
 
@@ -61151,483 +63203,455 @@ COPY public.vocativo (id_vocativo, expressao, sin_ativo) FROM stdin;
 
 
 --
--- Name: seq_acesso; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_acesso; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_acesso', 1, false);
 
 
 --
--- Name: seq_acesso_externo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_acesso_externo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_acesso_externo', 1, false);
 
 
 --
--- Name: seq_acompanhamento; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_acompanhamento; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_acompanhamento', 1, false);
 
 
 --
--- Name: seq_andamento_instalacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_andamento_instalacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_andamento_instalacao', 1, false);
 
 
 --
--- Name: seq_andamento_marcador; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_andamento_marcador; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_andamento_marcador', 1, false);
 
 
 --
--- Name: seq_andamento_plano_trabalho; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_andamento_plano_trabalho; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_andamento_plano_trabalho', 1, false);
 
 
 --
--- Name: seq_andamento_situacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_andamento_situacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_andamento_situacao', 1, false);
 
 
 --
--- Name: seq_anexo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_anexo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_anexo', 1, false);
 
 
 --
--- Name: seq_anotacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_anotacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_anotacao', 1, false);
 
 
 --
--- Name: seq_arquivo_extensao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_arquivo_extensao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_arquivo_extensao', 42, false);
 
 
 --
--- Name: seq_assinante; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_assinante; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_assinante', 22, false);
 
 
 --
--- Name: seq_assinatura; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_assinatura; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_assinatura', 1, false);
 
 
 --
--- Name: seq_assunto; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_assunto; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_assunto', 684, true);
 
 
 --
--- Name: seq_assunto_proxy; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_assunto_proxy; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_assunto_proxy', 684, true);
 
 
 --
--- Name: seq_atividade; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_atividade; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_atividade', 1, false);
 
 
 --
--- Name: seq_atributo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_atributo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_atributo', 1, false);
 
 
 --
--- Name: seq_atributo_andam_plano_trab; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_atributo_andam_plano_trab; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_atributo_andam_plano_trab', 1, false);
 
 
 --
--- Name: seq_atributo_andamento; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_atributo_andamento; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_atributo_andamento', 1, false);
 
 
 --
--- Name: seq_atributo_andamento_situaca; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_atributo_andamento_situaca; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_atributo_andamento_situaca', 1, false);
 
 
 --
--- Name: seq_atributo_instalacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_atributo_instalacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_atributo_instalacao', 1, false);
 
 
 --
--- Name: seq_auditoria_protocolo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_auditoria_protocolo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_auditoria_protocolo', 1, false);
 
 
 --
--- Name: seq_avaliacao_documental; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_avaliacao_documental; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_avaliacao_documental', 1, false);
 
 
 --
--- Name: seq_aviso; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_aviso; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_aviso', 1, false);
 
 
 --
--- Name: seq_base_conhecimento; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_base_conhecimento; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_base_conhecimento', 1, false);
 
 
 --
--- Name: seq_bloco; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_bloco; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_bloco', 1, false);
 
 
 --
--- Name: seq_campo_pesquisa; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_campo_pesquisa; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_campo_pesquisa', 1, false);
 
 
 --
--- Name: seq_cargo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_cargo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_cargo', 82, false);
 
 
 --
--- Name: seq_categoria; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_categoria; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_categoria', 1, false);
 
 
 --
--- Name: seq_cidade; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_cidade; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_cidade', 5565, false);
 
 
 --
--- Name: seq_comentario; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_comentario; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_comentario', 1, false);
 
 
 --
--- Name: seq_conjunto_estilos; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_conjunto_estilos; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
-SELECT pg_catalog.setval('public.seq_conjunto_estilos', 82, false);
-
-
---
--- Name: seq_conjunto_estilos_item; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.seq_conjunto_estilos_item', 1643, false);
+SELECT pg_catalog.setval('public.seq_conjunto_estilos', 83, false);
 
 
 --
--- Name: seq_contato; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_conjunto_estilos_item; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
-SELECT pg_catalog.setval('public.seq_contato', 100000012, false);
+SELECT pg_catalog.setval('public.seq_conjunto_estilos_item', 1682, false);
 
 
 --
--- Name: seq_controle_interno; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_contato; Type: SEQUENCE SET; Schema: public; Owner: sei_user
+--
+
+SELECT pg_catalog.setval('public.seq_contato', 100000011, true);
+
+
+--
+-- Name: seq_controle_interno; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_controle_interno', 1, false);
 
 
 --
--- Name: seq_controle_prazo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_controle_prazo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_controle_prazo', 1, false);
 
 
 --
--- Name: seq_controle_unidade; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_controle_unidade; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_controle_unidade', 1, false);
 
 
 --
--- Name: seq_cpad; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.seq_cpad', 1, false);
-
-
---
--- Name: seq_cpad_avaliacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.seq_cpad_avaliacao', 1, false);
-
-
---
--- Name: seq_cpad_composicao; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.seq_cpad_composicao', 1, false);
-
-
---
--- Name: seq_cpad_versao; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.seq_cpad_versao', 1, false);
-
-
---
--- Name: seq_documento; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_documento; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_documento', 1, false);
 
 
 --
--- Name: seq_dominio; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_dominio; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_dominio', 1, false);
 
 
 --
--- Name: seq_edital_eliminacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_edital_eliminacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_edital_eliminacao', 1, false);
 
 
 --
--- Name: seq_edital_eliminacao_conteudo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_edital_eliminacao_conteudo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_edital_eliminacao_conteudo', 1, false);
 
 
 --
--- Name: seq_edital_eliminacao_erro; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_edital_eliminacao_erro; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_edital_eliminacao_erro', 1, false);
 
 
 --
--- Name: seq_email_grupo_email; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_email_grupo_email; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_email_grupo_email', 1, false);
 
 
 --
--- Name: seq_email_sistema; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_email_sistema; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_email_sistema', 1001, false);
 
 
 --
--- Name: seq_email_unidade; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_email_unidade; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_email_unidade', 729, false);
 
 
 --
--- Name: seq_email_utilizado; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_email_utilizado; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_email_utilizado', 1, false);
 
 
 --
--- Name: seq_estatisticas; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_estatisticas; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_estatisticas', 1, false);
 
 
 --
--- Name: seq_estilo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_estilo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_estilo', 60, false);
 
 
 --
--- Name: seq_etapa_trabalho; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_etapa_trabalho; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_etapa_trabalho', 1, false);
 
 
 --
--- Name: seq_feed; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_feed; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_feed', 1, false);
 
 
 --
--- Name: seq_feriado; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_feriado; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_feriado', 13, false);
 
 
 --
--- Name: seq_grupo_acompanhamento; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_grupo_acompanhamento; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_grupo_acompanhamento', 1, false);
 
 
 --
--- Name: seq_grupo_bloco; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_grupo_bloco; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_grupo_bloco', 1, false);
 
 
 --
--- Name: seq_grupo_contato; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_grupo_contato; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_grupo_contato', 1, false);
 
 
 --
--- Name: seq_grupo_email; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_grupo_email; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_grupo_email', 1, false);
 
 
 --
--- Name: seq_grupo_federacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_grupo_federacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_grupo_federacao', 1, false);
 
 
 --
--- Name: seq_grupo_protocolo_modelo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_grupo_protocolo_modelo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_grupo_protocolo_modelo', 1, false);
 
 
 --
--- Name: seq_grupo_serie; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_grupo_serie; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_grupo_serie', 3, false);
 
 
 --
--- Name: seq_grupo_unidade; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_grupo_unidade; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_grupo_unidade', 1, false);
 
 
 --
--- Name: seq_hipotese_legal; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_hipotese_legal; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_hipotese_legal', 24, false);
 
 
 --
--- Name: seq_imagem_formato; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_imagem_formato; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_imagem_formato', 4, false);
 
 
 --
--- Name: seq_infra_auditoria; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_infra_auditoria; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
-SELECT pg_catalog.setval('public.seq_infra_auditoria', 1, false);
-
-
---
--- Name: seq_infra_log; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.seq_infra_log', 1, false);
+SELECT pg_catalog.setval('public.seq_infra_auditoria', 1, true);
 
 
 --
--- Name: seq_infra_navegador; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_infra_log; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
-SELECT pg_catalog.setval('public.seq_infra_navegador', 2, false);
+SELECT pg_catalog.setval('public.seq_infra_log', 1, true);
 
 
 --
--- Name: seq_item_etapa; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_infra_navegador; Type: SEQUENCE SET; Schema: public; Owner: sei_user
+--
+
+SELECT pg_catalog.setval('public.seq_infra_navegador', 1, true);
+
+
+--
+-- Name: seq_item_etapa; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_item_etapa', 1, false);
 
 
 --
--- Name: seq_lembrete; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_lembrete; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_lembrete', 1, false);
@@ -61641,378 +63665,392 @@ SELECT pg_catalog.setval('public.seq_lixeira', 1, false);
 
 
 --
--- Name: seq_localizador; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_localizador; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_localizador', 1, false);
 
 
 --
--- Name: seq_lugar_localizador; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_lugar_localizador; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_lugar_localizador', 1, false);
 
 
 --
--- Name: seq_marcador; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_marcador; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_marcador', 1, false);
 
 
 --
--- Name: seq_modelo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_modelo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_modelo', 119, false);
 
 
 --
--- Name: seq_monitoramento_servico; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_monitoramento_servico; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_monitoramento_servico', 1, false);
 
 
 --
--- Name: seq_nivel_acesso_permitido; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_nivel_acesso_permitido; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_nivel_acesso_permitido', 3030, false);
 
 
 --
--- Name: seq_notificacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_notificacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_notificacao', 1, false);
 
 
 --
--- Name: seq_novidade; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_novidade; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_novidade', 1, false);
 
 
 --
--- Name: seq_numeracao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_numeracao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_numeracao', 1, false);
 
 
 --
--- Name: seq_observacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_observacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_observacao', 1, false);
 
 
 --
--- Name: seq_operacao_servico; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_operacao_servico; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_operacao_servico', 1, false);
 
 
 --
--- Name: seq_ordenador_despesa; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_ordenador_despesa; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_ordenador_despesa', 1, false);
 
 
 --
--- Name: seq_orgao_historico; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_orgao_historico; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_orgao_historico', 1, false);
 
 
 --
--- Name: seq_pais; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_pais; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_pais', 895, false);
 
 
 --
--- Name: seq_participante; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_participante; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_participante', 1, false);
 
 
 --
--- Name: seq_pesquisa; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_pesquisa; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_pesquisa', 1, false);
 
 
 --
--- Name: seq_plano_trabalho; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_plano_trabalho; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_plano_trabalho', 1, false);
 
 
 --
--- Name: seq_protocolo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_protocolo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_protocolo', 1, false);
 
 
 --
--- Name: seq_protocolo_modelo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_protocolo_modelo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_protocolo_modelo', 1, false);
 
 
 --
--- Name: seq_publicacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_publicacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_publicacao', 1, false);
 
 
 --
--- Name: seq_reabertura_programada; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_reabertura_programada; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_reabertura_programada', 1, false);
 
 
 --
--- Name: seq_rel_protocolo_protocolo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_rel_protocolo_protocolo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_rel_protocolo_protocolo', 1, false);
 
 
 --
--- Name: seq_rel_unidade_tipo_contato; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_rel_unidade_tipo_contato; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_rel_unidade_tipo_contato', 8, false);
 
 
 --
--- Name: seq_retorno_programado; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_retorno_programado; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_retorno_programado', 1, false);
 
 
 --
--- Name: seq_secao_documento; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_revisao_avaliacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.seq_revisao_avaliacao', 1, false);
+
+
+--
+-- Name: seq_secao_documento; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_secao_documento', 1, false);
 
 
 --
--- Name: seq_secao_imprensa_nacional; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_secao_imprensa_nacional; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_secao_imprensa_nacional', 4, false);
 
 
 --
--- Name: seq_secao_modelo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_secao_modelo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_secao_modelo', 776, false);
 
 
 --
--- Name: seq_serie; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_serie; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_serie', 283, false);
 
 
 --
--- Name: seq_serie_publicacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_serie_publicacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_serie_publicacao', 1, false);
 
 
 --
--- Name: seq_serie_restricao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_serie_restricao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_serie_restricao', 1, false);
 
 
 --
--- Name: seq_servico; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_servico; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_servico', 1, false);
 
 
 --
--- Name: seq_situacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_situacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_situacao', 1, false);
 
 
 --
--- Name: seq_tabela_assuntos; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tabela_assuntos; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_tabela_assuntos', 2, false);
 
 
 --
--- Name: seq_tarefa; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tarefa; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_tarefa', 1001, false);
 
 
 --
--- Name: seq_tarja_assinatura; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tarja_assinatura; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
-SELECT pg_catalog.setval('public.seq_tarja_assinatura', 10, false);
+SELECT pg_catalog.setval('public.seq_tarja_assinatura', 8, true);
 
 
 --
--- Name: seq_texto_padrao_interno; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_termo_uso; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.seq_termo_uso', 1, true);
+
+
+--
+-- Name: seq_texto_padrao_interno; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_texto_padrao_interno', 1, false);
 
 
 --
--- Name: seq_tipo_conferencia; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tipo_conferencia; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_tipo_conferencia', 5, false);
 
 
 --
--- Name: seq_tipo_contato; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tipo_contato; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_tipo_contato', 7, false);
 
 
 --
--- Name: seq_tipo_formulario; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tipo_formulario; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_tipo_formulario', 1, false);
 
 
 --
--- Name: seq_tipo_localizador; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tipo_localizador; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_tipo_localizador', 1, false);
 
 
 --
--- Name: seq_tipo_prioridade; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tipo_prioridade; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_tipo_prioridade', 1, false);
 
 
 --
--- Name: seq_tipo_proced_restricao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tipo_proced_restricao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_tipo_proced_restricao', 1, false);
 
 
 --
--- Name: seq_tipo_procedimento; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tipo_procedimento; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_tipo_procedimento', 100000425, false);
 
 
 --
--- Name: seq_tipo_suporte; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tipo_suporte; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_tipo_suporte', 9, false);
 
 
 --
--- Name: seq_titulo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_titulo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_titulo', 1, false);
 
 
 --
--- Name: seq_tratamento; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_tratamento; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_tratamento', 5, false);
 
 
 --
--- Name: seq_uf; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_uf; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_uf', 28, false);
 
 
 --
--- Name: seq_unidade_historico; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_unidade_historico; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_unidade_historico', 3, true);
 
 
 --
--- Name: seq_unidade_publicacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_unidade_publicacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_unidade_publicacao', 1, false);
 
 
 --
--- Name: seq_upload; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_upload; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_upload', 1, false);
 
 
 --
--- Name: seq_veiculo_imprensa_nacional; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_veiculo_imprensa_nacional; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_veiculo_imprensa_nacional', 2, false);
 
 
 --
--- Name: seq_veiculo_publicacao; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_veiculo_publicacao; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_veiculo_publicacao', 2, false);
 
 
 --
--- Name: seq_versao_secao_documento; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_versao_secao_documento; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_versao_secao_documento', 1, false);
 
 
 --
--- Name: seq_vocativo; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Name: seq_vocativo; Type: SEQUENCE SET; Schema: public; Owner: sei_user
 --
 
 SELECT pg_catalog.setval('public.seq_vocativo', 64, false);
@@ -62227,6 +64265,14 @@ ALTER TABLE ONLY public.base_conhecimento
 
 
 --
+-- Name: base_conhecimento_idx pk_base_conhecimento_idx; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.base_conhecimento_idx
+    ADD CONSTRAINT pk_base_conhecimento_idx PRIMARY KEY (id_base_conhecimento, id_anexo);
+
+
+--
 -- Name: bloco pk_bloco; Type: CONSTRAINT; Schema: public; Owner: sei_user
 --
 
@@ -62275,6 +64321,14 @@ ALTER TABLE ONLY public.cidade
 
 
 --
+-- Name: codigo_acesso pk_codigo_acesso; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.codigo_acesso
+    ADD CONSTRAINT pk_codigo_acesso PRIMARY KEY (id_codigo_acesso);
+
+
+--
 -- Name: comentario pk_comentario; Type: CONSTRAINT; Schema: public; Owner: sei_user
 --
 
@@ -62312,38 +64366,6 @@ ALTER TABLE ONLY public.contato
 
 ALTER TABLE ONLY public.controle_interno
     ADD CONSTRAINT pk_controle_interno PRIMARY KEY (id_controle_interno);
-
-
---
--- Name: cpad pk_cpad; Type: CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad
-    ADD CONSTRAINT pk_cpad PRIMARY KEY (id_cpad);
-
-
---
--- Name: cpad_avaliacao pk_cpad_avaliacao; Type: CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad_avaliacao
-    ADD CONSTRAINT pk_cpad_avaliacao PRIMARY KEY (id_cpad_avaliacao);
-
-
---
--- Name: cpad_composicao pk_cpad_composicao; Type: CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad_composicao
-    ADD CONSTRAINT pk_cpad_composicao PRIMARY KEY (id_cpad_composicao);
-
-
---
--- Name: cpad_versao pk_cpad_versao; Type: CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad_versao
-    ADD CONSTRAINT pk_cpad_versao PRIMARY KEY (id_cpad_versao);
 
 
 --
@@ -62568,14 +64590,6 @@ ALTER TABLE ONLY public.infra_auditoria
 
 ALTER TABLE ONLY public.infra_captcha
     ADD CONSTRAINT pk_infra_captcha PRIMARY KEY (identificacao, dia, mes, ano);
-
-
---
--- Name: infra_captcha_tentativa pk_infra_captcha_tentativa; Type: CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.infra_captcha_tentativa
-    ADD CONSTRAINT pk_infra_captcha_tentativa PRIMARY KEY (identificacao, id_usuario_origem);
 
 
 --
@@ -62875,6 +64889,14 @@ ALTER TABLE ONLY public.protocolo_federacao
 
 
 --
+-- Name: protocolo_idx pk_protocolo_idx; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.protocolo_idx
+    ADD CONSTRAINT pk_protocolo_idx PRIMARY KEY (id_protocolo);
+
+
+--
 -- Name: protocolo_modelo pk_protocolo_modelo; Type: CONSTRAINT; Schema: public; Owner: sei_user
 --
 
@@ -62888,6 +64910,14 @@ ALTER TABLE ONLY public.protocolo_modelo
 
 ALTER TABLE ONLY public.publicacao
     ADD CONSTRAINT pk_publicacao PRIMARY KEY (id_publicacao);
+
+
+--
+-- Name: publicacao_idx pk_publicacao_idx; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.publicacao_idx
+    ADD CONSTRAINT pk_publicacao_idx PRIMARY KEY (id_publicacao);
 
 
 --
@@ -63211,6 +65241,14 @@ ALTER TABLE ONLY public.retorno_programado
 
 
 --
+-- Name: revisao_avaliacao pk_revisao_avaliacao; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.revisao_avaliacao
+    ADD CONSTRAINT pk_revisao_avaliacao PRIMARY KEY (id_revisao_avaliacao);
+
+
+--
 -- Name: secao_documento pk_secao_documento; Type: CONSTRAINT; Schema: public; Owner: sei_user
 --
 
@@ -63336,6 +65374,14 @@ ALTER TABLE ONLY public.tarefa_plano_trabalho
 
 ALTER TABLE ONLY public.tarja_assinatura
     ADD CONSTRAINT pk_tarja_assinatura PRIMARY KEY (id_tarja_assinatura);
+
+
+--
+-- Name: termo_uso pk_termo_uso; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.termo_uso
+    ADD CONSTRAINT pk_termo_uso PRIMARY KEY (id_termo_uso);
 
 
 --
@@ -63483,6 +65529,14 @@ ALTER TABLE ONLY public.usuario
 
 
 --
+-- Name: usuario_configuracao pk_usuario_configuracao; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuario_configuracao
+    ADD CONSTRAINT pk_usuario_configuracao PRIMARY KEY (id_usuario);
+
+
+--
 -- Name: usuario_federacao pk_usuario_federacao; Type: CONSTRAINT; Schema: public; Owner: sei_user
 --
 
@@ -63623,10 +65677,10 @@ CREATE UNIQUE INDEX ak2_protocolo ON public.protocolo USING btree (protocolo_for
 
 
 --
--- Name: ak_cnjp; Type: INDEX; Schema: public; Owner: sei_user
+-- Name: ak_cnpj; Type: INDEX; Schema: public; Owner: sei_user
 --
 
-CREATE UNIQUE INDEX ak_cnjp ON public.instalacao_federacao USING btree (cnpj);
+CREATE UNIQUE INDEX ak_cnpj ON public.instalacao_federacao USING btree (cnpj);
 
 
 --
@@ -63651,10 +65705,934 @@ CREATE UNIQUE INDEX ak_tipo_arquivo_nome ON public.tipo_localizador USING btree 
 
 
 --
+-- Name: fk_acesso_controle_interno; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_controle_interno ON public.acesso USING btree (id_controle_interno);
+
+
+--
+-- Name: fk_acesso_externo_atividade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_externo_atividade ON public.acesso_externo USING btree (id_atividade);
+
+
+--
+-- Name: fk_acesso_externo_documento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_externo_documento ON public.acesso_externo USING btree (id_documento);
+
+
+--
+-- Name: fk_acesso_externo_participante; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_externo_participante ON public.acesso_externo USING btree (id_participante);
+
+
+--
+-- Name: fk_acesso_fed_documento_fed; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_fed_documento_fed ON public.acesso_federacao USING btree (id_documento_federacao);
+
+
+--
+-- Name: fk_acesso_fed_instal_fed_dest; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_fed_instal_fed_dest ON public.acesso_federacao USING btree (id_instalacao_federacao_dest);
+
+
+--
+-- Name: fk_acesso_fed_instal_fed_rem; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_fed_instal_fed_rem ON public.acesso_federacao USING btree (id_instalacao_federacao_rem);
+
+
+--
+-- Name: fk_acesso_fed_orgao_fed_dest; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_fed_orgao_fed_dest ON public.acesso_federacao USING btree (id_orgao_federacao_dest);
+
+
+--
+-- Name: fk_acesso_fed_orgao_fed_rem; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_fed_orgao_fed_rem ON public.acesso_federacao USING btree (id_orgao_federacao_rem);
+
+
+--
+-- Name: fk_acesso_fed_procedimento_fed; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_fed_procedimento_fed ON public.acesso_federacao USING btree (id_procedimento_federacao);
+
+
+--
+-- Name: fk_acesso_fed_unidade_fed_dest; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_fed_unidade_fed_dest ON public.acesso_federacao USING btree (id_unidade_federacao_dest);
+
+
+--
+-- Name: fk_acesso_fed_unidade_fed_rem; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_fed_unidade_fed_rem ON public.acesso_federacao USING btree (id_unidade_federacao_rem);
+
+
+--
+-- Name: fk_acesso_fed_usuario_fed_dest; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_fed_usuario_fed_dest ON public.acesso_federacao USING btree (id_usuario_federacao_dest);
+
+
+--
+-- Name: fk_acesso_fed_usuario_fed_rem; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_fed_usuario_fed_rem ON public.acesso_federacao USING btree (id_usuario_federacao_rem);
+
+
+--
+-- Name: fk_acesso_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_protocolo ON public.acesso USING btree (id_protocolo);
+
+
+--
+-- Name: fk_acesso_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_unidade ON public.acesso USING btree (id_unidade);
+
+
+--
+-- Name: fk_acesso_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acesso_usuario ON public.acesso USING btree (id_usuario);
+
+
+--
+-- Name: fk_acompanhamento_grupo_acompa; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acompanhamento_grupo_acompa ON public.acompanhamento USING btree (id_grupo_acompanhamento);
+
+
+--
+-- Name: fk_acompanhamento_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acompanhamento_protocolo ON public.acompanhamento USING btree (id_protocolo);
+
+
+--
+-- Name: fk_acompanhamento_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acompanhamento_unidade ON public.acompanhamento USING btree (id_unidade);
+
+
+--
+-- Name: fk_acompanhamento_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_acompanhamento_usuario ON public.acompanhamento USING btree (id_usuario);
+
+
+--
+-- Name: fk_and_inst_tarefa_inst; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_and_inst_tarefa_inst ON public.andamento_instalacao USING btree (id_tarefa_instalacao);
+
+
+--
+-- Name: fk_and_plan_trab_tar_plan_trab; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_and_plan_trab_tar_plan_trab ON public.andamento_plano_trabalho USING btree (id_tarefa_plano_trabalho);
+
+
+--
+-- Name: fk_andam_plano_trab_plano_trab; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andam_plano_trab_plano_trab ON public.andamento_plano_trabalho USING btree (id_plano_trabalho);
+
+
+--
+-- Name: fk_andam_plano_trab_proced; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andam_plano_trab_proced ON public.andamento_plano_trabalho USING btree (id_procedimento);
+
+
+--
+-- Name: fk_andam_plano_trab_uni_origem; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andam_plano_trab_uni_origem ON public.andamento_plano_trabalho USING btree (id_unidade_origem);
+
+
+--
+-- Name: fk_andam_plano_trab_usu_origem; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andam_plano_trab_usu_origem ON public.andamento_plano_trabalho USING btree (id_usuario_origem);
+
+
+--
+-- Name: fk_andam_situacao_procedimento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andam_situacao_procedimento ON public.andamento_situacao USING btree (id_procedimento);
+
+
+--
+-- Name: fk_andam_situacao_situacao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andam_situacao_situacao ON public.andamento_situacao USING btree (id_situacao);
+
+
+--
+-- Name: fk_andamento_inst_inst_fed; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andamento_inst_inst_fed ON public.andamento_instalacao USING btree (id_instalacao_federacao);
+
+
+--
+-- Name: fk_andamento_inst_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andamento_inst_unidade ON public.andamento_instalacao USING btree (id_unidade);
+
+
+--
+-- Name: fk_andamento_inst_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andamento_inst_usuario ON public.andamento_instalacao USING btree (id_usuario);
+
+
+--
+-- Name: fk_andamento_marcador_marcador; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andamento_marcador_marcador ON public.andamento_marcador USING btree (id_marcador);
+
+
+--
+-- Name: fk_andamento_marcador_proced; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andamento_marcador_proced ON public.andamento_marcador USING btree (id_procedimento);
+
+
+--
+-- Name: fk_andamento_marcador_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andamento_marcador_unidade ON public.andamento_marcador USING btree (id_unidade);
+
+
+--
+-- Name: fk_andamento_marcador_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andamento_marcador_usuario ON public.andamento_marcador USING btree (id_usuario);
+
+
+--
+-- Name: fk_andamento_situacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andamento_situacao_unidade ON public.andamento_situacao USING btree (id_unidade);
+
+
+--
+-- Name: fk_andamento_situacao_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_andamento_situacao_usuario ON public.andamento_situacao USING btree (id_usuario);
+
+
+--
+-- Name: fk_anexo_base_conhecimento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_anexo_base_conhecimento ON public.anexo USING btree (id_base_conhecimento);
+
+
+--
+-- Name: fk_anexo_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_anexo_protocolo ON public.anexo USING btree (id_protocolo);
+
+
+--
+-- Name: fk_anexo_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_anexo_unidade ON public.anexo USING btree (id_unidade);
+
+
+--
+-- Name: fk_anexo_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_anexo_usuario ON public.anexo USING btree (id_usuario);
+
+
+--
+-- Name: fk_anotacao_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_anotacao_protocolo ON public.anotacao USING btree (id_protocolo);
+
+
+--
+-- Name: fk_anotacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_anotacao_unidade ON public.anotacao USING btree (id_unidade);
+
+
+--
+-- Name: fk_anotacao_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_anotacao_usuario ON public.anotacao USING btree (id_usuario);
+
+
+--
+-- Name: fk_arquiv_ativ_arquiv; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_arquiv_ativ_arquiv ON public.arquivamento USING btree (id_atividade_arquivamento);
+
+
+--
+-- Name: fk_arquiv_ativ_canc; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_arquiv_ativ_canc ON public.arquivamento USING btree (id_atividade_cancelamento);
+
+
+--
+-- Name: fk_arquiv_ativ_desarquiv; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_arquiv_ativ_desarquiv ON public.arquivamento USING btree (id_atividade_desarquivamento);
+
+
+--
+-- Name: fk_arquiv_ativ_eliminacao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_arquiv_ativ_eliminacao ON public.arquivamento USING btree (id_atividade_eliminacao);
+
+
+--
+-- Name: fk_arquiv_ativ_receb; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_arquiv_ativ_receb ON public.arquivamento USING btree (id_atividade_recebimento);
+
+
+--
+-- Name: fk_arquiv_ativ_solic_desarq; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_arquiv_ativ_solic_desarq ON public.arquivamento USING btree (id_atividade_solicitacao);
+
+
+--
+-- Name: fk_arquivamento_localizador; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_arquivamento_localizador ON public.arquivamento USING btree (id_localizador);
+
+
+--
+-- Name: fk_assinante_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_assinante_orgao ON public.assinante USING btree (id_orgao);
+
+
+--
+-- Name: fk_assinatura_atividade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_assinatura_atividade ON public.assinatura USING btree (id_atividade);
+
+
+--
+-- Name: fk_assinatura_documento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_assinatura_documento ON public.assinatura USING btree (id_documento);
+
+
+--
+-- Name: fk_assinatura_tarja_assinatura; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_assinatura_tarja_assinatura ON public.assinatura USING btree (id_tarja_assinatura);
+
+
+--
+-- Name: fk_assinatura_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_assinatura_unidade ON public.assinatura USING btree (id_unidade);
+
+
+--
+-- Name: fk_assinatura_usuario_autentic; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_assinatura_usuario_autentic ON public.assinatura USING btree (id_usuario);
+
+
+--
+-- Name: fk_assunto_map_assunto_destino; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_assunto_map_assunto_destino ON public.mapeamento_assunto USING btree (id_assunto_destino);
+
+
+--
+-- Name: fk_assunto_map_assunto_origem; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_assunto_map_assunto_origem ON public.mapeamento_assunto USING btree (id_assunto_origem);
+
+
+--
+-- Name: fk_assunto_proxy_assunto; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_assunto_proxy_assunto ON public.assunto_proxy USING btree (id_assunto);
+
+
+--
+-- Name: fk_assunto_tabela_assuntos; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_assunto_tabela_assuntos ON public.assunto USING btree (id_tabela_assuntos);
+
+
+--
+-- Name: fk_atividade_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atividade_protocolo ON public.atividade USING btree (id_protocolo);
+
+
+--
+-- Name: fk_atividade_tarefa; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atividade_tarefa ON public.atividade USING btree (id_tarefa);
+
+
+--
+-- Name: fk_atividade_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atividade_unidade ON public.atividade USING btree (id_unidade);
+
+
+--
+-- Name: fk_atividade_unidade_origem; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atividade_unidade_origem ON public.atividade USING btree (id_unidade_origem);
+
+
+--
+-- Name: fk_atividade_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atividade_usuario ON public.atividade USING btree (id_usuario);
+
+
+--
+-- Name: fk_atividade_usuario_atribuica; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atividade_usuario_atribuica ON public.atividade USING btree (id_usuario_atribuicao);
+
+
+--
+-- Name: fk_atividade_usuario_conclusao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atividade_usuario_conclusao ON public.atividade USING btree (id_usuario_conclusao);
+
+
+--
+-- Name: fk_atividade_usuario_origem; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atividade_usuario_origem ON public.atividade USING btree (id_usuario_origem);
+
+
+--
+-- Name: fk_atividade_usuario_visualiza; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atividade_usuario_visualiza ON public.atividade USING btree (id_usuario_visualizacao);
+
+
+--
+-- Name: fk_atr_and_pla_tra_and_pla_tra; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atr_and_pla_tra_and_pla_tra ON public.atributo_andam_plano_trab USING btree (id_andamento_plano_trabalho);
+
+
+--
+-- Name: fk_atributo_andamento_atividad; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atributo_andamento_atividad ON public.atributo_andamento USING btree (id_atividade);
+
+
+--
+-- Name: fk_atributo_inst_andam_inst; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atributo_inst_andam_inst ON public.atributo_instalacao USING btree (id_andamento_instalacao);
+
+
+--
+-- Name: fk_atributo_tipo_formulario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_atributo_tipo_formulario ON public.atributo USING btree (id_tipo_formulario);
+
+
+--
+-- Name: fk_avaliacao_doc_assunto; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_avaliacao_doc_assunto ON public.avaliacao_documental USING btree (id_assunto);
+
+
+--
+-- Name: fk_avaliacao_doc_assunto_proxy; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_avaliacao_doc_assunto_proxy ON public.avaliacao_documental USING btree (id_assunto_proxy);
+
+
+--
+-- Name: fk_avaliacao_doc_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_avaliacao_doc_unidade ON public.avaliacao_documental USING btree (id_unidade);
+
+
+--
+-- Name: fk_avaliacao_documental_proced; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_avaliacao_documental_proced ON public.avaliacao_documental USING btree (id_procedimento);
+
+
+--
+-- Name: fk_avaliacao_documental_usu; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_avaliacao_documental_usu ON public.avaliacao_documental USING btree (id_usuario);
+
+
+--
+-- Name: fk_base_conhec_conj_estilos; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_base_conhec_conj_estilos ON public.base_conhecimento USING btree (id_conjunto_estilos);
+
+
+--
+-- Name: fk_base_conhec_usu_gerador; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_base_conhec_usu_gerador ON public.base_conhecimento USING btree (id_usuario_gerador);
+
+
+--
+-- Name: fk_base_conhec_usu_liberacao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_base_conhec_usu_liberacao ON public.base_conhecimento USING btree (id_usuario_liberacao);
+
+
+--
+-- Name: fk_base_conhecimento_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_base_conhecimento_unidade ON public.base_conhecimento USING btree (id_unidade);
+
+
+--
+-- Name: fk_bloco_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_bloco_unidade ON public.bloco USING btree (id_unidade);
+
+
+--
+-- Name: fk_bloco_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_bloco_usuario ON public.bloco USING btree (id_usuario);
+
+
+--
 -- Name: fk_campo_pesquisa_pesquisa; Type: INDEX; Schema: public; Owner: sei_user
 --
 
 CREATE INDEX fk_campo_pesquisa_pesquisa ON public.campo_pesquisa USING btree (id_pesquisa);
+
+
+--
+-- Name: fk_cargo_funcao_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_cargo_funcao_unidade ON public.cargo_funcao USING btree (id_unidade);
+
+
+--
+-- Name: fk_cargo_titulo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_cargo_titulo ON public.cargo USING btree (id_titulo);
+
+
+--
+-- Name: fk_cargo_tratamento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_cargo_tratamento ON public.cargo USING btree (id_tratamento);
+
+
+--
+-- Name: fk_cargo_vocativo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_cargo_vocativo ON public.cargo USING btree (id_vocativo);
+
+
+--
+-- Name: fk_cidade_pais; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_cidade_pais ON public.cidade USING btree (id_pais);
+
+
+--
+-- Name: fk_cidade_uf; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_cidade_uf ON public.cidade USING btree (id_uf);
+
+
+--
+-- Name: fk_codigo_acesso_usuario; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_codigo_acesso_usuario ON public.codigo_acesso USING btree (id_usuario);
+
+
+--
+-- Name: fk_comentario_procedimento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_comentario_procedimento ON public.comentario USING btree (id_procedimento);
+
+
+--
+-- Name: fk_comentario_rel_prot_prot; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_comentario_rel_prot_prot ON public.comentario USING btree (id_rel_protocolo_protocolo);
+
+
+--
+-- Name: fk_comentario_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_comentario_unidade ON public.comentario USING btree (id_unidade);
+
+
+--
+-- Name: fk_comentario_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_comentario_usuario ON public.comentario USING btree (id_usuario);
+
+
+--
+-- Name: fk_conj_est_item_conj_est; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_conj_est_item_conj_est ON public.conjunto_estilos_item USING btree (id_conjunto_estilos);
+
+
+--
+-- Name: fk_contato_cargo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_contato_cargo ON public.contato USING btree (id_cargo);
+
+
+--
+-- Name: fk_contato_categoria; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_contato_categoria ON public.contato USING btree (id_categoria);
+
+
+--
+-- Name: fk_contato_cidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_contato_cidade ON public.contato USING btree (id_cidade);
+
+
+--
+-- Name: fk_contato_pais; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_contato_pais ON public.contato USING btree (id_pais);
+
+
+--
+-- Name: fk_contato_pais_passaporte; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_contato_pais_passaporte ON public.contato USING btree (id_pais_passaporte);
+
+
+--
+-- Name: fk_contato_tipo_contato; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_contato_tipo_contato ON public.contato USING btree (id_tipo_contato);
+
+
+--
+-- Name: fk_contato_titulo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_contato_titulo ON public.contato USING btree (id_titulo);
+
+
+--
+-- Name: fk_contato_uf; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_contato_uf ON public.contato USING btree (id_uf);
+
+
+--
+-- Name: fk_contato_unidade_cadastro; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_contato_unidade_cadastro ON public.contato USING btree (id_unidade_cadastro);
+
+
+--
+-- Name: fk_contato_usuario_cadastro; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_contato_usuario_cadastro ON public.contato USING btree (id_usuario_cadastro);
+
+
+--
+-- Name: fk_controle_prazo_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_controle_prazo_protocolo ON public.controle_prazo USING btree (id_protocolo);
+
+
+--
+-- Name: fk_controle_prazo_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_controle_prazo_unidade ON public.controle_prazo USING btree (id_unidade);
+
+
+--
+-- Name: fk_controle_prazo_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_controle_prazo_usuario ON public.controle_prazo USING btree (id_usuario);
+
+
+--
+-- Name: fk_documento_conjunto_estilos; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_documento_conjunto_estilos ON public.documento USING btree (id_conjunto_estilos);
+
+
+--
+-- Name: fk_documento_procedimento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_documento_procedimento ON public.documento USING btree (id_procedimento);
+
+
+--
+-- Name: fk_documento_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_documento_serie ON public.documento USING btree (id_serie);
+
+
+--
+-- Name: fk_documento_tipo_conferencia; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_documento_tipo_conferencia ON public.documento USING btree (id_tipo_conferencia);
+
+
+--
+-- Name: fk_documento_tipo_formulario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_documento_tipo_formulario ON public.documento USING btree (id_tipo_formulario);
+
+
+--
+-- Name: fk_documento_unidade_responsav; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_documento_unidade_responsav ON public.documento USING btree (id_unidade_responsavel);
+
+
+--
+-- Name: fk_dominio_atributo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_dominio_atributo ON public.dominio USING btree (id_atributo);
+
+
+--
+-- Name: fk_edit_elim_erro_edit_eli_con; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_edit_elim_erro_edit_eli_con ON public.edital_eliminacao_erro USING btree (id_edital_eliminacao_conteudo);
+
+
+--
+-- Name: fk_edital_elim_cont_usu_inclus; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_edital_elim_cont_usu_inclus ON public.edital_eliminacao_conteudo USING btree (id_usuario_inclusao);
+
+
+--
+-- Name: fk_edital_eliminacao_documento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_edital_eliminacao_documento ON public.edital_eliminacao USING btree (id_documento);
+
+
+--
+-- Name: fk_edital_eliminacao_proced; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_edital_eliminacao_proced ON public.edital_eliminacao USING btree (id_procedimento);
+
+
+--
+-- Name: fk_edital_eliminacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_edital_eliminacao_unidade ON public.edital_eliminacao USING btree (id_unidade);
+
+
+--
+-- Name: fk_email_grupo_email_grupo_em; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_email_grupo_email_grupo_em ON public.email_grupo_email USING btree (id_grupo_email);
+
+
+--
+-- Name: fk_email_unidade_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_email_unidade_unidade ON public.email_unidade USING btree (id_unidade);
+
+
+--
+-- Name: fk_email_utilizado_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_email_utilizado_unidade ON public.email_utilizado USING btree (id_unidade);
+
+
+--
+-- Name: fk_etapa_trab_plano_trab; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_etapa_trab_plano_trab ON public.etapa_trabalho USING btree (id_plano_trabalho);
+
+
+--
+-- Name: fk_feriado_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_feriado_orgao ON public.feriado USING btree (id_orgao);
+
+
+--
+-- Name: fk_grupo_acompanhamento_unidad; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_grupo_acompanhamento_unidad ON public.grupo_acompanhamento USING btree (id_unidade);
+
+
+--
+-- Name: fk_grupo_bloco_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_grupo_bloco_unidade ON public.grupo_bloco USING btree (id_unidade);
+
+
+--
+-- Name: fk_grupo_contato_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_grupo_contato_unidade ON public.grupo_contato USING btree (id_unidade);
+
+
+--
+-- Name: fk_grupo_email_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_grupo_email_unidade ON public.grupo_email USING btree (id_unidade);
 
 
 --
@@ -63665,10 +66643,297 @@ CREATE INDEX fk_grupo_federacao_unidade ON public.grupo_federacao USING btree (i
 
 
 --
+-- Name: fk_grupo_protocolo_modelo_unid; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_grupo_protocolo_modelo_unid ON public.grupo_protocolo_modelo USING btree (id_unidade);
+
+
+--
+-- Name: fk_grupo_unidade_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_grupo_unidade_unidade ON public.grupo_unidade USING btree (id_unidade);
+
+
+--
 -- Name: fk_inf_reg_aud_rec_inf_reg_aud; Type: INDEX; Schema: public; Owner: sei_user
 --
 
 CREATE INDEX fk_inf_reg_aud_rec_inf_reg_aud ON public.infra_regra_auditoria_recurso USING btree (id_infra_regra_auditoria);
+
+
+--
+-- Name: fk_item_etapa_etapa_trabalho; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_item_etapa_etapa_trabalho ON public.item_etapa USING btree (id_etapa_trabalho);
+
+
+--
+-- Name: fk_lembrete_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_lembrete_usuario ON public.lembrete USING btree (id_usuario);
+
+
+--
+-- Name: fk_lixeira_anexo; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_lixeira_anexo ON public.lixeira USING btree (id_anexo);
+
+
+--
+-- Name: fk_lixeira_unidade; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_lixeira_unidade ON public.lixeira USING btree (id_unidade);
+
+
+--
+-- Name: fk_lixeira_usuario; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_lixeira_usuario ON public.lixeira USING btree (id_usuario);
+
+
+--
+-- Name: fk_localizador_lugar_localizad; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_localizador_lugar_localizad ON public.localizador USING btree (id_lugar_localizador);
+
+
+--
+-- Name: fk_localizador_tipo_localizado; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_localizador_tipo_localizado ON public.localizador USING btree (id_tipo_localizador);
+
+
+--
+-- Name: fk_localizador_tipo_suporte; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_localizador_tipo_suporte ON public.localizador USING btree (id_tipo_suporte);
+
+
+--
+-- Name: fk_localizador_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_localizador_unidade ON public.localizador USING btree (id_unidade);
+
+
+--
+-- Name: fk_lugar_localizador_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_lugar_localizador_unidade ON public.lugar_localizador USING btree (id_unidade);
+
+
+--
+-- Name: fk_marcador_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_marcador_unidade ON public.marcador USING btree (id_unidade);
+
+
+--
+-- Name: fk_monitoram_servico_servico; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_monitoram_servico_servico ON public.monitoramento_servico USING btree (id_servico);
+
+
+--
+-- Name: fk_nivel_acesso_perm_tipo_proc; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_nivel_acesso_perm_tipo_proc ON public.nivel_acesso_permitido USING btree (id_tipo_procedimento);
+
+
+--
+-- Name: fk_notificacao_atividade_confi; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_notificacao_atividade_confi ON public.notificacao USING btree (id_atividade_confirmacao);
+
+
+--
+-- Name: fk_notificacao_procedimento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_notificacao_procedimento ON public.notificacao USING btree (id_procedimento);
+
+
+--
+-- Name: fk_notificacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_notificacao_unidade ON public.notificacao USING btree (id_unidade);
+
+
+--
+-- Name: fk_notificacao_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_notificacao_usuario ON public.notificacao USING btree (id_usuario);
+
+
+--
+-- Name: fk_novidade_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_novidade_usuario ON public.novidade USING btree (id_usuario);
+
+
+--
+-- Name: fk_numeracao_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_numeracao_orgao ON public.numeracao USING btree (id_orgao);
+
+
+--
+-- Name: fk_numeracao_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_numeracao_serie ON public.numeracao USING btree (id_serie);
+
+
+--
+-- Name: fk_numeracao_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_numeracao_unidade ON public.numeracao USING btree (id_unidade);
+
+
+--
+-- Name: fk_observacao_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_observacao_protocolo ON public.observacao USING btree (id_protocolo);
+
+
+--
+-- Name: fk_observacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_observacao_unidade ON public.observacao USING btree (id_unidade);
+
+
+--
+-- Name: fk_oper_serv_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_oper_serv_serie ON public.operacao_servico USING btree (id_serie);
+
+
+--
+-- Name: fk_oper_serv_servico; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_oper_serv_servico ON public.operacao_servico USING btree (id_servico);
+
+
+--
+-- Name: fk_oper_serv_tipo_proc; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_oper_serv_tipo_proc ON public.operacao_servico USING btree (id_tipo_procedimento);
+
+
+--
+-- Name: fk_oper_serv_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_oper_serv_unidade ON public.operacao_servico USING btree (id_unidade);
+
+
+--
+-- Name: fk_ordenador_despesa_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_ordenador_despesa_orgao ON public.ordenador_despesa USING btree (id_orgao);
+
+
+--
+-- Name: fk_ordenador_despesa_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_ordenador_despesa_unidade ON public.ordenador_despesa USING btree (id_unidade);
+
+
+--
+-- Name: fk_ordenador_despesa_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_ordenador_despesa_usuario ON public.ordenador_despesa USING btree (id_usuario);
+
+
+--
+-- Name: fk_orgao_contato; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_orgao_contato ON public.orgao USING btree (id_contato);
+
+
+--
+-- Name: fk_orgao_fed_instalacao_fed; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_orgao_fed_instalacao_fed ON public.orgao_federacao USING btree (id_instalacao_federacao);
+
+
+--
+-- Name: fk_orgao_historico_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_orgao_historico_orgao ON public.orgao_historico USING btree (id_orgao);
+
+
+--
+-- Name: fk_orgao_orgao_federacao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_orgao_orgao_federacao ON public.orgao USING btree (id_orgao_federacao);
+
+
+--
+-- Name: fk_orgao_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_orgao_unidade ON public.orgao USING btree (id_unidade);
+
+
+--
+-- Name: fk_param_acao_fed_acao_fed; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_param_acao_fed_acao_fed ON public.parametro_acao_federacao USING btree (id_acao_federacao);
+
+
+--
+-- Name: fk_participante_contato; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_participante_contato ON public.participante USING btree (id_contato);
+
+
+--
+-- Name: fk_participante_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_participante_protocolo ON public.participante USING btree (id_protocolo);
+
+
+--
+-- Name: fk_participante_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_participante_unidade ON public.participante USING btree (id_unidade);
 
 
 --
@@ -63686,6 +66951,426 @@ CREATE INDEX fk_pesquisa_usuario ON public.pesquisa USING btree (id_usuario);
 
 
 --
+-- Name: fk_proced_tipo_prioridade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_proced_tipo_prioridade ON public.procedimento USING btree (id_tipo_prioridade);
+
+
+--
+-- Name: fk_procedimento_plano_trabalho; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_procedimento_plano_trabalho ON public.procedimento USING btree (id_plano_trabalho);
+
+
+--
+-- Name: fk_procedimento_tipo_procedime; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_procedimento_tipo_procedime ON public.procedimento USING btree (id_tipo_procedimento);
+
+
+--
+-- Name: fk_prot_mod_grupo_prot_mod; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_prot_mod_grupo_prot_mod ON public.protocolo_modelo USING btree (id_grupo_protocolo_modelo);
+
+
+--
+-- Name: fk_protocolo_fed_inst_fed; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_protocolo_fed_inst_fed ON public.protocolo_federacao USING btree (id_instalacao_federacao);
+
+
+--
+-- Name: fk_protocolo_hipotese_legal; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_protocolo_hipotese_legal ON public.protocolo USING btree (id_hipotese_legal);
+
+
+--
+-- Name: fk_protocolo_modelo_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_protocolo_modelo_protocolo ON public.protocolo_modelo USING btree (id_protocolo);
+
+
+--
+-- Name: fk_protocolo_modelo_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_protocolo_modelo_unidade ON public.protocolo_modelo USING btree (id_unidade);
+
+
+--
+-- Name: fk_protocolo_modelo_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_protocolo_modelo_usuario ON public.protocolo_modelo USING btree (id_usuario);
+
+
+--
+-- Name: fk_protocolo_protocolo_1; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_protocolo_protocolo_1 ON public.rel_protocolo_protocolo USING btree (id_protocolo_1);
+
+
+--
+-- Name: fk_protocolo_protocolo_2; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_protocolo_protocolo_2 ON public.rel_protocolo_protocolo USING btree (id_protocolo_2);
+
+
+--
+-- Name: fk_protocolo_protocolo_fed; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_protocolo_protocolo_fed ON public.protocolo USING btree (id_protocolo_federacao);
+
+
+--
+-- Name: fk_protocolo_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_protocolo_unidade ON public.protocolo USING btree (id_unidade_geradora);
+
+
+--
+-- Name: fk_protocolo_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_protocolo_usuario ON public.protocolo USING btree (id_usuario_gerador);
+
+
+--
+-- Name: fk_public_legado_secao_imp_nac; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_public_legado_secao_imp_nac ON public.publicacao_legado USING btree (id_secao_io);
+
+
+--
+-- Name: fk_public_legado_veic_public; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_public_legado_veic_public ON public.publicacao_legado USING btree (id_veiculo_publicacao);
+
+
+--
+-- Name: fk_public_legado_veicu_imp_nac; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_public_legado_veicu_imp_nac ON public.publicacao_legado USING btree (id_veiculo_io);
+
+
+--
+-- Name: fk_publicacao_atividade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_publicacao_atividade ON public.publicacao USING btree (id_atividade);
+
+
+--
+-- Name: fk_publicacao_documento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE UNIQUE INDEX fk_publicacao_documento ON public.publicacao USING btree (id_documento);
+
+
+--
+-- Name: fk_publicacao_legado_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_publicacao_legado_serie ON public.publicacao_legado USING btree (id_serie);
+
+
+--
+-- Name: fk_publicacao_legado_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_publicacao_legado_unidade ON public.publicacao_legado USING btree (id_unidade);
+
+
+--
+-- Name: fk_publicacao_secao_in; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_publicacao_secao_in ON public.publicacao USING btree (id_secao_io);
+
+
+--
+-- Name: fk_publicacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_publicacao_unidade ON public.publicacao USING btree (id_unidade);
+
+
+--
+-- Name: fk_publicacao_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_publicacao_usuario ON public.publicacao USING btree (id_usuario);
+
+
+--
+-- Name: fk_publicacao_veiculo_in; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_publicacao_veiculo_in ON public.publicacao USING btree (id_veiculo_io);
+
+
+--
+-- Name: fk_publicacao_veiculo_public; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_publicacao_veiculo_public ON public.publicacao USING btree (id_veiculo_publicacao);
+
+
+--
+-- Name: fk_re_secmod_cj_est_i_cj_est_i; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_re_secmod_cj_est_i_cj_est_i ON public.rel_secao_mod_cj_estilos_item USING btree (id_conjunto_estilos_item);
+
+
+--
+-- Name: fk_reabertura_prog_atividade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_reabertura_prog_atividade ON public.reabertura_programada USING btree (id_atividade);
+
+
+--
+-- Name: fk_reabertura_prog_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_reabertura_prog_protocolo ON public.reabertura_programada USING btree (id_protocolo);
+
+
+--
+-- Name: fk_reabertura_prog_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_reabertura_prog_unidade ON public.reabertura_programada USING btree (id_unidade);
+
+
+--
+-- Name: fk_reabertura_prog_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_reabertura_prog_usuario ON public.reabertura_programada USING btree (id_usuario);
+
+
+--
+-- Name: fk_rel_aces_ext_prot_aces_ext; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_aces_ext_prot_aces_ext ON public.rel_acesso_ext_protocolo USING btree (id_acesso_externo);
+
+
+--
+-- Name: fk_rel_aces_ext_prot_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_aces_ext_prot_protocolo ON public.rel_acesso_ext_protocolo USING btree (id_protocolo);
+
+
+--
+-- Name: fk_rel_aces_ext_serie_aces_ext; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_aces_ext_serie_aces_ext ON public.rel_acesso_ext_serie USING btree (id_acesso_externo);
+
+
+--
+-- Name: fk_rel_aces_ext_serie_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_aces_ext_serie_serie ON public.rel_acesso_ext_serie USING btree (id_serie);
+
+
+--
+-- Name: fk_rel_assinante_uni_assinante; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_assinante_uni_assinante ON public.rel_assinante_unidade USING btree (id_assinante);
+
+
+--
+-- Name: fk_rel_assinante_uni_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_assinante_uni_unidade ON public.rel_assinante_unidade USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_aval_doc_ed_eli_av_doc; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_aval_doc_ed_eli_av_doc ON public.edital_eliminacao_conteudo USING btree (id_avaliacao_documental);
+
+
+--
+-- Name: fk_rel_aval_doc_ed_eli_ed_eli; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_aval_doc_ed_eli_ed_eli ON public.edital_eliminacao_conteudo USING btree (id_edital_eliminacao);
+
+
+--
+-- Name: fk_rel_aviso_orgao_aviso; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_aviso_orgao_aviso ON public.rel_aviso_orgao USING btree (id_aviso);
+
+
+--
+-- Name: fk_rel_aviso_orgao_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_aviso_orgao_orgao ON public.rel_aviso_orgao USING btree (id_orgao);
+
+
+--
+-- Name: fk_rel_bc_tp_base_conhecimento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_bc_tp_base_conhecimento ON public.rel_base_conhec_tipo_proced USING btree (id_base_conhecimento);
+
+
+--
+-- Name: fk_rel_bc_tp_tipo_procedimento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_bc_tp_tipo_procedimento ON public.rel_base_conhec_tipo_proced USING btree (id_tipo_procedimento);
+
+
+--
+-- Name: fk_rel_blo_uni_grupo_bloco; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_blo_uni_grupo_bloco ON public.rel_bloco_unidade USING btree (id_grupo_bloco);
+
+
+--
+-- Name: fk_rel_blo_uni_usu_atribuicao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_blo_uni_usu_atribuicao ON public.rel_bloco_unidade USING btree (id_usuario_atribuicao);
+
+
+--
+-- Name: fk_rel_blo_uni_usu_comentario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_blo_uni_usu_comentario ON public.rel_bloco_unidade USING btree (id_usuario_comentario);
+
+
+--
+-- Name: fk_rel_blo_uni_usu_prioridade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_blo_uni_usu_prioridade ON public.rel_bloco_unidade USING btree (id_usuario_prioridade);
+
+
+--
+-- Name: fk_rel_blo_uni_usu_revisao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_blo_uni_usu_revisao ON public.rel_bloco_unidade USING btree (id_usuario_revisao);
+
+
+--
+-- Name: fk_rel_bloco_protocolo_bloco; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_bloco_protocolo_bloco ON public.rel_bloco_protocolo USING btree (id_bloco);
+
+
+--
+-- Name: fk_rel_bloco_protocolo_protoco; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_bloco_protocolo_protoco ON public.rel_bloco_protocolo USING btree (id_protocolo);
+
+
+--
+-- Name: fk_rel_bloco_unidade_bloco; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_bloco_unidade_bloco ON public.rel_bloco_unidade USING btree (id_bloco);
+
+
+--
+-- Name: fk_rel_bloco_unidade_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_bloco_unidade_unidade ON public.rel_bloco_unidade USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_contr_int_t_tipo_proc; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_contr_int_t_tipo_proc ON public.rel_controle_interno_tipo_proc USING btree (id_tipo_procedimento);
+
+
+--
+-- Name: fk_rel_contr_int_tipo_proc_ci; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_contr_int_tipo_proc_ci ON public.rel_controle_interno_tipo_proc USING btree (id_controle_interno);
+
+
+--
+-- Name: fk_rel_controle_int_unid_ci; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_controle_int_unid_ci ON public.rel_controle_interno_unidade USING btree (id_controle_interno);
+
+
+--
+-- Name: fk_rel_controle_int_unid_unid; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_controle_int_unid_unid ON public.rel_controle_interno_unidade USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_controle_interno_org_id; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_controle_interno_org_id ON public.rel_controle_interno_orgao USING btree (id_controle_interno);
+
+
+--
+-- Name: fk_rel_controle_interno_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_controle_interno_orgao ON public.rel_controle_interno_orgao USING btree (id_orgao);
+
+
+--
+-- Name: fk_rel_controle_interno_se_ci; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_controle_interno_se_ci ON public.rel_controle_interno_serie USING btree (id_controle_interno);
+
+
+--
+-- Name: fk_rel_controle_interno_se_se; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_controle_interno_se_se ON public.rel_controle_interno_serie USING btree (id_serie);
+
+
+--
 -- Name: fk_rel_grp_fed_org_fed_grp_fed; Type: INDEX; Schema: public; Owner: sei_user
 --
 
@@ -63697,6 +67382,314 @@ CREATE INDEX fk_rel_grp_fed_org_fed_grp_fed ON public.rel_grupo_fed_orgao_fed US
 --
 
 CREATE INDEX fk_rel_grp_fed_org_fed_org_fed ON public.rel_grupo_fed_orgao_fed USING btree (id_orgao_federacao);
+
+
+--
+-- Name: fk_rel_grupo_contato_contato; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_grupo_contato_contato ON public.rel_grupo_contato USING btree (id_contato);
+
+
+--
+-- Name: fk_rel_grupo_contato_grupo_con; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_grupo_contato_grupo_con ON public.rel_grupo_contato USING btree (id_grupo_contato);
+
+
+--
+-- Name: fk_rel_grupo_unid_grupo_unid; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_grupo_unid_grupo_unid ON public.rel_grupo_unidade_unidade USING btree (id_grupo_unidade);
+
+
+--
+-- Name: fk_rel_grupo_unid_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_grupo_unid_unidade ON public.rel_grupo_unidade_unidade USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_item_etap_doc_documento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_item_etap_doc_documento ON public.rel_item_etapa_documento USING btree (id_documento);
+
+
+--
+-- Name: fk_rel_item_etap_doc_item_etap; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_item_etap_doc_item_etap ON public.rel_item_etapa_documento USING btree (id_item_etapa);
+
+
+--
+-- Name: fk_rel_item_etap_ser_item_etap; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_item_etap_ser_item_etap ON public.rel_item_etapa_serie USING btree (id_item_etapa);
+
+
+--
+-- Name: fk_rel_item_etap_ser_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_item_etap_ser_serie ON public.rel_item_etapa_serie USING btree (id_serie);
+
+
+--
+-- Name: fk_rel_item_etap_uni_item_etap; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_item_etap_uni_item_etap ON public.rel_item_etapa_unidade USING btree (id_item_etapa);
+
+
+--
+-- Name: fk_rel_item_etap_uni_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_item_etap_uni_unidade ON public.rel_item_etapa_unidade USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_notif_doc_documento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_notif_doc_documento ON public.rel_notificacao_documento USING btree (id_notificacao);
+
+
+--
+-- Name: fk_rel_notif_doc_notificacao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_notif_doc_notificacao ON public.rel_notificacao_documento USING btree (id_documento);
+
+
+--
+-- Name: fk_rel_orgao_pesq_org_1; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_orgao_pesq_org_1 ON public.rel_orgao_pesquisa USING btree (id_orgao_1);
+
+
+--
+-- Name: fk_rel_orgao_pesq_org_2; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_orgao_pesq_org_2 ON public.rel_orgao_pesquisa USING btree (id_orgao_2);
+
+
+--
+-- Name: fk_rel_proc_doc_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_proc_doc_usuario ON public.rel_protocolo_protocolo USING btree (id_usuario);
+
+
+--
+-- Name: fk_rel_prot_assu_prot_proc; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_prot_assu_prot_proc ON public.rel_protocolo_assunto USING btree (id_protocolo_procedimento);
+
+
+--
+-- Name: fk_rel_prot_assunto_assunto; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_prot_assunto_assunto ON public.rel_protocolo_assunto USING btree (id_assunto_proxy);
+
+
+--
+-- Name: fk_rel_prot_assunto_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_prot_assunto_protocolo ON public.rel_protocolo_assunto USING btree (id_protocolo);
+
+
+--
+-- Name: fk_rel_prot_atributo_atributo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_prot_atributo_atributo ON public.rel_protocolo_atributo USING btree (id_atributo);
+
+
+--
+-- Name: fk_rel_prot_atributo_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_prot_atributo_protocolo ON public.rel_protocolo_atributo USING btree (id_protocolo);
+
+
+--
+-- Name: fk_rel_protocolo_assunto_uni; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_protocolo_assunto_uni ON public.rel_protocolo_assunto USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_protocolo_protocolo_uni; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_protocolo_protocolo_uni ON public.rel_protocolo_protocolo USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_sec_mod_estilo_estilo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_sec_mod_estilo_estilo ON public.rel_secao_modelo_estilo USING btree (id_estilo);
+
+
+--
+-- Name: fk_rel_sec_mod_estilo_sec_mod; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_sec_mod_estilo_sec_mod ON public.rel_secao_modelo_estilo USING btree (id_secao_modelo);
+
+
+--
+-- Name: fk_rel_secmod_cj_est_it_secmod; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_secmod_cj_est_it_secmod ON public.rel_secao_mod_cj_estilos_item USING btree (id_secao_modelo);
+
+
+--
+-- Name: fk_rel_serie_assunto_assunto; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_serie_assunto_assunto ON public.rel_serie_assunto USING btree (id_assunto_proxy);
+
+
+--
+-- Name: fk_rel_serie_assunto_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_serie_assunto_serie ON public.rel_serie_assunto USING btree (id_serie);
+
+
+--
+-- Name: fk_rel_serie_plano_trab_plano; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_serie_plano_trab_plano ON public.rel_serie_plano_trabalho USING btree (id_plano_trabalho);
+
+
+--
+-- Name: fk_rel_serie_plano_trab_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_serie_plano_trab_serie ON public.rel_serie_plano_trabalho USING btree (id_serie);
+
+
+--
+-- Name: fk_rel_serie_veic_pub_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_serie_veic_pub_serie ON public.rel_serie_veiculo_publicacao USING btree (id_serie);
+
+
+--
+-- Name: fk_rel_serie_veic_pub_veic_pub; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_serie_veic_pub_veic_pub ON public.rel_serie_veiculo_publicacao USING btree (id_veiculo_publicacao);
+
+
+--
+-- Name: fk_rel_situacao_unid_situacao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_situacao_unid_situacao ON public.rel_situacao_unidade USING btree (id_situacao);
+
+
+--
+-- Name: fk_rel_situacao_unid_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_situacao_unid_unidade ON public.rel_situacao_unidade USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_tipo_proc_assu_assunto; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_tipo_proc_assu_assunto ON public.rel_tipo_procedimento_assunto USING btree (id_assunto_proxy);
+
+
+--
+-- Name: fk_rel_tipo_proc_assu_tip_proc; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_tipo_proc_assu_tip_proc ON public.rel_tipo_procedimento_assunto USING btree (id_tipo_procedimento);
+
+
+--
+-- Name: fk_rel_unid_tip_cont_tip_cont; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_unid_tip_cont_tip_cont ON public.rel_unidade_tipo_contato USING btree (id_tipo_contato);
+
+
+--
+-- Name: fk_rel_unid_tip_cont_unid; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_unid_tip_cont_unid ON public.rel_unidade_tipo_contato USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_uso_tipo_prio_tipo_prio; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_uso_tipo_prio_tipo_prio ON public.rel_usuario_tipo_prioridade USING btree (id_tipo_prioridade);
+
+
+--
+-- Name: fk_rel_uso_tipo_prio_unid; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_uso_tipo_prio_unid ON public.rel_usuario_tipo_prioridade USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_uso_tipo_prio_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_uso_tipo_prio_usuario ON public.rel_usuario_tipo_prioridade USING btree (id_usuario);
+
+
+--
+-- Name: fk_rel_usu_grp_acomp_grp_acomp; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_usu_grp_acomp_grp_acomp ON public.rel_usuario_grupo_acomp USING btree (id_grupo_acompanhamento);
+
+
+--
+-- Name: fk_rel_usu_grp_acomp_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_usu_grp_acomp_usuario ON public.rel_usuario_grupo_acomp USING btree (id_usuario);
+
+
+--
+-- Name: fk_rel_usu_grupo_bloco_grp_blo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_usu_grupo_bloco_grp_blo ON public.rel_usuario_grupo_bloco USING btree (id_grupo_bloco);
+
+
+--
+-- Name: fk_rel_usu_grupo_bloco_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_usu_grupo_bloco_usuario ON public.rel_usuario_grupo_bloco USING btree (id_usuario);
 
 
 --
@@ -63721,6 +67714,41 @@ CREATE INDEX fk_rel_usu_tipo_proced_usu ON public.rel_usuario_tipo_proced USING 
 
 
 --
+-- Name: fk_rel_usu_usu_uni_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_usu_usu_uni_unidade ON public.rel_usuario_usuario_unidade USING btree (id_unidade);
+
+
+--
+-- Name: fk_rel_usu_usu_uni_usu_atrib; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_usu_usu_uni_usu_atrib ON public.rel_usuario_usuario_unidade USING btree (id_usuario_atribuicao);
+
+
+--
+-- Name: fk_rel_usu_usu_uni_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_usu_usu_uni_usuario ON public.rel_usuario_usuario_unidade USING btree (id_usuario);
+
+
+--
+-- Name: fk_rel_usuario_marcad_marcad; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_usuario_marcad_marcad ON public.rel_usuario_marcador USING btree (id_marcador);
+
+
+--
+-- Name: fk_rel_usuario_marcad_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_rel_usuario_marcad_usuario ON public.rel_usuario_marcador USING btree (id_usuario);
+
+
+--
 -- Name: fk_replicacao_fed_inst_fed; Type: INDEX; Schema: public; Owner: sei_user
 --
 
@@ -63732,6 +67760,181 @@ CREATE INDEX fk_replicacao_fed_inst_fed ON public.replicacao_federacao USING btr
 --
 
 CREATE INDEX fk_replicacao_fed_prot_fed ON public.replicacao_federacao USING btree (id_protocolo_federacao);
+
+
+--
+-- Name: fk_ret_prog_ativ_envio; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_ret_prog_ativ_envio ON public.retorno_programado USING btree (id_atividade_envio);
+
+
+--
+-- Name: fk_ret_prog_ativ_retorno; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_ret_prog_ativ_retorno ON public.retorno_programado USING btree (id_atividade_retorno);
+
+
+--
+-- Name: fk_ret_programado_protocolo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_ret_programado_protocolo ON public.retorno_programado USING btree (id_protocolo);
+
+
+--
+-- Name: fk_ret_programado_uni_envio; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_ret_programado_uni_envio ON public.retorno_programado USING btree (id_unidade_envio);
+
+
+--
+-- Name: fk_ret_programado_uni_retorno; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_ret_programado_uni_retorno ON public.retorno_programado USING btree (id_unidade_retorno);
+
+
+--
+-- Name: fk_retorno_programado_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_retorno_programado_usuario ON public.retorno_programado USING btree (id_usuario);
+
+
+--
+-- Name: fk_revisao_avaliacao_aval_doc; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_revisao_avaliacao_aval_doc ON public.revisao_avaliacao USING btree (id_avaliacao_documental);
+
+
+--
+-- Name: fk_revisao_avaliacao_unidade; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_revisao_avaliacao_unidade ON public.revisao_avaliacao USING btree (id_unidade);
+
+
+--
+-- Name: fk_revisao_avaliacao_usuario; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_revisao_avaliacao_usuario ON public.revisao_avaliacao USING btree (id_usuario);
+
+
+--
+-- Name: fk_secao_doc_base_conhecimento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_secao_doc_base_conhecimento ON public.secao_documento USING btree (id_base_conhecimento);
+
+
+--
+-- Name: fk_secao_doc_secao_mod; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_secao_doc_secao_mod ON public.secao_documento USING btree (id_secao_modelo);
+
+
+--
+-- Name: fk_secao_documento_documento; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_secao_documento_documento ON public.secao_documento USING btree (id_documento);
+
+
+--
+-- Name: fk_secao_in_veiculo_in; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_secao_in_veiculo_in ON public.secao_imprensa_nacional USING btree (id_veiculo_imprensa_nacional);
+
+
+--
+-- Name: fk_secao_modelo_modelo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_secao_modelo_modelo ON public.secao_modelo USING btree (id_modelo);
+
+
+--
+-- Name: fk_serie_escolha_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_serie_escolha_serie ON public.serie_escolha USING btree (id_serie);
+
+
+--
+-- Name: fk_serie_escolha_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_serie_escolha_unidade ON public.serie_escolha USING btree (id_unidade);
+
+
+--
+-- Name: fk_serie_grupo_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_serie_grupo_serie ON public.serie USING btree (id_grupo_serie);
+
+
+--
+-- Name: fk_serie_modelo; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_serie_modelo ON public.serie USING btree (id_modelo);
+
+
+--
+-- Name: fk_serie_publicacao_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_serie_publicacao_orgao ON public.serie_publicacao USING btree (id_orgao);
+
+
+--
+-- Name: fk_serie_publicacao_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_serie_publicacao_serie ON public.serie_publicacao USING btree (id_serie);
+
+
+--
+-- Name: fk_serie_restricao_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_serie_restricao_orgao ON public.serie_restricao USING btree (id_orgao);
+
+
+--
+-- Name: fk_serie_restricao_serie; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_serie_restricao_serie ON public.serie_restricao USING btree (id_serie);
+
+
+--
+-- Name: fk_serie_restricao_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_serie_restricao_unidade ON public.serie_restricao USING btree (id_unidade);
+
+
+--
+-- Name: fk_serie_tipo_formulario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_serie_tipo_formulario ON public.serie USING btree (id_tipo_formulario);
+
+
+--
+-- Name: fk_servico_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_servico_usuario ON public.servico USING btree (id_usuario);
 
 
 --
@@ -63753,6 +67956,230 @@ CREATE INDEX fk_sinalizacao_fed_prot_fed ON public.sinalizacao_federacao USING b
 --
 
 CREATE INDEX fk_sinalizacao_fed_unidade ON public.sinalizacao_federacao USING btree (id_unidade);
+
+
+--
+-- Name: fk_solicitacao_ouv_ativ_atend; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_solicitacao_ouv_ativ_atend ON public.solicitacao_ouvidoria USING btree (id_atividade_atendimento);
+
+
+--
+-- Name: fk_solicitacao_ouv_documento; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_solicitacao_ouv_documento ON public.solicitacao_ouvidoria USING btree (id_documento);
+
+
+--
+-- Name: fk_solicitacao_ouv_proced; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_solicitacao_ouv_proced ON public.solicitacao_ouvidoria USING btree (id_procedimento);
+
+
+--
+-- Name: fk_solicitacao_ouv_uni_atend; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_solicitacao_ouv_uni_atend ON public.solicitacao_ouvidoria USING btree (id_unidade_atendimento);
+
+
+--
+-- Name: fk_termo_uso_unidade; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_termo_uso_unidade ON public.termo_uso USING btree (id_unidade);
+
+
+--
+-- Name: fk_termo_uso_usuario; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_termo_uso_usuario ON public.termo_uso USING btree (id_usuario);
+
+
+--
+-- Name: fk_texto_padrao_int_conj; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_texto_padrao_int_conj ON public.texto_padrao_interno USING btree (id_conjunto_estilos);
+
+
+--
+-- Name: fk_texto_padrao_int_unid; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_texto_padrao_int_unid ON public.texto_padrao_interno USING btree (id_unidade);
+
+
+--
+-- Name: fk_tipo_localizador_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_tipo_localizador_unidade ON public.tipo_localizador USING btree (id_unidade);
+
+
+--
+-- Name: fk_tipo_proc_escolha_tipo_proc; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_tipo_proc_escolha_tipo_proc ON public.tipo_procedimento_escolha USING btree (id_tipo_procedimento);
+
+
+--
+-- Name: fk_tipo_proc_escolha_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_tipo_proc_escolha_unidade ON public.tipo_procedimento_escolha USING btree (id_unidade);
+
+
+--
+-- Name: fk_tipo_proced_hipotese_legal; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_tipo_proced_hipotese_legal ON public.tipo_procedimento USING btree (id_hipotese_legal_sugestao);
+
+
+--
+-- Name: fk_tipo_proced_plano_trabalho; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_tipo_proced_plano_trabalho ON public.tipo_procedimento USING btree (id_plano_trabalho);
+
+
+--
+-- Name: fk_tipo_proced_restr_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_tipo_proced_restr_orgao ON public.tipo_proced_restricao USING btree (id_orgao);
+
+
+--
+-- Name: fk_tipo_proced_restr_tipo_proc; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_tipo_proced_restr_tipo_proc ON public.tipo_proced_restricao USING btree (id_tipo_procedimento);
+
+
+--
+-- Name: fk_tipo_proced_restr_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_tipo_proced_restr_unidade ON public.tipo_proced_restricao USING btree (id_unidade);
+
+
+--
+-- Name: fk_uf_pais; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_uf_pais ON public.uf USING btree (id_pais);
+
+
+--
+-- Name: fk_unidade_contato; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_unidade_contato ON public.unidade USING btree (id_contato);
+
+
+--
+-- Name: fk_unidade_fed_instalacao_fed; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_unidade_fed_instalacao_fed ON public.unidade_federacao USING btree (id_instalacao_federacao);
+
+
+--
+-- Name: fk_unidade_historico_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_unidade_historico_orgao ON public.unidade_historico USING btree (id_orgao);
+
+
+--
+-- Name: fk_unidade_historico_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_unidade_historico_unidade ON public.unidade_historico USING btree (id_unidade);
+
+
+--
+-- Name: fk_unidade_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_unidade_orgao ON public.unidade USING btree (id_orgao);
+
+
+--
+-- Name: fk_unidade_publicacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_unidade_publicacao_unidade ON public.unidade_publicacao USING btree (id_unidade);
+
+
+--
+-- Name: fk_unidade_unidade_federacao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_unidade_unidade_federacao ON public.unidade USING btree (id_unidade_federacao);
+
+
+--
+-- Name: fk_usuario_contato; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_usuario_contato ON public.usuario USING btree (id_contato);
+
+
+--
+-- Name: fk_usuario_fed_instalacao_fed; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_usuario_fed_instalacao_fed ON public.usuario_federacao USING btree (id_instalacao_federacao);
+
+
+--
+-- Name: fk_usuario_login_usuario; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fk_usuario_login_usuario ON public.usuario_login USING btree (id_usuario);
+
+
+--
+-- Name: fk_usuario_orgao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_usuario_orgao ON public.usuario USING btree (id_orgao);
+
+
+--
+-- Name: fk_usuario_usuario_federacao; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_usuario_usuario_federacao ON public.usuario USING btree (id_usuario_federacao);
+
+
+--
+-- Name: fk_versao_sec_doc_sec_doc; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_versao_sec_doc_sec_doc ON public.versao_secao_documento USING btree (id_secao_documento);
+
+
+--
+-- Name: fk_versao_secao_doc_unidade; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_versao_secao_doc_unidade ON public.versao_secao_documento USING btree (id_unidade);
+
+
+--
+-- Name: fk_versao_secao_doc_usuario; Type: INDEX; Schema: public; Owner: sei_user
+--
+
+CREATE INDEX fk_versao_secao_doc_usuario ON public.versao_secao_documento USING btree (id_usuario);
 
 
 --
@@ -63840,6 +68267,13 @@ CREATE INDEX i01_base_conhecimento ON public.base_conhecimento USING btree (id_b
 
 
 --
+-- Name: i01_base_conhecimento_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX i01_base_conhecimento_idx ON public.base_conhecimento_idx USING btree (dth_indexacao);
+
+
+--
 -- Name: i01_bloco; Type: INDEX; Schema: public; Owner: sei_user
 --
 
@@ -63851,6 +68285,13 @@ CREATE INDEX i01_bloco ON public.bloco USING btree (id_bloco, sta_estado, sta_ti
 --
 
 CREATE INDEX i01_cidade ON public.cidade USING btree (codigo_ibge, id_pais, id_uf, sin_capital);
+
+
+--
+-- Name: i01_codigo_acesso; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX i01_codigo_acesso ON public.codigo_acesso USING btree (id_usuario, codigo);
 
 
 --
@@ -63952,10 +68393,24 @@ CREATE INDEX i01_protocolo_federacao ON public.protocolo_federacao USING btree (
 
 
 --
+-- Name: i01_protocolo_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX i01_protocolo_idx ON public.protocolo_idx USING btree (dth_indexacao);
+
+
+--
 -- Name: i01_publicacao; Type: INDEX; Schema: public; Owner: sei_user
 --
 
 CREATE INDEX i01_publicacao ON public.publicacao USING btree (dta_publicacao);
+
+
+--
+-- Name: i01_publicacao_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX i01_publicacao_idx ON public.publicacao_idx USING btree (dth_indexacao);
 
 
 --
@@ -63984,6 +68439,13 @@ CREATE INDEX i01_rel_protocolo_protocolo ON public.rel_protocolo_protocolo USING
 --
 
 CREATE INDEX i01_rel_unidade_tipo_contato ON public.rel_unidade_tipo_contato USING btree (id_tipo_contato, id_unidade, sta_acesso);
+
+
+--
+-- Name: i01_revisao_avaliacao; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX i01_revisao_avaliacao ON public.revisao_avaliacao USING btree (sta_revisao_avaliacao, id_usuario);
 
 
 --
@@ -64113,10 +68575,10 @@ CREATE INDEX i02_base_conhecimento ON public.base_conhecimento USING btree (id_u
 
 
 --
--- Name: i02_bloco; Type: INDEX; Schema: public; Owner: sei_user
+-- Name: i02_codigo_acesso; Type: INDEX; Schema: public; Owner: postgres
 --
 
-CREATE INDEX i02_bloco ON public.bloco USING btree (descricao, id_bloco, id_unidade, sta_estado, sta_tipo);
+CREATE INDEX i02_codigo_acesso ON public.codigo_acesso USING btree (id_usuario, dth_geracao);
 
 
 --
@@ -64691,2400 +69153,6 @@ CREATE INDEX if4_rel_bloco_unidade ON public.rel_bloco_unidade USING btree (id_u
 --
 
 CREATE INDEX if5_documento ON public.documento USING btree (id_documento, id_procedimento, id_serie);
-
-
---
--- Name: if_acesso_controle_interno; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_controle_interno ON public.acesso USING btree (id_controle_interno);
-
-
---
--- Name: if_acesso_externo_atividade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_externo_atividade ON public.acesso_externo USING btree (id_atividade);
-
-
---
--- Name: if_acesso_externo_documento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_externo_documento ON public.acesso_externo USING btree (id_documento);
-
-
---
--- Name: if_acesso_externo_participante; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_externo_participante ON public.acesso_externo USING btree (id_participante);
-
-
---
--- Name: if_acesso_fed_documento_fed; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_fed_documento_fed ON public.acesso_federacao USING btree (id_documento_federacao);
-
-
---
--- Name: if_acesso_fed_instal_fed_dest; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_fed_instal_fed_dest ON public.acesso_federacao USING btree (id_instalacao_federacao_dest);
-
-
---
--- Name: if_acesso_fed_instal_fed_rem; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_fed_instal_fed_rem ON public.acesso_federacao USING btree (id_instalacao_federacao_rem);
-
-
---
--- Name: if_acesso_fed_orgao_fed_dest; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_fed_orgao_fed_dest ON public.acesso_federacao USING btree (id_orgao_federacao_dest);
-
-
---
--- Name: if_acesso_fed_orgao_fed_rem; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_fed_orgao_fed_rem ON public.acesso_federacao USING btree (id_orgao_federacao_rem);
-
-
---
--- Name: if_acesso_fed_procedimento_fed; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_fed_procedimento_fed ON public.acesso_federacao USING btree (id_procedimento_federacao);
-
-
---
--- Name: if_acesso_fed_unidade_fed_dest; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_fed_unidade_fed_dest ON public.acesso_federacao USING btree (id_unidade_federacao_dest);
-
-
---
--- Name: if_acesso_fed_unidade_fed_rem; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_fed_unidade_fed_rem ON public.acesso_federacao USING btree (id_unidade_federacao_rem);
-
-
---
--- Name: if_acesso_fed_usuario_fed_dest; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_fed_usuario_fed_dest ON public.acesso_federacao USING btree (id_usuario_federacao_dest);
-
-
---
--- Name: if_acesso_fed_usuario_fed_rem; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_fed_usuario_fed_rem ON public.acesso_federacao USING btree (id_usuario_federacao_rem);
-
-
---
--- Name: if_acesso_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_protocolo ON public.acesso USING btree (id_protocolo);
-
-
---
--- Name: if_acesso_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_unidade ON public.acesso USING btree (id_unidade);
-
-
---
--- Name: if_acesso_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acesso_usuario ON public.acesso USING btree (id_usuario);
-
-
---
--- Name: if_acompanhamento_grupo_acompa; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acompanhamento_grupo_acompa ON public.acompanhamento USING btree (id_grupo_acompanhamento);
-
-
---
--- Name: if_acompanhamento_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acompanhamento_protocolo ON public.acompanhamento USING btree (id_protocolo);
-
-
---
--- Name: if_acompanhamento_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acompanhamento_unidade ON public.acompanhamento USING btree (id_unidade);
-
-
---
--- Name: if_acompanhamento_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_acompanhamento_usuario ON public.acompanhamento USING btree (id_usuario);
-
-
---
--- Name: if_and_inst_tarefa_inst; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_and_inst_tarefa_inst ON public.andamento_instalacao USING btree (id_tarefa_instalacao);
-
-
---
--- Name: if_and_plan_trab_tar_plan_trab; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_and_plan_trab_tar_plan_trab ON public.andamento_plano_trabalho USING btree (id_tarefa_plano_trabalho);
-
-
---
--- Name: if_andam_plano_trab_plano_trab; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andam_plano_trab_plano_trab ON public.andamento_plano_trabalho USING btree (id_plano_trabalho);
-
-
---
--- Name: if_andam_plano_trab_proced; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andam_plano_trab_proced ON public.andamento_plano_trabalho USING btree (id_procedimento);
-
-
---
--- Name: if_andam_plano_trab_uni_origem; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andam_plano_trab_uni_origem ON public.andamento_plano_trabalho USING btree (id_unidade_origem);
-
-
---
--- Name: if_andam_plano_trab_usu_origem; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andam_plano_trab_usu_origem ON public.andamento_plano_trabalho USING btree (id_usuario_origem);
-
-
---
--- Name: if_andam_situacao_procedimento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andam_situacao_procedimento ON public.andamento_situacao USING btree (id_procedimento);
-
-
---
--- Name: if_andam_situacao_situacao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andam_situacao_situacao ON public.andamento_situacao USING btree (id_situacao);
-
-
---
--- Name: if_andamento_inst_inst_fed; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andamento_inst_inst_fed ON public.andamento_instalacao USING btree (id_instalacao_federacao);
-
-
---
--- Name: if_andamento_inst_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andamento_inst_unidade ON public.andamento_instalacao USING btree (id_unidade);
-
-
---
--- Name: if_andamento_inst_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andamento_inst_usuario ON public.andamento_instalacao USING btree (id_usuario);
-
-
---
--- Name: if_andamento_marcador_marcador; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andamento_marcador_marcador ON public.andamento_marcador USING btree (id_marcador);
-
-
---
--- Name: if_andamento_marcador_proced; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andamento_marcador_proced ON public.andamento_marcador USING btree (id_procedimento);
-
-
---
--- Name: if_andamento_marcador_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andamento_marcador_unidade ON public.andamento_marcador USING btree (id_unidade);
-
-
---
--- Name: if_andamento_marcador_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andamento_marcador_usuario ON public.andamento_marcador USING btree (id_usuario);
-
-
---
--- Name: if_andamento_situacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andamento_situacao_unidade ON public.andamento_situacao USING btree (id_unidade);
-
-
---
--- Name: if_andamento_situacao_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_andamento_situacao_usuario ON public.andamento_situacao USING btree (id_usuario);
-
-
---
--- Name: if_anexo_base_conhecimento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_anexo_base_conhecimento ON public.anexo USING btree (id_base_conhecimento);
-
-
---
--- Name: if_anexo_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_anexo_protocolo ON public.anexo USING btree (id_protocolo);
-
-
---
--- Name: if_anexo_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_anexo_unidade ON public.anexo USING btree (id_unidade);
-
-
---
--- Name: if_anexo_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_anexo_usuario ON public.anexo USING btree (id_usuario);
-
-
---
--- Name: if_anotacao_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_anotacao_protocolo ON public.anotacao USING btree (id_protocolo);
-
-
---
--- Name: if_anotacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_anotacao_unidade ON public.anotacao USING btree (id_unidade);
-
-
---
--- Name: if_anotacao_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_anotacao_usuario ON public.anotacao USING btree (id_usuario);
-
-
---
--- Name: if_arquiv_ativ_arquiv; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_arquiv_ativ_arquiv ON public.arquivamento USING btree (id_atividade_arquivamento);
-
-
---
--- Name: if_arquiv_ativ_canc; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_arquiv_ativ_canc ON public.arquivamento USING btree (id_atividade_cancelamento);
-
-
---
--- Name: if_arquiv_ativ_desarquiv; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_arquiv_ativ_desarquiv ON public.arquivamento USING btree (id_atividade_desarquivamento);
-
-
---
--- Name: if_arquiv_ativ_eliminacao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_arquiv_ativ_eliminacao ON public.arquivamento USING btree (id_atividade_eliminacao);
-
-
---
--- Name: if_arquiv_ativ_receb; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_arquiv_ativ_receb ON public.arquivamento USING btree (id_atividade_recebimento);
-
-
---
--- Name: if_arquiv_ativ_solic_desarq; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_arquiv_ativ_solic_desarq ON public.arquivamento USING btree (id_atividade_solicitacao);
-
-
---
--- Name: if_arquivamento_localizador; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_arquivamento_localizador ON public.arquivamento USING btree (id_localizador);
-
-
---
--- Name: if_assinante_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_assinante_orgao ON public.assinante USING btree (id_orgao);
-
-
---
--- Name: if_assinatura_atividade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_assinatura_atividade ON public.assinatura USING btree (id_atividade);
-
-
---
--- Name: if_assinatura_documento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_assinatura_documento ON public.assinatura USING btree (id_documento);
-
-
---
--- Name: if_assinatura_tarja_assinatura; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_assinatura_tarja_assinatura ON public.assinatura USING btree (id_tarja_assinatura);
-
-
---
--- Name: if_assinatura_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_assinatura_unidade ON public.assinatura USING btree (id_unidade);
-
-
---
--- Name: if_assinatura_usuario_autentic; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_assinatura_usuario_autentic ON public.assinatura USING btree (id_usuario);
-
-
---
--- Name: if_assunto_map_assunto_destino; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_assunto_map_assunto_destino ON public.mapeamento_assunto USING btree (id_assunto_destino);
-
-
---
--- Name: if_assunto_map_assunto_origem; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_assunto_map_assunto_origem ON public.mapeamento_assunto USING btree (id_assunto_origem);
-
-
---
--- Name: if_assunto_proxy_assunto; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_assunto_proxy_assunto ON public.assunto_proxy USING btree (id_assunto);
-
-
---
--- Name: if_assunto_tabela_assuntos; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_assunto_tabela_assuntos ON public.assunto USING btree (id_tabela_assuntos);
-
-
---
--- Name: if_atividade_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atividade_protocolo ON public.atividade USING btree (id_protocolo);
-
-
---
--- Name: if_atividade_tarefa; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atividade_tarefa ON public.atividade USING btree (id_tarefa);
-
-
---
--- Name: if_atividade_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atividade_unidade ON public.atividade USING btree (id_unidade);
-
-
---
--- Name: if_atividade_unidade_origem; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atividade_unidade_origem ON public.atividade USING btree (id_unidade_origem);
-
-
---
--- Name: if_atividade_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atividade_usuario ON public.atividade USING btree (id_usuario);
-
-
---
--- Name: if_atividade_usuario_atribuica; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atividade_usuario_atribuica ON public.atividade USING btree (id_usuario_atribuicao);
-
-
---
--- Name: if_atividade_usuario_conclusao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atividade_usuario_conclusao ON public.atividade USING btree (id_usuario_conclusao);
-
-
---
--- Name: if_atividade_usuario_origem; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atividade_usuario_origem ON public.atividade USING btree (id_usuario_origem);
-
-
---
--- Name: if_atividade_usuario_visualiza; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atividade_usuario_visualiza ON public.atividade USING btree (id_usuario_visualizacao);
-
-
---
--- Name: if_atr_and_pla_tra_and_pla_tra; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atr_and_pla_tra_and_pla_tra ON public.atributo_andam_plano_trab USING btree (id_andamento_plano_trabalho);
-
-
---
--- Name: if_atributo_andamento_atividad; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atributo_andamento_atividad ON public.atributo_andamento USING btree (id_atividade);
-
-
---
--- Name: if_atributo_inst_andam_inst; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atributo_inst_andam_inst ON public.atributo_instalacao USING btree (id_andamento_instalacao);
-
-
---
--- Name: if_atributo_tipo_formulario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_atributo_tipo_formulario ON public.atributo USING btree (id_tipo_formulario);
-
-
---
--- Name: if_avaliacao_doc_assunto; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_avaliacao_doc_assunto ON public.avaliacao_documental USING btree (id_assunto);
-
-
---
--- Name: if_avaliacao_doc_assunto_proxy; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_avaliacao_doc_assunto_proxy ON public.avaliacao_documental USING btree (id_assunto_proxy);
-
-
---
--- Name: if_avaliacao_doc_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_avaliacao_doc_unidade ON public.avaliacao_documental USING btree (id_unidade);
-
-
---
--- Name: if_avaliacao_documental_proced; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_avaliacao_documental_proced ON public.avaliacao_documental USING btree (id_procedimento);
-
-
---
--- Name: if_avaliacao_documental_usu; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_avaliacao_documental_usu ON public.avaliacao_documental USING btree (id_usuario);
-
-
---
--- Name: if_base_conhec_conj_estilos; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_base_conhec_conj_estilos ON public.base_conhecimento USING btree (id_conjunto_estilos);
-
-
---
--- Name: if_base_conhec_usu_gerador; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_base_conhec_usu_gerador ON public.base_conhecimento USING btree (id_usuario_gerador);
-
-
---
--- Name: if_base_conhec_usu_liberacao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_base_conhec_usu_liberacao ON public.base_conhecimento USING btree (id_usuario_liberacao);
-
-
---
--- Name: if_base_conhecimento_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_base_conhecimento_unidade ON public.base_conhecimento USING btree (id_unidade);
-
-
---
--- Name: if_bloco_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_bloco_unidade ON public.bloco USING btree (id_unidade);
-
-
---
--- Name: if_bloco_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_bloco_usuario ON public.bloco USING btree (id_usuario);
-
-
---
--- Name: if_cargo_funcao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cargo_funcao_unidade ON public.cargo_funcao USING btree (id_unidade);
-
-
---
--- Name: if_cargo_titulo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cargo_titulo ON public.cargo USING btree (id_titulo);
-
-
---
--- Name: if_cargo_tratamento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cargo_tratamento ON public.cargo USING btree (id_tratamento);
-
-
---
--- Name: if_cargo_vocativo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cargo_vocativo ON public.cargo USING btree (id_vocativo);
-
-
---
--- Name: if_cidade_pais; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cidade_pais ON public.cidade USING btree (id_pais);
-
-
---
--- Name: if_cidade_uf; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cidade_uf ON public.cidade USING btree (id_uf);
-
-
---
--- Name: if_comentario_procedimento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_comentario_procedimento ON public.comentario USING btree (id_procedimento);
-
-
---
--- Name: if_comentario_rel_prot_prot; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_comentario_rel_prot_prot ON public.comentario USING btree (id_rel_protocolo_protocolo);
-
-
---
--- Name: if_comentario_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_comentario_unidade ON public.comentario USING btree (id_unidade);
-
-
---
--- Name: if_comentario_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_comentario_usuario ON public.comentario USING btree (id_usuario);
-
-
---
--- Name: if_conj_est_item_conj_est; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_conj_est_item_conj_est ON public.conjunto_estilos_item USING btree (id_conjunto_estilos);
-
-
---
--- Name: if_contato_cargo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_contato_cargo ON public.contato USING btree (id_cargo);
-
-
---
--- Name: if_contato_categoria; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_contato_categoria ON public.contato USING btree (id_categoria);
-
-
---
--- Name: if_contato_cidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_contato_cidade ON public.contato USING btree (id_cidade);
-
-
---
--- Name: if_contato_pais; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_contato_pais ON public.contato USING btree (id_pais);
-
-
---
--- Name: if_contato_pais_passaporte; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_contato_pais_passaporte ON public.contato USING btree (id_pais_passaporte);
-
-
---
--- Name: if_contato_tipo_contato; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_contato_tipo_contato ON public.contato USING btree (id_tipo_contato);
-
-
---
--- Name: if_contato_titulo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_contato_titulo ON public.contato USING btree (id_titulo);
-
-
---
--- Name: if_contato_uf; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_contato_uf ON public.contato USING btree (id_uf);
-
-
---
--- Name: if_contato_unidade_cadastro; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_contato_unidade_cadastro ON public.contato USING btree (id_unidade_cadastro);
-
-
---
--- Name: if_contato_usuario_cadastro; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_contato_usuario_cadastro ON public.contato USING btree (id_usuario_cadastro);
-
-
---
--- Name: if_controle_prazo_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_controle_prazo_protocolo ON public.controle_prazo USING btree (id_protocolo);
-
-
---
--- Name: if_controle_prazo_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_controle_prazo_unidade ON public.controle_prazo USING btree (id_unidade);
-
-
---
--- Name: if_controle_prazo_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_controle_prazo_usuario ON public.controle_prazo USING btree (id_usuario);
-
-
---
--- Name: if_cpad_avaliacao_aval_doc; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cpad_avaliacao_aval_doc ON public.cpad_avaliacao USING btree (id_avaliacao_documental);
-
-
---
--- Name: if_cpad_avaliacao_cpad_comp; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cpad_avaliacao_cpad_comp ON public.cpad_avaliacao USING btree (id_cpad_composicao);
-
-
---
--- Name: if_cpad_composicao_cargo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cpad_composicao_cargo ON public.cpad_composicao USING btree (id_cargo);
-
-
---
--- Name: if_cpad_composicao_cpad_versao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cpad_composicao_cpad_versao ON public.cpad_composicao USING btree (id_cpad_versao);
-
-
---
--- Name: if_cpad_composicao_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cpad_composicao_usuario ON public.cpad_composicao USING btree (id_usuario);
-
-
---
--- Name: if_cpad_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cpad_orgao ON public.cpad USING btree (id_orgao);
-
-
---
--- Name: if_cpad_versao_cpad; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cpad_versao_cpad ON public.cpad_versao USING btree (id_cpad);
-
-
---
--- Name: if_cpad_versao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cpad_versao_unidade ON public.cpad_versao USING btree (id_unidade);
-
-
---
--- Name: if_cpad_versao_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_cpad_versao_usuario ON public.cpad_versao USING btree (id_usuario);
-
-
---
--- Name: if_documento_conjunto_estilos; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_documento_conjunto_estilos ON public.documento USING btree (id_conjunto_estilos);
-
-
---
--- Name: if_documento_procedimento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_documento_procedimento ON public.documento USING btree (id_procedimento);
-
-
---
--- Name: if_documento_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_documento_serie ON public.documento USING btree (id_serie);
-
-
---
--- Name: if_documento_tipo_conferencia; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_documento_tipo_conferencia ON public.documento USING btree (id_tipo_conferencia);
-
-
---
--- Name: if_documento_tipo_formulario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_documento_tipo_formulario ON public.documento USING btree (id_tipo_formulario);
-
-
---
--- Name: if_documento_unidade_responsav; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_documento_unidade_responsav ON public.documento USING btree (id_unidade_responsavel);
-
-
---
--- Name: if_dominio_atributo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_dominio_atributo ON public.dominio USING btree (id_atributo);
-
-
---
--- Name: if_edit_elim_erro_edit_eli_con; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_edit_elim_erro_edit_eli_con ON public.edital_eliminacao_erro USING btree (id_edital_eliminacao_conteudo);
-
-
---
--- Name: if_edital_elim_cont_usu_inclus; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_edital_elim_cont_usu_inclus ON public.edital_eliminacao_conteudo USING btree (id_usuario_inclusao);
-
-
---
--- Name: if_edital_eliminacao_documento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_edital_eliminacao_documento ON public.edital_eliminacao USING btree (id_documento);
-
-
---
--- Name: if_edital_eliminacao_proced; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_edital_eliminacao_proced ON public.edital_eliminacao USING btree (id_procedimento);
-
-
---
--- Name: if_edital_eliminacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_edital_eliminacao_unidade ON public.edital_eliminacao USING btree (id_unidade);
-
-
---
--- Name: if_email_grupo_email_grupo_em; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_email_grupo_email_grupo_em ON public.email_grupo_email USING btree (id_grupo_email);
-
-
---
--- Name: if_email_unidade_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_email_unidade_unidade ON public.email_unidade USING btree (id_unidade);
-
-
---
--- Name: if_email_utilizado_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_email_utilizado_unidade ON public.email_utilizado USING btree (id_unidade);
-
-
---
--- Name: if_etapa_trab_plano_trab; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_etapa_trab_plano_trab ON public.etapa_trabalho USING btree (id_plano_trabalho);
-
-
---
--- Name: if_feriado_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_feriado_orgao ON public.feriado USING btree (id_orgao);
-
-
---
--- Name: if_grupo_acompanhamento_unidad; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_grupo_acompanhamento_unidad ON public.grupo_acompanhamento USING btree (id_unidade);
-
-
---
--- Name: if_grupo_bloco_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_grupo_bloco_unidade ON public.grupo_bloco USING btree (id_unidade);
-
-
---
--- Name: if_grupo_contato_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_grupo_contato_unidade ON public.grupo_contato USING btree (id_unidade);
-
-
---
--- Name: if_grupo_email_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_grupo_email_unidade ON public.grupo_email USING btree (id_unidade);
-
-
---
--- Name: if_grupo_protocolo_modelo_unid; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_grupo_protocolo_modelo_unid ON public.grupo_protocolo_modelo USING btree (id_unidade);
-
-
---
--- Name: if_grupo_unidade_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_grupo_unidade_unidade ON public.grupo_unidade USING btree (id_unidade);
-
-
---
--- Name: if_item_etapa_etapa_trabalho; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_item_etapa_etapa_trabalho ON public.item_etapa USING btree (id_etapa_trabalho);
-
-
---
--- Name: if_lembrete_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_lembrete_usuario ON public.lembrete USING btree (id_usuario);
-
-
---
--- Name: if_lixeira_anexo; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX if_lixeira_anexo ON public.lixeira USING btree (id_anexo);
-
-
---
--- Name: if_lixeira_unidade; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX if_lixeira_unidade ON public.lixeira USING btree (id_unidade);
-
-
---
--- Name: if_lixeira_usuario; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX if_lixeira_usuario ON public.lixeira USING btree (id_usuario);
-
-
---
--- Name: if_localizador_lugar_localizad; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_localizador_lugar_localizad ON public.localizador USING btree (id_lugar_localizador);
-
-
---
--- Name: if_localizador_tipo_localizado; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_localizador_tipo_localizado ON public.localizador USING btree (id_tipo_localizador);
-
-
---
--- Name: if_localizador_tipo_suporte; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_localizador_tipo_suporte ON public.localizador USING btree (id_tipo_suporte);
-
-
---
--- Name: if_localizador_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_localizador_unidade ON public.localizador USING btree (id_unidade);
-
-
---
--- Name: if_lugar_localizador_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_lugar_localizador_unidade ON public.lugar_localizador USING btree (id_unidade);
-
-
---
--- Name: if_marcador_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_marcador_unidade ON public.marcador USING btree (id_unidade);
-
-
---
--- Name: if_monitoram_servico_servico; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_monitoram_servico_servico ON public.monitoramento_servico USING btree (id_servico);
-
-
---
--- Name: if_nivel_acesso_perm_tipo_proc; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_nivel_acesso_perm_tipo_proc ON public.nivel_acesso_permitido USING btree (id_tipo_procedimento);
-
-
---
--- Name: if_notificacao_atividade_confi; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_notificacao_atividade_confi ON public.notificacao USING btree (id_atividade_confirmacao);
-
-
---
--- Name: if_notificacao_procedimento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_notificacao_procedimento ON public.notificacao USING btree (id_procedimento);
-
-
---
--- Name: if_notificacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_notificacao_unidade ON public.notificacao USING btree (id_unidade);
-
-
---
--- Name: if_notificacao_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_notificacao_usuario ON public.notificacao USING btree (id_usuario);
-
-
---
--- Name: if_novidade_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_novidade_usuario ON public.novidade USING btree (id_usuario);
-
-
---
--- Name: if_numeracao_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_numeracao_orgao ON public.numeracao USING btree (id_orgao);
-
-
---
--- Name: if_numeracao_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_numeracao_serie ON public.numeracao USING btree (id_serie);
-
-
---
--- Name: if_numeracao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_numeracao_unidade ON public.numeracao USING btree (id_unidade);
-
-
---
--- Name: if_observacao_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_observacao_protocolo ON public.observacao USING btree (id_protocolo);
-
-
---
--- Name: if_observacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_observacao_unidade ON public.observacao USING btree (id_unidade);
-
-
---
--- Name: if_oper_serv_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_oper_serv_serie ON public.operacao_servico USING btree (id_serie);
-
-
---
--- Name: if_oper_serv_servico; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_oper_serv_servico ON public.operacao_servico USING btree (id_servico);
-
-
---
--- Name: if_oper_serv_tipo_proc; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_oper_serv_tipo_proc ON public.operacao_servico USING btree (id_tipo_procedimento);
-
-
---
--- Name: if_oper_serv_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_oper_serv_unidade ON public.operacao_servico USING btree (id_unidade);
-
-
---
--- Name: if_ordenador_despesa_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_ordenador_despesa_orgao ON public.ordenador_despesa USING btree (id_orgao);
-
-
---
--- Name: if_ordenador_despesa_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_ordenador_despesa_unidade ON public.ordenador_despesa USING btree (id_unidade);
-
-
---
--- Name: if_ordenador_despesa_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_ordenador_despesa_usuario ON public.ordenador_despesa USING btree (id_usuario);
-
-
---
--- Name: if_orgao_contato; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_orgao_contato ON public.orgao USING btree (id_contato);
-
-
---
--- Name: if_orgao_fed_instalacao_fed; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_orgao_fed_instalacao_fed ON public.orgao_federacao USING btree (id_instalacao_federacao);
-
-
---
--- Name: if_orgao_historico_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_orgao_historico_orgao ON public.orgao_historico USING btree (id_orgao);
-
-
---
--- Name: if_orgao_orgao_federacao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_orgao_orgao_federacao ON public.orgao USING btree (id_orgao_federacao);
-
-
---
--- Name: if_orgao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_orgao_unidade ON public.orgao USING btree (id_unidade);
-
-
---
--- Name: if_param_acao_fed_acao_fed; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_param_acao_fed_acao_fed ON public.parametro_acao_federacao USING btree (id_acao_federacao);
-
-
---
--- Name: if_participante_contato; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_participante_contato ON public.participante USING btree (id_contato);
-
-
---
--- Name: if_participante_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_participante_protocolo ON public.participante USING btree (id_protocolo);
-
-
---
--- Name: if_participante_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_participante_unidade ON public.participante USING btree (id_unidade);
-
-
---
--- Name: if_proced_tipo_prioridade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_proced_tipo_prioridade ON public.procedimento USING btree (id_tipo_prioridade);
-
-
---
--- Name: if_procedimento_plano_trabalho; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_procedimento_plano_trabalho ON public.procedimento USING btree (id_plano_trabalho);
-
-
---
--- Name: if_procedimento_tipo_procedime; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_procedimento_tipo_procedime ON public.procedimento USING btree (id_tipo_procedimento);
-
-
---
--- Name: if_prot_mod_grupo_prot_mod; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_prot_mod_grupo_prot_mod ON public.protocolo_modelo USING btree (id_grupo_protocolo_modelo);
-
-
---
--- Name: if_protocolo_fed_inst_fed; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_protocolo_fed_inst_fed ON public.protocolo_federacao USING btree (id_instalacao_federacao);
-
-
---
--- Name: if_protocolo_hipotese_legal; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_protocolo_hipotese_legal ON public.protocolo USING btree (id_hipotese_legal);
-
-
---
--- Name: if_protocolo_modelo_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_protocolo_modelo_protocolo ON public.protocolo_modelo USING btree (id_protocolo);
-
-
---
--- Name: if_protocolo_modelo_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_protocolo_modelo_unidade ON public.protocolo_modelo USING btree (id_unidade);
-
-
---
--- Name: if_protocolo_modelo_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_protocolo_modelo_usuario ON public.protocolo_modelo USING btree (id_usuario);
-
-
---
--- Name: if_protocolo_protocolo_1; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_protocolo_protocolo_1 ON public.rel_protocolo_protocolo USING btree (id_protocolo_1);
-
-
---
--- Name: if_protocolo_protocolo_2; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_protocolo_protocolo_2 ON public.rel_protocolo_protocolo USING btree (id_protocolo_2);
-
-
---
--- Name: if_protocolo_protocolo_fed; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_protocolo_protocolo_fed ON public.protocolo USING btree (id_protocolo_federacao);
-
-
---
--- Name: if_protocolo_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_protocolo_unidade ON public.protocolo USING btree (id_unidade_geradora);
-
-
---
--- Name: if_protocolo_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_protocolo_usuario ON public.protocolo USING btree (id_usuario_gerador);
-
-
---
--- Name: if_public_legado_secao_imp_nac; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_public_legado_secao_imp_nac ON public.publicacao_legado USING btree (id_secao_io);
-
-
---
--- Name: if_public_legado_veic_public; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_public_legado_veic_public ON public.publicacao_legado USING btree (id_veiculo_publicacao);
-
-
---
--- Name: if_public_legado_veicu_imp_nac; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_public_legado_veicu_imp_nac ON public.publicacao_legado USING btree (id_veiculo_io);
-
-
---
--- Name: if_publicacao_atividade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_publicacao_atividade ON public.publicacao USING btree (id_atividade);
-
-
---
--- Name: if_publicacao_documento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE UNIQUE INDEX if_publicacao_documento ON public.publicacao USING btree (id_documento);
-
-
---
--- Name: if_publicacao_legado_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_publicacao_legado_serie ON public.publicacao_legado USING btree (id_serie);
-
-
---
--- Name: if_publicacao_legado_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_publicacao_legado_unidade ON public.publicacao_legado USING btree (id_unidade);
-
-
---
--- Name: if_publicacao_secao_in; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_publicacao_secao_in ON public.publicacao USING btree (id_secao_io);
-
-
---
--- Name: if_publicacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_publicacao_unidade ON public.publicacao USING btree (id_unidade);
-
-
---
--- Name: if_publicacao_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_publicacao_usuario ON public.publicacao USING btree (id_usuario);
-
-
---
--- Name: if_publicacao_veiculo_in; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_publicacao_veiculo_in ON public.publicacao USING btree (id_veiculo_io);
-
-
---
--- Name: if_publicacao_veiculo_public; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_publicacao_veiculo_public ON public.publicacao USING btree (id_veiculo_publicacao);
-
-
---
--- Name: if_re_secmod_cj_est_i_cj_est_i; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_re_secmod_cj_est_i_cj_est_i ON public.rel_secao_mod_cj_estilos_item USING btree (id_conjunto_estilos_item);
-
-
---
--- Name: if_reabertura_prog_atividade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_reabertura_prog_atividade ON public.reabertura_programada USING btree (id_atividade);
-
-
---
--- Name: if_reabertura_prog_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_reabertura_prog_protocolo ON public.reabertura_programada USING btree (id_protocolo);
-
-
---
--- Name: if_reabertura_prog_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_reabertura_prog_unidade ON public.reabertura_programada USING btree (id_unidade);
-
-
---
--- Name: if_reabertura_prog_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_reabertura_prog_usuario ON public.reabertura_programada USING btree (id_usuario);
-
-
---
--- Name: if_rel_aces_ext_prot_aces_ext; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_aces_ext_prot_aces_ext ON public.rel_acesso_ext_protocolo USING btree (id_acesso_externo);
-
-
---
--- Name: if_rel_aces_ext_prot_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_aces_ext_prot_protocolo ON public.rel_acesso_ext_protocolo USING btree (id_protocolo);
-
-
---
--- Name: if_rel_aces_ext_serie_aces_ext; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_aces_ext_serie_aces_ext ON public.rel_acesso_ext_serie USING btree (id_acesso_externo);
-
-
---
--- Name: if_rel_aces_ext_serie_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_aces_ext_serie_serie ON public.rel_acesso_ext_serie USING btree (id_serie);
-
-
---
--- Name: if_rel_assinante_uni_assinante; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_assinante_uni_assinante ON public.rel_assinante_unidade USING btree (id_assinante);
-
-
---
--- Name: if_rel_assinante_uni_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_assinante_uni_unidade ON public.rel_assinante_unidade USING btree (id_unidade);
-
-
---
--- Name: if_rel_aval_doc_ed_eli_av_doc; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_aval_doc_ed_eli_av_doc ON public.edital_eliminacao_conteudo USING btree (id_avaliacao_documental);
-
-
---
--- Name: if_rel_aval_doc_ed_eli_ed_eli; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_aval_doc_ed_eli_ed_eli ON public.edital_eliminacao_conteudo USING btree (id_edital_eliminacao);
-
-
---
--- Name: if_rel_aviso_orgao_aviso; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_aviso_orgao_aviso ON public.rel_aviso_orgao USING btree (id_aviso);
-
-
---
--- Name: if_rel_aviso_orgao_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_aviso_orgao_orgao ON public.rel_aviso_orgao USING btree (id_orgao);
-
-
---
--- Name: if_rel_bc_tp_base_conhecimento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_bc_tp_base_conhecimento ON public.rel_base_conhec_tipo_proced USING btree (id_base_conhecimento);
-
-
---
--- Name: if_rel_bc_tp_tipo_procedimento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_bc_tp_tipo_procedimento ON public.rel_base_conhec_tipo_proced USING btree (id_tipo_procedimento);
-
-
---
--- Name: if_rel_blo_uni_grupo_bloco; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_blo_uni_grupo_bloco ON public.rel_bloco_unidade USING btree (id_grupo_bloco);
-
-
---
--- Name: if_rel_blo_uni_usu_atribuicao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_blo_uni_usu_atribuicao ON public.rel_bloco_unidade USING btree (id_usuario_atribuicao);
-
-
---
--- Name: if_rel_blo_uni_usu_comentario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_blo_uni_usu_comentario ON public.rel_bloco_unidade USING btree (id_usuario_comentario);
-
-
---
--- Name: if_rel_blo_uni_usu_prioridade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_blo_uni_usu_prioridade ON public.rel_bloco_unidade USING btree (id_usuario_prioridade);
-
-
---
--- Name: if_rel_blo_uni_usu_revisao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_blo_uni_usu_revisao ON public.rel_bloco_unidade USING btree (id_usuario_revisao);
-
-
---
--- Name: if_rel_bloco_protocolo_bloco; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_bloco_protocolo_bloco ON public.rel_bloco_protocolo USING btree (id_bloco);
-
-
---
--- Name: if_rel_bloco_protocolo_protoco; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_bloco_protocolo_protoco ON public.rel_bloco_protocolo USING btree (id_protocolo);
-
-
---
--- Name: if_rel_bloco_unidade_bloco; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_bloco_unidade_bloco ON public.rel_bloco_unidade USING btree (id_bloco);
-
-
---
--- Name: if_rel_bloco_unidade_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_bloco_unidade_unidade ON public.rel_bloco_unidade USING btree (id_unidade);
-
-
---
--- Name: if_rel_contr_int_t_tipo_proc; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_contr_int_t_tipo_proc ON public.rel_controle_interno_tipo_proc USING btree (id_tipo_procedimento);
-
-
---
--- Name: if_rel_contr_int_tipo_proc_ci; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_contr_int_tipo_proc_ci ON public.rel_controle_interno_tipo_proc USING btree (id_controle_interno);
-
-
---
--- Name: if_rel_controle_int_unid_ci; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_controle_int_unid_ci ON public.rel_controle_interno_unidade USING btree (id_controle_interno);
-
-
---
--- Name: if_rel_controle_int_unid_unid; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_controle_int_unid_unid ON public.rel_controle_interno_unidade USING btree (id_unidade);
-
-
---
--- Name: if_rel_controle_interno_org_id; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_controle_interno_org_id ON public.rel_controle_interno_orgao USING btree (id_controle_interno);
-
-
---
--- Name: if_rel_controle_interno_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_controle_interno_orgao ON public.rel_controle_interno_orgao USING btree (id_orgao);
-
-
---
--- Name: if_rel_controle_interno_se_ci; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_controle_interno_se_ci ON public.rel_controle_interno_serie USING btree (id_controle_interno);
-
-
---
--- Name: if_rel_controle_interno_se_se; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_controle_interno_se_se ON public.rel_controle_interno_serie USING btree (id_serie);
-
-
---
--- Name: if_rel_grupo_contato_contato; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_grupo_contato_contato ON public.rel_grupo_contato USING btree (id_contato);
-
-
---
--- Name: if_rel_grupo_contato_grupo_con; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_grupo_contato_grupo_con ON public.rel_grupo_contato USING btree (id_grupo_contato);
-
-
---
--- Name: if_rel_grupo_unid_grupo_unid; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_grupo_unid_grupo_unid ON public.rel_grupo_unidade_unidade USING btree (id_grupo_unidade);
-
-
---
--- Name: if_rel_grupo_unid_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_grupo_unid_unidade ON public.rel_grupo_unidade_unidade USING btree (id_unidade);
-
-
---
--- Name: if_rel_item_etap_doc_documento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_item_etap_doc_documento ON public.rel_item_etapa_documento USING btree (id_documento);
-
-
---
--- Name: if_rel_item_etap_doc_item_etap; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_item_etap_doc_item_etap ON public.rel_item_etapa_documento USING btree (id_item_etapa);
-
-
---
--- Name: if_rel_item_etap_ser_item_etap; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_item_etap_ser_item_etap ON public.rel_item_etapa_serie USING btree (id_item_etapa);
-
-
---
--- Name: if_rel_item_etap_ser_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_item_etap_ser_serie ON public.rel_item_etapa_serie USING btree (id_serie);
-
-
---
--- Name: if_rel_item_etap_uni_item_etap; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_item_etap_uni_item_etap ON public.rel_item_etapa_unidade USING btree (id_item_etapa);
-
-
---
--- Name: if_rel_item_etap_uni_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_item_etap_uni_unidade ON public.rel_item_etapa_unidade USING btree (id_unidade);
-
-
---
--- Name: if_rel_notif_doc_documento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_notif_doc_documento ON public.rel_notificacao_documento USING btree (id_notificacao);
-
-
---
--- Name: if_rel_notif_doc_notificacao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_notif_doc_notificacao ON public.rel_notificacao_documento USING btree (id_documento);
-
-
---
--- Name: if_rel_orgao_pesq_org_1; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_orgao_pesq_org_1 ON public.rel_orgao_pesquisa USING btree (id_orgao_1);
-
-
---
--- Name: if_rel_orgao_pesq_org_2; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_orgao_pesq_org_2 ON public.rel_orgao_pesquisa USING btree (id_orgao_2);
-
-
---
--- Name: if_rel_proc_doc_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_proc_doc_usuario ON public.rel_protocolo_protocolo USING btree (id_usuario);
-
-
---
--- Name: if_rel_prot_assu_prot_proc; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_prot_assu_prot_proc ON public.rel_protocolo_assunto USING btree (id_protocolo_procedimento);
-
-
---
--- Name: if_rel_prot_assunto_assunto; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_prot_assunto_assunto ON public.rel_protocolo_assunto USING btree (id_assunto_proxy);
-
-
---
--- Name: if_rel_prot_assunto_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_prot_assunto_protocolo ON public.rel_protocolo_assunto USING btree (id_protocolo);
-
-
---
--- Name: if_rel_prot_atributo_atributo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_prot_atributo_atributo ON public.rel_protocolo_atributo USING btree (id_atributo);
-
-
---
--- Name: if_rel_prot_atributo_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_prot_atributo_protocolo ON public.rel_protocolo_atributo USING btree (id_protocolo);
-
-
---
--- Name: if_rel_protocolo_assunto_uni; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_protocolo_assunto_uni ON public.rel_protocolo_assunto USING btree (id_unidade);
-
-
---
--- Name: if_rel_protocolo_protocolo_uni; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_protocolo_protocolo_uni ON public.rel_protocolo_protocolo USING btree (id_unidade);
-
-
---
--- Name: if_rel_sec_mod_estilo_estilo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_sec_mod_estilo_estilo ON public.rel_secao_modelo_estilo USING btree (id_estilo);
-
-
---
--- Name: if_rel_sec_mod_estilo_sec_mod; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_sec_mod_estilo_sec_mod ON public.rel_secao_modelo_estilo USING btree (id_secao_modelo);
-
-
---
--- Name: if_rel_secmod_cj_est_it_secmod; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_secmod_cj_est_it_secmod ON public.rel_secao_mod_cj_estilos_item USING btree (id_secao_modelo);
-
-
---
--- Name: if_rel_serie_assunto_assunto; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_serie_assunto_assunto ON public.rel_serie_assunto USING btree (id_assunto_proxy);
-
-
---
--- Name: if_rel_serie_assunto_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_serie_assunto_serie ON public.rel_serie_assunto USING btree (id_serie);
-
-
---
--- Name: if_rel_serie_plano_trab_plano; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_serie_plano_trab_plano ON public.rel_serie_plano_trabalho USING btree (id_plano_trabalho);
-
-
---
--- Name: if_rel_serie_plano_trab_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_serie_plano_trab_serie ON public.rel_serie_plano_trabalho USING btree (id_serie);
-
-
---
--- Name: if_rel_serie_veic_pub_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_serie_veic_pub_serie ON public.rel_serie_veiculo_publicacao USING btree (id_serie);
-
-
---
--- Name: if_rel_serie_veic_pub_veic_pub; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_serie_veic_pub_veic_pub ON public.rel_serie_veiculo_publicacao USING btree (id_veiculo_publicacao);
-
-
---
--- Name: if_rel_situacao_unid_situacao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_situacao_unid_situacao ON public.rel_situacao_unidade USING btree (id_situacao);
-
-
---
--- Name: if_rel_situacao_unid_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_situacao_unid_unidade ON public.rel_situacao_unidade USING btree (id_unidade);
-
-
---
--- Name: if_rel_tipo_proc_assu_assunto; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_tipo_proc_assu_assunto ON public.rel_tipo_procedimento_assunto USING btree (id_assunto_proxy);
-
-
---
--- Name: if_rel_tipo_proc_assu_tip_proc; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_tipo_proc_assu_tip_proc ON public.rel_tipo_procedimento_assunto USING btree (id_tipo_procedimento);
-
-
---
--- Name: if_rel_unid_tip_cont_tip_cont; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_unid_tip_cont_tip_cont ON public.rel_unidade_tipo_contato USING btree (id_tipo_contato);
-
-
---
--- Name: if_rel_unid_tip_cont_unid; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_unid_tip_cont_unid ON public.rel_unidade_tipo_contato USING btree (id_unidade);
-
-
---
--- Name: if_rel_uso_tipo_prio_tipo_prio; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_uso_tipo_prio_tipo_prio ON public.rel_usuario_tipo_prioridade USING btree (id_tipo_prioridade);
-
-
---
--- Name: if_rel_uso_tipo_prio_unid; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_uso_tipo_prio_unid ON public.rel_usuario_tipo_prioridade USING btree (id_unidade);
-
-
---
--- Name: if_rel_uso_tipo_prio_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_uso_tipo_prio_usuario ON public.rel_usuario_tipo_prioridade USING btree (id_usuario);
-
-
---
--- Name: if_rel_usu_grp_acomp_grp_acomp; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_usu_grp_acomp_grp_acomp ON public.rel_usuario_grupo_acomp USING btree (id_grupo_acompanhamento);
-
-
---
--- Name: if_rel_usu_grp_acomp_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_usu_grp_acomp_usuario ON public.rel_usuario_grupo_acomp USING btree (id_usuario);
-
-
---
--- Name: if_rel_usu_grupo_bloco_grp_blo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_usu_grupo_bloco_grp_blo ON public.rel_usuario_grupo_bloco USING btree (id_grupo_bloco);
-
-
---
--- Name: if_rel_usu_grupo_bloco_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_usu_grupo_bloco_usuario ON public.rel_usuario_grupo_bloco USING btree (id_usuario);
-
-
---
--- Name: if_rel_usu_usu_uni_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_usu_usu_uni_unidade ON public.rel_usuario_usuario_unidade USING btree (id_unidade);
-
-
---
--- Name: if_rel_usu_usu_uni_usu_atrib; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_usu_usu_uni_usu_atrib ON public.rel_usuario_usuario_unidade USING btree (id_usuario_atribuicao);
-
-
---
--- Name: if_rel_usu_usu_uni_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_usu_usu_uni_usuario ON public.rel_usuario_usuario_unidade USING btree (id_usuario);
-
-
---
--- Name: if_rel_usuario_marcad_marcad; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_usuario_marcad_marcad ON public.rel_usuario_marcador USING btree (id_marcador);
-
-
---
--- Name: if_rel_usuario_marcad_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_rel_usuario_marcad_usuario ON public.rel_usuario_marcador USING btree (id_usuario);
-
-
---
--- Name: if_ret_prog_ativ_envio; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_ret_prog_ativ_envio ON public.retorno_programado USING btree (id_atividade_envio);
-
-
---
--- Name: if_ret_prog_ativ_retorno; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_ret_prog_ativ_retorno ON public.retorno_programado USING btree (id_atividade_retorno);
-
-
---
--- Name: if_ret_programado_protocolo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_ret_programado_protocolo ON public.retorno_programado USING btree (id_protocolo);
-
-
---
--- Name: if_ret_programado_uni_envio; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_ret_programado_uni_envio ON public.retorno_programado USING btree (id_unidade_envio);
-
-
---
--- Name: if_ret_programado_uni_retorno; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_ret_programado_uni_retorno ON public.retorno_programado USING btree (id_unidade_retorno);
-
-
---
--- Name: if_retorno_programado_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_retorno_programado_usuario ON public.retorno_programado USING btree (id_usuario);
-
-
---
--- Name: if_secao_doc_base_conhecimento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_secao_doc_base_conhecimento ON public.secao_documento USING btree (id_base_conhecimento);
-
-
---
--- Name: if_secao_doc_secao_mod; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_secao_doc_secao_mod ON public.secao_documento USING btree (id_secao_modelo);
-
-
---
--- Name: if_secao_documento_documento; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_secao_documento_documento ON public.secao_documento USING btree (id_documento);
-
-
---
--- Name: if_secao_in_veiculo_in; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_secao_in_veiculo_in ON public.secao_imprensa_nacional USING btree (id_veiculo_imprensa_nacional);
-
-
---
--- Name: if_secao_modelo_modelo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_secao_modelo_modelo ON public.secao_modelo USING btree (id_modelo);
-
-
---
--- Name: if_serie_escolha_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_serie_escolha_serie ON public.serie_escolha USING btree (id_serie);
-
-
---
--- Name: if_serie_escolha_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_serie_escolha_unidade ON public.serie_escolha USING btree (id_unidade);
-
-
---
--- Name: if_serie_grupo_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_serie_grupo_serie ON public.serie USING btree (id_grupo_serie);
-
-
---
--- Name: if_serie_modelo; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_serie_modelo ON public.serie USING btree (id_modelo);
-
-
---
--- Name: if_serie_publicacao_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_serie_publicacao_orgao ON public.serie_publicacao USING btree (id_orgao);
-
-
---
--- Name: if_serie_publicacao_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_serie_publicacao_serie ON public.serie_publicacao USING btree (id_serie);
-
-
---
--- Name: if_serie_restricao_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_serie_restricao_orgao ON public.serie_restricao USING btree (id_orgao);
-
-
---
--- Name: if_serie_restricao_serie; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_serie_restricao_serie ON public.serie_restricao USING btree (id_serie);
-
-
---
--- Name: if_serie_restricao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_serie_restricao_unidade ON public.serie_restricao USING btree (id_unidade);
-
-
---
--- Name: if_serie_tipo_formulario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_serie_tipo_formulario ON public.serie USING btree (id_tipo_formulario);
-
-
---
--- Name: if_servico_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_servico_usuario ON public.servico USING btree (id_usuario);
-
-
---
--- Name: if_solicitacao_ouv_ativ_atend; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX if_solicitacao_ouv_ativ_atend ON public.solicitacao_ouvidoria USING btree (id_atividade_atendimento);
-
-
---
--- Name: if_solicitacao_ouv_documento; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX if_solicitacao_ouv_documento ON public.solicitacao_ouvidoria USING btree (id_documento);
-
-
---
--- Name: if_solicitacao_ouv_proced; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX if_solicitacao_ouv_proced ON public.solicitacao_ouvidoria USING btree (id_procedimento);
-
-
---
--- Name: if_solicitacao_ouv_uni_atend; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX if_solicitacao_ouv_uni_atend ON public.solicitacao_ouvidoria USING btree (id_unidade_atendimento);
-
-
---
--- Name: if_texto_padrao_int_conj; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_texto_padrao_int_conj ON public.texto_padrao_interno USING btree (id_conjunto_estilos);
-
-
---
--- Name: if_texto_padrao_int_unid; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_texto_padrao_int_unid ON public.texto_padrao_interno USING btree (id_unidade);
-
-
---
--- Name: if_tipo_localizador_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_tipo_localizador_unidade ON public.tipo_localizador USING btree (id_unidade);
-
-
---
--- Name: if_tipo_proc_escolha_tipo_proc; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_tipo_proc_escolha_tipo_proc ON public.tipo_procedimento_escolha USING btree (id_tipo_procedimento);
-
-
---
--- Name: if_tipo_proc_escolha_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_tipo_proc_escolha_unidade ON public.tipo_procedimento_escolha USING btree (id_unidade);
-
-
---
--- Name: if_tipo_proced_hipotese_legal; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_tipo_proced_hipotese_legal ON public.tipo_procedimento USING btree (id_hipotese_legal_sugestao);
-
-
---
--- Name: if_tipo_proced_plano_trabalho; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_tipo_proced_plano_trabalho ON public.tipo_procedimento USING btree (id_plano_trabalho);
-
-
---
--- Name: if_tipo_proced_restr_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_tipo_proced_restr_orgao ON public.tipo_proced_restricao USING btree (id_orgao);
-
-
---
--- Name: if_tipo_proced_restr_tipo_proc; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_tipo_proced_restr_tipo_proc ON public.tipo_proced_restricao USING btree (id_tipo_procedimento);
-
-
---
--- Name: if_tipo_proced_restr_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_tipo_proced_restr_unidade ON public.tipo_proced_restricao USING btree (id_unidade);
-
-
---
--- Name: if_uf_pais; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_uf_pais ON public.uf USING btree (id_pais);
-
-
---
--- Name: if_unidade_contato; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_unidade_contato ON public.unidade USING btree (id_contato);
-
-
---
--- Name: if_unidade_fed_instalacao_fed; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_unidade_fed_instalacao_fed ON public.unidade_federacao USING btree (id_instalacao_federacao);
-
-
---
--- Name: if_unidade_historico_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_unidade_historico_orgao ON public.unidade_historico USING btree (id_orgao);
-
-
---
--- Name: if_unidade_historico_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_unidade_historico_unidade ON public.unidade_historico USING btree (id_unidade);
-
-
---
--- Name: if_unidade_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_unidade_orgao ON public.unidade USING btree (id_orgao);
-
-
---
--- Name: if_unidade_publicacao_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_unidade_publicacao_unidade ON public.unidade_publicacao USING btree (id_unidade);
-
-
---
--- Name: if_unidade_unidade_federacao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_unidade_unidade_federacao ON public.unidade USING btree (id_unidade_federacao);
-
-
---
--- Name: if_usuario_contato; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_usuario_contato ON public.usuario USING btree (id_contato);
-
-
---
--- Name: if_usuario_fed_instalacao_fed; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_usuario_fed_instalacao_fed ON public.usuario_federacao USING btree (id_instalacao_federacao);
-
-
---
--- Name: if_usuario_login_usuario; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX if_usuario_login_usuario ON public.usuario_login USING btree (id_usuario);
-
-
---
--- Name: if_usuario_orgao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_usuario_orgao ON public.usuario USING btree (id_orgao);
-
-
---
--- Name: if_usuario_usuario_federacao; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_usuario_usuario_federacao ON public.usuario USING btree (id_usuario_federacao);
-
-
---
--- Name: if_versao_sec_doc_sec_doc; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_versao_sec_doc_sec_doc ON public.versao_secao_documento USING btree (id_secao_documento);
-
-
---
--- Name: if_versao_secao_doc_unidade; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_versao_secao_doc_unidade ON public.versao_secao_documento USING btree (id_unidade);
-
-
---
--- Name: if_versao_secao_doc_usuario; Type: INDEX; Schema: public; Owner: sei_user
---
-
-CREATE INDEX if_versao_secao_doc_usuario ON public.versao_secao_documento USING btree (id_usuario);
 
 
 --
@@ -67840,6 +69908,14 @@ ALTER TABLE ONLY public.cidade
 
 
 --
+-- Name: codigo_acesso fk_codigo_acesso_usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.codigo_acesso
+    ADD CONSTRAINT fk_codigo_acesso_usuario FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario);
+
+
+--
 -- Name: comentario fk_comentario_procedimento; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
 --
 
@@ -67981,78 +70057,6 @@ ALTER TABLE ONLY public.controle_prazo
 
 ALTER TABLE ONLY public.controle_prazo
     ADD CONSTRAINT fk_controle_prazo_usuario FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario);
-
-
---
--- Name: cpad_avaliacao fk_cpad_avaliacao_aval_doc; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad_avaliacao
-    ADD CONSTRAINT fk_cpad_avaliacao_aval_doc FOREIGN KEY (id_avaliacao_documental) REFERENCES public.avaliacao_documental(id_avaliacao_documental);
-
-
---
--- Name: cpad_avaliacao fk_cpad_avaliacao_cpad_comp; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad_avaliacao
-    ADD CONSTRAINT fk_cpad_avaliacao_cpad_comp FOREIGN KEY (id_cpad_composicao) REFERENCES public.cpad_composicao(id_cpad_composicao);
-
-
---
--- Name: cpad_composicao fk_cpad_composicao_cargo; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad_composicao
-    ADD CONSTRAINT fk_cpad_composicao_cargo FOREIGN KEY (id_cargo) REFERENCES public.cargo(id_cargo);
-
-
---
--- Name: cpad_composicao fk_cpad_composicao_cpad_versao; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad_composicao
-    ADD CONSTRAINT fk_cpad_composicao_cpad_versao FOREIGN KEY (id_cpad_versao) REFERENCES public.cpad_versao(id_cpad_versao);
-
-
---
--- Name: cpad_composicao fk_cpad_composicao_usuario; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad_composicao
-    ADD CONSTRAINT fk_cpad_composicao_usuario FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario);
-
-
---
--- Name: cpad fk_cpad_orgao; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad
-    ADD CONSTRAINT fk_cpad_orgao FOREIGN KEY (id_orgao) REFERENCES public.orgao(id_orgao);
-
-
---
--- Name: cpad_versao fk_cpad_versao_cpad; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad_versao
-    ADD CONSTRAINT fk_cpad_versao_cpad FOREIGN KEY (id_cpad) REFERENCES public.cpad(id_cpad);
-
-
---
--- Name: cpad_versao fk_cpad_versao_unidade; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad_versao
-    ADD CONSTRAINT fk_cpad_versao_unidade FOREIGN KEY (id_unidade) REFERENCES public.unidade(id_unidade);
-
-
---
--- Name: cpad_versao fk_cpad_versao_usuario; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
---
-
-ALTER TABLE ONLY public.cpad_versao
-    ADD CONSTRAINT fk_cpad_versao_usuario FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario);
 
 
 --
@@ -69592,6 +71596,30 @@ ALTER TABLE ONLY public.retorno_programado
 
 
 --
+-- Name: revisao_avaliacao fk_revisao_avaliacao_aval_doc; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.revisao_avaliacao
+    ADD CONSTRAINT fk_revisao_avaliacao_aval_doc FOREIGN KEY (id_avaliacao_documental) REFERENCES public.avaliacao_documental(id_avaliacao_documental);
+
+
+--
+-- Name: revisao_avaliacao fk_revisao_avaliacao_unidade; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.revisao_avaliacao
+    ADD CONSTRAINT fk_revisao_avaliacao_unidade FOREIGN KEY (id_unidade) REFERENCES public.unidade(id_unidade);
+
+
+--
+-- Name: revisao_avaliacao fk_revisao_avaliacao_usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.revisao_avaliacao
+    ADD CONSTRAINT fk_revisao_avaliacao_usuario FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario);
+
+
+--
 -- Name: secao_documento fk_secao_doc_base_conhecimento; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
 --
 
@@ -69776,6 +71804,22 @@ ALTER TABLE ONLY public.solicitacao_ouvidoria
 
 
 --
+-- Name: termo_uso fk_termo_uso_unidade; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.termo_uso
+    ADD CONSTRAINT fk_termo_uso_unidade FOREIGN KEY (id_unidade) REFERENCES public.unidade(id_unidade);
+
+
+--
+-- Name: termo_uso fk_termo_uso_usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.termo_uso
+    ADD CONSTRAINT fk_termo_uso_usuario FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario);
+
+
+--
 -- Name: texto_padrao_interno fk_texto_padrao_int_conj; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
 --
 
@@ -69920,6 +71964,14 @@ ALTER TABLE ONLY public.unidade
 
 
 --
+-- Name: usuario_configuracao fk_usuario_config_usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.usuario_configuracao
+    ADD CONSTRAINT fk_usuario_config_usuario FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario);
+
+
+--
 -- Name: usuario fk_usuario_contato; Type: FK CONSTRAINT; Schema: public; Owner: sei_user
 --
 
@@ -69991,6 +72043,20 @@ GRANT ALL ON SCHEMA public TO sei_user;
 
 
 --
+-- Name: TABLE base_conhecimento_idx; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.base_conhecimento_idx TO sei_user;
+
+
+--
+-- Name: TABLE codigo_acesso; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.codigo_acesso TO sei_user;
+
+
+--
 -- Name: TABLE infra_editor_comentario; Type: ACL; Schema: public; Owner: postgres
 --
 
@@ -70005,864 +72071,24 @@ GRANT ALL ON TABLE public.lixeira TO sei_user;
 
 
 --
--- Name: SEQUENCE seq_acesso; Type: ACL; Schema: public; Owner: postgres
+-- Name: TABLE protocolo_idx; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON SEQUENCE public.seq_acesso TO sei_user;
+GRANT ALL ON TABLE public.protocolo_idx TO sei_user;
 
 
 --
--- Name: SEQUENCE seq_acesso_externo; Type: ACL; Schema: public; Owner: postgres
+-- Name: TABLE publicacao_idx; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON SEQUENCE public.seq_acesso_externo TO sei_user;
+GRANT ALL ON TABLE public.publicacao_idx TO sei_user;
 
 
 --
--- Name: SEQUENCE seq_acompanhamento; Type: ACL; Schema: public; Owner: postgres
+-- Name: TABLE revisao_avaliacao; Type: ACL; Schema: public; Owner: postgres
 --
 
-GRANT ALL ON SEQUENCE public.seq_acompanhamento TO sei_user;
-
-
---
--- Name: SEQUENCE seq_andamento_instalacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_andamento_instalacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_andamento_marcador; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_andamento_marcador TO sei_user;
-
-
---
--- Name: SEQUENCE seq_andamento_plano_trabalho; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_andamento_plano_trabalho TO sei_user;
-
-
---
--- Name: SEQUENCE seq_andamento_situacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_andamento_situacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_anexo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_anexo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_anotacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_anotacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_arquivo_extensao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_arquivo_extensao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_assinante; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_assinante TO sei_user;
-
-
---
--- Name: SEQUENCE seq_assinatura; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_assinatura TO sei_user;
-
-
---
--- Name: SEQUENCE seq_assunto; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_assunto TO sei_user;
-
-
---
--- Name: SEQUENCE seq_assunto_proxy; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_assunto_proxy TO sei_user;
-
-
---
--- Name: SEQUENCE seq_atividade; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_atividade TO sei_user;
-
-
---
--- Name: SEQUENCE seq_atributo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_atributo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_atributo_andam_plano_trab; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_atributo_andam_plano_trab TO sei_user;
-
-
---
--- Name: SEQUENCE seq_atributo_andamento; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_atributo_andamento TO sei_user;
-
-
---
--- Name: SEQUENCE seq_atributo_andamento_situaca; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_atributo_andamento_situaca TO sei_user;
-
-
---
--- Name: SEQUENCE seq_atributo_instalacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_atributo_instalacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_auditoria_protocolo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_auditoria_protocolo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_avaliacao_documental; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_avaliacao_documental TO sei_user;
-
-
---
--- Name: SEQUENCE seq_aviso; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_aviso TO sei_user;
-
-
---
--- Name: SEQUENCE seq_base_conhecimento; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_base_conhecimento TO sei_user;
-
-
---
--- Name: SEQUENCE seq_bloco; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_bloco TO sei_user;
-
-
---
--- Name: SEQUENCE seq_campo_pesquisa; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_campo_pesquisa TO sei_user;
-
-
---
--- Name: SEQUENCE seq_cargo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_cargo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_categoria; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_categoria TO sei_user;
-
-
---
--- Name: SEQUENCE seq_cidade; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_cidade TO sei_user;
-
-
---
--- Name: SEQUENCE seq_comentario; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_comentario TO sei_user;
-
-
---
--- Name: SEQUENCE seq_conjunto_estilos; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_conjunto_estilos TO sei_user;
-
-
---
--- Name: SEQUENCE seq_conjunto_estilos_item; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_conjunto_estilos_item TO sei_user;
-
-
---
--- Name: SEQUENCE seq_contato; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_contato TO sei_user;
-
-
---
--- Name: SEQUENCE seq_controle_interno; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_controle_interno TO sei_user;
-
-
---
--- Name: SEQUENCE seq_controle_prazo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_controle_prazo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_controle_unidade; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_controle_unidade TO sei_user;
-
-
---
--- Name: SEQUENCE seq_cpad; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_cpad TO sei_user;
-
-
---
--- Name: SEQUENCE seq_cpad_avaliacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_cpad_avaliacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_cpad_composicao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_cpad_composicao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_cpad_versao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_cpad_versao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_documento; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_documento TO sei_user;
-
-
---
--- Name: SEQUENCE seq_dominio; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_dominio TO sei_user;
-
-
---
--- Name: SEQUENCE seq_edital_eliminacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_edital_eliminacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_edital_eliminacao_conteudo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_edital_eliminacao_conteudo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_edital_eliminacao_erro; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_edital_eliminacao_erro TO sei_user;
-
-
---
--- Name: SEQUENCE seq_email_grupo_email; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_email_grupo_email TO sei_user;
-
-
---
--- Name: SEQUENCE seq_email_sistema; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_email_sistema TO sei_user;
-
-
---
--- Name: SEQUENCE seq_email_unidade; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_email_unidade TO sei_user;
-
-
---
--- Name: SEQUENCE seq_email_utilizado; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_email_utilizado TO sei_user;
-
-
---
--- Name: SEQUENCE seq_estatisticas; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_estatisticas TO sei_user;
-
-
---
--- Name: SEQUENCE seq_estilo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_estilo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_etapa_trabalho; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_etapa_trabalho TO sei_user;
-
-
---
--- Name: SEQUENCE seq_feed; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_feed TO sei_user;
-
-
---
--- Name: SEQUENCE seq_feriado; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_feriado TO sei_user;
-
-
---
--- Name: SEQUENCE seq_grupo_acompanhamento; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_grupo_acompanhamento TO sei_user;
-
-
---
--- Name: SEQUENCE seq_grupo_bloco; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_grupo_bloco TO sei_user;
-
-
---
--- Name: SEQUENCE seq_grupo_contato; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_grupo_contato TO sei_user;
-
-
---
--- Name: SEQUENCE seq_grupo_email; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_grupo_email TO sei_user;
-
-
---
--- Name: SEQUENCE seq_grupo_federacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_grupo_federacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_grupo_protocolo_modelo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_grupo_protocolo_modelo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_grupo_serie; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_grupo_serie TO sei_user;
-
-
---
--- Name: SEQUENCE seq_grupo_unidade; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_grupo_unidade TO sei_user;
-
-
---
--- Name: SEQUENCE seq_hipotese_legal; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_hipotese_legal TO sei_user;
-
-
---
--- Name: SEQUENCE seq_imagem_formato; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_imagem_formato TO sei_user;
-
-
---
--- Name: SEQUENCE seq_infra_auditoria; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_infra_auditoria TO sei_user;
-
-
---
--- Name: SEQUENCE seq_infra_log; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_infra_log TO sei_user;
-
-
---
--- Name: SEQUENCE seq_infra_navegador; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_infra_navegador TO sei_user;
-
-
---
--- Name: SEQUENCE seq_item_etapa; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_item_etapa TO sei_user;
-
-
---
--- Name: SEQUENCE seq_lembrete; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_lembrete TO sei_user;
-
-
---
--- Name: SEQUENCE seq_localizador; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_localizador TO sei_user;
-
-
---
--- Name: SEQUENCE seq_lugar_localizador; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_lugar_localizador TO sei_user;
-
-
---
--- Name: SEQUENCE seq_marcador; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_marcador TO sei_user;
-
-
---
--- Name: SEQUENCE seq_modelo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_modelo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_monitoramento_servico; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_monitoramento_servico TO sei_user;
-
-
---
--- Name: SEQUENCE seq_nivel_acesso_permitido; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_nivel_acesso_permitido TO sei_user;
-
-
---
--- Name: SEQUENCE seq_notificacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_notificacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_novidade; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_novidade TO sei_user;
-
-
---
--- Name: SEQUENCE seq_numeracao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_numeracao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_observacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_observacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_operacao_servico; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_operacao_servico TO sei_user;
-
-
---
--- Name: SEQUENCE seq_ordenador_despesa; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_ordenador_despesa TO sei_user;
-
-
---
--- Name: SEQUENCE seq_orgao_historico; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_orgao_historico TO sei_user;
-
-
---
--- Name: SEQUENCE seq_pais; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_pais TO sei_user;
-
-
---
--- Name: SEQUENCE seq_participante; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_participante TO sei_user;
-
-
---
--- Name: SEQUENCE seq_pesquisa; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_pesquisa TO sei_user;
-
-
---
--- Name: SEQUENCE seq_plano_trabalho; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_plano_trabalho TO sei_user;
-
-
---
--- Name: SEQUENCE seq_protocolo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_protocolo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_protocolo_modelo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_protocolo_modelo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_publicacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_publicacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_reabertura_programada; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_reabertura_programada TO sei_user;
-
-
---
--- Name: SEQUENCE seq_rel_protocolo_protocolo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_rel_protocolo_protocolo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_rel_unidade_tipo_contato; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_rel_unidade_tipo_contato TO sei_user;
-
-
---
--- Name: SEQUENCE seq_retorno_programado; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_retorno_programado TO sei_user;
-
-
---
--- Name: SEQUENCE seq_secao_documento; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_secao_documento TO sei_user;
-
-
---
--- Name: SEQUENCE seq_secao_imprensa_nacional; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_secao_imprensa_nacional TO sei_user;
-
-
---
--- Name: SEQUENCE seq_secao_modelo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_secao_modelo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_serie; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_serie TO sei_user;
-
-
---
--- Name: SEQUENCE seq_serie_publicacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_serie_publicacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_serie_restricao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_serie_restricao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_servico; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_servico TO sei_user;
-
-
---
--- Name: SEQUENCE seq_situacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_situacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tabela_assuntos; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tabela_assuntos TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tarefa; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tarefa TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tarja_assinatura; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tarja_assinatura TO sei_user;
-
-
---
--- Name: SEQUENCE seq_texto_padrao_interno; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_texto_padrao_interno TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tipo_conferencia; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tipo_conferencia TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tipo_contato; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tipo_contato TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tipo_formulario; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tipo_formulario TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tipo_localizador; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tipo_localizador TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tipo_prioridade; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tipo_prioridade TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tipo_proced_restricao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tipo_proced_restricao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tipo_procedimento; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tipo_procedimento TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tipo_suporte; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tipo_suporte TO sei_user;
-
-
---
--- Name: SEQUENCE seq_titulo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_titulo TO sei_user;
-
-
---
--- Name: SEQUENCE seq_tratamento; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_tratamento TO sei_user;
-
-
---
--- Name: SEQUENCE seq_uf; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_uf TO sei_user;
-
-
---
--- Name: SEQUENCE seq_unidade_historico; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_unidade_historico TO sei_user;
-
-
---
--- Name: SEQUENCE seq_unidade_publicacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_unidade_publicacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_upload; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_upload TO sei_user;
-
-
---
--- Name: SEQUENCE seq_veiculo_imprensa_nacional; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_veiculo_imprensa_nacional TO sei_user;
-
-
---
--- Name: SEQUENCE seq_veiculo_publicacao; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_veiculo_publicacao TO sei_user;
-
-
---
--- Name: SEQUENCE seq_versao_secao_documento; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_versao_secao_documento TO sei_user;
-
-
---
--- Name: SEQUENCE seq_vocativo; Type: ACL; Schema: public; Owner: postgres
---
-
-GRANT ALL ON SEQUENCE public.seq_vocativo TO sei_user;
+GRANT ALL ON TABLE public.revisao_avaliacao TO sei_user;
 
 
 --
@@ -70870,6 +72096,20 @@ GRANT ALL ON SEQUENCE public.seq_vocativo TO sei_user;
 --
 
 GRANT ALL ON TABLE public.solicitacao_ouvidoria TO sei_user;
+
+
+--
+-- Name: TABLE termo_uso; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.termo_uso TO sei_user;
+
+
+--
+-- Name: TABLE usuario_configuracao; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT ALL ON TABLE public.usuario_configuracao TO sei_user;
 
 
 --
