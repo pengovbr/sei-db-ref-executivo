@@ -1,5 +1,5 @@
 /*
-SCRIPT DE LIMPEZA DE PROCESSOS, DOCUMENTOS E OPERAÇÕES DE USUÁRIOS DA BASE DE DADOS DO SEI 4.1.0.0 (MySQL)    
+SCRIPT DE LIMPEZA DE PROCESSOS, DOCUMENTOS E OPERAÇÕES DE USUÁRIOS DA BASE DE DADOS DO SEI 5.0.0.0 (MySQL)    
 	Antes de executar o script:
 		1) Retirar o sistema do "AR" (derrubar todas sessões).
 		2) Fazer uma cópia da base imediatamente antes de executar o script.
@@ -142,8 +142,6 @@ truncate table item_etapa;
 truncate table seq_item_etapa;
 
 truncate table lembrete;
-
-truncate table mapeamento_assunto;
 
 truncate table marcador;
 truncate table seq_marcador;
@@ -313,6 +311,8 @@ truncate table seq_localizador;
 
 truncate table lugar_localizador;
 truncate table seq_lugar_localizador;
+
+truncate table mapeamento_assunto;
 
 truncate table novidade;
 truncate table seq_novidade;

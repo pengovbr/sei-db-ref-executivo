@@ -1,5 +1,5 @@
 /*
-SCRIPT DE LIMPEZA DE DADOS DA BASE DE DADOS DO SIP - SEI 4.1.0 (SqlServer)
+SCRIPT DE LIMPEZA DE DADOS DA BASE DE DADOS DO SIP - SEI 5.0.0 (SqlServer)
 */
 
 /* Reconstrui as tabelas de log e auditoria e tabelas sequenciais correspondentes */

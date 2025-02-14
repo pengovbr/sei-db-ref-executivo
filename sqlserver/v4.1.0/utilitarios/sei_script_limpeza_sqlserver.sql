@@ -157,8 +157,6 @@ delete from seq_item_etapa;
 
 delete from lembrete;
 
-delete from mapeamento_assunto;
-
 delete from marcador;
 delete from seq_marcador;
 
@@ -318,6 +316,8 @@ delete from seq_localizador;
 
 delete from lugar_localizador;
 delete from seq_lugar_localizador;
+
+delete from mapeamento_assunto;
 
 delete from novidade;
 delete from seq_novidade;

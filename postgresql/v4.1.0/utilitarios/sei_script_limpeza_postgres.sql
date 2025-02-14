@@ -1,5 +1,5 @@
 /*
-SCRIPT DE LIMPEZA DE PROCESSOS, DOCUMENTOS E OPERAÇÕES DE USUÁRIOS DA BASE DE DADOS DO SEI 4.0.0 (PostgresSQL)    
+SCRIPT DE LIMPEZA DE PROCESSOS, DOCUMENTOS E OPERAÇÕES DE USUÁRIOS DA BASE DE DADOS DO SEI 4.1.0 (PostgresSQL)    
 	Antes de executar o script:
 		1) Retirar o sistema do "AR" (derrubar todas sessões).
 		2) Fazer uma cópia da base imediatamente antes de executar o script.
@@ -21,7 +21,7 @@ SCRIPT DE LIMPEZA DE PROCESSOS, DOCUMENTOS E OPERAÇÕES DE USUÁRIOS DA BASE DE
 
 /*SET FOREIGN_KEY_CHECKS=0;*/
 
-DROP FUNCTION fc_habilitar_triggers;
+--DROP FUNCTION fc_habilitar_triggers;
 
 CREATE FUNCTION fc_habilitar_triggers( nome_schema TEXT, habilitar BOOLEAN )
 RETURNS VOID AS 
@@ -97,7 +97,6 @@ delete from infra_erro_php;
 delete from instalacao_federacao;
 delete from item_etapa;
 delete from lembrete;
-delete from mapeamento_assunto;
 delete from marcador;
 delete from monitoramento_servico;
 delete from notificacao;
@@ -231,6 +230,7 @@ delete from infra_auditoria;
 delete from infra_log;
 delete from localizador;
 delete from lugar_localizador;
+delete from mapeamento_assunto;
 delete from novidade;
 delete from operacao_servico;
 delete from ordenador_despesa;

@@ -1,5 +1,5 @@
 /*
-SCRIPT DE LIMPEZA DE PROCESSOS, DOCUMENTOS E OPERAÇÕES DE USUÁRIOS DA BASE DE DADOS DO SEI 4.1.0 (SQLServer)    
+SCRIPT DE LIMPEZA DE PROCESSOS, DOCUMENTOS E OPERAÇÕES DE USUÁRIOS DA BASE DE DADOS DO SEI 5.0.0 (SQLServer)    
 	Antes de executar o script:
 		1) Retirar o sistema do "AR" (derrubar todas sessões).
 		2) Fazer uma cópia da base imediatamente antes de executar o script.
@@ -142,8 +142,6 @@ delete from item_etapa;
 delete from seq_item_etapa;
 
 delete from lembrete;
-
-delete from mapeamento_assunto;
 
 delete from marcador;
 delete from seq_marcador;
@@ -312,6 +310,8 @@ delete from seq_localizador;
 
 delete from lugar_localizador;
 delete from seq_lugar_localizador;
+
+delete from mapeamento_assunto;
 
 delete from novidade;
 delete from seq_novidade;

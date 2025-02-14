@@ -183,8 +183,6 @@ truncate table instalacao_federacao;
 truncate table lembrete;
 truncate table seq_lembrete;
 
-truncate table mapeamento_assunto;
-
 truncate table marcador;
 truncate table seq_marcador;
 

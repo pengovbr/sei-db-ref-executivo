@@ -157,8 +157,6 @@ truncate table seq_item_etapa;
 
 truncate table lembrete;
 
-truncate table mapeamento_assunto;
-
 truncate table marcador;
 truncate table seq_marcador;
 
@@ -318,6 +316,8 @@ truncate table seq_localizador;
 
 truncate table lugar_localizador;
 truncate table seq_lugar_localizador;
+
+truncate table mapeamento_assunto;
 
 truncate table novidade;
 truncate table seq_novidade;
