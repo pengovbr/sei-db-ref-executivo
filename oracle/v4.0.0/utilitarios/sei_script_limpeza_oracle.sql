@@ -221,8 +221,6 @@ truncate table instalacao_federacao;
 truncate table lembrete;
 exec reset_seq('sei_esquema.seq_lembrete');
 
-truncate table mapeamento_assunto;
-
 truncate table marcador;
 exec reset_seq('sei_esquema.seq_marcador');
 

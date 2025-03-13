@@ -187,8 +187,6 @@ delete from instalacao_federacao;
 delete from lembrete;
 delete from seq_lembrete;
 
-delete from mapeamento_assunto;
-
 delete from marcador;
 delete from seq_marcador;
 

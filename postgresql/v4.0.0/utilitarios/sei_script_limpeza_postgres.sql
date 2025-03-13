@@ -208,8 +208,6 @@ delete from instalacao_federacao;
 delete from lembrete;
 select setval('seq_lembrete',1);
 
-delete from mapeamento_assunto;
-
 delete from marcador;
 select setval('seq_marcador',1);
 
