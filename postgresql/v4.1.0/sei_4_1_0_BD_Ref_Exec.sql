@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.7 (Debian 15.7-1.pgdg120+1)
--- Dumped by pg_dump version 15.7 (Debian 15.7-1.pgdg120+1)
+-- Dumped from database version 15.10 (Debian 15.10-1.pgdg120+1)
+-- Dumped by pg_dump version 15.10 (Debian 15.10-1.pgdg120+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -4977,10 +4977,8 @@ COPY public.assinatura (id_assinatura, id_documento, id_usuario, id_unidade, id_
 --
 
 COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descricao, observacao, idx_assunto, sin_ativo, prazo_intermediario, prazo_corrente, sta_destinacao, sin_estrutural) FROM stdin;
-19	1	004.1	ORIENTAÇÃO TÉCNICA E NORMATIVA	Nas subdivisões deste descritor classificam-se documentos referentes à análise jurídica de instrumentos e de atos normativos elaborados pelo órgão e entidade.	004.1 0041 Nas subdivisoes deste descritor classificam-se documentos referentes a analise juridica de instrumentos e de atos normativos elaborados pelo orgao e entidade.	S	\N	\N	\N	S
-409	1	053.4	GESTÃO DE CONTAS ESPECIAIS	Incluem-se documentos referentes à movimentação dos recursos advindos de empréstimos e créditos externos.	053.4 0534 Incluem-se documentos referentes a movimentacao dos recursos advindos de emprestimos e creditos externos.	S	5	\N	E	N
-39	1	014.4	DIVULGAÇÃO DOS RESULTADOS E INTERPOSIÇÃO DE RECURSOS	Incluem-se documentos referentes aos resultados finais da eleição realizada e à divulgação dos candidatos eleitos, bem como aqueles referentes aos recursos impetrados.	014.4 0144 Incluem-se documentos referentes aos resultados finais da eleicao realizada e a divulgacao dos candidatos eleitos bem como aqueles referentes aos recursos impetrados.	S	1	\N	G	N
-156	1	023.92	OCUPAÇÃO DE IMÓVEL FUNCIONAL	Incluem-se documentos referentes à ocupação de imóvel funcional, tais como: solicitação, termo de ocupação e de responsabilidade.	023.92 02392 Incluem-se documentos referentes a ocupacao de imovel funcional tais como: solicitacao termo de ocupacao e de responsabilidade.	S	5	\N	E	N
+534	1	082.24.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.24.a 08224a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
+21	1	004.12	ANÁLISE DOS INSTRUMENTOS ADMINISTRATIVOS	Incluem-se documentos referentes ao exame e à análise prévia ou conclusiva de textos de editais de licitação, de contratos e de instrumentos congêneres a serem publicados e celebrados pelo órgão e entidade.	004.12 00412 Incluem-se documentos referentes ao exame e a analise previa ou conclusiva de textos de editais de licitacao de contratos e de instrumentos congeneres a serem publicados e celebrados pelo orgao e entidade.	S	5	\N	E	N
 1	1	000	ADMINISTRAÇÃO GERAL	Esta classe contempla documentos referentes às atividades relacionadas à administração interna do órgão e entidade, que viabilizam o seu funcionamento e o alcance dos  objetivos para os quais foram criados.	000 000 Esta classe contempla documentos referentes as atividades relacionadas a administracao interna do orgao e entidade que viabilizam o seu funcionamento e o alcance dos objetivos para os quais foram criados.	S	\N	\N	\N	S
 2	1	001	RELAÇÃO INTERINSTITUCIONAL	Incluem-se documentos referentes à formalização, execução e acompanhamento das relações entre o órgão e entidade e outros órgãos e entidades, públicos e privados, firmadas por meio de acordos, contratos, convênios, termos e outros atos de ajustes, que abranjam, ao mesmo tempo, a execução de várias atividades, bem como aqueles referentes à fiscalização, prestação e tomada de contas, relatórios técnicos e termos de aditamento.	001 001 Incluem-se documentos referentes a formalizacao execucao e acompanhamento das relacoes entre o orgao e entidade e outros orgaos e entidades publicos e privados firmadas por meio de acordos contratos convenios termos e outros atos de ajustes que abranjam ao mesmo tempo a execucao de varias atividades bem como aqueles referentes a fiscalizacao prestacao e tomada de contas relatorios tecnicos e termos de aditamento.	S	20	\N	G	N
 3	1	002	ATENDIMENTO AO CIDADÃO	Nas subdivisões deste descritor classificam-se documentos referentes às solicitações de informações e às comunicações enviadas ao órgão e entidade pelos canais de atendimento ao cidadão, tais como: Serviço de Informações ao Cidadão (SIC), ouvidoria e outros canais de comunicação.	002 002 Nas subdivisoes deste descritor classificam-se documentos referentes as solicitacoes de informacoes e as comunicacoes enviadas ao orgao e entidade pelos canais de atendimento ao cidadao tais como: Servico de Informacoes ao Cidadao (SIC) ouvidoria e outros canais de comunicacao.	S	\N	\N	\N	S
@@ -4988,8 +4986,9 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 5	1	002.1	ACESSO À INFORMAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes aos pedidos de acesso à informação e aos documentos institucionais, encaminhados ao SIC, bem como os recursos impetrados em razão de negativa de acesso.  Quanto ao controle de satisfação dos usuários em relação aos canais de atendimento ao cidadão, classificar no código 002.2. Quanto tratamento de demandas recebidas pela ouvidoria e por outros canais de comunicação, classificar nas subdivisões do código 002.3. Quanto às comunicações eventuais trocadas entre o órgão e entidade e demais instituições, classificar no código 991.	002.1 0021 Nas subdivisoes deste descritor classificam-se documentos referentes aos pedidos de acesso a informacao e aos documentos institucionais encaminhados ao SIC bem como os recursos impetrados em razao de negativa de acesso.  Quanto ao controle de satisfacao dos usuarios em relacao aos canais de atendimento ao cidadao classificar no codigo 002.2. Quanto tratamento de demandas recebidas pela ouvidoria e por outros canais de comunicacao classificar nas subdivisoes do codigo 002.3. Quanto as comunicacoes eventuais trocadas entre o orgao e entidade e demais instituicoes classificar no codigo 991.	S	\N	\N	\N	S
 6	1	002.11	PEDIDO DE ACESSO À INFORMAÇÃO E RECURSO	Incluem-se documentos referentes às solicitações, respostas e recursos referentes aos pedidos de acesso à informação, presenciais e não presenciais, realizados por intermédio do SIC, tais como: formulários com pedidos de acesso à informação e formulários de recursos.  Quanto ao acesso e ao controle das consultas aos documentos arquivísticos, bibliográficos e museológicos, classificar no código 063.1.	002.11 00211 Incluem-se documentos referentes as solicitacoes respostas e recursos referentes aos pedidos de acesso a informacao presenciais e nao presenciais realizados por intermedio do SIC tais como: formularios com pedidos de acesso a informacao e formularios de recursos.  Quanto ao acesso e ao controle das consultas aos documentos arquivisticos bibliograficos e museologicos classificar no codigo 063.1.	S	5	\N	E	N
 7	1	002.12	ACOMPANHAMENTO DO ATENDIMENTO AO CIDADÃO	Incluem-se documentos referentes ao acompanhamento das atividades desempenhadas pelo SIC, tais como: relatórios estatísticos, de atendimento, de controle de consultas e de perfil do usuário.	002.12 00212 Incluem-se documentos referentes ao acompanhamento das atividades desempenhadas pelo SIC, tais como: relatorios estatisticos, de atendimento, de controle de consultas e de perfil do usuario.	S	\N	2	G	N
-40	1	015	GESTÃO INSTITUCIONAL	Nas subdivisões deste descritor classificam-se documentos referentes ao planejamento, acompanhamento, avaliação, governança e acreditação das atividades do órgão e entidade.	015 015 Nas subdivisoes deste descritor classificam-se documentos referentes ao planejamento, acompanhamento, avaliacao, governanca e acreditacao das atividades do orgao e entidade.	S	\N	\N	\N	S
 8	1	002.2	CONTROLE DE SATISFAÇÃO DO USUÁRIO	Incluem-se documentos referentes à pesquisa de satisfação dos usuários dos serviços públicos, decorrentes de pedidos de acesso à informação e de manifestações registradas na ouvidoria e nos demais canais de comunicação do órgão e entidade.  Quanto aos pedidos de acesso à informação e aos documentos institucionais, classificar nas subdivisões do código 002.1.  Quanto ao tratamento das demandas recebidas pela ouvidoria e por outros canais de comunicação, classificar nas subdivisões do código 002.3. Quanto às comunicações eventuais trocadas entre o órgão e entidade e demais instituições, classificar no código 991.	002.2 0022 Incluem-se documentos referentes a pesquisa de satisfacao dos usuarios dos servicos publicos decorrentes de pedidos de acesso a informacao e de manifestacoes registradas na ouvidoria e nos demais canais de comunicacao do orgao e entidade.  Quanto aos pedidos de acesso a informacao e aos documentos institucionais classificar nas subdivisoes do codigo 002.1.  Quanto ao tratamento das demandas recebidas pela ouvidoria e por outros canais de comunicacao classificar nas subdivisoes do codigo 002.3. Quanto as comunicacoes eventuais trocadas entre o orgao e entidade e demais instituicoes classificar no codigo 991.	S	\N	2	E	N
+22	1	004.2	ATUAÇÃO EM CONTENCIOSO	Nas subdivisões deste descritor classificam-se documentos referentes à atuação contenciosa judicial e administrativa, nas hipóteses de contestação, conflito ou litígio, exercida pela assessoria ou consultoria jurídica do órgão e entidade.	004.2 0042 Nas subdivisoes deste descritor classificam-se documentos referentes a atuacao contenciosa judicial e administrativa nas hipoteses de contestacao conflito ou litigio exercida pela assessoria ou consultoria juridica do orgao e entidade.	S	\N	\N	\N	S
+90	1	021.1	PLANEJAMENTO DO PROCESSO SELETIVO	Incluem-se estudos, propostas, constituição de bancas examinadoras, programas, editais, exemplares únicos de provas, gabaritos e critérios para correção de provas e para solicitação de recursos.	021.1 0211 Incluem-se estudos, propostas, constituicao de bancas examinadoras, programas, editais, exemplares unicos de provas, gabaritos e criterios para correcao de provas e para solicitacao de recursos.	S	2	\N	G	N
 9	1	002.3	ACOMPANHAMENTO DE MANIFESTAÇÃO DO USUÁRIO	Nas subdivisões deste descritor classificam-se documentos referentes ao acompanhamento e tratamento de manifestações de usuários do órgão e entidade, recebidas pela ouvidoria e demais canais de comunicação institucional, abrangendo as reclamações, elogios, solicitações, sugestões ou denúncias, bem como às ações de ouvidoria ativa. Quanto aos pedidos de acesso à informação e aos documentos institucionais, classificar nas subdivisões do código 002.1. Quanto à conversão da demanda em processo administrativo, classificar de acordo com a atividade decorrente da manifestação ou da denúncia.	002.3 0023 Nas subdivisoes deste descritor classificam-se documentos referentes ao acompanhamento e tratamento de manifestacoes de usuarios do orgao e entidade recebidas pela ouvidoria e demais canais de comunicacao institucional abrangendo as reclamacoes elogios solicitacoes sugestoes ou denuncias bem como as acoes de ouvidoria ativa. Quanto aos pedidos de acesso a informacao e aos documentos institucionais classificar nas subdivisoes do codigo 002.1. Quanto a conversao da demanda em processo administrativo classificar de acordo com a atividade decorrente da manifestacao ou da denuncia.	S	\N	\N	\N	S
 10	1	002.31	TRATAMENTO DE MANIFESTAÇÃO 	Incluem-se documentos referentes à análise e tratamento de manifestações recebidas pela ouvidoria e demais canais de comunicação do órgão ou entidade, pertinentes às reclamações, elogios, solicitações e sugestões de usuários. Quanto ao tratamento de denúncias e comunicações de ilegalidade ou irregularidade, classificar no código 002.32.	002.31 00231 Incluem-se documentos referentes a analise e tratamento de manifestacoes recebidas pela ouvidoria e demais canais de comunicacao do orgao ou entidade pertinentes as reclamacoes elogios solicitacoes e sugestoes de usuarios. Quanto ao tratamento de denuncias e comunicacoes de ilegalidade ou irregularidade classificar no codigo 002.32.	S	5	5	E	N
 11	1	002.32	TRATAMENTO DE DENÚNCIA	Incluem-se documentos referentes à análise e tratamento de denúncias e comunicações de irregularidade ou ilegalidade, recebidas pela ouvidoria e demais canais de comunicação do órgão ou entidade.  Quanto ao tratamento de reclamações, elogios, solicitações e sugestões, classificar no código 002.31.	002.32 00232 Incluem-se documentos referentes a analise e tratamento de denuncias e comunicacoes de irregularidade ou ilegalidade recebidas pela ouvidoria e demais canais de comunicacao do orgao ou entidade.  Quanto ao tratamento de reclamacoes elogios solicitacoes e sugestoes classificar no codigo 002.31.	S	15	5	E	N
@@ -5000,19 +4999,19 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 16	1	003.2	AÇÃO PREVENTIVA	Incluem-se documentos referentes às ações implementadas por orientação dos órgãos fiscalizadores para prevenção da corrupção no órgão e entidade.	003.2 0032 Incluem-se documentos referentes as acoes implementadas por orientacao dos orgaos fiscalizadores para prevencao da corrupcao no orgao e entidade.	S	9	5	G	N
 17	1	003.3	CORREIÇÃO	Incluem-se documentos referentes à fiscalização e apuração de responsabilidades realizada pelos órgãos fiscalizadores em caso de irregularidades cometidas no órgão e entidade.	003.3 0033 Incluem-se documentos referentes a fiscalizacao e apuracao de responsabilidades realizada pelos orgaos fiscalizadores em caso de irregularidades cometidas no orgao e entidade.	S	9	5	G	N
 18	1	004	ASSESSORAMENTO JURÍDICO	Nas subdivisões deste descritor classificam-se documentos referentes à análise jurídica de instrumentos e de atos normativos e ao acompanhamento de ações judiciais.	004 004 Nas subdivisoes deste descritor classificam-se documentos referentes a analise juridica de instrumentos e de atos normativos e ao acompanhamento de acoes judiciais.	S	\N	\N	\N	S
+19	1	004.1	ORIENTAÇÃO TÉCNICA E NORMATIVA	Nas subdivisões deste descritor classificam-se documentos referentes à análise jurídica de instrumentos e de atos normativos elaborados pelo órgão e entidade.	004.1 0041 Nas subdivisoes deste descritor classificam-se documentos referentes a analise juridica de instrumentos e de atos normativos elaborados pelo orgao e entidade.	S	\N	\N	\N	S
 20	1	004.11	UNIFORMIZAÇÃO DO ENTENDIMENTO JURÍDICO	Incluem-se documentos referentes à  análise e à fixação de interpretação da Constituição, das leis, dos tratados e dos demais atos normativos, a serem seguidos, de modo uniforme, pelo órgão e entidade, quando não houver orientação normativa superior, tais como: instruções, pareceres e notas.	004.11 00411 Incluem-se documentos referentes a  analise e a fixacao de interpretacao da Constituicao das leis dos tratados e dos demais atos normativos a serem seguidos de modo uniforme pelo orgao e entidade quando nao houver orientacao normativa superior tais como: instrucoes pareceres e notas.	S	5	\N	G	N
-21	1	004.12	ANÁLISE DOS INSTRUMENTOS ADMINISTRATIVOS	Incluem-se documentos referentes ao exame e à análise prévia ou conclusiva de textos de editais de licitação, de contratos e de instrumentos congêneres a serem publicados e celebrados pelo órgão e entidade.	004.12 00412 Incluem-se documentos referentes ao exame e a analise previa ou conclusiva de textos de editais de licitacao de contratos e de instrumentos congeneres a serem publicados e celebrados pelo orgao e entidade.	S	5	\N	E	N
-22	1	004.2	ATUAÇÃO EM CONTENCIOSO	Nas subdivisões deste descritor classificam-se documentos referentes à atuação contenciosa judicial e administrativa, nas hipóteses de contestação, conflito ou litígio, exercida pela assessoria ou consultoria jurídica do órgão e entidade.	004.2 0042 Nas subdivisoes deste descritor classificam-se documentos referentes a atuacao contenciosa judicial e administrativa nas hipoteses de contestacao conflito ou litigio exercida pela assessoria ou consultoria juridica do orgao e entidade.	S	\N	\N	\N	S
+86	1	020.13	RESIDENTES E ESTAGIÁRIOS	Incluem-se documentos referentes à vida funcional dos residentes e dos estagiários.	020.13 02013 Incluem-se documentos referentes a vida funcional dos residentes e dos estagiarios.	S	\N	\N	E	N
+535	1	082.3	AVALIAÇÃO	\N	082.3 0823 avaliacao	N	\N	5	E	N
 23	1	004.21	REPRESENTAÇÃO EXTRAJUDICIAL	Incluem-se documentos referentes à solução extrajudicial dos litígios, visando à composição entre as partes em conflito de interesses, por meio de mediação, conciliação, arbitragem e demais técnicas de composição e administração de conflitos.	004.21 00421 Incluem-se documentos referentes a solucao extrajudicial dos litigios visando a composicao entre as partes em conflito de interesses por meio de mediacao conciliacao arbitragem e demais tecnicas de composicao e administracao de conflitos.	S	5	\N	G	N
 24	1	004.22	REPRESENTAÇÃO JUDICIAL	Incluem-se documentos referentes às ações defendidas pela assessoria ou consultoria jurídica em processos administrativos e judiciais, perante todas as instâncias, ordinárias ou extraordinárias, utilizando as medidas capazes de propiciar a efetiva defesa dos interesses do órgão e entidade.	004.22 00422 Incluem-se documentos referentes as acoes defendidas pela assessoria ou consultoria juridica em processos administrativos e judiciais perante todas as instancias ordinarias ou extraordinarias utilizando as medidas capazes de propiciar a efetiva defesa dos interesses do orgao e entidade.	S	5	\N	G	N
 25	1	005	PARTICIPAÇÃO EM ÓRGÃOS COLEGIADOS	Nas subdivisões deste descritor classificam-se documentos referentes à organização e ao funcionamento de colegiados, como comissões, conselhos, comitês, juntas e grupos de trabalho, criados pelo próprio órgão e entidade ou por outros órgãos de deliberação coletiva, que contem com a participação de servidores da instituição. Quanto aos documentos referentes às atividades do órgão colegiado, classificar no descritor referente ao objeto de sua atuação. Quanto aos documentos referentes ao processo eletivo, classificar nas subdivisões do código 014.	005 005 Nas subdivisoes deste descritor classificam-se documentos referentes a organizacao e ao funcionamento de colegiados como comissoes conselhos comites juntas e grupos de trabalho criados pelo proprio orgao e entidade ou por outros orgaos de deliberacao coletiva que contem com a participacao de servidores da instituicao. Quanto aos documentos referentes as atividades do orgao colegiado classificar no descritor referente ao objeto de sua atuacao. Quanto aos documentos referentes ao processo eletivo classificar nas subdivisoes do codigo 014.	S	\N	\N	\N	S
 26	1	005.1	CRIAÇÃO E ORGANIZAÇÃO	Incluem-se documentos referentes à implantação de órgãos colegiados, tais como: ato de instituição, regras para atuação, designação e substituição de membros.  Quanto aos documentos referentes à atuação do órgão colegiado, devem ser classifi-cados no descritor referente ao objeto de sua atuação.	005.1 0051 Incluem-se documentos referentes a implantacao de orgaos colegiados tais como: ato de instituicao regras para atuacao designacao e substituicao de membros.  Quanto aos documentos referentes a atuacao do orgao colegiado devem ser classifi-cados no descritor referente ao objeto de sua atuacao.	S	5	4	G	N
 27	1	005.2	OPERACIONALIZAÇÃO DE REUNIÕES	Incluem-se documentos referentes à organização das reuniões dos órgãos colegiados, bem como aqueles referentes ao agendamento, convocação, pauta e lista de participantes.	005.2 0052 Incluem-se documentos referentes a organizacao das reunioes dos orgaos colegiados bem como aqueles referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
 28	1	010	ORGANIZAÇÃO E FUNCIONAMENTO	Esta subclasse contempla documentos referentes à definição e alteração das políticas institucionais, à criação e modificação das estruturas organizacionais e aos registros que garantam a existência do órgão e entidade como pessoa jurídica e a sua atuação no meio público, privado, com o terceiro setor e com o cidadão, bem como aqueles referentes à contratação de prestação de serviços para o funcio-namento do órgão e entidade, e ao planejamento e acompanhamento das ações institucionais, da gestão ambiental e da comunicação social.	010 010 Esta subclasse contempla documentos referentes a definicao e alteracao das politicas institucionais a criacao e modificacao das estruturas organizacionais e aos registros que garantam a existencia do orgao e entidade como pessoa juridica e a sua atuacao no meio publico privado com o terceiro setor e com o cidadao bem como aqueles referentes a contratacao de prestacao de servicos para o funcio-namento do orgao e entidade e ao planejamento e acompanhamento das acoes institucionais da gestao ambiental e da comunicacao social.	S	\N	\N	\N	S
-41	1	015.1	PLANEJAMENTO INSTITUCIONAL	Incluem-se documentos referentes ao planejamento, às ações e aos programas e projetos de trabalho do órgão e entidade, tais como: planejamento plurianual, planejamento estratégico, plano de desenvolvimento institucional, plano de metas e definição de indicadores de desempenho.	015.1 0151 Incluem-se documentos referentes ao planejamento as acoes e aos programas e projetos de trabalho do orgao e entidade tais como: planejamento plurianual planejamento estrategico plano de desenvolvimento institucional plano de metas e definicao de indicadores de desempenho.	S	9	5	G	N
-42	1	015.2	ACOMPANHAMENTO DAS ATIVIDADES	Incluem-se documentos referentes aos registros das atividades desempenhadas pelo órgão e entidade, tais como: relatórios parciais (mensal, trimestral ou semestral), relatório anual e relatório de gestão.	015.2 0152 Incluem-se documentos referentes aos registros das atividades desempenhadas pelo orgao e entidade, tais como: relatorios parciais (mensal, trimestral ou semestral), relatorio anual e relatorio de gestao.	S	9	5	G	N
 29	1	010.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais internos e às decisões de caráter geral sobre a organização e funcionamento de todas as atividades do órgão e entidade, bem como os boletins administrativos e de serviço. Quanto aos boletins de pessoal, classificar no código 020.01. Quanto à publicação de matérias em boletins administrativos, de serviço, de pessoal, em diários oficiais e em periódicos de grande circulação, classificar no código 069.3. Quanto a documentos referentes à função de normatização e regulamentação de determinada atividade que alcancem os órgãos e entidades do Poder Executivo federal, classificar na atividade finalística.	010.01 01001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais internos e as decisoes de carater geral sobre a organizacao e funcionamento de todas as atividades do orgao e entidade bem como os boletins administrativos e de servico. Quanto aos boletins de pessoal classificar no codigo 020.01. Quanto a publicacao de materias em boletins administrativos de servico de pessoal em diarios oficiais e em periodicos de grande circulacao classificar no codigo 069.3. Quanto a documentos referentes a funcao de normatizacao e regulamentacao de determinada atividade que alcancem os orgaos e entidades do Poder Executivo federal classificar na atividade finalistica.	S	5	\N	G	N
 30	1	011	ORGANIZAÇÃO ADMINISTRATIVA	Incluem-se documentos referentes aos estudos para a definição da estrutura e das atribuições do órgão e entidade e para as mudanças estratégicas (missão, finalidade e forma de atuação) e estruturais (hierarquia, distribuição formal de autoridade e responsabilidade, abertura ou encerramento de unidades administrativas), bem como aqueles resultantes da implantação de reformas administrativas ou de processos de modernização, com impacto no órgão e entidade, na forma de fusão, privatização, reestatização ou extinção.	011 011 Incluem-se documentos referentes aos estudos para a definicao da estrutura e das atribuicoes do orgao e entidade e para as mudancas estrategicas (missao, finalidade e forma de atuacao) e estruturais (hierarquia, distribuicao formal de autoridade e responsabilidade, abertura ou encerramento de unidades administrativas), bem como aqueles resultantes da implantacao de reformas administrativas ou de processos de modernizacao, com impacto no orgao e entidade, na forma de fusao, privatizacao, reestatizacao ou extincao.	S	5	\N	G	N
+87	1	020.14	OCUPANTES DE CARGO COMISSIONADO E DE FUNÇÃO DE CONFIANÇA	Incluem-se documentos referentes à vida funcional dos ocupantes de cargo comissionado e de função de confiança sem vínculo.	020.14 02014 Incluem-se documentos referentes a vida funcional dos ocupantes de cargo comissionado e de funcao de confianca sem vinculo.	S	\N	\N	E	N
 31	1	012	HABILITAÇÃO JURÍDICA E REGULARIZAÇÃO FISCAL	Incluem-se documentos referentes à inscrição, baixa e cancelamento nos órgãos competentes, tais como: cadastro bancário, registros de inscrição no Cadastro Nacional de Pessoa Jurídica (CNPJ), no Sistema de Operações, Registro e Controle do Banco Central (Sisbacen), no Serviço de Proteção ao Crédito (SPC), no Cadastro Informativo de Créditos e não Quitados do Setor Público Federal (Cadin).	012 012 Incluem-se documentos referentes a inscricao baixa e cancelamento nos orgaos competentes tais como: cadastro bancario registros de inscricao no Cadastro Nacional de Pessoa Juridica (CNPJ) no Sistema de Operacoes Registro e Controle do Banco Central (Sisbacen) no Servico de Protecao ao Credito (SPC) no Cadastro Informativo de Creditos e nao Quitados do Setor Publico Federal (Cadin).	S	2	\N	E	N
 32	1	013	COORDENAÇÃO E GESTÃO DE REUNIÕES	Nas subdivisões deste descritor classificam-se documentos relativos às atividades necessárias para a realização de assembleias, audiências, despachos e reuniões, gerais e setoriais, do órgão e entidade, bem como aqueles referentes ao registro de suas deliberações.	013 013 Nas subdivisoes deste descritor classificam-se documentos relativos as atividades necessarias para a realizacao de assembleias audiencias despachos e reunioes gerais e setoriais do orgao e entidade bem como aqueles referentes ao registro de suas deliberacoes.	S	\N	\N	\N	S
 33	1	013.1	OPERACIONALIZAÇÃO	Incluem-se documentos referentes à organização das reuniões do órgão e entidade, bem como aqueles referentes ao agendamento, convocação, pauta e lista de participantes.	013.1 0131 Incluem-se documentos referentes a organizacao das reunioes do orgao e entidade bem como aqueles referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
@@ -5021,8 +5020,12 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 36	1	014.1	NOMEAÇÃO E ATUAÇÃO DA COMISSÃO ELEITORAL	Incluem-se documentos referentes à constituição e às atividades da comissão eleitoral, das mesas de votação e dos fiscais, tais como: indicação dos membros, regimento eleitoral, convocação, pauta, lista de participantes e registros e atas das reuniões.	014.1 0141 Incluem-se documentos referentes a constituicao e as atividades da comissao eleitoral das mesas de votacao e dos fiscais tais como: indicacao dos membros regimento eleitoral convocacao pauta lista de participantes e registros e atas das reunioes.	S	1	\N	G	N
 37	1	014.2	INSCRIÇÃO	Incluem-se documentos referentes à definição do calendário eleitoral, à inscrição de candidatos para participação no processo eletivo e à divulgação das atividades eletivas e dos candidatos, tais como: cronograma, cópia de documentos pessoais dos inscritos ou integrantes das chapas concorrentes, propaganda eleitoral e pedidos de impugnação de candidatura.	014.2 0142 Incluem-se documentos referentes a definicao do calendario eleitoral a inscricao de candidatos para participacao no processo eletivo e a divulgacao das atividades eletivas e dos candidatos tais como: cronograma copia de documentos pessoais dos inscritos ou integrantes das chapas concorrentes propaganda eleitoral e pedidos de impugnacao de candidatura.	S	1	\N	E	N
 38	1	014.3	VOTAÇÃO	Incluem-se documentos referentes à apuração do processo eletivo, tais como: relação de eleitores habilitados, cédulas de votação e contagem de votos.	014.3 0143 Incluem-se documentos referentes a apuracao do processo eletivo tais como: relacao de eleitores habilitados cedulas de votacao e contagem de votos.	S	1	\N	G	N
-534	1	082.24.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.24.a 08224a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
+39	1	014.4	DIVULGAÇÃO DOS RESULTADOS E INTERPOSIÇÃO DE RECURSOS	Incluem-se documentos referentes aos resultados finais da eleição realizada e à divulgação dos candidatos eleitos, bem como aqueles referentes aos recursos impetrados.	014.4 0144 Incluem-se documentos referentes aos resultados finais da eleicao realizada e a divulgacao dos candidatos eleitos bem como aqueles referentes aos recursos impetrados.	S	1	\N	G	N
+40	1	015	GESTÃO INSTITUCIONAL	Nas subdivisões deste descritor classificam-se documentos referentes ao planejamento, acompanhamento, avaliação, governança e acreditação das atividades do órgão e entidade.	015 015 Nas subdivisoes deste descritor classificam-se documentos referentes ao planejamento, acompanhamento, avaliacao, governanca e acreditacao das atividades do orgao e entidade.	S	\N	\N	\N	S
+41	1	015.1	PLANEJAMENTO INSTITUCIONAL	Incluem-se documentos referentes ao planejamento, às ações e aos programas e projetos de trabalho do órgão e entidade, tais como: planejamento plurianual, planejamento estratégico, plano de desenvolvimento institucional, plano de metas e definição de indicadores de desempenho.	015.1 0151 Incluem-se documentos referentes ao planejamento as acoes e aos programas e projetos de trabalho do orgao e entidade tais como: planejamento plurianual planejamento estrategico plano de desenvolvimento institucional plano de metas e definicao de indicadores de desempenho.	S	9	5	G	N
+42	1	015.2	ACOMPANHAMENTO DAS ATIVIDADES	Incluem-se documentos referentes aos registros das atividades desempenhadas pelo órgão e entidade, tais como: relatórios parciais (mensal, trimestral ou semestral), relatório anual e relatório de gestão.	015.2 0152 Incluem-se documentos referentes aos registros das atividades desempenhadas pelo orgao e entidade, tais como: relatorios parciais (mensal, trimestral ou semestral), relatorio anual e relatorio de gestao.	S	9	5	G	N
 43	1	015.3	AVALIAÇÃO DA GESTÃO INSTITUCIONAL	Nas subdivisões deste descritor classificam-se documentos referentes às ações de autoavaliação, para verificação do desempenho do órgão e entidade, visando o controle da qualidade e a melhoria na prestação do serviço público.	015.3 0153 Nas subdivisoes deste descritor classificam-se documentos referentes as acoes de autoavaliacao para verificacao do desempenho do orgao e entidade visando o controle da qualidade e a melhoria na prestacao do servico publico.	S	\N	\N	\N	S
+91	1	021.2	INSCRIÇÃO	Incluem-se documentos exigidos no edital para a homologação da inscrição e fichas de inscrição.	021.2 0212 Incluem-se documentos exigidos no edital para a homologacao da inscricao e fichas de inscricao.	S	2	\N	E	N
 44	1	015.31	ELABORAÇÃO DOS INSTRUMENTOS DE AVALIAÇÃO	Incluem-se documentos referentes ao planejamento das atividades de avaliação e aos programas e projetos de implementação do controle da qualidade da gestão do órgão e entidade, tais como: definição de indicadores e de instrumentos para avaliação dos aspectos gerenciais, diagnósticos e cronogramas.	015.31 01531 Incluem-se documentos referentes ao planejamento das atividades de avaliacao e aos programas e projetos de implementacao do controle da qualidade da gestao do orgao e entidade, tais como: definicao de indicadores e de instrumentos para avaliacao dos aspectos gerenciais, diagnosticos e cronogramas.	S	9	5	G	N
 45	1	015.32	EXECUÇÃO E ACOMPANHAMENTO	Incluem-se documentos referentes à implementação das atividades de avaliação e controle da qualidade da gestão institucional, bem como aqueles referentes à análise crítica e à verificação da compatibilidade entre o planejamento e os resultados obtidos na apuração das metas institucionais.	015.32 01532 Incluem-se documentos referentes a implementacao das atividades de avaliacao e controle da qualidade da gestao institucional bem como aqueles referentes a analise critica e a verificacao da compatibilidade entre o planejamento e os resultados obtidos na apuracao das metas institucionais.	S	9	5	G	N
 46	1	015.33	CERTIFICAÇÃO DA CONFORMIDADE	Incluem-se documentos referentes à certificação da conformidade, às propostas de ações corretivas e preventivas e ao tratamento da não conformidade, bem como relatórios estatísticos, demonstrativos de resultados, certificados e premiações.	015.33 01533 Incluem-se documentos referentes a certificacao da conformidade as propostas de acoes corretivas e preventivas e ao tratamento da nao conformidade bem como relatorios estatisticos demonstrativos de resultados certificados e premiacoes.	S	9	5	G	N
@@ -5036,18 +5039,16 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 54	1	016.3	RESULTADO	Incluem-se documentos referentes aos resultados do mapeamento de processos institucionais, tais como: diagnósticos, fluxogramas e relatórios.	016.3 0163 Incluem-se documentos referentes aos resultados do mapeamento de processos institucionais, tais como: diagnosticos, fluxogramas e relatorios.	S	9	5	G	N
 55	1	016.4	MODELAGEM DE PROCESSOS	Incluem-se documentos referentes à definição de especificações para a modelagem de processos novos ou modificados.	016.4 0164 Incluem-se documentos referentes a definicao de especificacoes para a modelagem de processos novos ou modificados.	S	9	5	G	N
 56	1	016.5	GERENCIAMENTO DE DESEMPENHO	Incluem-se documentos referentes à medição e monitoramento de processos e propostas de ações corretivas ou preventivas, tais como: questionários, avaliações, propostas, análises e laudos.	016.5 0165 Incluem-se documentos referentes a medicao e monitoramento de processos e propostas de acoes corretivas ou preventivas tais como: questionarios avaliacoes propostas analises e laudos.	S	9	5	G	N
-87	1	020.14	OCUPANTES DE CARGO COMISSIONADO E DE FUNÇÃO DE CONFIANÇA	Incluem-se documentos referentes à vida funcional dos ocupantes de cargo comissionado e de função de confiança sem vínculo.	020.14 02014 Incluem-se documentos referentes a vida funcional dos ocupantes de cargo comissionado e de funcao de confianca sem vinculo.	S	\N	\N	E	N
-245	1	031.4	CESSÃO, COMODATO E EMPRÉSTIMO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição temporária de material permanente e de consumo.	031.4 0314 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao temporaria de material permanente e de consumo.	S	\N	\N	\N	S
 57	1	017	GESTÃO AMBIENTAL	Nas subdivisões deste descritor classificam-se documentos referentes à gestão ambiental, visando à utilização racional e sustentável dos recursos naturais, envolvendo o uso de práticas e o desenvolvimento de hábitos que garantam a proteção, conservação e preservação da biodiversidade, a reciclagem das matérias-primas e a redução do impacto ambiental.	017 017 Nas subdivisoes deste descritor classificam-se documentos referentes a gestao ambiental visando a utilizacao racional e sustentavel dos recursos naturais envolvendo o uso de praticas e o desenvolvimento de habitos que garantam a protecao conservacao e preservacao da biodiversidade a reciclagem das materias-primas e a reducao do impacto ambiental.	S	\N	\N	\N	S
+88	1	020.2	IDENTIFICAÇÃO FUNCIONAL	Incluem-se documentos referentes à requisição e ao controle de entrega de documentos de identificação funcional, tais como: carteira, cartão, identidade, crachá, credencial, passaporte de serviço ou diplomático.	020.2 0202 Incluem-se documentos referentes a requisicao e ao controle de entrega de documentos de identificacao funcional tais como: carteira cartao identidade cracha credencial passaporte de servico ou diplomatico.	S	\N	\N	E	N
 58	1	017.1	PROTEÇÃO AMBIENTAL INTERNA	Incluem-se documentos referentes aos procedimentos de controle e preservação do ambiente de trabalho que envolve a conscientização dos servidores, tais como: campanhas de conscientização para redução do consumo de água e energia elétrica e programas de coleta seletiva solidária e reciclagem de resíduos descartáveis, bem como a produção de material de divulgação. Quanto ao controle de riscos ambientais, classificar no código 025.21. Quanto ao recolhimento de material inservível e de sucatas ao depósito, classificar no código 032.3.	017.1 0171 Incluem-se documentos referentes aos procedimentos de controle e preservacao do ambiente de trabalho que envolve a conscientizacao dos servidores, tais como: campanhas de conscientizacao para reducao do consumo de agua e energia eletrica e programas de coleta seletiva solidaria e reciclagem de residuos descartaveis, bem como a producao de material de divulgacao. Quanto ao controle de riscos ambientais, classificar no codigo 025.21. Quanto ao recolhimento de material inservivel e de sucatas ao deposito, classificar no codigo 032.3.	S	2	\N	E	N
 59	1	017.2	PROTEÇÃO AMBIENTAL EXTERNA	Incluem-se documentos referentes aos procedimentos de controle e preservação ambiental externa que envolve a coleta seletiva solidária, a reciclagem de resíduos descartáveis e o uso de fontes não poluentes, tais como: projetos, questionários, avaliações, análises, laudos, relatórios estatísticos e de destinação de resíduos. Quanto à alienação definitiva, por desfazimento, de material permanente e de consumo em razão de serem considerados inservíveis e irrecuperáveis, classificar nos códigos 033.41 e 033.42, respectivamente.	017.2 0172 Incluem-se documentos referentes aos procedimentos de controle e preservacao ambiental externa que envolve a coleta seletiva solidaria a reciclagem de residuos descartaveis e o uso de fontes nao poluentes tais como: projetos questionarios avaliacoes analises laudos relatorios estatisticos e de destinacao de residuos. Quanto a alienacao definitiva por desfazimento de material permanente e de consumo em razao de serem considerados inserviveis e irrecuperaveis classificar nos codigos 033.41 e 033.42 respectivamente.	S	9	5	G	N
 60	1	018	CONTRATAÇÃO DE PRESTAÇÃO DE SERVIÇOS	Nas subdivisões desse descritor classificam-se documentos referentes à contratação de pessoa jurídica ou pessoa física para a realização de serviços e/ou fornecimento de mão de obra terceirizada para o órgão ou entidade, com exceção dos referentes à execução de obras em bens imóveis. Quanto à contratação de pessoa jurídica ou física para execução de obras em bens imóveis do órgão e entidade, classificar nas subdivisões do código 045.3.	018 018 Nas subdivisoes desse descritor classificam-se documentos referentes a contratacao de pessoa juridica ou pessoa fisica para a realizacao de servicos e/ou fornecimento de mao de obra terceirizada para o orgao ou entidade com excecao dos referentes a execucao de obras em bens imoveis. Quanto a contratacao de pessoa juridica ou fisica para execucao de obras em bens imoveis do orgao e entidade classificar nas subdivisoes do codigo 045.3.	S	\N	\N	\N	S
 61	1	018.1	CONTRATAÇÃO DE PESSOA JURÍDICA	Incluem-se documentos referentes à contratação de pessoa jurídica para a realização de serviços e/ou fornecimento de mão de obra para o órgão ou entidade, tais como: planejamento da contratação, divulgação, seleção do fornecedor, contrato, indicação e designação do gestor e dos fiscais da execução do contrato para acompanhamento, fiscalização, avaliação e aferição dos resultados previstos na contratação e demais documentos comprobatórios da prestação de serviços.	018.1 0181 Incluem-se documentos referentes a contratacao de pessoa juridica para a realizacao de servicos e/ou fornecimento de mao de obra para o orgao ou entidade tais como: planejamento da contratacao divulgacao selecao do fornecedor contrato indicacao e designacao do gestor e dos fiscais da execucao do contrato para acompanhamento fiscalizacao avaliacao e afericao dos resultados previstos na contratacao e demais documentos comprobatorios da prestacao de servicos.	S	5	\N	E	N
 62	1	018.2	CONTRATAÇÃO DE PESSOA FÍSICA	Incluem-se documentos referentes à contratação de pessoas físicas (autônomos e colaboradores) para a realização de serviços técnicos profissionais especializados, transitórios, de caráter eventual, por prazo determinado e sem vínculo empregatício, tais como: planejamento da contratação, divulgação, seleção, contrato, indicação e designação do gestor e dos fiscais da execução do contrato para acompanhamento, fiscalização, avaliação e aferição dos resultados previstos na contratação e demais documentos comprobatórios da prestação de serviços.	018.2 0182 Incluem-se documentos referentes a contratacao de pessoas fisicas (autônomos e colaboradores) para a realizacao de servicos tecnicos profissionais especializados transitorios de carater eventual por prazo determinado e sem vinculo empregaticio tais como: planejamento da contratacao divulgacao selecao contrato indicacao e designacao do gestor e dos fiscais da execucao do contrato para acompanhamento fiscalizacao avaliacao e afericao dos resultados previstos na contratacao e demais documentos comprobatorios da prestacao de servicos.	S	5	\N	E	N
 63	1	019	OUTRAS AÇÕES REFERENTES À ORGANIZAÇÃO E FUNCIONAMENTO	Nas subdivisões deste descritor classificam-se documentos referentes a outras ações de organização e funcionamento não contempladas nos descritores anteriores.	019 019 Nas subdivisoes deste descritor classificam-se documentos referentes a outras acoes de organizacao e funcionamento nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
-74	1	020	GESTÃO DE PESSOAS	Esta subclasse contempla documentos referentes aos direitos e obrigações dos servidores e empregados públicos, dos servidores temporários, dos residentes (aqueles inscritos nas residências médica, multiprofissional em saúde, pedagógica e jurídica, entre outras), dos estagiários, dos ocupantes de cargo comissionado e de função de confiança sem vínculo, lotados no órgão e entidade, bem como aqueles referentes aos direitos e obrigações do empregador.	020 020 Esta subclasse contempla documentos referentes aos direitos e obrigacoes dos servidores e empregados publicos, dos servidores temporarios, dos residentes (aqueles inscritos nas residencias medica, multiprofissional em saude, pedagogica e juridica, entre outras), dos estagiarios, dos ocupantes de cargo comissionado e de funcao de confianca sem vinculo, lotados no orgao e entidade, bem como aqueles referentes aos direitos e obrigacoes do empregador.	S	\N	\N	\N	S
-535	1	082.3	AVALIAÇÃO	\N	082.3 0823 avaliacao	N	\N	5	E	N
 64	1	019.1	GERENCIAMENTO DE ESTRATÉGIAS DE MARKETING E DE COMUNICAÇÃO SOCIAL	Nas subdivisões deste descritor classificam-se documentos referentes à administração da comunicação, à divulgação interna, ao planejamento, elaboração, acompanhamento, execução e avaliação das estratégias e ações de marketing (como o cultural, social, ambiental, de relacionamento, institucional e endomarketing) e de merchandising, alinhadas com o posicionamento institucional, desenvolvidos com meios próprios, por meio da contratação de empresas terceirizadas ou profissionais transitórios, bem como às atividadesde comunicação social nos âmbitos externo e interno, compreendendo a escolha e os usos de mídias empregadas. Quanto aos documentos referentes à contratação de empresas terceirizadas ou de autônomo, classificar nas subdivisões do código 018.	019.1 0191 Nas subdivisoes deste descritor classificam-se documentos referentes a administracao da comunicacao a divulgacao interna ao planejamento elaboracao acompanhamento execucao e avaliacao das estrategias e acoes de marketing (como o cultural social ambiental de relacionamento institucional e endomarketing) e de merchandising alinhadas com o posicionamento institucional desenvolvidos com meios proprios por meio da contratacao de empresas terceirizadas ou profissionais transitorios bem como as atividadesde comunicacao social nos ambitos externo e interno compreendendo a escolha e os usos de midias empregadas. Quanto aos documentos referentes a contratacao de empresas terceirizadas ou de autônomo classificar nas subdivisoes do codigo 018.	S	\N	\N	\N	S
+536	1	082.3.a	FICHAS/FOLHAS DE AVALIAÇÃO	\N	082.3.a 0823a fichas folhas de avaliacao	N	47	5	E	N
 65	1	019.11	ADMINISTRAÇÃO DA COMUNICAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes ao credenciamento de jornalistas, relacionamento com a imprensa, elaboração de propagandas e campanhas publicitárias, elaboração e atualização de site institucional. Quanto ao assessoramento de cerimonial para a realização de solenidades oficiais e eventos do órgão e entidade, classificar nas subdivisões do código 910.	019.11 01911 Nas subdivisoes deste descritor classificam-se documentos referentes ao credenciamento de jornalistas, relacionamento com a imprensa, elaboracao de propagandas e campanhas publicitarias, elaboracao e atualizacao de site institucional. Quanto ao assessoramento de cerimonial para a realizacao de solenidades oficiais e eventos do orgao e entidade, classificar nas subdivisoes do codigo 910.	S	\N	\N	\N	S
 66	1	019.111	CREDENCIAMENTO DE JORNALISTAS	Incluem-se documentos referentes ao credenciamento de jornalistas, tais como: normas de credenciamento, formulários e credenciais.	019.111 019111 Incluem-se documentos referentes ao credenciamento de jornalistas, tais como: normas de credenciamento, formularios e credenciais.	S	1	\N	E	N
 67	1	019.112	RELAÇÃO COM A IMPRENSA	Incluem-se documentos referentes à releases para publicação, mensagens, entrevistas, noticiários, reportagens e editoriais.	019.112 019112 Incluem-se documentos referentes a releases para publicacao mensagens entrevistas noticiarios reportagens e editoriais.	S	\N	1	E	N
@@ -5057,7 +5058,9 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 71	1	019.13	PLANEJAMENTO, ELABORAÇÃO E ACOMPANHAMENTO	Incluem-se documentos referentes ao planejamento, elaboração e ao acompanhamento das estratégias e ações de marketing e de comunicação social, desenvolvidas pelo órgão ou entidade.	019.13 01913 Incluem-se documentos referentes ao planejamento, elaboracao e ao acompanhamento das estrategias e acoes de marketing e de comunicacao social, desenvolvidas pelo orgao ou entidade.	S	5	5	G	N
 72	1	019.14	EXECUÇÃO E AVALIAÇÃO DE ESTRATÉGIAS	Incluem-se documentos referentes à execução e avaliação das estratégias e ações de marketing e de comunicação social, desenvolvidas pelo órgão ou entidade.	019.14 01914 Incluem-se documentos referentes a execucao e avaliacao das estrategias e acoes de marketing e de comunicacao social desenvolvidas pelo orgao ou entidade.	S	5	5	E	N
 73	1	019.2	AÇÃO DE RESPONSABILIDADE SOCIAL	Incluem-se documentos referentes à participação em ações de incentivo ao esporte, à cultura e à educação, com possibilidade de dedução de imposto de renda, conforme especificado em legislação. Quanto às ações de marketing e de merchandising, classificar no código 019.113.	019.2 0192 Incluem-se documentos referentes a participacao em acoes de incentivo ao esporte a cultura e a educacao com possibilidade de deducao de imposto de renda conforme especificado em legislacao. Quanto as acoes de marketing e de merchandising classificar no codigo 019.113.	S	9	5	G	N
-86	1	020.13	RESIDENTES E ESTAGIÁRIOS	Incluem-se documentos referentes à vida funcional dos residentes e dos estagiários.	020.13 02013 Incluem-se documentos referentes a vida funcional dos residentes e dos estagiarios.	S	\N	\N	E	N
+74	1	020	GESTÃO DE PESSOAS	Esta subclasse contempla documentos referentes aos direitos e obrigações dos servidores e empregados públicos, dos servidores temporários, dos residentes (aqueles inscritos nas residências médica, multiprofissional em saúde, pedagógica e jurídica, entre outras), dos estagiários, dos ocupantes de cargo comissionado e de função de confiança sem vínculo, lotados no órgão e entidade, bem como aqueles referentes aos direitos e obrigações do empregador.	020 020 Esta subclasse contempla documentos referentes aos direitos e obrigacoes dos servidores e empregados publicos, dos servidores temporarios, dos residentes (aqueles inscritos nas residencias medica, multiprofissional em saude, pedagogica e juridica, entre outras), dos estagiarios, dos ocupantes de cargo comissionado e de funcao de confianca sem vinculo, lotados no orgao e entidade, bem como aqueles referentes aos direitos e obrigacoes do empregador.	S	\N	\N	\N	S
+89	1	021	RECRUTAMENTO E SELEÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos desenvolvidos para a realização de concursos públicos para o provimento de cargos públicos, empregos públicos e contratação por tempo determinado ou para realização de processo seletivo, que ocorre entre instituições, para recrutamento de servidores e empregados públicos.	021 021 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos desenvolvidos para a realizacao de concursos publicos para o provimento de cargos publicos, empregos publicos e contratacao por tempo determinado ou para realizacao de processo seletivo, que ocorre entre instituicoes, para recrutamento de servidores e empregados publicos.	S	\N	\N	\N	S
+537	1	082.4	REQUISITOS ESPECÍFICOS DE CARREIRA	\N	082.4 0824 requisitos especificos de carreira	N	\N	5	E	N
 75	1	020.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais e às decisões de caráter geral sobre a gestão de pessoas do órgão e entidade, bem como os boletins de pessoal. Quanto aos boletins administrativos e de serviço, classificar no código 010.01. Quanto à publicação de matériasemboletins administrativos, de serviço, de pessoal, emdiários oficiais e em periódicos de grande circulação, classificar no código 069.3.	020.01 02001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais e as decisoes de carater geral sobre a gestao de pessoas do orgao e entidade bem como os boletins de pessoal. Quanto aos boletins administrativos e de servico classificar no codigo 010.01. Quanto a publicacao de materiasemboletins administrativos de servico de pessoal emdiarios oficiais e em periodicos de grande circulacao classificar no codigo 069.3.	S	5	\N	G	N
 76	1	020.02	IMPLEMENTAÇÃO DAS POLÍTICAS DE PESSOAL	Nas subdivisões deste descritor classificam-se documentos referentes ao planejamento, desenvolvimento e implantação das políticas de pessoal.	020.02 02002 Nas subdivisoes deste descritor classificam-se documentos referentes ao planejamento, desenvolvimento e implantacao das politicas de pessoal.	S	\N	\N	\N	S
 77	1	020.021	PLANEJAMENTO DA FORÇA DE TRABALHO. PREVISÃO DE PESSOAL	Incluem-se documentos referentes ao levantamento das habilidades e especificações necessárias para o exercício das funções e atividades rotineiras e eventuais, visando subsidiar a previsão de pessoal, definindo qualificação e quantitativo.	020.021 020021 Incluem-se documentos referentes ao levantamento das habilidades e especificacoes necessarias para o exercicio das funcoes e atividades rotineiras e eventuais, visando subsidiar a previsao de pessoal, definindo qualificacao e quantitativo.	S	5	5	G	N
@@ -5069,11 +5072,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 83	1	020.1	ASSENTAMENTO FUNCIONAL	Nas subdivisões deste descritor classificam-se documentos referentes à vida funcional dos servidores e empregados públicos, dos servidores temporários, dos residentes (aqueles inscritos nas residências médica, multiprofissional em saúde, pedagógica e jurídica, entre outras), dos estagiários, dos ocupantes de cargo comissionado e de função de confiança sem vínculo, bem como os registros e as anotações dos atos da administração pública a que tiveram direito ou lhe foram impostos como deveres.	020.1 0201 Nas subdivisoes deste descritor classificam-se documentos referentes a vida funcional dos servidores e empregados publicos dos servidores temporarios dos residentes (aqueles inscritos nas residencias medica multiprofissional em saude pedagogica e juridica entre outras) dos estagiarios dos ocupantes de cargo comissionado e de funcao de confianca sem vinculo bem como os registros e as anotacoes dos atos da administracao publica a que tiveram direito ou lhe foram impostos como deveres.	S	\N	\N	\N	S
 84	1	020.11	SERVIDORES E EMPREGADOS PÚBLICOS	Incluem-se documentos referentes à vida funcional dos servidores estatutários ativos (ou seja, ocupantes de cargos públicos) e inativos e dos empregados públicos (ou seja, ocupantes de empregos públicos) que são contratados e submetidos ao regime da legislação trabalhista.	020.11 02011 Incluem-se documentos referentes a vida funcional dos servidores estatutarios ativos (ou seja ocupantes de cargos publicos) e inativos e dos empregados publicos (ou seja ocupantes de empregos publicos) que sao contratados e submetidos ao regime da legislacao trabalhista.	S	\N	\N	E	N
 85	1	020.12	SERVIDORES TEMPORÁRIOS	Incluem-se documentos referentes à vida funcional dos servidores que são contratados por tempo determinado, em caráter excepcional para atender uma eventual necessidade de interesse público, sem que estejam vinculados a cargo ou emprego públicos. Quanto à contratação de pessoas físicas (autônomos e colaboradores), classificar no código 029.5.	020.12 02012 Incluem-se documentos referentes a vida funcional dos servidores que sao contratados por tempo determinado em carater excepcional para atender uma eventual necessidade de interesse publico sem que estejam vinculados a cargo ou emprego publicos. Quanto a contratacao de pessoas fisicas (autônomos e colaboradores) classificar no codigo 029.5.	S	\N	\N	E	N
-536	1	082.3.a	FICHAS/FOLHAS DE AVALIAÇÃO	\N	082.3.a 0823a fichas folhas de avaliacao	N	47	5	E	N
-88	1	020.2	IDENTIFICAÇÃO FUNCIONAL	Incluem-se documentos referentes à requisição e ao controle de entrega de documentos de identificação funcional, tais como: carteira, cartão, identidade, crachá, credencial, passaporte de serviço ou diplomático.	020.2 0202 Incluem-se documentos referentes a requisicao e ao controle de entrega de documentos de identificacao funcional tais como: carteira cartao identidade cracha credencial passaporte de servico ou diplomatico.	S	\N	\N	E	N
-89	1	021	RECRUTAMENTO E SELEÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos desenvolvidos para a realização de concursos públicos para o provimento de cargos públicos, empregos públicos e contratação por tempo determinado ou para realização de processo seletivo, que ocorre entre instituições, para recrutamento de servidores e empregados públicos.	021 021 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos desenvolvidos para a realizacao de concursos publicos para o provimento de cargos publicos, empregos publicos e contratacao por tempo determinado ou para realizacao de processo seletivo, que ocorre entre instituicoes, para recrutamento de servidores e empregados publicos.	S	\N	\N	\N	S
-90	1	021.1	PLANEJAMENTO DO PROCESSO SELETIVO	Incluem-se estudos, propostas, constituição de bancas examinadoras, programas, editais, exemplares únicos de provas, gabaritos e critérios para correção de provas e para solicitação de recursos.	021.1 0211 Incluem-se estudos, propostas, constituicao de bancas examinadoras, programas, editais, exemplares unicos de provas, gabaritos e criterios para correcao de provas e para solicitacao de recursos.	S	2	\N	G	N
-91	1	021.2	INSCRIÇÃO	Incluem-se documentos exigidos no edital para a homologação da inscrição e fichas de inscrição.	021.2 0212 Incluem-se documentos exigidos no edital para a homologacao da inscricao e fichas de inscricao.	S	2	\N	E	N
+553	1	082.7.a	REQUERIMENTOS, AVALIAÇÕES, PARECERES E DESPACHOS	\N	082.7.a 0827a requerimentos avaliacoes pareceres e despachos	N	47	5	E	N
 92	1	021.3	CONTROLE DE APLICAÇÃO DE PROVAS	Incluem-se documentos referentes ao controle de aplicação das provas, de acordo com os requisitos estipulados no edital.	021.3 0213 Incluem-se documentos referentes ao controle de aplicacao das provas, de acordo com os requisitos estipulados no edital.	S	2	\N	E	N
 93	1	021.4	CORREÇÃO DE PROVAS. AVALIAÇÃO	Incluem-se cadernos de prova utilizados pelos candidatos, folhas de resposta, provas de títulos, avaliação psicológica, testes psicotécnicos, exames médicos e de aptidão física, bem como currículos e entrevistas dos candidatos. Quanto às provas de títulos, avaliação psicológica, testes psicotécnicos, exames médicos e de aptidão física dos candidatos que vierem a ser nomeados, classificar nas subdivisões do código 020.1.	021.4 0214 Incluem-se cadernos de prova utilizados pelos candidatos folhas de resposta provas de titulos avaliacao psicologica testes psicotecnicos exames medicos e de aptidao fisica bem como curriculos e entrevistas dos candidatos. Quanto as provas de titulos avaliacao psicologica testes psicotecnicos exames medicos e de aptidao fisica dos candidatos que vierem a ser nomeados classificar nas subdivisoes do codigo 020.1.	S	2	\N	E	N
 94	1	021.5	DIVULGAÇÃO DOS RESULTADOS E INTERPOSIÇÃO DE RECURSOS	Incluem-se documentos referentes aos resultados das provas realizadas ou do processo seletivo interno, a classificação e a reclassificação dos candidatos, bem como aqueles referentes aos recursos impetrados em qualquer uma das fases do concurso.	021.5 0215 Incluem-se documentos referentes aos resultados das provas realizadas ou do processo seletivo interno, a classificacao e a reclassificacao dos candidatos, bem como aqueles referentes aos recursos impetrados em qualquer uma das fases do concurso.	S	2	\N	G	N
@@ -5085,11 +5084,11 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 100	1	022.3	REMOÇÃO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de remoção.	022.3 0223 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de remocao.	S	5	4	E	N
 101	1	022.4	REDISTRIBUIÇÃO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de redistribuição	022.4 0224 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de redistribuicao	S	52	5	E	N
 102	1	022.5	SUBSTITUIÇÃO	Incluem-se documentos referentes aos procedimentos que efetivam as ações de substituição.	022.5 0225 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de substituicao.	S	52	5	E	N
-117	1	023.153	CARGOS EM COMISSÃO	Incluem-se documentos referentes à solicitação, comprovação do direito, incorporação, pagamento e interrupção do pagamento da gratificação.	023.153 023153 Incluem-se documentos referentes a solicitacao comprovacao do direito incorporacao pagamento e interrupcao do pagamento da gratificacao.	S	52	5	E	N
 103	1	022.6	AVALIAÇÃO DE DESEMPENHO	Nas subdivisões deste descritor classificam-se documentos referentes ao cumprimento do estágio obrigatório pelo servidor público, à homologação de sua estabilidade e ao período de experiência a ser cumprido pelos contratados, bem como aqueles referentes às promoções e progressões funcionais.	022.6 0226 Nas subdivisoes deste descritor classificam-se documentos referentes ao cumprimento do estagio obrigatorio pelo servidor publico a homologacao de sua estabilidade e ao periodo de experiencia a ser cumprido pelos contratados bem como aqueles referentes as promocoes e progressoes funcionais.	S	\N	\N	\N	S
 104	1	022.61	CUMPRIMENTO DE ESTÁGIO PROBATÓRIO. HOMOLOGAÇÃO DA ESTABILIDADE.	Incluem-se documentos referentes ao cumprimento e à avaliação do estágio probatório e à homologação da estabilidade do servidor público.	022.61 02261 Incluem-se documentos referentes ao cumprimento e a avaliacao do estagio probatorio e a homologacao da estabilidade do servidor publico.	S	52	5	E	N
 105	1	022.62	CUMPRIMENTO DE PERÍODO DE EXPERIÊNCIA	Incluem-se documentos referentes ao período de experiência a ser cumprido pelos contratados.	022.62 02262 Incluem-se documentos referentes ao periodo de experiencia a ser cumprido pelos contratados.	S	52	5	E	N
 106	1	022.63	PROMOÇÃO E PROGRESSÃO FUNCIONAL	Incluem-se documentos referentes às avaliações de desempenho para promoção e progressão funcional dos servidores.  Quanto à reestruturação e alteração salarial decorrentes de promoção e progressão funcional, classificar no código 023.12.	022.63 02263 Incluem-se documentos referentes as avaliacoes de desempenho para promocao e progressao funcional dos servidores.  Quanto a reestruturacao e alteracao salarial decorrentes de promocao e progressao funcional classificar no codigo 023.12.	S	52	5	E	N
+122	1	023.16	ADICIONAIS	Nas subdivisões deste descritor classificam-se documentos referentes à solicitação, comprovação do direito, pagamento e interrupção do pagamento dos adicionais concedidos.	023.16 02316 Nas subdivisoes deste descritor classificam-se documentos referentes a solicitacao comprovacao do direito pagamento e interrupcao do pagamento dos adicionais concedidos.	S	\N	\N	\N	S
 107	1	022.7	VACÂNCIA	Incluem-se documentos referentes aos procedimentos que efetivam as ações de demissão, dispensa, exoneração, rescisão contratual, aviso prévio, posse em outro cargo não acumulável, promoção, readaptação, aposentadoria e falecimento, bem como aqueles referentes à adesão aos planos de demissão voluntária.	022.7 0227 Incluem-se documentos referentes aos procedimentos que efetivam as acoes de demissao dispensa exoneracao rescisao contratual aviso previo posse em outro cargo nao acumulavel promocao readaptacao aposentadoria e falecimento bem como aqueles referentes a adesao aos planos de demissao voluntaria.	S	52	5	E	N
 108	1	023	CONCESSÃO DE DIREITOS E VANTAGENS	Nas subdivisões deste descritor classificam-se documentos referentes à percepção de pagamento de vencimentos, remunerações, salários e proventos e ao gozo de férias, licenças, afastamentos, concessões, auxílios e reembolso de despesas, bem como aqueles referentes aos descontos, obrigações trabalhistas e estatutárias, encargos patronais e recolhimentos.	023 023 Nas subdivisoes deste descritor classificam-se documentos referentes a percepcao de pagamento de vencimentos remuneracoes salarios e proventos e ao gozo de ferias licencas afastamentos concessoes auxilios e reembolso de despesas bem como aqueles referentes aos descontos obrigacoes trabalhistas e estatutarias encargos patronais e recolhimentos.	S	\N	\N	\N	S
 109	1	023.1	PAGAMENTO DE VENCIMENTOS. REMUNERAÇÕES. SALÁRIOS. PROVENTOS	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos que efetivam as ações de percepção de pagamento.	023.1 0231 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos que efetivam as acoes de percepcao de pagamento.	S	\N	\N	\N	S
@@ -5100,11 +5099,11 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 114	1	023.15	GRATIFICAÇÕES	Nas subdivisões deste descritor classificam-se os documentos referentes à solicitação, comprovação do direito, incorporação, pagamento e interrupção do pagamento das gratificações concedidas.	023.15 02315 Nas subdivisoes deste descritor classificam-se os documentos referentes a solicitacao comprovacao do direito incorporacao pagamento e interrupcao do pagamento das gratificacoes concedidas.	S	\N	\N	\N	S
 115	1	023.151	FUNÇÃO	Incluem-se documentos referentes à solicitação, comprovação do direito, incorporação de quintos e décimos, pagamento e interrupção do pagamento da gratificação.	023.151 023151 Incluem-se documentos referentes a solicitacao comprovacao do direito incorporacao de quintos e decimos pagamento e interrupcao do pagamento da gratificacao.	S	52	5	E	N
 116	1	023.152	JETONS	Incluem-se documentos referentes à solicitação, comprovação do direito, incorporação, pagamento e interrupção do pagamento da gratificação.	023.152 023152 Incluem-se documentos referentes a solicitacao comprovacao do direito incorporacao pagamento e interrupcao do pagamento da gratificacao.	S	\N	7	E	N
+117	1	023.153	CARGOS EM COMISSÃO	Incluem-se documentos referentes à solicitação, comprovação do direito, incorporação, pagamento e interrupção do pagamento da gratificação.	023.153 023153 Incluem-se documentos referentes a solicitacao comprovacao do direito incorporacao pagamento e interrupcao do pagamento da gratificacao.	S	52	5	E	N
 118	1	023.154	NATALINA. DÉCIMO TERCEIRO SALÁRIO	Incluem-se documentos referentes ao pagamento e adiantamento da gratificação.	023.154 023154 Incluem-se documentos referentes ao pagamento e adiantamento da gratificacao.	S	\N	7	E	N
 119	1	023.155	DESEMPENHO	Incluem-se documentos referentes às gratificações por desempenho de atividade, qualificação e produtividade, bem como aqueles referentes à solicitação de inclusão e ao cancelamento do pagamento da gratificação.	023.155 023155 Incluem-se documentos referentes as gratificacoes por desempenho de atividade qualificacao e produtividade bem como aqueles referentes a solicitacao de inclusao e ao cancelamento do pagamento da gratificacao.	S	52	5	E	N
 120	1	023.156	ENCARGO DE CURSO E CONCURSO	Incluem-se documentos referentes à solicitação e pagamento da gratificação por encargo de curso ministrado, bem como aqueles referentes à participação em bancas examinadoras e de fiscalização e aplicação de provas em concursos.	023.156 023156 Incluem-se documentos referentes a solicitacao e pagamento da gratificacao por encargo de curso ministrado bem como aqueles referentes a participacao em bancas examinadoras e de fiscalizacao e aplicacao de provas em concursos.	S	\N	7	E	N
 121	1	023.157	TITULAÇÃO	Incluem-se documentos referentes à solicitação, comprovação do direito, incorporação e pagamento da retribuição por titulação, obtida pela conclusão de cursos de especialização, mestrado e doutorado.	023.157 023157 Incluem-se documentos referentes a solicitacao comprovacao do direito incorporacao e pagamento da retribuicao por titulacao obtida pela conclusao de cursos de especializacao mestrado e doutorado.	S	52	5	E	N
-122	1	023.16	ADICIONAIS	Nas subdivisões deste descritor classificam-se documentos referentes à solicitação, comprovação do direito, pagamento e interrupção do pagamento dos adicionais concedidos.	023.16 02316 Nas subdivisoes deste descritor classificam-se documentos referentes a solicitacao comprovacao do direito pagamento e interrupcao do pagamento dos adicionais concedidos.	S	\N	\N	\N	S
 123	1	023.161	TEMPO DE SERVIÇO	Incluem-se documentos referentes ao acréscimo financeiro sobre a remuneração em razão do cumprimento de cada ano de serviço público efetivo, tais como: anuênios, biênios e quinquênios.	023.161 023161 Incluem-se documentos referentes ao acrescimo financeiro sobre a remuneracao em razao do cumprimento de cada ano de servico publico efetivo, tais como: anuenios, bienios e quinquenios.	S	52	5	E	N
 124	1	023.162	NOTURNO	Incluem-se documentos referentes ao acréscimo financeiro na remuneração em razão de trabalho noturno.	023.162 023162 Incluem-se documentos referentes ao acrescimo financeiro na remuneracao em razao de trabalho noturno.	S	52	5	E	N
 125	1	023.163	PERICULOSIDADE	Incluem-se documentos referentes ao acréscimo financeiro na remuneração em razão do trabalho ser executado em condições perigosas.	023.163 023163 Incluem-se documentos referentes ao acrescimo financeiro na remuneracao em razao do trabalho ser executado em condicoes perigosas.	S	52	5	E	N
@@ -5118,6 +5117,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 133	1	023.173	IMPOSTO DE RENDA RETIDO NA FONTE (IRRF)	Incluem-se documentos referentes ao desconto do imposto de renda retido na fonte, bem como aqueles referentes à solicitação de isenção de pagamento, por parte do servidor portador de doença específica ou aposentado por invalidez permanente. Quanto ao imposto de renda recolhido pela fonte pagadora, classificar no código 023.185.	023.173 023173 Incluem-se documentos referentes ao desconto do imposto de renda retido na fonte bem como aqueles referentes a solicitacao de isencao de pagamento por parte do servidor portador de doenca especifica ou aposentado por invalidez permanente. Quanto ao imposto de renda recolhido pela fonte pagadora classificar no codigo 023.185.	S	\N	7	E	N
 134	1	023.174	PENSÃO ALIMENTÍCIA	Incluem-se documentos referentes à autorização para desconto incidente sobre a remuneração em razão do pagamento de pensão alimentícia, bem como aqueles referentes à solicitação de cancelamento do desconto.	023.174 023174 Incluem-se documentos referentes a autorizacao para desconto incidente sobre a remuneracao em razao do pagamento de pensao alimenticia bem como aqueles referentes a solicitacao de cancelamento do desconto.	S	95	5	E	N
 135	1	023.175	CONSIGNAÇÕES FACULTATIVAS	Incluem-se documentos referentes à autorização para desconto incidente sobre a remuneração em razão de contribuição e coparticipação para plano de saúde, de contribuição e coparticipação para entidade de previdência complementar, de prêmio relativo a seguro de vida, de contribuição em favor de associação ou cooperativa, de empréstimo, de financiamento imobiliário e de despesa contraída e saque realizado por meio de cartão de crédito, bem como aqueles referentes à solicitação de cancelamento do desconto e devolução de descontos indevidos.	023.175 023175 Incluem-se documentos referentes a autorizacao para desconto incidente sobre a remuneracao em razao de contribuicao e coparticipacao para plano de saude de contribuicao e coparticipacao para entidade de previdencia complementar de premio relativo a seguro de vida de contribuicao em favor de associacao ou cooperativa de emprestimo de financiamento imobiliario e de despesa contraida e saque realizado por meio de cartao de credito bem como aqueles referentes a solicitacao de cancelamento do desconto e devolucao de descontos indevidos.	S	7	\N	E	N
+538	1	082.4.a	MANOBRA, TEMPO DE TROPA, TEMPO DE EMBARQUE, VIVÊNCIA NACIONAL, DIAS DE MAR, ATIVIDADE BÉLICA, HORAS DE VOO	\N	082.4.a 0824a manobra tempo de tropa tempo de embarque vivencia nacional dias de mar atividade belica horas de voo	N	47	5	E	N
 136	1	023.18	OBRIGAÇÕES TRABALHISTAS E ESTATUTÁRIAS, ENCARGOS PATRONAIS E RECOLHIMENTOS	Nas subdivisões deste descritor classificam-se documentos referentes aos encargos patronais e recolhimentos efetuados pelo empregador.	023.18 02318 Nas subdivisoes deste descritor classificam-se documentos referentes aos encargos patronais e recolhimentos efetuados pelo empregador.	S	\N	\N	\N	S
 137	1	023.181	PROGRAMA DE FORMAÇÃO DO PATRIMÔNIO DO SERVIDOR PÚBLICO (PASEP). PROGRAMA DE INTEGRAÇÃO SOCIAL (PIS)	Incluem-se documentos referentes às contribuições sociais, de natureza tributária, devidas pelo órgão e entidade, com o objetivo de financiar o pagamento do seguro-desemprego, do abono e da participação na receita do órgão e entidade e que são destinados aos servidores.	023.181 023181 Incluem-se documentos referentes as contribuicoes sociais de natureza tributaria devidas pelo orgao e entidade com o objetivo de financiar o pagamento do seguro-desemprego do abono e da participacao na receita do orgao e entidade e que sao destinados aos servidores.	S	5	5	E	N
 138	1	023.182	FUNDO DE GARANTIA DO TEMPO DE SERVIÇO (FGTS)	Incluem-se documentos referentes à declaração de opção e à comprovação do depósito do valor do FGTS.	023.182 023182 Incluem-se documentos referentes a declaracao de opcao e a comprovacao do deposito do valor do FGTS.	S	52	5	E	N
@@ -5128,9 +5128,8 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 143	1	023.19	OUTRAS AÇÕES REFERENTES AO PAGAMENTO DE VENCIMENTOS. REMUNERAÇÕES. SALÁRIOS. PROVENTOS	Na subdivisão deste descritor classificam-se documentos referentes a outras ações de pagamento de vencimentos, remunerações, salários e proventos não contempladas nos descritores anteriores.	023.19 02319 Na subdivisao deste descritor classificam-se documentos referentes a outras acoes de pagamento de vencimentos, remuneracoes, salarios e proventos nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
 144	1	023.191	RETIFICAÇÃO DE PAGAMENTO	Incluem-se documentos referentes aos pedidos, feitos pelo servidor, para a retificação de erros efetuados no pagamento. Quanto aos casos de restituição de valores ao erário, classificar no código 059.4.	023.191 023191 Incluem-se documentos referentes aos pedidos, feitos pelo servidor, para a retificacao de erros efetuados no pagamento. Quanto aos casos de restituicao de valores ao erario, classificar no codigo 059.4.	S	\N	7	E	N
 145	1	023.2	FÉRIAS	Incluem-se documentos referentes à concessão de férias, tais como: programação, alteração, cancelamento, suspensão, escala e aviso de férias. Quanto ao pagamento de adicional de um terço de férias e abono pecuniário, classificar no código 023.167.	023.2 0232 Incluem-se documentos referentes a concessao de ferias tais como: programacao alteracao cancelamento suspensao escala e aviso de ferias. Quanto ao pagamento de adicional de um terco de ferias e abono pecuniario classificar no codigo 023.167.	S	\N	7	E	N
-155	1	023.91	CONTRATAÇÃO DE SEGURO	Incluem-se documentos referentes à contratação de seguro de vida em grupo e seguro de acidentes pessoais. Quanto à contratação de seguro patrimonial, classificar no código 018.1.	023.91 02391 Incluem-se documentos referentes a contratacao de seguro de vida em grupo e seguro de acidentes pessoais. Quanto a contratacao de seguro patrimonial classificar no codigo 018.1.	S	5	\N	E	N
-537	1	082.4	REQUISITOS ESPECÍFICOS DE CARREIRA	\N	082.4 0824 requisitos especificos de carreira	N	\N	5	E	N
 146	1	023.3	LICENÇAS	Incluem-se documentos referentes à concessão e à prorrogação de licenças para afastamento do cônjuge ou companheiro, atividade política, capacitação profissional, participação em programa de pós-graduação lato sensu, para desempenho de mandato classista, motivo de doença em pessoa da família, incentivada, sem remuneração, prêmio por assiduidade, serviço militar e tratamento de interesses particulares, bem como as perícias médicas realizadas para concessão e prorrogação das licenças, quando forem necessárias. Quanto às licenças referentes à concessão de benefícios de seguridade e previdência social (acidente em serviço, tratamento de saúde, gestante, paternidade e adotante), classificar no código 026.4.	023.3 0233 Incluem-se documentos referentes a concessao e a prorrogacao de licencas para afastamento do cônjuge ou companheiro atividade politica capacitacao profissional participacao em programa de pos-graduacao lato sensu para desempenho de mandato classista motivo de doenca em pessoa da familia incentivada sem remuneracao premio por assiduidade servico militar e tratamento de interesses particulares bem como as pericias medicas realizadas para concessao e prorrogacao das licencas quando forem necessarias. Quanto as licencas referentes a concessao de beneficios de seguridade e previdencia social (acidente em servico tratamento de saude gestante paternidade e adotante) classificar no codigo 026.4.	S	52	5	E	N
+157	1	023.93	FORNECIMENTO DE TRANSPORTE	Incluem-se documentos referentes à comprovação do fornecimento de serviço de transporte, oferecido pelo órgão e entidade, para que o servidor se desloque de sua residência para o local de trabalho e vice-versa. Quanto ao reembolso de despesas para locomoção, classificar no código 023.72. Quanto à prestação de serviço de transporte remunerado de passageiro(s) por demanda, classificar no código 018.1.	023.93 02393 Incluem-se documentos referentes a comprovacao do fornecimento de servico de transporte oferecido pelo orgao e entidade para que o servidor se desloque de sua residencia para o local de trabalho e vice-versa. Quanto ao reembolso de despesas para locomocao classificar no codigo 023.72. Quanto a prestacao de servico de transporte remunerado de passageiro(s) por demanda classificar no codigo 018.1.	S	5	\N	E	N
 147	1	023.4	AFASTAMENTOS	Incluem-se documentos referentes à suspensão de contrato de trabalho e concessão de afastamento para depor, exercer mandato eletivo, servir a Justiça Eleitoral, servir como jurado, participar em programas de pós-graduação stricto sensu, de pós-doutorado e em estudos, no país e no exterior. Quanto ao afastamento para o cumprimento de missões e viagens a serviço, no país e no exterior, e para servir em organismo internacional de que o Brasil participe ou com o qual coo-pere, classificar nas subdivisões do código 028. Quanto à participação em programa de pós-graduação lato sensu, classificar no código 023.3, no âmbito da capacitação profissional.	023.4 0234 Incluem-se documentos referentes a suspensao de contrato de trabalho e concessao de afastamento para depor exercer mandato eletivo servir a Justica Eleitoral servir como jurado participar em programas de pos-graduacao stricto sensu de pos-doutorado e em estudos no pais e no exterior. Quanto ao afastamento para o cumprimento de missoes e viagens a servico no pais e no exterior e para servir em organismo internacional de que o Brasil participe ou com o qual coo-pere classificar nas subdivisoes do codigo 028. Quanto a participacao em programa de pos-graduacao lato sensu classificar no codigo 023.3 no ambito da capacitacao profissional.	S	52	5	E	N
 148	1	023.5	CONCESSÕES	Incluem-se documentos referentes à comprovação de ausência no serviço em razão de alistamento eleitoral, casamento (gala), doação de sangue e falecimento de familiares (nojo), bem como aqueles referentes à concessão de horário especial para servidor estudante, servidor portador de deficiência e servidor que possua dependente portador de deficiência, com ou sem compensação de horas. Quanto à concessão de benefícios de seguridade e previdência social, classificar nas subdivisões do código 026.	023.5 0235 Incluem-se documentos referentes a comprovacao de ausencia no servico em razao de alistamento eleitoral casamento (gala) doacao de sangue e falecimento de familiares (nojo) bem como aqueles referentes a concessao de horario especial para servidor estudante servidor portador de deficiencia e servidor que possua dependente portador de deficiencia com ou sem compensacao de horas. Quanto a concessao de beneficios de seguridade e previdencia social classificar nas subdivisoes do codigo 026.	S	52	5	E	N
 149	1	023.6	AUXÍLIOS	Incluem-se documentos referentes à solicitação, comprovação do direito, pagamento e interrupção do pagamento dos auxílios alimentação ou refeição, assistência pré-escolar ou creche, moradia e vale-transporte, bem como o auxílio-moradia para liquidante. Quanto aos auxílios referentes à concessão de benefícios de seguridade e previdência social (acidente, doença, funeral e natalidade), classificar no código 026.3. Quanto ao auxílio-reclusão, classificar no código 026.91.	023.6 0236 Incluem-se documentos referentes a solicitacao comprovacao do direito pagamento e interrupcao do pagamento dos auxilios alimentacao ou refeicao assistencia pre-escolar ou creche moradia e vale-transporte bem como o auxilio-moradia para liquidante. Quanto aos auxilios referentes a concessao de beneficios de seguridade e previdencia social (acidente doenca funeral e natalidade) classificar no codigo 026.3. Quanto ao auxilio-reclusao classificar no codigo 026.91.	S	5	\N	E	N
@@ -5139,8 +5138,11 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 152	1	023.72	LOCOMOÇÃO	Incluem-se documentos referentes ao reembolso de despesas efetuadas com a utilização de meio de locomoção, próprio ou não, para a execução de serviços externos. Quanto ao fornecimento de transporte, classificar no código 023.93. Quanto à prestação de serviço de transporte remunerado de passageiro(s) por demanda, classificar no código 018.1.	023.72 02372 Incluem-se documentos referentes ao reembolso de despesas efetuadas com a utilizacao de meio de locomocao proprio ou nao para a execucao de servicos externos. Quanto ao fornecimento de transporte classificar no codigo 023.93. Quanto a prestacao de servico de transporte remunerado de passageiro(s) por demanda classificar no codigo 018.1.	S	5	\N	E	N
 153	1	023.73	RESSARCIMENTO DE PLANO DE SAÚDE	Incluem-se documentos relativos à participação do órgão e entidade no custeio da assistência suplementar à saúde do servidor e demais beneficiários.	023.73 02373 Incluem-se documentos relativos a participacao do orgao e entidade no custeio da assistencia suplementar a saude do servidor e demais beneficiarios.	S	5	\N	E	N
 154	1	023.9	OUTRAS AÇÕES REFERENTES À CONCESSÃO DE DIREITOS E VANTAGENS	Nas subdivisões deste descritor classificam-se documentos referentes a outras ações de concessão de direitos e vantagens não contempladas nos descritores anteriores. 	023.9 0239 Nas subdivisoes deste descritor classificam-se documentos referentes a outras acoes de concessao de direitos e vantagens nao contempladas nos descritores anteriores. 	S	\N	\N	\N	S
-157	1	023.93	FORNECIMENTO DE TRANSPORTE	Incluem-se documentos referentes à comprovação do fornecimento de serviço de transporte, oferecido pelo órgão e entidade, para que o servidor se desloque de sua residência para o local de trabalho e vice-versa. Quanto ao reembolso de despesas para locomoção, classificar no código 023.72. Quanto à prestação de serviço de transporte remunerado de passageiro(s) por demanda, classificar no código 018.1.	023.93 02393 Incluem-se documentos referentes a comprovacao do fornecimento de servico de transporte oferecido pelo orgao e entidade para que o servidor se desloque de sua residencia para o local de trabalho e vice-versa. Quanto ao reembolso de despesas para locomocao classificar no codigo 023.72. Quanto a prestacao de servico de transporte remunerado de passageiro(s) por demanda classificar no codigo 018.1.	S	5	\N	E	N
+155	1	023.91	CONTRATAÇÃO DE SEGURO	Incluem-se documentos referentes à contratação de seguro de vida em grupo e seguro de acidentes pessoais. Quanto à contratação de seguro patrimonial, classificar no código 018.1.	023.91 02391 Incluem-se documentos referentes a contratacao de seguro de vida em grupo e seguro de acidentes pessoais. Quanto a contratacao de seguro patrimonial classificar no codigo 018.1.	S	5	\N	E	N
+156	1	023.92	OCUPAÇÃO DE IMÓVEL FUNCIONAL	Incluem-se documentos referentes à ocupação de imóvel funcional, tais como: solicitação, termo de ocupação e de responsabilidade.	023.92 02392 Incluem-se documentos referentes a ocupacao de imovel funcional tais como: solicitacao termo de ocupacao e de responsabilidade.	S	5	\N	E	N
 158	1	024	CAPACITAÇÃO DO SERVIDOR	Nas subdivisões deste descritor classificam-se documentos referentes à promoção, elaboração e execução de programas de capacitação, desenvolvimento e valorização do servidor. Quanto ao pagamento de cursos para servidores, classificar no código 052.221.	024 024 Nas subdivisoes deste descritor classificam-se documentos referentes a promocao elaboracao e execucao de programas de capacitacao desenvolvimento e valorizacao do servidor. Quanto ao pagamento de cursos para servidores classificar no codigo 052.221.	S	\N	\N	\N	S
+539	1	082.5	CURSOS COMPLEMENTARES	\N	082.5 0825 cursos complementares	N	\N	\N	\N	S
+540	1	082.51	ADESTRAMENTO	\N	082.51 08251 adestramento	N	\N	5	E	N
 159	1	024.01	PLANEJAMENTO DA CAPACITAÇÃO	Incluem-se documentos referentes ao mapeamento das competências institucionais e individuais, diagnóstico das competências profissionais e o plano anual de capacitação proporcionado pelo órgão e entidade ao servidor.	024.01 02401 Incluem-se documentos referentes ao mapeamento das competencias institucionais e individuais, diagnostico das competencias profissionais e o plano anual de capacitacao proporcionado pelo orgao e entidade ao servidor.	S	5	5	G	N
 160	1	024.1	PROMOÇÃO DE CURSOS PELO ÓRGÃO E ENTIDADE	Nas subdivisões deste descritor classificam-se documentos referentes à promoção, pelo órgão e entidade, de cursos de capacitação destinados ao servidor. Quanto aos documentos comprobatórios de participação do servidor, que deverão integrar o assentamento funcional, classificar nas subdivisões do código 020.1.	024.1 0241 Nas subdivisoes deste descritor classificam-se documentos referentes a promocao pelo orgao e entidade de cursos de capacitacao destinados ao servidor. Quanto aos documentos comprobatorios de participacao do servidor que deverao integrar o assentamento funcional classificar nas subdivisoes do codigo 020.1.	S	\N	\N	\N	S
 161	1	024.11	PROGRAMAÇÃO	Incluem-se documentos referentes à divulgação do curso e à definição do conteúdo programático, bem como exemplares únicos de exercícios e apostilas.	024.11 02411 Incluem-se documentos referentes a divulgacao do curso e a definicao do conteudo programatico bem como exemplares unicos de exercicios e apostilas.	S	5	5	G	N
@@ -5152,11 +5154,11 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 167	1	024.32	INSCRIÇÃO E FREQUÊNCIA	Incluem-se documentos referentes aos procedimentos para inscrição, controle de entrega de material e lista de frequência dos participantes, bem como aqueles referentes à concessão de bolsas de estágio.	024.32 02432 Incluem-se documentos referentes aos procedimentos para inscricao controle de entrega de material e lista de frequencia dos participantes bem como aqueles referentes a concessao de bolsas de estagio.	S	\N	5	E	N
 168	1	024.33	AVALIAÇÃO E RESULTADOS	Incluem-se documentos referentes aos resultados alcançados, avaliação do estágio pelos participantes, controle de expedição e entrega de declaração de participação e relatórios.	024.33 02433 Incluem-se documentos referentes aos resultados alcancados, avaliacao do estagio pelos participantes, controle de expedicao e entrega de declaracao de participacao e relatorios.	S	5	5	G	N
 169	1	024.4	PARTICIPAÇÃO EM ESTÁGIOS PROMOVIDOS POR OUTROS ÓRGÃOS E ENTIDADES	Incluem-se documentos referentes à divulgação do estágio, programa, termo de compromisso e relatório de participação do servidor no estágio. Quanto aos documentos comprobatórios de participação do servidor, que deverão integrar o assentamento funcional, classificar nas subdivisões do código 020.1.	024.4 0244 Incluem-se documentos referentes a divulgacao do estagio programa termo de compromisso e relatorio de participacao do servidor no estagio. Quanto aos documentos comprobatorios de participacao do servidor que deverao integrar o assentamento funcional classificar nas subdivisoes do codigo 020.1.	S	\N	5	E	N
-248	1	031.5	LOCAÇÃO. ARRENDAMENTO MERCANTIL (LEASING)	Incluem-se documentos referentes à aquisição temporária de material permanente por locação e arrendamento mercantil (leasing).	031.5 0315 Incluem-se documentos referentes a aquisicao temporaria de material permanente por locacao e arrendamento mercantil (leasing).	S	5	\N	E	N
 170	1	024.5	CONCESSÃO DE ESTÁGIOS E BOLSAS PARA ESTUDANTES	Nas subdivisões deste descritor classificam-se documentos referentes à oferta de estágios, remunerados ou não, e à concessão de bolsas para estudantes (residentes médicos, multiprofissionais e estagiários), por parte do órgão e entidade.	024.5 0245 Nas subdivisoes deste descritor classificam-se documentos referentes a oferta de estagios remunerados ou nao e a concessao de bolsas para estudantes (residentes medicos multiprofissionais e estagiarios) por parte do orgao e entidade.	S	\N	\N	\N	S
 171	1	024.51	RELAÇÃO COM INSTITUIÇÕES DE ENSINO E AGENTES DE INTEGRAÇÃO	Incluem-se documentos referentes à celebração de convênios com instituições de ensino superior e outras que visem à oferta de estágios, à integração da empresa-escola e à concessão de bolsas para estudantes.	024.51 02451 Incluem-se documentos referentes a celebracao de convenios com instituicoes de ensino superior e outras que visem a oferta de estagios a integracao da empresa-escola e a concessao de bolsas para estudantes.	S	2	\N	E	N
 172	1	024.52	PLANO DE ESTÁGIO	Incluem-se documentos referentes ao estabelecimento das atividades a serem realizadas pelos estudantes.	024.52 02452 Incluem-se documentos referentes ao estabelecimento das atividades a serem realizadas pelos estudantes.	S	2	\N	E	N
 173	1	025	PROMOÇÃO DA SAÚDE E BEM-ESTAR	Nas subdivisões deste descritor classificam-se documentos referentes às atividades de promoção da saúde e bem-estar do servidor.	025 025 Nas subdivisoes deste descritor classificam-se documentos referentes as atividades de promocao da saude e bem-estar do servidor.	S	\N	\N	\N	S
+554	1	082.9	OUTROS ASSUNTOS REFERENTES A PLANO DE CARREIRA	\N	082.9 0829 outros assuntos referentes a plano de carreira	N	\N	\N	\N	S
 174	1	025.1	ASSISTÊNCIA À SAÚDE	Nas subdivisões deste descritor classificam-se documentos referentes à celebraçãode convênios e ao desenvolvimento de ações voltadas para a saúde doservidor, bem como oregistro nosprontuáriosde pacientes sobre a assistência prestada.	025.1 0251 Nas subdivisoes deste descritor classificam-se documentos referentes a celebracaode convenios e ao desenvolvimento de acoes voltadas para a saude doservidor bem como oregistro nosprontuariosde pacientes sobre a assistencia prestada.	S	\N	\N	\N	S
 175	1	025.11	CELEBRAÇÃO DE CONVÊNIOS DE ASSISTÊNCIA À SAÚDE	Incluem-se documentos referentes à celebração de convênios firmados para a prestação de assistência à saúde destinados ao servidor e seus dependentes.	025.11 02511 Incluem-se documentos referentes a celebracao de convenios firmados para a prestacao de assistencia a saude destinados ao servidor e seus dependentes.	S	5	\N	E	N
 176	1	025.12	ORIENTAÇÃO PARA CUIDADOS COM A SAÚDE	Incluem-se documentos referentes às ações de orientação, acompanhamento e execução de iniciativas que visem o bem-estar do servidor.	025.12 02512 Incluem-se documentos referentes as acoes de orientacao acompanhamento e execucao de iniciativas que visem o bem-estar do servidor.	S	\N	2	E	N
@@ -5169,6 +5171,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 183	1	025.31	CONSTITUIÇÃO DA COMISSÃO INTERNA DE PREVENÇÃO DE ACIDENTES (CIPA)	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos para a constituição e atuação da comissão.	025.31 02531 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos para a constituicao e atuacao da comissao.	S	\N	\N	\N	S
 184	1	025.311	COMPOSIÇÃO E ATUAÇÃO	Incluem-se documentos referentes à constituição da Cipa, editais de convocação e divulgação das eleições, constituição da comissão eleitoral, folha de votação e atas da eleição (nos casos de realização de processo eleitoral) ou indicação e designação dos membros e instalação e posse da comissão (em outras situações que não envolvam processo eleitoral), bem como aqueles referentes aos estudos e às inspeções relativas à qualidade e segurança do ambiente de trabalho, mapas de riscos, laudos e pareceres técnicos, atas, relatórios e campanhas de divulgação.	025.311 025311 Incluem-se documentos referentes a constituicao da Cipa editais de convocacao e divulgacao das eleicoes constituicao da comissao eleitoral folha de votacao e atas da eleicao (nos casos de realizacao de processo eleitoral) ou indicacao e designacao dos membros e instalacao e posse da comissao (em outras situacoes que nao envolvam processo eleitoral) bem como aqueles referentes aos estudos e as inspecoes relativas a qualidade e seguranca do ambiente de trabalho mapas de riscos laudos e pareceres tecnicos atas relatorios e campanhas de divulgacao.	S	5	5	G	N
 185	1	025.312	OPERACIONALIZAÇÃO DE REUNIÕES	Incluem-se documentos referentes à organização das reuniões da Cipa, bem como aqueles referentes ao agendamento, convocação, pauta e lista de participantes.	025.312 025312 Incluem-se documentos referentes a organizacao das reunioes da Cipa bem como aqueles referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
+541	1	082.51.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS DIVERSOS TIPOS DE ADESTRAMENTO	\N	082.51.a 08251a designacao matricula conclusao cancelamento trancamento e ou desligamento dos diversos tipos de adestramento	N	47	5	E	N
 186	1	025.32	REGISTRO DE OCORRÊNCIAS DE ACIDENTES DE TRABALHO	Incluem-se os comunicados e os registros das ocorrências e as sindicâncias instaladas para averiguação dos acidentes de trabalho.	025.32 02532 Incluem-se os comunicados e os registros das ocorrencias e as sindicancias instaladas para averiguacao dos acidentes de trabalho.	S	52	5	E	N
 187	1	026	CONCESSÃO DE BENEFÍCIOS DE SEGURIDADE E PREVIDÊNCIA SOCIAL	Nas subdivisões deste descritor classificam-se documentos referentes à concessão de benefícios previdenciários e assistenciais ao servidor. Quanto às concessões referentes aos direitos e vantagens (ausência no serviço em razão de alistamento eleitoral, casamento, doação de sangue, falecimento de familiares, horário especial para servidor estudante, servidor portador de deficiência e servidor que possua dependente portador de deficiência), classificar no código 023.5.	026 026 Nas subdivisoes deste descritor classificam-se documentos referentes a concessao de beneficios previdenciarios e assistenciais ao servidor. Quanto as concessoes referentes aos direitos e vantagens (ausencia no servico em razao de alistamento eleitoral casamento doacao de sangue falecimento de familiares horario especial para servidor estudante servidor portador de deficiencia e servidor que possua dependente portador de deficiencia) classificar no codigo 023.5.	S	\N	\N	\N	S
 188	1	026.01	ADESÃO À PREVIDÊNCIA COMPLEMENTAR	Incluem-se documentos referentes à contribuição aos planos privados de pecúlios, rendas e benefícios complementares ou assemelhados aos da previdência social.	026.01 02601 Incluem-se documentos referentes a contribuicao aos planos privados de peculios rendas e beneficios complementares ou assemelhados aos da previdencia social.	S	52	5	E	N
@@ -5178,7 +5181,6 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 192	1	026.3	AUXÍLIOS	Incluem-se documentos referentes à solicitação, comprovação do direito, pagamento e interrupção do pagamento dos auxílios acidente, doença, funeral e natalidade. Quanto aos auxílios referentes à concessão de direitos e vantagens (alimentação ou refeição, assistência pré-escolar ou creche, moradia, vale-transporte e moradia de liquidante), classificar no código 023.6. Quanto ao auxílio-reclusão, classificar no código 026.91.	026.3 0263 Incluem-se documentos referentes a solicitacao comprovacao do direito pagamento e interrupcao do pagamento dos auxilios acidente doenca funeral e natalidade. Quanto aos auxilios referentes a concessao de direitos e vantagens (alimentacao ou refeicao assistencia pre-escolar ou creche moradia vale-transporte e moradia de liquidante) classificar no codigo 023.6. Quanto ao auxilio-reclusao classificar no codigo 026.91.	S	5	\N	E	N
 193	1	026.4	LICENÇAS	Incluem-se documentos referentes à concessão de licenças para acidente em serviço, tratamento de saúde, gestante, paternidade e adotante, bem como as perícias médicas realizadas para concessão e prorrogação das licenças, quando forem necessárias. Quanto às licenças referentes à concessão de direitos e vantagens (afastamento do cônjuge ou companheiro, atividade política, capacitação profissional, desempenho de mandato classista, motivo de doença em pessoa da família, incentivada sem remuneração, prêmio por assiduidade, serviço militar e tratamento de interesses particulares), classificar no código 023.3.	026.4 0264 Incluem-se documentos referentes a concessao de licencas para acidente em servico tratamento de saude gestante paternidade e adotante bem como as pericias medicas realizadas para concessao e prorrogacao das licencas quando forem necessarias. Quanto as licencas referentes a concessao de direitos e vantagens (afastamento do cônjuge ou companheiro atividade politica capacitacao profissional desempenho de mandato classista motivo de doenca em pessoa da familia incentivada sem remuneracao premio por assiduidade servico militar e tratamento de interesses particulares) classificar no codigo 023.3.	S	52	5	E	N
 194	1	026.5	APOSENTADORIA	Nas subdivisões deste descritor classificam-se documentos referentes à solicitação e concessão de aposentadoria por invalidez permanente, por idade, por tempo de contribuição previdenciária e aposentadoria especial.	026.5 0265 Nas subdivisoes deste descritor classificam-se documentos referentes a solicitacao e concessao de aposentadoria por invalidez permanente por idade por tempo de contribuicao previdenciaria e aposentadoria especial.	S	\N	\N	\N	S
-298	1	041.5	CESSÃO E COMODATO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição temporária de bens imóveis, de veículos e de bens semoventes.	041.5 0415 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao temporaria de bens imoveis de veiculos e de bens semoventes.	S	\N	\N	\N	S
 195	1	026.51	INVALIDEZ PERMANENTE	Incluem-se documentos referentes à solicitação e concessão de aposentadoria por invalidez permanente em decorrência de acidente em serviço, moléstia profissional e doença grave, contagiosa ou incurável, especificadas em legislação.	026.51 02651 Incluem-se documentos referentes a solicitacao e concessao de aposentadoria por invalidez permanente em decorrencia de acidente em servico molestia profissional e doenca grave contagiosa ou incuravel especificadas em legislacao.	S	95	5	E	N
 196	1	026.52	COMPULSÓRIA	Incluem-se documentos referentes à concessão de aposentadoria compulsória, de acordo com a legislação em vigor, com proventos proporcionais ao tempo de contribuição previdenciária.	026.52 02652 Incluem-se documentos referentes a concessao de aposentadoria compulsoria de acordo com a legislacao em vigor com proventos proporcionais ao tempo de contribuicao previdenciaria.	S	95	5	E	N
 197	1	026.53	VOLUNTÁRIA	Incluem-se documentos referentes à solicitação e concessão de aposentadoria voluntária, atendendo aos requisitos de tempo de contribuição previdenciária e de idade mínima.	026.53 02653 Incluem-se documentos referentes a solicitacao e concessao de aposentadoria voluntaria atendendo aos requisitos de tempo de contribuicao previdenciaria e de idade minima.	S	95	5	E	N
@@ -5193,6 +5195,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 206	1	027.2	APLICAÇÃO DE PENALIDADES DISCIPLINARES	Incluem-se documentos referentes à imposição de penalidades em razão da conclusão da apuração de responsabilidade disciplinar, podendo se constituir em uma advertência, suspensão, demissão, cassação de aposentadoria, disponibilidade, destituição de cargo em comissão e destituição de função comissionada. Quanto ao registro das penalidades disciplinares aplicadas ao servidor, que deverão integrar o assentamento funcional, classificar nas subdivisões do código 020.1.	027.2 0272 Incluem-se documentos referentes a imposicao de penalidades em razao da conclusao da apuracao de responsabilidade disciplinar podendo se constituir em uma advertencia suspensao demissao cassacao de aposentadoria disponibilidade destituicao de cargo em comissao e destituicao de funcao comissionada. Quanto ao registro das penalidades disciplinares aplicadas ao servidor que deverao integrar o assentamento funcional classificar nas subdivisoes do codigo 020.1.	S	95	5	G	N
 207	1	027.3	AJUSTAMENTO DE CONDUTA	Incluem-se documentos referentes à celebração de termo de ajustamento de conduta (TAC) nos casos de infração disciplinar de menor potencial ofensivo e de desvios de conduta de baixa lesividade praticados pelo servidor.	027.3 0273 Incluem-se documentos referentes a celebracao de termo de ajustamento de conduta (TAC) nos casos de infracao disciplinar de menor potencial ofensivo e de desvios de conduta de baixa lesividade praticados pelo servidor.	S	52	5	E	N
 208	1	028	CUMPRIMENTO DE MISSÕES E VIAGENS A SERVIÇO	Nas subdivisões deste descritor classificam-se documentos referentes ao afastamento do servidor para o cumprimento de missões e a realização de viagens a serviço, no país e no exterior, para colaboração ou participação esporádica em assuntos que é especialista, e para servir em organismo internacional de que o Brasil participe ou com o qual coopere. Quanto ao planejamento, acompanhamento, execução, avaliação e relatório técnico, classificar no código específico relativo ao objeto da missão e da viagem a serviço. Quanto aos afastamentos referentes à concessão de direitos e vantagens (suspensão de contrato de trabalho, depor, exercer mandato legislativo, servir a Justiça Eleitoral, servir como jurado, participar em programas de pós-graduação stricto sensu e de pós-doutorado e em estudos, no país e no exterior), classificar no código 023.4.	028 028 Nas subdivisoes deste descritor classificam-se documentos referentes ao afastamento do servidor para o cumprimento de missoes e a realizacao de viagens a servico no pais e no exterior para colaboracao ou participacao esporadica em assuntos que e especialista e para servir em organismo internacional de que o Brasil participe ou com o qual coopere. Quanto ao planejamento acompanhamento execucao avaliacao e relatorio tecnico classificar no codigo especifico relativo ao objeto da missao e da viagem a servico. Quanto aos afastamentos referentes a concessao de direitos e vantagens (suspensao de contrato de trabalho depor exercer mandato legislativo servir a Justica Eleitoral servir como jurado participar em programas de pos-graduacao stricto sensu e de pos-doutorado e em estudos no pais e no exterior) classificar no codigo 023.4.	S	\N	\N	\N	S
+339	1	044.2	TOMBAMENTO	Incluem-se documentos referentes ao tombamento de veículos, pertencentes ao órgão e entidade, quando se tornam peças de exposição.	044.2 0442 Incluem-se documentos referentes ao tombamento de veiculos, pertencentes ao orgao e entidade, quando se tornam pecas de exposicao.	S	5	\N	G	N
 209	1	028.1	NO PAÍS	Nas subdivisões deste descritor classificam-se documentos referentes ao afastamento do servidor para o cumprimento de missões e a realização de viagens no país, podendo ser: com ônus (quando implicarem no direito à concessão de passagens e diárias e ao recebimento de vencimentos ou salários e demais vantagens) e com ônus limitado (quando implicarem, apenas, no direito ao recebimento de vencimentos e salários e demais vantagens).	028.1 0281 Nas subdivisoes deste descritor classificam-se documentos referentes ao afastamento do servidor para o cumprimento de missoes e a realizacao de viagens no pais podendo ser: com ônus (quando implicarem no direito a concessao de passagens e diarias e ao recebimento de vencimentos ou salarios e demais vantagens) e com ônus limitado (quando implicarem apenas no direito ao recebimento de vencimentos e salarios e demais vantagens).	S	\N	\N	\N	S
 210	1	028.11	COM ÔNUS	Incluem-se documentos referentes à solicitação e autorização de afastamento, ajudas de custo, diárias, passagens, reservas de ho-tel, pagamento de despesas de eventos, prestações de contas e relatórios de viagem, bem como lista de participantes (no caso de comitivas e delegações) e concessão de passagens e diárias para convidados. 	028.11 02811 Incluem-se documentos referentes a solicitacao e autorizacao de afastamento ajudas de custo diarias passagens reservas de ho-tel pagamento de despesas de eventos prestacoes de contas e relatorios de viagem bem como lista de participantes (no caso de comitivas e delegacoes) e concessao de passagens e diarias para convidados. 	S	5	\N	E	N
 211	1	028.12	COM ÔNUS LIMITADO	Incluem-se documentos referentes à solicitação e autorização de afastamento para participar de eventos ou cumprir missões e realizar viagens no país, bem como aqueles referentes à solicitação de afastamento para colaboração ou participação esporádica, (remunerada ou não), em assuntos que é especialista.	028.12 02812 Incluem-se documentos referentes a solicitacao e autorizacao de afastamento para participar de eventos ou cumprir missoes e realizar viagens no pais bem como aqueles referentes a solicitacao de afastamento para colaboracao ou participacao esporadica (remunerada ou nao) em assuntos que e especialista.	S	\N	7	E	N
@@ -5201,10 +5204,10 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 214	1	028.22	COM ÔNUS LIMITADO	Incluem-se documentos referentes à solicitação e autorização de afastamento do país para participar de eventos ou cumprir missões e realizar viagens ao exterior.	028.22 02822 Incluem-se documentos referentes a solicitacao e autorizacao de afastamento do pais para participar de eventos ou cumprir missoes e realizar viagens ao exterior.	S	\N	7	E	N
 215	1	028.23	SEM ÔNUS	Incluem-se documentos referentes à solicitação e autorização de afastamento do país para participar de eventos ou cumprir missões e realizar viagens ao exterior.	028.23 02823 Incluem-se documentos referentes a solicitacao e autorizacao de afastamento do pais para participar de eventos ou cumprir missoes e realizar viagens ao exterior.	S	\N	7	E	N
 216	1	029	OUTRAS AÇÕES REFERENTES À GESTÃO DE PESSOAS	Nas subdivisões deste descritor classificam-se documentos referentes a outras ações de gestão de pessoas não contempladas nos descritores anteriores.	029 029 Nas subdivisoes deste descritor classificam-se documentos referentes a outras acoes de gestao de pessoas nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
-322	1	042.53	BENS SEMOVENTES	Incluem-se documentos referentes à cessão e comodato de animais.	042.53 04253 Incluem-se documentos referentes a cessao e comodato de animais.	S	5	4	E	N
 217	1	029.1	CONTROLE DE ASSIDUIDADE E PONTUALIDADE	Nas subdivisões deste descritor classificam-se documentos referentes ao controle de frequência dos servidores, ao estabelecimento do horário de expediente do órgão e entidade e ao controle do cumprimento da jornada de trabalho regular fora das dependências do órgão ou entidade.	029.1 0291 Nas subdivisoes deste descritor classificam-se documentos referentes ao controle de frequencia dos servidores, ao estabelecimento do horario de expediente do orgao e entidade e ao controle do cumprimento da jornada de trabalho regular fora das dependencias do orgao ou entidade.	S	\N	\N	\N	S
 218	1	029.11	CONTROLE DE FREQUÊNCIA	Incluem-se livros, cartões e folhas de ponto, bem como documentos referentes ao abono de faltas, cumprimento de horário especial e de horas extras, banco de horas, corte de ponto e registro de dias parados.	029.11 02911 Incluem-se livros, cartoes e folhas de ponto, bem como documentos referentes ao abono de faltas, cumprimento de horario especial e de horas extras, banco de horas, corte de ponto e registro de dias parados.	S	52	5	E	N
 219	1	029.12	DEFINIÇÃO DO HORÁRIO DE EXPEDIENTE	Incluem-se documentos referentes à fixação e mudanças do horário de funcionamento do órgão e entidade e às escalas de plantão.	029.12 02912 Incluem-se documentos referentes a fixacao e mudancas do horario de funcionamento do orgao e entidade e as escalas de plantao.	S	\N	2	E	N
+233	1	030.03	ESPECIFICAÇÃO, PADRONIZAÇÃO, CODIFICAÇÃO, PREVISÃO, IDENTIFICAÇÃO E CLASSIFICAÇÃO	Incluem-se documentos referentes à especificação, padronização, codificação, previsão, identificação e classificação de material permanente, de consumo e de matéria-prima e insumo, bem como catálogo e amostras de materiais.	030.03 03003 Incluem-se documentos referentes a especificacao padronizacao codificacao previsao identificacao e classificacao de material permanente de consumo e de materia-prima e insumo bem como catalogo e amostras de materiais.	S	\N	2	E	N
 220	1	029.13	REGISTRO DAS ATIVIDADES DE TELETRABALHO	Incluem-se documentosreferentes a definiçãoou aprestação de contasdasatividades realizadasremotamente,em substituição ao controle defrequência,tais como: plano de trabalho,tabela de atividades,relatórioou outra forma de prestação de contasdas atividades e/ou entregasrealizadas.	029.13 02913 Incluem-se documentosreferentes a definicaoou aprestacao de contasdasatividades realizadasremotamente,em substituicao ao controle defrequencia,tais como: plano de trabalho,tabela de atividades,relatorioou outra forma de prestacao de contasdas atividades e/ou entregasrealizadas.	S	52	5	E	N
 221	1	029.2	INSTITUIÇÃO DO PROGRAMA DE CRECHE	Nas subdivisões deste descritor classificam-se documentos referentes à implantação do programa de creche em decorrência da implementação de plano de assistência pré-escolar no órgão e entidade.	029.2 0292 Nas subdivisoes deste descritor classificam-se documentos referentes a implantacao do programa de creche em decorrencia da implementacao de plano de assistencia pre-escolar no orgao e entidade.	S	\N	\N	\N	S
 222	1	029.21	PUBLICAÇÃO E DIVULGAÇÃO	Incluem-se documentos referentes ao lançamento do programa de creche, à publicação de editais e à divulgação das vagas e dos critérios de seleção.	029.21 02921 Incluem-se documentos referentes ao lancamento do programa de creche a publicacao de editais e a divulgacao das vagas e dos criterios de selecao.	S	5	5	G	N
@@ -5215,13 +5218,10 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 227	1	029.4	DELEGAÇÃO DE COMPETÊNCIA E PROCURAÇÃO	Incluem-se documentos referentes à autorização ou à delegação que a autoridade administrativa responsável pelo órgão e entidade pode conferir a um servidor para tratar de matéria de competência exclusiva, tais como: ordenação de despesas, decisões de recursos e casos de edição de atos de caráter normativo.	029.4 0294 Incluem-se documentos referentes a autorizacao ou a delegacao que a autoridade administrativa responsavel pelo orgao e entidade pode conferir a um servidor para tratar de materia de competencia exclusiva tais como: ordenacao de despesas decisoes de recursos e casos de edicao de atos de carater normativo.	S	5	\N	E	N
 228	1	029.5	CONTRATAÇÃO DE SERVIÇOS PROFISSIONAIS TRANSITÓRIOS	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa física para prestação de serviços devem ser classificados no código 018.2.	029.5 0295 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa fisica para prestacao de servicos devem ser classificados no codigo 018.2.	S	\N	\N	\N	S
 229	1	029.6	PETIÇÃO DE DIREITOS	Incluem-se requerimentos feitos pelo servidor em defesa de seus direitos ou interesses legítimos e pedidos de interposição de reconsideração ou de recurso.	029.6 0296 Incluem-se requerimentos feitos pelo servidor em defesa de seus direitos ou interesses legitimos e pedidos de interposicao de reconsideracao ou de recurso.	S	5	\N	G	N
-246	1	031.41	MATERIAL PERMANENTE	Incluem-se documentos referentes à cessão, comodato e empréstimo de material permanente. Quanto ao empréstimo e devolução de material permanente disponibilizado aos servidores, classificar no código 039.2.	031.41 03141 Incluem-se documentos referentes a cessao comodato e emprestimo de material permanente. Quanto ao emprestimo e devolucao de material permanente disponibilizado aos servidores classificar no codigo 039.2.	S	5	\N	E	N
-247	1	031.42	MATERIAL DE CONSUMO	Incluem-se documentos referentes à cessão, comodato e empréstimo de material de consumo.	031.42 03142 Incluem-se documentos referentes a cessao comodato e emprestimo de material de consumo.	S	5	\N	E	N
-406	1	053.1	PAGAMENTO EM MOEDA ESTRANGEIRA	Incluem-se documentos referentes aos pagamentos em moedas diferentes da moeda nacional.	053.1 0531 Incluem-se documentos referentes aos pagamentos em moedas diferentes da moeda nacional.	S	5	\N	E	N
 230	1	030	GESTÃO DE MATERIAIS	Esta subclasse contempla documentos referentes à aquisição, movimentação, alienação, baixa e inventário de material permanente (mobiliário, equipamentos, utensílios, aparelhos, ferramentas, máquinas, instrumentos técnicos e obras de arte) e de consumo (material destinado às atividades de expediente, limpeza, manutenção, alimentação e abastecimento de veículos, medicamentos, uniformes, peças de reposição, matérias-primas e cobaias para uso científico), bem como aqueles referentes ao cadastramento e qualificação de fornecedores para a prestação produtos e serviços, e à execução de serviços de instalação e manutenção.	030 030 Esta subclasse contempla documentos referentes a aquisicao movimentacao alienacao baixa e inventario de material permanente (mobiliario equipamentos utensilios aparelhos ferramentas maquinas instrumentos tecnicos e obras de arte) e de consumo (material destinado as atividades de expediente limpeza manutencao alimentacao e abastecimento de veiculos medicamentos uniformes pecas de reposicao materias-primas e cobaias para uso cientifico) bem como aqueles referentes ao cadastramento e qualificacao de fornecedores para a prestacao produtos e servicos e a execucao de servicos de instalacao e manutencao.	S	\N	\N	\N	S
 231	1	030.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais e às decisões de caráter geral sobre a gestão de material permanente e de consumo.	030.01 03001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais e as decisoes de carater geral sobre a gestao de material permanente e de consumo.	S	5	\N	G	N
 232	1	030.02	CADASTRAMENTO DE FORNECEDORES E DE PRESTADORES DE SERVIÇOS	Incluem-se documentos referentes ao registro cadastral de fornecedores em sistema específico da administração pública, visando verificar a capacidade técnica para aquisições e contratações de serviços relacionadas à gestão de material.	030.02 03002 Incluem-se documentos referentes ao registro cadastral de fornecedores em sistema especifico da administracao publica visando verificar a capacidade tecnica para aquisicoes e contratacoes de servicos relacionadas a gestao de material.	S	\N	5	E	N
-233	1	030.03	ESPECIFICAÇÃO, PADRONIZAÇÃO, CODIFICAÇÃO, PREVISÃO, IDENTIFICAÇÃO E CLASSIFICAÇÃO	Incluem-se documentos referentes à especificação, padronização, codificação, previsão, identificação e classificação de material permanente, de consumo e de matéria-prima e insumo, bem como catálogo e amostras de materiais.	030.03 03003 Incluem-se documentos referentes a especificacao padronizacao codificacao previsao identificacao e classificacao de material permanente de consumo e de materia-prima e insumo bem como catalogo e amostras de materiais.	S	\N	2	E	N
+542	1	082.52	PÓS-GRADUAÇÃO LATO SENSU	\N	082.52 08252 pos-graduacao lato sensu	N	\N	5	E	N
 234	1	030.04	QUALIFICAÇÃO DE FORNECEDORES	Incluem-se documentos referentes à seleção, pré-qualificação, qualificação, homologação, acompanhamento e auditoria de provedores externos, com base na capacidade de prover procedimentos, produtos e serviços, de acordo com requisitos técnicos e de qualidade.	030.04 03004 Incluem-se documentos referentes a selecao pre-qualificacao qualificacao homologacao acompanhamento e auditoria de provedores externos com base na capacidade de prover procedimentos produtos e servicos de acordo com requisitos tecnicos e de qualidade.	S	\N	5	E	N
 235	1	031	AQUISIÇÃO E INCORPORAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição e incorporação de material permanente, de consumo e de matéria-prima e insumo.	031 031 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao e incorporacao de material permanente de consumo e de materia-prima e insumo.	S	\N	\N	\N	S
 236	1	031.1	COMPRA	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição definitiva de material permanente e de consumo. Nota: A compra poderá ocorrer nas modalidades de licitação, dispensa de licitação e inexigibilidade de licitação.	031.1 0311 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao definitiva de material permanente e de consumo. Nota: A compra podera ocorrer nas modalidades de licitacao dispensa de licitacao e inexigibilidade de licitacao.	S	\N	\N	\N	S
@@ -5233,7 +5233,10 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 242	1	031.3	DAÇÃO. ADJUDICAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição definitiva de material permanente e de consumo.	031.3 0313 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao definitiva de material permanente e de consumo.	S	\N	\N	\N	S
 243	1	031.31	MATERIAL PERMANENTE	Incluem-se documentos referentes à dação e adjudicação de material permanente, para recebimento de parte ou totalidade de dívida.	031.31 03131 Incluem-se documentos referentes a dacao e adjudicacao de material permanente para recebimento de parte ou totalidade de divida.	S	5	\N	E	N
 244	1	031.32	MATERIAL DE CONSUMO	Incluem-se documentos referentes à dação e adjudicação de material de consumo, para recebimento de parte ou totalidade de dívida.	031.32 03132 Incluem-se documentos referentes a dacao e adjudicacao de material de consumo para recebimento de parte ou totalidade de divida.	S	5	\N	E	N
-538	1	082.4.a	MANOBRA, TEMPO DE TROPA, TEMPO DE EMBARQUE, VIVÊNCIA NACIONAL, DIAS DE MAR, ATIVIDADE BÉLICA, HORAS DE VOO	\N	082.4.a 0824a manobra tempo de tropa tempo de embarque vivencia nacional dias de mar atividade belica horas de voo	N	47	5	E	N
+245	1	031.4	CESSÃO, COMODATO E EMPRÉSTIMO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição temporária de material permanente e de consumo.	031.4 0314 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao temporaria de material permanente e de consumo.	S	\N	\N	\N	S
+246	1	031.41	MATERIAL PERMANENTE	Incluem-se documentos referentes à cessão, comodato e empréstimo de material permanente. Quanto ao empréstimo e devolução de material permanente disponibilizado aos servidores, classificar no código 039.2.	031.41 03141 Incluem-se documentos referentes a cessao comodato e emprestimo de material permanente. Quanto ao emprestimo e devolucao de material permanente disponibilizado aos servidores classificar no codigo 039.2.	S	5	\N	E	N
+247	1	031.42	MATERIAL DE CONSUMO	Incluem-se documentos referentes à cessão, comodato e empréstimo de material de consumo.	031.42 03142 Incluem-se documentos referentes a cessao comodato e emprestimo de material de consumo.	S	5	\N	E	N
+248	1	031.5	LOCAÇÃO. ARRENDAMENTO MERCANTIL (LEASING)	Incluem-se documentos referentes à aquisição temporária de material permanente por locação e arrendamento mercantil (leasing).	031.5 0315 Incluem-se documentos referentes a aquisicao temporaria de material permanente por locacao e arrendamento mercantil (leasing).	S	5	\N	E	N
 249	1	032	MOVIMENTAÇÃO DE MATERIAL	Nas subdivisões deste descritor classificam-se documentos referentes à movimentação de material permanente e de consumo, que envolve as atividades de controle, segurança e proteção do armazenamento, do deslocamento, da distribuição, da previsão de consumo e da reposição de estoque.	032 032 Nas subdivisoes deste descritor classificam-se documentos referentes a movimentacao de material permanente e de consumo que envolve as atividades de controle seguranca e protecao do armazenamento do deslocamento da distribuicao da previsao de consumo e da reposicao de estoque.	S	\N	\N	\N	S
 250	1	032.01	TERMOS DE RESPONSABILIDADE. CAUTELA	Incluem-se documentos referentes à responsabilidade na movimentação de material e com o acautelamento no controle logístico, bem como as guias de transferência e os relatórios de movimentação de material.	032.01 03201 Incluem-se documentos referentes a responsabilidade na movimentacao de material e com o acautelamento no controle logistico bem como as guias de transferencia e os relatorios de movimentacao de material.	S	5	\N	E	N
 251	1	032.1	CONTROLE DE ESTOQUE	Incluem-se documentos referentes à requisição e distribuição de material e à reposição e controle de estoque, bem como os relatórios de movimentação de almoxarifado. Quanto ao acompanhamento e controle de bens materiais, classificar nas subdivisões do código 036.	032.1 0321 Incluem-se documentos referentes a requisicao e distribuicao de material e a reposicao e controle de estoque bem como os relatorios de movimentacao de almoxarifado. Quanto ao acompanhamento e controle de bens materiais classificar nas subdivisoes do codigo 036.	S	\N	2	E	N
@@ -5250,15 +5253,13 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 262	1	033.3	DAÇÃO. ADJUDICAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à alienação definitiva de material permanente e de consumo.	033.3 0333 Nas subdivisoes deste descritor classificam-se documentos referentes a alienacao definitiva de material permanente e de consumo.	S	\N	\N	\N	S
 263	1	033.31	MATERIAL PERMANENTE	Incluem-se documentos referentes à dação e adjudicação de material permanente, para pagamento de parte ou totalidade de dívida.	033.31 03331 Incluem-se documentos referentes a dacao e adjudicacao de material permanente para pagamento de parte ou totalidade de divida.	S	5	\N	E	N
 264	1	033.32	MATERIAL DE CONSUMO	Incluem-se documentos referentes à dação e adjudicação de material de consumo, para pagamento de parte ou totalidade de dívida.	033.32 03332 Incluem-se documentos referentes a dacao e adjudicacao de material de consumo para pagamento de parte ou totalidade de divida.	S	5	\N	E	N
-280	1	039.11	CRIAÇÃO E ATUAÇÃO DE GRUPOS DE TRABALHO	Incluem-se documentos referentes à criação de grupos de trabalho e comissões de racionalização do uso de material, aos registros das deliberações e às tomadas de decisão definidas nas reuniões, tais como: ato de instituição, regras para atuação, designação e substituição de membros, resoluções, atas e relatórios.	039.11 03911 Incluem-se documentos referentes a criacao de grupos de trabalho e comissoes de racionalizacao do uso de material aos registros das deliberacoes e as tomadas de decisao definidas nas reunioes tais como: ato de instituicao regras para atuacao designacao e substituicao de membros resolucoes atas e relatorios.	S	5	4	G	N
-539	1	082.5	CURSOS COMPLEMENTARES	\N	082.5 0825 cursos complementares	N	\N	\N	\N	S
-540	1	082.51	ADESTRAMENTO	\N	082.51 08251 adestramento	N	\N	5	E	N
 265	1	033.4	DESFAZIMENTO	Nas subdivisões deste descritor classificam-se documentos referentes à alienação definitiva de material permanente e de consumo em razão de serem considerados inservíveis e irrecuperáveis, ocorrendo por meio de inutilização, eliminação ou destruição. Quanto ao monitoramento e avaliação dos procedimentos de controle e preservação ambiental externa, classificar no código 017.2. Quanto ao recolhimento de material inservível e de sucatas ao depósito, classificar no código 032.3.	033.4 0334 Nas subdivisoes deste descritor classificam-se documentos referentes a alienacao definitiva de material permanente e de consumo em razao de serem considerados inserviveis e irrecuperaveis ocorrendo por meio de inutilizacao eliminacao ou destruicao. Quanto ao monitoramento e avaliacao dos procedimentos de controle e preservacao ambiental externa classificar no codigo 017.2. Quanto ao recolhimento de material inservivel e de sucatas ao deposito classificar no codigo 032.3.	S	\N	\N	\N	S
 266	1	033.41	MATERIAL PERMANENTE	Incluem-se documentos referentes ao desfazimento de material permanente.	033.41 03341 Incluem-se documentos referentes ao desfazimento de material permanente.	S	5	4	E	N
 267	1	033.42	MATERIAL DE CONSUMO	Incluem-se documentos referentes ao desfazimento de material de consumo.	033.42 03342 Incluem-se documentos referentes ao desfazimento de material de consumo.	S	5	4	E	N
 268	1	033.5	CESSÃO, COMODATO E EMPRÉSTIMO	Nas subdivisões deste descritor classificam-se documentos referentes à alienação temporária de material permanente e de consumo.	033.5 0335 Nas subdivisoes deste descritor classificam-se documentos referentes a alienacao temporaria de material permanente e de consumo.	S	\N	\N	\N	S
 269	1	033.51	MATERIAL PERMANENTE	Incluem-se documentos referentes à cessão, comodato e empréstimo de material permanente. Quanto ao empréstimo e devolução de material permanente disponibilizado aos servidores, classificar no código 039.2.	033.51 03351 Incluem-se documentos referentes a cessao comodato e emprestimo de material permanente. Quanto ao emprestimo e devolucao de material permanente disponibilizado aos servidores classificar no codigo 039.2.	S	5	4	E	N
 270	1	033.52	MATERIAL DE CONSUMO	Incluem-se documentos referentes à cessão, comodato e empréstimo de material de consumo.	033.52 03352 Incluem-se documentos referentes a cessao comodato e emprestimo de material de consumo.	S	5	4	E	N
+587	1	085.2	LICENÇAS	\N	085.2 0852 licencas	N	\N	5	E	N
 271	1	033.6	EXTRAVIO, ROUBO, DESAPARECIMENTO, FURTO E AVARIA	Incluem-se documentos referentes aos casos de extravio, roubo, desaparecimento, furto ou avaria de material. Quanto à apuração de responsabilidade disciplinar do servidor, classificar nas subdivisões do código 027. Quanto à ocorrência de sinistros em imóveis do órgão e entidade, classificar no código 046.3.	033.6 0336 Incluem-se documentos referentes aos casos de extravio roubo desaparecimento furto ou avaria de material. Quanto a apuracao de responsabilidade disciplinar do servidor classificar nas subdivisoes do codigo 027. Quanto a ocorrencia de sinistros em imoveis do orgao e entidade classificar no codigo 046.3.	S	5	\N	E	N
 272	1	034	CONTRATAÇÃO DE PRESTAÇÃO DE SERVIÇOS	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1. Quanto à instalação e manutenção de equipamentos de combate a incêndio, classificar no código 046.13.	034 034 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1. Quanto a instalacao e manutencao de equipamentos de combate a incendio classificar no codigo 046.13.	S	\N	\N	\N	S
 273	1	035	EXECUÇÃO DE SERVIÇOS DE INSTALAÇÃO E MANUTENÇÃO	Incluem-se documentos referentes à execução de serviços de instalação e manutenção de material, com meios próprios do órgão e entidade, não sendo necessária a contratação de empresas terceirizadas ou de mão de obra externa.	035 035 Incluem-se documentos referentes a execucao de servicos de instalacao e manutencao de material com meios proprios do orgao e entidade nao sendo necessaria a contratacao de empresas terceirizadas ou de mao de obra externa.	S	\N	1	E	N
@@ -5268,9 +5269,11 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 277	1	036.2	INVENTÁRIO DE MATERIAL DE CONSUMO	Incluem-se documentos referentes à elaboração do inventário do  material de consumo do órgão e entidade.	036.2 0362 Incluem-se documentos referentes a elaboracao do inventario do  material de consumo do orgao e entidade.	S	5	\N	E	N
 278	1	039	OUTRAS AÇÕES REFERENTES À GESTÃO DE MATERIAIS	Nas subdivisões deste descritor classificam-se documentos referentes a outras ações de gestão de bens materiais não contempladas nos descritores anteriores.	039 039 Nas subdivisoes deste descritor classificam-se documentos referentes a outras acoes de gestao de bens materiais nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
 279	1	039.1	RACIONALIZAÇÃO DO USO DE MATERIAL	Nas subdivisões deste descritor classificam-se documentos referentes à criação, designação, gestão, divulgação e resultados da atuação de grupos de trabalho e de comissões de racionalização do uso de material.	039.1 0391 Nas subdivisoes deste descritor classificam-se documentos referentes a criacao designacao gestao divulgacao e resultados da atuacao de grupos de trabalho e de comissoes de racionalizacao do uso de material.	S	\N	\N	\N	S
-297	1	041.4	PROCRIAÇÃO	Incluem-se documentos referentes à aquisição definitiva de bens semoventes por procriação (animais nascidos no local de criação).	041.4 0414 Incluem-se documentos referentes a aquisicao definitiva de bens semoventes por procriacao (animais nascidos no local de criacao).	S	5	4	E	N
+280	1	039.11	CRIAÇÃO E ATUAÇÃO DE GRUPOS DE TRABALHO	Incluem-se documentos referentes à criação de grupos de trabalho e comissões de racionalização do uso de material, aos registros das deliberações e às tomadas de decisão definidas nas reuniões, tais como: ato de instituição, regras para atuação, designação e substituição de membros, resoluções, atas e relatórios.	039.11 03911 Incluem-se documentos referentes a criacao de grupos de trabalho e comissoes de racionalizacao do uso de material aos registros das deliberacoes e as tomadas de decisao definidas nas reunioes tais como: ato de instituicao regras para atuacao designacao e substituicao de membros resolucoes atas e relatorios.	S	5	4	G	N
 281	1	039.12	OPERACIONALIZAÇÃO DE REUNIÕES	Incluem-se documentos referentes à organização das reuniões dos grupos de trabalhos e das comissões de racionalização do uso de material, bem como aqueles referentes ao agendamento, convocação, pauta e lista de participantes.	039.12 03912 Incluem-se documentos referentes a organizacao das reunioes dos grupos de trabalhos e das comissoes de racionalizacao do uso de material bem como aqueles referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
 282	1	039.2	EMPRÉSTIMO E DEVOLUÇÃO DE MATERIAL PERMANENTE	Incluem-se documentos referentes ao empréstimo e devolução de material permanente, normalmente, disponibilizados aos servidores, para uso em atividades internas e externas do órgão e entidade, como computadores portáteis, filmadoras, câmeras fotográficas e telefones celulares funcionais. Quanto à autorização de entrada e saída de material do órgão e entidade, classificar no código 032.2. Quanto ao empréstimo de material permanente para outro órgão e entidade, classificar no código 033.51.	039.2 0392 Incluem-se documentos referentes ao emprestimo e devolucao de material permanente normalmente disponibilizados aos servidores para uso em atividades internas e externas do orgao e entidade como computadores portateis filmadoras cameras fotograficas e telefones celulares funcionais. Quanto a autorizacao de entrada e saida de material do orgao e entidade classificar no codigo 032.2. Quanto ao emprestimo de material permanente para outro orgao e entidade classificar no codigo 033.51.	S	1	\N	E	N
+302	1	041.6	LOCAÇÃO. ARRENDAMENTO MERCANTIL (LEASING). SUBLOCAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição temporária de bens imóveis e de veículos.	041.6 0416 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao temporaria de bens imoveis e de veiculos.	S	\N	\N	\N	S
+654	1	087.5.b	PROCESSOS DE HABILITAÇÃO E REGISTROS DE CASAMENTO; BATIZADO E CRISMA; LIVRO TOMBO	\N	087.5.b 0875b processos de habilitacao e registros de casamento; batizado e crisma; livro tombo	N	15	15	G	N
 283	1	040	GESTÃO DE BENS PATRIMONIAIS E DE SERVIÇOS	Esta subclasse contempla documentos referentes à aquisição, alienação e inventário de bens imóveis (terrenos, edifícios, residências  e  salas),  de  veículos  motorizados  (terrestres,  fluviais,  marítimos e aéreos) e não motorizados (propulsão humana e tração animal) e de bens semoventes (animais utilizados para patrulhamento, investigação e transporte), bem como aqueles referentes à contratação de prestação de serviços para o fornecimento de serviços públicos essenciais, para a execução de obras e ao controle, proteção, guarda e segurança patrimonial.	040 040 Esta subclasse contempla documentos referentes a aquisicao alienacao e inventario de bens imoveis (terrenos edificios residencias  e  salas)  de  veiculos  motorizados  (terrestres  fluviais  maritimos e aereos) e nao motorizados (propulsao humana e tracao animal) e de bens semoventes (animais utilizados para patrulhamento investigacao e transporte) bem como aqueles referentes a contratacao de prestacao de servicos para o fornecimento de servicos publicos essenciais para a execucao de obras e ao controle protecao guarda e seguranca patrimonial.	S	\N	\N	\N	S
 284	1	040.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais e às decisões de caráter geral sobre a gestão de bens patrimoniais.	040.01 04001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais e as decisoes de carater geral sobre a gestao de bens patrimoniais.	S	5	\N	G	N
 285	1	041	AQUISIÇÃO E INCORPORAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição e incorporação de bens imóveis, de veículos e de bens semoventes.	041 041 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao e incorporacao de bens imoveis de veiculos e de bens semoventes.	S	\N	\N	\N	S
@@ -5285,10 +5288,12 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 294	1	041.3	DAÇÃO. ADJUDICAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição definitiva de bens imóveis e de veículos.	041.3 0413 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao definitiva de bens imoveis e de veiculos.	S	\N	\N	\N	S
 295	1	041.31	BENS IMÓVEIS	Incluem-se documentos referentes à dação e adjudicação de imóveis, para recebimento de parte ou totalidade de dívida.	041.31 04131 Incluem-se documentos referentes a dacao e adjudicacao de imoveis para recebimento de parte ou totalidade de divida.	S	5	\N	G	N
 296	1	041.32	VEÍCULOS	Incluem-se documentos referentes à dação e adjudicação de veículos, para recebimento de parte ou totalidade de dívida.	041.32 04132 Incluem-se documentos referentes a dacao e adjudicacao de veiculos para recebimento de parte ou totalidade de divida.	S	5	\N	E	N
+297	1	041.4	PROCRIAÇÃO	Incluem-se documentos referentes à aquisição definitiva de bens semoventes por procriação (animais nascidos no local de criação).	041.4 0414 Incluem-se documentos referentes a aquisicao definitiva de bens semoventes por procriacao (animais nascidos no local de criacao).	S	5	4	E	N
+298	1	041.5	CESSÃO E COMODATO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição temporária de bens imóveis, de veículos e de bens semoventes.	041.5 0415 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao temporaria de bens imoveis de veiculos e de bens semoventes.	S	\N	\N	\N	S
 299	1	041.51	BENS IMÓVEIS	Incluem-se documentos referentes à cessão e comodato de imóveis. Quanto ao uso de dependências do órgão e entidade, por servidores, classificar no código 043.7.	041.51 04151 Incluem-se documentos referentes a cessao e comodato de imoveis. Quanto ao uso de dependencias do orgao e entidade por servidores classificar no codigo 043.7.	S	5	4	G	N
 300	1	041.52	VEÍCULOS	Incluem-se documentos referentes à cessão e comodato de  veículos.	041.52 04152 Incluem-se documentos referentes a cessao e comodato de  veiculos.	S	5	4	E	N
 301	1	041.53	BENS SEMOVENTES	Incluem-se documentos referentes à cessão e comodato de animais.	041.53 04153 Incluem-se documentos referentes a cessao e comodato de animais.	S	5	4	E	N
-302	1	041.6	LOCAÇÃO. ARRENDAMENTO MERCANTIL (LEASING). SUBLOCAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição temporária de bens imóveis e de veículos.	041.6 0416 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao temporaria de bens imoveis e de veiculos.	S	\N	\N	\N	S
+406	1	053.1	PAGAMENTO EM MOEDA ESTRANGEIRA	Incluem-se documentos referentes aos pagamentos em moedas diferentes da moeda nacional.	053.1 0531 Incluem-se documentos referentes aos pagamentos em moedas diferentes da moeda nacional.	S	5	\N	E	N
 303	1	041.61	BENS IMÓVEIS	Incluem-se documentos referentes à locação, arrendamento mercantil (leasing) e sublocação de imóveis. Quanto ao uso de dependências do órgão e entidade, por servidores, classificar no código 043.7. Quanto à locação temporária de salas e auditórios para realização de eventos, classificar no código 918.	041.61 04161 Incluem-se documentos referentes a locacao arrendamento mercantil (leasing) e sublocacao de imoveis. Quanto ao uso de dependencias do orgao e entidade por servidores classificar no codigo 043.7. Quanto a locacao temporaria de salas e auditorios para realizacao de eventos classificar no codigo 918.	S	5	\N	E	N
 304	1	041.62	VEÍCULOS	Incluem-se documentos referentes à locação, arrendamento mercantil (leasing) e sublocação de veículos.	041.62 04162 Incluem-se documentos referentes a locacao arrendamento mercantil (leasing) e sublocacao de veiculos.	S	5	\N	E	N
 305	1	041.7	DESMEMBRAMENTO	Incluem-se documentos referentes ao desmembramento de bem imóvel do órgão ou entidade, desvinculado da alienação. Quanto à alienação definitiva de bem imóvel por desmembramento, classificar no código 042.4.	041.7 0417 Incluem-se documentos referentes ao desmembramento de bem imovel do orgao ou entidade desvinculado da alienacao. Quanto a alienacao definitiva de bem imovel por desmembramento classificar no codigo 042.4.	S	5	4	G	N
@@ -5308,8 +5313,10 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 319	1	042.5	CESSÃO E COMODATO	Nas subdivisões deste descritor classificam-se documentos referentes à alienação temporária de bens imóveis, de veículos e de bens semoventes.	042.5 0425 Nas subdivisoes deste descritor classificam-se documentos referentes a alienacao temporaria de bens imoveis de veiculos e de bens semoventes.	S	\N	\N	\N	S
 320	1	042.51	BENS IMÓVEIS	Incluem-se documentos referentes à cessão e comodato de imóveis.	042.51 04251 Incluem-se documentos referentes a cessao e comodato de imoveis.	S	5	4	G	N
 321	1	042.52	VEÍCULOS	Incluem-se documentos referentes à cessão e comodato de veículos.	042.52 04252 Incluem-se documentos referentes a cessao e comodato de veiculos.	S	5	4	E	N
+322	1	042.53	BENS SEMOVENTES	Incluem-se documentos referentes à cessão e comodato de animais.	042.53 04253 Incluem-se documentos referentes a cessao e comodato de animais.	S	5	4	E	N
 323	1	042.6	LOCAÇÃO. ARRENDAMENTO. SUBLOCAÇÃO	Incluem-se documentos referentes à alienação temporária de bens imóveis por locação, por arrendamento e por sublocação, bem como os termos de permissão remunerada de uso.	042.6 0426 Incluem-se documentos referentes a alienacao temporaria de bens imoveis por locacao por arrendamento e por sublocacao bem como os termos de permissao remunerada de uso.	S	5	\N	E	N
 324	1	042.7	BAIXA. DESFAZIMENTO	Nas subdivisões deste descritor classificam-se documentos referentes à baixa e desfazimento de veículos e de bens semoventes.	042.7 0427 Nas subdivisoes deste descritor classificam-se documentos referentes a baixa e desfazimento de veiculos e de bens semoventes.	S	\N	\N	\N	S
+543	1	082.52.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.52.a 08252a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
 325	1	042.71	VEÍCULOS	Incluem-se documentos referentes à baixa e desfazimento de veículos, quando o mesmo é retirado de circulação, por ser irrecuperável e inservível, definitivamente desmontado, sinistrado com laudo de perda total, vendido ou leiloado como sucata.	042.71 04271 Incluem-se documentos referentes a baixa e desfazimento de veiculos quando o mesmo e retirado de circulacao por ser irrecuperavel e inservivel definitivamente desmontado sinistrado com laudo de perda total vendido ou leiloado como sucata.	S	5	4	E	N
 326	1	042.72	BENS SEMOVENTES	Incluem-se documentos referentes à baixa de animais por incapacidade, inaptidão, invalidez, morte, sacrifício e aposentadoria.	042.72 04272 Incluem-se documentos referentes a baixa de animais por incapacidade inaptidao invalidez morte sacrificio e aposentadoria.	S	5	4	E	N
 327	1	043	ADMINISTRAÇÃO CONDOMINIAL	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos necessários para a administração, o registro e o controle dos bens patrimoniais do órgão e entidade.	043 043 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos necessarios para a administracao, o registro e o controle dos bens patrimoniais do orgao e entidade.	S	\N	\N	\N	S
@@ -5324,7 +5331,8 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 336	1	043.7	USO DE DEPENDÊNCIAS	Incluem-se documentos referentes à requisição e utilização, por servidores, de dependências (salas e auditórios) de imóvel do órgão e entidade. Quanto ao uso de dependências do órgão e entidade, por terceiros, mediante cessão e comodato, classificar no código 041.51. Quanto ao uso de dependências do órgão e entidade, por terceiros, mediante locação, arrendamento mercantil (leasing) e sublocação, classificar no código 041.61.	043.7 0437 Incluem-se documentos referentes a requisicao e utilizacao por servidores de dependencias (salas e auditorios) de imovel do orgao e entidade. Quanto ao uso de dependencias do orgao e entidade por terceiros mediante cessao e comodato classificar no codigo 041.51. Quanto ao uso de dependencias do orgao e entidade por terceiros mediante locacao arrendamento mercantil (leasing) e sublocacao classificar no codigo 041.61.	S	\N	2	E	N
 337	1	044	ADMINISTRAÇÃO DA FROTA DE VEÍCULOS	Nas subdivisões deste descritor classificam-se documentos referentes aos procedimentos necessários para a administração e o controle de uso dos veículos do órgão e entidade.	044 044 Nas subdivisoes deste descritor classificam-se documentos referentes aos procedimentos necessarios para a administracao e o controle de uso dos veiculos do orgao e entidade.	S	\N	\N	\N	S
 338	1	044.1	CADASTRAMENTO, LICENCIAMENTO E EMPLACAMENTO	Incluem-se documentos referentes ao cadastramento, licenciamento e emplacamento de veículos. Quanto ao pagamento de taxas e tributos dos veículos, como o imposto sobre a propriedade de veículos automotores, classificar no código 059.2.	044.1 0441 Incluem-se documentos referentes ao cadastramento, licenciamento e emplacamento de veiculos. Quanto ao pagamento de taxas e tributos dos veiculos, como o imposto sobre a propriedade de veiculos automotores, classificar no codigo 059.2.	S	5	\N	E	N
-339	1	044.2	TOMBAMENTO	Incluem-se documentos referentes ao tombamento de veículos, pertencentes ao órgão e entidade, quando se tornam peças de exposição.	044.2 0442 Incluem-se documentos referentes ao tombamento de veiculos, pertencentes ao orgao e entidade, quando se tornam pecas de exposicao.	S	5	\N	G	N
+544	1	082.53	QUALIFICAÇÃO TÉCNICA ESPECIAL	\N	082.53 08253 qualificacao tecnica especial	N	\N	5	E	N
+655	1	088	VAGA	\N	088 088 vaga	N	\N	\N	\N	S
 340	1	044.3	OCORRÊNCIA DE SINISTROS	Incluem-se documentos referentes a acidentes, eventos inesperados e não premeditados ocorridos com veículos pertencentes ao órgão e entidade e com veículos locados, tais como: colisão, incêndio, roubo, furto, enchente e alagamento. Quanto à ocorrência de sinistros em imóveis do órgão e entidade, classificar no código 046.3.	044.3 0443 Incluem-se documentos referentes a acidentes eventos inesperados e nao premeditados ocorridos com veiculos pertencentes ao orgao e entidade e com veiculos locados tais como: colisao incendio roubo furto enchente e alagamento. Quanto a ocorrencia de sinistros em imoveis do orgao e entidade classificar no codigo 046.3.	S	5	\N	E	N
 341	1	044.4	CONTROLE DE USO	Incluem-se documentos referentes ao controle e a utilização de veículos, bem como aqueles referentes à requisição e autorização para uso, dentro e fora do horário de expediente. Quanto ao controle de entrada e saída de veículos de visitantes e prestadores de serviço, classificar no código 046.4.	044.4 0444 Incluem-se documentos referentes ao controle e a utilizacao de veiculos bem como aqueles referentes a requisicao e autorizacao para uso dentro e fora do horario de expediente. Quanto ao controle de entrada e saida de veiculos de visitantes e prestadores de servico classificar no codigo 046.4.	S	\N	2	E	N
 342	1	044.5	ESTACIONAMENTO. GARAGEM	Incluem-se documentos referentes à utilização de estacionamento e garagem, do órgão e entidade, por veículos oficiais e por veículos dos servidores. Quanto ao controle de entrada e saída de veículos de visitantes e de prestadores de serviço, classificar no código 046.4.	044.5 0445 Incluem-se documentos referentes a utilizacao de estacionamento e garagem do orgao e entidade por veiculos oficiais e por veiculos dos servidores. Quanto ao controle de entrada e saida de veiculos de visitantes e de prestadores de servico classificar no codigo 046.4.	S	\N	2	E	N
@@ -5338,6 +5346,8 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 350	1	045.2	MANUTENÇÃO E REPARO DAS INSTALAÇÕES	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.2 0452 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
 351	1	045.21	ELEVADORES	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.21 04521 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
 352	1	045.22	SISTEMAS CENTRAIS DE AR CONDICIONADO	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.22 04522 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
+545	1	082.53.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.53.a 08253a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
+546	1	082.54	PÓS-GRADUAÇÃO STRICTO SENSU	\N	082.54 08254 pos-graduacao stricto sensu	N	\N	5	E	N
 353	1	045.23	SUBESTAÇÕES ELÉTRICAS E GERADORES	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.23 04523 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
 354	1	045.24	CONSERVAÇÃO PREDIAL	Esse descritor foi suprimido em revisão do presente instrumento em 2022. Todos os documentos relativos à contratação de pessoa jurídica para prestação de serviços devem ser classificados no código 018.1.	045.24 04524 Esse descritor foi suprimido em revisao do presente instrumento em 2022. Todos os documentos relativos a contratacao de pessoa juridica para prestacao de servicos devem ser classificados no codigo 018.1.	S	\N	\N	\N	S
 355	1	045.3	EXECUÇÃO DE OBRAS	Nas subdivisões deste descritor classificam-se documentos referentes à contratação de pessoa jurídica ou física para a execução de obras em bens imóveis do órgão e entidade, bem como aqueles referentes à prestação de consultoria para a realização de obras. Quanto à contratação de pessoa jurídica ou física para prestação de demais serviços, distintos da execução de obras, classificar nas subdivisões do código 018.	045.3 0453 Nas subdivisoes deste descritor classificam-se documentos referentes a contratacao de pessoa juridica ou fisica para a execucao de obras em bens imoveis do orgao e entidade bem como aqueles referentes a prestacao de consultoria para a realizacao de obras. Quanto a contratacao de pessoa juridica ou fisica para prestacao de demais servicos distintos da execucao de obras classificar nas subdivisoes do codigo 018.	S	\N	\N	\N	S
@@ -5351,6 +5361,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 363	1	046	PROTEÇÃO, GUARDA E SEGURANÇA PATRIMONIAL	Nas subdivisões deste descritor classificam-se documentos referentes às atividades para proteção, guarda e segurança das dependências do órgão e entidade.	046 046 Nas subdivisoes deste descritor classificam-se documentos referentes as atividades para protecao guarda e seguranca das dependencias do orgao e entidade.	S	\N	\N	\N	S
 364	1	046.1	PREVENÇÃO DE INCÊNDIO	Nas subdivisões deste descritor classificam-se documentos referentes ao treinamento de pessoal, instalação e manutenção de extintores, inspeções periódicas dos equipamentos de combate a incêndio e constituição de brigadas voluntárias de incêndio.	046.1 0461 Nas subdivisoes deste descritor classificam-se documentos referentes ao treinamento de pessoal, instalacao e manutencao de extintores, inspecoes periodicas dos equipamentos de combate a incendio e constituicao de brigadas voluntarias de incendio.	S	\N	\N	\N	S
 365	1	046.11	PLANEJAMENTO, ELABORAÇÃO E ACOMPANHAMENTO DE PROJETOS	Incluem-se documentos referentes ao planejamento, à elaboração e à execução de projetos para a prevenção de incêndios, bem como os relatórios de acompanhamento.	046.11 04611 Incluem-se documentos referentes ao planejamento a elaboracao e a execucao de projetos para a prevencao de incendios bem como os relatorios de acompanhamento.	S	5	4	G	N
+547	1	082.54.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.54.a 08254a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
 366	1	046.12	CONSTITUIÇÃO DE BRIGADA VOLUNTÁRIA	Incluem-se documentos referentes à constituição de brigada de incêndio, composta por servidores que se apresentam como voluntários. Quanto à contratação de bombeiro profissional civil como autônomo (pessoa física), classificar no código 029.5. Quanto à contratação de empresa terceirizada para execução de serviços de brigada de incêndio (bombeiro profissional civil), classificar no código 045.4.	046.12 04612 Incluem-se documentos referentes a constituicao de brigada de incendio composta por servidores que se apresentam como voluntarios. Quanto a contratacao de bombeiro profissional civil como autônomo (pessoa fisica) classificar no codigo 029.5. Quanto a contratacao de empresa terceirizada para execucao de servicos de brigada de incendio (bombeiro profissional civil) classificar no codigo 045.4.	S	5	4	G	N
 367	1	046.13	INSTALAÇÃO E MANUTENÇÃO DE EQUIPAMENTOS DE COMBATE A INCÊNDIO	Incluem-se documentos referentes à instalação e à manutenção de equipamentos e sistemas de combate a incêndio, como extintores, mangueiras, machados, luvas e capacetes.	046.13 04613 Incluem-se documentos referentes a instalacao e a manutencao de equipamentos e sistemas de combate a incendio como extintores mangueiras machados luvas e capacetes.	S	\N	2	E	N
 368	1	046.2	MONITORAMENTO. VIGILÂNCIA	Incluem-se documentos referentes ao funcionamento de sistemas eletrônicos de monitoramento e vigilância que utilizam câmeras de circuitos fechados de televisão, instalados nas dependências do órgão e entidade, bem como as gravações resultantes do mesmo. Quanto à instalação, conservação e reparo dos equipamentos, classificar no código 034. Quanto à contratação de empresa terceirizada para execução de serviços de guarda e segurança patrimonial, classificar no código 045.4.	046.2 0462 Incluem-se documentos referentes ao funcionamento de sistemas eletrônicos de monitoramento e vigilancia que utilizam cameras de circuitos fechados de televisao instalados nas dependencias do orgao e entidade bem como as gravacoes resultantes do mesmo. Quanto a instalacao conservacao e reparo dos equipamentos classificar no codigo 034. Quanto a contratacao de empresa terceirizada para execucao de servicos de guarda e seguranca patrimonial classificar no codigo 045.4.	S	\N	2	E	N
@@ -5361,8 +5372,9 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 373	1	047.1	INVENTÁRIO DE BENS IMÓVEIS	Incluem-se documentos referentes ao levantamento da situação dos imóveis que se encontram em uso e à verificação da disponibilidade dos imóveis do órgão e entidade, bem como aqueles referentes à emissão de relatórios.	047.1 0471 Incluem-se documentos referentes ao levantamento da situacao dos imoveis que se encontram em uso e a verificacao da disponibilidade dos imoveis do orgao e entidade bem como aqueles referentes a emissao de relatorios.	S	5	\N	G	N
 374	1	047.2	INVENTÁRIO DE VEÍCULOS	Incluem-se documentos referentes ao levantamento da situação dos veículos que se encontram em uso e à verificação da disponibilidade dos veículos do órgão e entidade, bem como aqueles referentes à emissão de relatórios.	047.2 0472 Incluem-se documentos referentes ao levantamento da situacao dos veiculos que se encontram em uso e a verificacao da disponibilidade dos veiculos do orgao e entidade bem como aqueles referentes a emissao de relatorios.	S	5	\N	G	N
 375	1	047.3	INVENTÁRIO DE BENS SEMOVENTES	Incluem-se documentos referentes ao levantamento dos animais que se encontram em uso e à verificação da disponibilidade dos animais do órgão e entidade, bem como aqueles referentes à emissão de relatórios.	047.3 0473 Incluem-se documentos referentes ao levantamento dos animais que se encontram em uso e a verificacao da disponibilidade dos animais do orgao e entidade bem como aqueles referentes a emissao de relatorios.	S	5	\N	G	N
-541	1	082.51.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS DIVERSOS TIPOS DE ADESTRAMENTO	\N	082.51.a 08251a designacao matricula conclusao cancelamento trancamento e ou desligamento dos diversos tipos de adestramento	N	47	5	E	N
 376	1	049	OUTRAS AÇÕES REFERENTES À GESTÃO DE BENS PATRIMONIAIS E DE SERVIÇOS	Nas subdivisões deste grupo classificam-se documentos referentes a outras ações de gestão de bens patrimoniais não contempladas nos descritores anteriores.	049 049 Nas subdivisoes deste grupo classificam-se documentos referentes a outras acoes de gestao de bens patrimoniais nao contempladas nos descritores anteriores.	S	\N	\N	\N	S
+548	1	082.55	PÓS-DOUTORADO	\N	082.55 08255 pos-doutorado	N	\N	5	E	N
+656	1	089	OUTROS ASSUNTOS REFERENTES A PESSOAL MILITAR	\N	089 089 outros assuntos referentes a pessoal militar	N	\N	\N	\N	S
 377	1	049.1	RACIONALIZAÇÃO DO USO DE BENS E SERVIÇOS	Nas subdivisões deste descritor classificam-se documentos referentes à criação, designação, gestão, divulgação e resultados da atuação de grupos de estudo e de comissões de racionalização do uso dos bens patrimoniais e dos serviços públicos essenciais, como redução de uso de veículo oficial e a economia de água e de energia elétrica.	049.1 0491 Nas subdivisoes deste descritor classificam-se documentos referentes a criacao designacao gestao divulgacao e resultados da atuacao de grupos de estudo e de comissoes de racionalizacao do uso dos bens patrimoniais e dos servicos publicos essenciais como reducao de uso de veiculo oficial e a economia de agua e de energia eletrica.	S	\N	\N	\N	S
 378	1	049.11	CRIAÇÃO E ATUAÇÃO DE GRUPOS DE TRABALHO	Incluem-se documentos referentes à criação de grupos de trabalho e comissões de racionalização do uso de bens e serviços, aos registros das deliberações e às tomadas de decisão definidas nas reuniões, tais como: ato de instituição, regras para atuação, designação e substituição de membros, resoluções, atas e relatórios.	049.11 04911 Incluem-se documentos referentes a criacao de grupos de trabalho e comissoes de racionalizacao do uso de bens e servicos aos registros das deliberacoes e as tomadas de decisao definidas nas reunioes tais como: ato de instituicao regras para atuacao designacao e substituicao de membros resolucoes atas e relatorios.	S	5	4	G	N
 379	1	049.12	OPERACIONALIZAÇÃO DE REUNIÕES	Incluem-se documentos referentes à organização das reuniões dos grupos de trabalhos e das comissões de racionalização do uso de bens e serviços, bem como os referentes ao agendamento, convocação, pauta e lista de participantes.	049.12 04912 Incluem-se documentos referentes a organizacao das reunioes dos grupos de trabalhos e das comissoes de racionalizacao do uso de bens e servicos bem como os referentes ao agendamento convocacao pauta e lista de participantes.	S	\N	2	E	N
@@ -5374,8 +5386,9 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 385	1	051.1	PROGRAMAÇÃO ORÇAMENTÁRIA	Incluem-se documentos referentes à elaboração do orçamento, como a programação, a previsão e a proposta orçamentária, os estudos de adequação da estrutura programática, a atualização e o aperfeiçoamento das informações constantes do cadastro de ações orçamentárias, a fixação dos referenciais monetários para apresentação das propostas orçamentárias e dos limites de movimentação, de empenho e de pagamento das unidades administrativas do órgão e entidade.	051.1 0511 Incluem-se documentos referentes a elaboracao do orcamento como a programacao a previsao e a proposta orcamentaria os estudos de adequacao da estrutura programatica a atualizacao e o aperfeicoamento das informacoes constantes do cadastro de acoes orcamentarias a fixacao dos referenciais monetarios para apresentacao das propostas orcamentarias e dos limites de movimentacao de empenho e de pagamento das unidades administrativas do orgao e entidade.	S	5	5	G	N
 386	1	051.2	DETALHAMENTO DE DESPESA	Incluem-se documentos referentes ao estabelecimento das metas e à destinação de recursos e receitas por fontes, bem como o detalhamento, a nível operacional, dos projetos e atividades a serem desenvolvidas no exercício, especificando os elementos de despesa e respectivos desdobramentos.	051.2 0512 Incluem-se documentos referentes ao estabelecimento das metas e a destinacao de recursos e receitas por fontes bem como o detalhamento a nivel operacional dos projetos e atividades a serem desenvolvidas no exercicio especificando os elementos de despesa e respectivos desdobramentos.	S	\N	2	E	N
 387	1	051.3	EXECUÇÃO ORÇAMENTÁRIA	Incluem-se documentos referentes à movimentação, interna e externa, e à descentralização de créditos orçamentários pelo órgão e entidade, bem como as transferências, provisões, destaques, estornos e subvenções.	051.3 0513 Incluem-se documentos referentes a movimentacao interna e externa e a descentralizacao de creditos orcamentarios pelo orgao e entidade bem como as transferencias provisoes destaques estornos e subvencoes.	S	5	\N	E	N
-542	1	082.52	PÓS-GRADUAÇÃO LATO SENSU	\N	082.52 08252 pos-graduacao lato sensu	N	\N	5	E	N
 388	1	051.4	RETIFICAÇÃO ORÇAMENTÁRIA. CRÉDITOS ADICIONAIS	Incluem-se documentos referentes às autorizações de despesas não computadas, ou insuficientemente dotadas, na lei orçamentária, por meio da liberação de créditos suplementares, especiais e extraordinários.	051.4 0514 Incluem-se documentos referentes as autorizacoes de despesas nao computadas ou insuficientemente dotadas na lei orcamentaria por meio da liberacao de creditos suplementares especiais e extraordinarios.	S	5	5	G	N
+657	1	089.1	SERVIÇOS DE ESCALA	\N	089.1 0891 servicos de escala	N	\N	5	E	N
+658	1	089.1.a	ESCALAS DE SERVIÇO	\N	089.1.a 0891a escalas de servico	N	47	5	E	N
 389	1	052	GESTÃO FINANCEIRA	Nas subdivisões deste descritor classificam-se documentos referentes às atividades de programação, gestão e execução financeira do órgão e entidade, bem como aqueles referentes ao controle da efetiva entrada e saída de recursos do órgão e entidade.	052 052 Nas subdivisoes deste descritor classificam-se documentos referentes as atividades de programacao gestao e execucao financeira do orgao e entidade bem como aqueles referentes ao controle da efetiva entrada e saida de recursos do orgao e entidade.	S	\N	\N	\N	S
 390	1	052.1	PROGRAMAÇÃO FINANCEIRA	Incluem-se documentos referentes à programação da entrada e da saída de recursos financeiros, à previsão da utilização dos recursos destinados a determinados fins e à operacionalização de gastos específicos visando a realização das atividades e projetos atribuídos às unidades orçamentárias, bem como aqueles referentes ao contingenciamento do orçamento do órgão e entidade.	052.1 0521 Incluem-se documentos referentes a programacao da entrada e da saida de recursos financeiros a previsao da utilizacao dos recursos destinados a determinados fins e a operacionalizacao de gastos especificos visando a realizacao das atividades e projetos atribuidos as unidades orcamentarias bem como aqueles referentes ao contingenciamento do orcamento do orgao e entidade.	S	5	\N	E	N
 391	1	052.2	EXECUÇÃO FINANCEIRA	Nas subdivisões deste descritor classificam-se documentos referentes ao controle da entrada e saída de recursos financeiros do órgão e entidade.	052.2 0522 Nas subdivisoes deste descritor classificam-se documentos referentes ao controle da entrada e saida de recursos financeiros do orgao e entidade.	S	\N	\N	\N	S
@@ -5386,7 +5399,9 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 396	1	052.22	DESPESA	Nas subdivisões deste descritor classificam-se documentos referentes à utilização de recursos, fixados e especificados na Lei Orçamentária Anual (LOA), para pagamento das despesas efetuadas pelo órgão e entidade.	052.22 05222 Nas subdivisoes deste descritor classificam-se documentos referentes a utilizacao de recursos fixados e especificados na Lei Orcamentaria Anual (LOA) para pagamento das despesas efetuadas pelo orgao e entidade.	S	\N	\N	\N	S
 407	1	053.2	GESTÃO DA CONTA ÚNICA	Incluem-se documentos referentes à transferência de recursos recebidos na rede bancária para a conta única, com os créditos das respectivas unidades gestoras, bem como aqueles referentes às assinaturas autorizadas, às ordens bancárias e aos extratos de contas.	053.2 0532 Incluem-se documentos referentes a transferencia de recursos recebidos na rede bancaria para a conta unica com os creditos das respectivas unidades gestoras bem como aqueles referentes as assinaturas autorizadas as ordens bancarias e aos extratos de contas.	S	5	\N	E	N
 408	1	053.3	GESTÃO DE CONTAS CORRENTES BANCÁRIAS: TIPO A, B, C, D e E	Incluem-se documentos referentes à abertura, movimentação e encerramento das contas correntes, bem como aqueles referentes às assinaturas autorizadas, às ordens bancárias e aos extratos de contas.	053.3 0533 Incluem-se documentos referentes a abertura movimentacao e encerramento das contas correntes bem como aqueles referentes as assinaturas autorizadas as ordens bancarias e aos extratos de contas.	S	5	\N	E	N
-611	1	085.631	OBRIGATÓRIOS	\N	085.631 085631 obrigatorios	N	\N	5	E	N
+409	1	053.4	GESTÃO DE CONTAS ESPECIAIS	Incluem-se documentos referentes à movimentação dos recursos advindos de empréstimos e créditos externos.	053.4 0534 Incluem-se documentos referentes a movimentacao dos recursos advindos de emprestimos e creditos externos.	S	5	\N	E	N
+549	1	082.55.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.55.a 08255a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
+550	1	082.6	PRORROGAÇÃO DE TEMPO DE SERVIÇO. REENGAJAMENTO	\N	082.6 0826 prorrogacao de tempo de servico reengajamento	N	\N	5	E	N
 397	1	052.221	DESPESA CORRENTE	Incluem-se documentos referentes à utilização dos recursos provenientes das dotações orçamentárias ordinárias destinadas à manutenção contínua dos serviços públicos, como as despesas de custeio reservadas ao pagamento de pessoal (ativos, inativos, pensionistas, civis e militares) e dos encargos sociais, bem como aqueles referentes às transferências correntes relacionadas às contribuições e subvenções que atendem à manifestação de outras entidades de direito público ou privado, entre elas as transferências de assistência e previdência social e os pagamentos dos juros e encargos da dívida pública. Quanto às despesas decorrentes da compra de material de consumo, classificar no código 031.12. Quanto às despesas decorrentes da contratação de empresas terceirizadas para a prestação de serviços, classificar nos códigos 018, 034, 045.1, 045.2, 045.4, 045.5, 045.6, 045.7, 067, 071 e 918, de acordo com o objeto da contratação.	052.221 052221 Incluem-se documentos referentes a utilizacao dos recursos provenientes das dotacoes orcamentarias ordinarias destinadas a manutencao continua dos servicos publicos como as despesas de custeio reservadas ao pagamento de pessoal (ativos inativos pensionistas civis e militares) e dos encargos sociais bem como aqueles referentes as transferencias correntes relacionadas as contribuicoes e subvencoes que atendem a manifestacao de outras entidades de direito publico ou privado entre elas as transferencias de assistencia e previdencia social e os pagamentos dos juros e encargos da divida publica. Quanto as despesas decorrentes da compra de material de consumo classificar no codigo 031.12. Quanto as despesas decorrentes da contratacao de empresas terceirizadas para a prestacao de servicos classificar nos codigos 018 034 045.1 045.2 045.4 045.5 045.6 045.7 067 071 e 918 de acordo com o objeto da contratacao.	S	5	\N	E	N
 398	1	052.222	DESPESA DE CAPITAL	Incluem-se documentos referentes à utilização dos recursos provenientes das dotações orçamentárias ordinárias destinadas aos investimentos, às inversões financeiras e à amortização da dívida interna e externa. Quanto às despesas decorrentes da compra de material permanente, classificar no código 031.11. Quanto às despesas decorrentes da compra de bens imóveis, classificar no código 041.11. Quanto às despesas decorrentes da contratação de empresas terceirizadas para a execução de obras em bens imóveis do órgão e entidade, classificar nas subdivisões do código 045.3.	052.222 052222 Incluem-se documentos referentes a utilizacao dos recursos provenientes das dotacoes orcamentarias ordinarias destinadas aos investimentos as inversoes financeiras e a amortizacao da divida interna e externa. Quanto as despesas decorrentes da compra de material permanente classificar no codigo 031.11. Quanto as despesas decorrentes da compra de bens imoveis classificar no codigo 041.11. Quanto as despesas decorrentes da contratacao de empresas terceirizadas para a execucao de obras em bens imoveis do orgao e entidade classificar nas subdivisoes do codigo 045.3.	S	5	\N	E	N
 399	1	052.23	DEMONSTRAÇÃO CONTÁBIL	Incluem-se os documentos referentes à consolidação dos registros contábeis, tais como: livro-razão, balanço patrimonial, balanço orçamentário, balanço financeiro, demonstração das variações patrimoniais, demonstrações dos fluxos de caixa, demonstração das mutações do patrimônio líquido, demonstração do resultado econômico e balancetes. Quanto à conformidade de registro de gestão, classificar no código 050.02. Quanto à conformidade contábil, classificar no código 050.03.	052.23 05223 Incluem-se os documentos referentes a consolidacao dos registros contabeis tais como: livro-razao balanco patrimonial balanco orcamentario balanco financeiro demonstracao das variacoes patrimoniais demonstracoes dos fluxos de caixa demonstracao das mutacoes do patrimônio liquido demonstracao do resultado econômico e balancetes. Quanto a conformidade de registro de gestao classificar no codigo 050.02. Quanto a conformidade contabil classificar no codigo 050.03.	S	5	\N	G	N
@@ -5423,6 +5438,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 434	1	061.523	RECOLHIMENTO	Incluem-se documentos referentes aos procedimentos para controle da passagem de documentos do arquivo intermediário para o arquivo permanente, tais como: listagem descritiva do acervo, guia e termo de recolhimento.	061.523 061523 Incluem-se documentos referentes aos procedimentos para controle da passagem de documentos do arquivo intermediario para o arquivo permanente, tais como: listagem descritiva do acervo, guia e termo de recolhimento.	S	\N	5	G	N
 435	1	062	GESTÃO DE ACERVOS BIBLIOGRÁFICO E MUSEOLÓGICO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição, incorporação, processamento técnico, inventário e desincorporação de acervos bibliográfico e museológico.	062 062 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao incorporacao processamento tecnico inventario e desincorporacao de acervos bibliografico e museologico.	S	\N	\N	\N	S
 436	1	062.1	AQUISIÇÃO E INCORPORAÇÃO	Nas subdivisões deste descritor classificam-se documentos referentes à aquisição, no Brasil e exterior, e à incorporação de acervos bibliográfico e museológico pelo órgão e entidade.	062.1 0621 Nas subdivisoes deste descritor classificam-se documentos referentes a aquisicao no Brasil e exterior e a incorporacao de acervos bibliografico e museologico pelo orgao e entidade.	S	\N	\N	\N	S
+659	1	089.2	TABELAS MESTRAS	\N	089.2 0892 tabelas mestras	N	\N	5	E	N
 437	1	062.11	COMPRA	Incluem-se documentos referentes à aquisição definitiva de acervos bibliográfico e museológico por compra e por importação, bem como aqueles referentes à assinatura de periódicos e de bases de dados. Nota: A compra poderá ocorrer nas modalidades de licitação, dispensa de licitação e inexigibilidade de licitação.	062.11 06211 Incluem-se documentos referentes a aquisicao definitiva de acervos bibliografico e museologico por compra e por importacao bem como aqueles referentes a assinatura de periodicos e de bases de dados. Nota: A compra podera ocorrer nas modalidades de licitacao dispensa de licitacao e inexigibilidade de licitacao.	S	5	\N	E	N
 438	1	062.12	DOAÇÃO	Incluem-se documentos referentes à aquisição definitiva de acervos bibliográfico e museológico por doação. Quanto à doação da produção editorial do órgão e entidade, classificar no código 065.3.	062.12 06212 Incluem-se documentos referentes a aquisicao definitiva de acervos bibliografico e museologico por doacao. Quanto a doacao da producao editorial do orgao e entidade classificar no codigo 065.3.	S	5	4	E	N
 439	1	062.13	PERMUTA	Incluem-se documentos referentes à aquisição definitiva de acervos bibliográfico e museológico por permuta. Quanto à permuta da produção editorial do órgão e entidade, classificar no código 065.3 	062.13 06213 Incluem-se documentos referentes a aquisicao definitiva de acervos bibliografico e museologico por permuta. Quanto a permuta da producao editorial do orgao e entidade classificar no codigo 065.3 	S	5	4	E	N
@@ -5438,6 +5454,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 449	1	063.2	EMPRÉSTIMOS	Incluem-se documentos referentes ao controle dos empréstimos de documentos arquivísticos, bibliográficos e museológicos.	063.2 0632 Incluem-se documentos referentes ao controle dos emprestimos de documentos arquivisticos, bibliograficos e museologicos.	S	1	\N	E	N
 450	1	063.3	MOVIMENTAÇÃO DE ACERVOS	Incluem-se documentos referentes à gestão de depósitos e ao controle da localização e da movimentação dos documentos arquivísticos, bibliográficos e museológicos entre as áreas de armazenamento e as áreas destinadas às consultas.	063.3 0633 Incluem-se documentos referentes a gestao de depositos e ao controle da localizacao e da movimentacao dos documentos arquivisticos bibliograficos e museologicos entre as areas de armazenamento e as areas destinadas as consultas.	S	\N	2	E	N
 451	1	063.4	MUDANÇA DE ACERVOS	Incluem-se documentos referentes ao controle da mudança de acervos arquivísticos, bibliográficos e museológicos, distinta da movimentação de acervos, motivado pela necessidade de mudança de imóvel ou dentro do mesmo imóvel.	063.4 0634 Incluem-se documentos referentes ao controle da mudanca de acervos arquivisticos, bibliograficos e museologicos, distinta da movimentacao de acervos, motivado pela necessidade de mudanca de imovel ou dentro do mesmo imovel.	S	5	5	E	N
+551	1	082.6.a	REQUERIMENTOS, AVALIAÇÕES, PARECERES E DESPACHOS	\N	082.6.a 0826a requerimentos avaliacoes pareceres e despachos	N	47	5	E	N
 452	1	064	CONSERVAÇÃO E PRESERVAÇÃO DE ACERVOS	Nas subdivisões deste descritor classificam-se documentos referentes à desinfestação, higienização e controle das áreas de armazenamento, à encadernação e à reformatação e restauração dos documentos.	064 064 Nas subdivisoes deste descritor classificam-se documentos referentes a desinfestacao higienizacao e controle das areas de armazenamento a encadernacao e a reformatacao e restauracao dos documentos.	S	\N	\N	\N	S
 453	1	064.01	AVALIAÇÃO E MONITORAMENTO	Incluem-se documentos referentes à elaboração de diagnósticos, relatórios e pareceres técnicos sobre as condições de conservação e preservação de acervos e fichas de registro do tratamento adotado para a restauração ou encadernação de documentos, bem como aqueles referentes ao plano de prevenção de riscos e à definição dos critérios adotados para a reformatação de acervos.	064.01 06401 Incluem-se documentos referentes a elaboracao de diagnosticos relatorios e pareceres tecnicos sobre as condicoes de conservacao e preservacao de acervos e fichas de registro do tratamento adotado para a restauracao ou encadernacao de documentos bem como aqueles referentes ao plano de prevencao de riscos e a definicao dos criterios adotados para a reformatacao de acervos.	S	5	\N	G	N
 454	1	064.1	DESINFESTAÇÃO E HIGIENIZAÇÃO	Incluem-se documentos referentes aos procedimentos para desinfestação e higienização das áreas de armazenamento de acervos.	064.1 0641 Incluem-se documentos referentes aos procedimentos para desinfestacao e higienizacao das areas de armazenamento de acervos.	S	\N	2	E	N
@@ -5484,6 +5501,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 493	1	073.2	SERVIÇO DE TELEX	Incluem-se documentos referentes à autorização e ao controle do uso dos serviços de telex.	073.2 0732 Incluem-se documentos referentes a autorizacao e ao controle do uso dos servicos de telex.	S	\N	2	E	N
 494	1	073.3	SERVIÇO DE TELEFONIA. SERVIÇO DE FAX	Nas subdivisões desse descritor classificam-se os documentos referentes à autorização e ao controle da utilização dos serviços de telefonia e de fax.	073.3 0733 Nas subdivisoes desse descritor classificam-se os documentos referentes a autorizacao e ao controle da utilizacao dos servicos de telefonia e de fax.	S	\N	\N	\N	S
 495	1	073.31	TRANSFERÊNCIA DE PROPRIEDADE OU TITULARIDADE	Incluem-se documentos referentes à transferência de propriedade ou titularidade das linhas telefônicas e dos serviços telefônicos fixo ou móvel.	073.31 07331 Incluem-se documentos referentes a transferencia de propriedade ou titularidade das linhas telefônicas e dos servicos telefônicos fixo ou movel.	S	2	\N	E	N
+552	1	082.7	TRANSPOSIÇÃO DE QUADRO	\N	082.7 0827 transposicao de quadro	N	\N	5	E	N
 497	1	073.33	DIVULGAÇÃO DE LISTAS TELEFÔNICAS INTERNAS	Incluem-se as listagens de servidores e unidades administrativas, com os respectivos ramais internos, elaboradas com o objetivo de facilitar e agilizar a comunicação interna no órgão e entidade.	073.33 07333 Incluem-se as listagens de servidores e unidades administrativas, com os respectivos ramais internos, elaboradas com o objetivo de facilitar e agilizar a comunicacao interna no orgao e entidade.	S	\N	\N	E	N
 498	1	073.4	SERVIÇO DE TRANSMISSÃO DE DADOS, VOZ E IMAGEM	Incluem-se documentos referentes à autorização e ao controle do uso dos serviços de acesso à internet, assinatura de televisão e videoconferência.	073.4 0734 Incluem-se documentos referentes a autorizacao e ao controle do uso dos servicos de acesso a internet assinatura de televisao e videoconferencia.	S	\N	2	E	N
 499	1	080	PESSOAL MILITAR - ver anexo 1	Aprovada pela Resolução n. 21, de 4 de agosto de 2004, do Conselho Nacional de Arquivos   (Conarq).	080 080 Aprovada pela Resolucao n. 21, de 4 de agosto de 2004, do Conselho Nacional de Arquivos   (Conarq).	S	\N	\N	\N	S
@@ -5520,18 +5538,6 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 530	1	082.22.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.22.a 08222a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
 531	1	082.23	ESTADO-MAIOR	\N	082.23 08223 estado-maior	N	\N	5	E	N
 532	1	082.23.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.23.a 08223a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
-543	1	082.52.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.52.a 08252a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
-544	1	082.53	QUALIFICAÇÃO TÉCNICA ESPECIAL	\N	082.53 08253 qualificacao tecnica especial	N	\N	5	E	N
-545	1	082.53.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.53.a 08253a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
-546	1	082.54	PÓS-GRADUAÇÃO STRICTO SENSU	\N	082.54 08254 pos-graduacao stricto sensu	N	\N	5	E	N
-547	1	082.54.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.54.a 08254a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
-548	1	082.55	PÓS-DOUTORADO	\N	082.55 08255 pos-doutorado	N	\N	5	E	N
-549	1	082.55.a	DESIGNAÇÃO, MATRÍCULA, CONCLUSÃO, CANCELAMENTO, TRANCAMENTO E/OU DESLIGAMENTO DOS CURSOS	\N	082.55.a 08255a designacao matricula conclusao cancelamento trancamento e ou desligamento dos cursos	N	47	5	E	N
-550	1	082.6	PRORROGAÇÃO DE TEMPO DE SERVIÇO. REENGAJAMENTO	\N	082.6 0826 prorrogacao de tempo de servico reengajamento	N	\N	5	E	N
-551	1	082.6.a	REQUERIMENTOS, AVALIAÇÕES, PARECERES E DESPACHOS	\N	082.6.a 0826a requerimentos avaliacoes pareceres e despachos	N	47	5	E	N
-552	1	082.7	TRANSPOSIÇÃO DE QUADRO	\N	082.7 0827 transposicao de quadro	N	\N	5	E	N
-553	1	082.7.a	REQUERIMENTOS, AVALIAÇÕES, PARECERES E DESPACHOS	\N	082.7.a 0827a requerimentos avaliacoes pareceres e despachos	N	47	5	E	N
-554	1	082.9	OUTROS ASSUNTOS REFERENTES A PLANO DE CARREIRA	\N	082.9 0829 outros assuntos referentes a plano de carreira	N	\N	\N	\N	S
 555	1	083	MOVIMENTAÇÃO. DESTAQUE. ADIÇÃO. EXCLUSÃO DO SERVIÇO ATIVO: MAPAS DE LOTAÇÃO DE OFICIAIS E PRAÇAS	\N	083 083 movimentacao destaque adicao exclusao do servico ativo: mapas de lotacao de oficiais e pracas	N	\N	5	E	N
 556	1	083.1	MOVIMENTAÇÃO	\N	083.1 0831 movimentacao	N	\N	\N	\N	S
 557	1	083.11	MOTIVO DE SAÚDE	\N	083.11 08311 motivo de saude	N	\N	5	E	N
@@ -5564,7 +5570,6 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 584	1	085.1	RECOMPENSAS. DISTINÇÕES. HONRARIAS	\N	085.1 0851 recompensas distincoes honrarias	N	\N	5	E	N
 585	1	085.1.a	PRÊMIOS DE HONRA AO MÉRITO, ELOGIOS, LOUVORES, REFERÊNCIAS ELOGIOSAS, DISTINTIVOS, DISPENSAS DE SERVIÇO	\N	085.1.a 0851a premios de honra ao merito elogios louvores referencias elogiosas distintivos dispensas de servico	N	47	5	E	N
 586	1	085.1.b	RELAÇÕES DE AGRACIADOS COM AS CONDECORAÇÕES, RELAÇÕES DAQUELES QUE TIVERAM AS CONDECORAÇÕES CASSADAS	\N	085.1.b 0851b relacoes de agraciados com as condecoracoes relacoes daqueles que tiveram as condecoracoes cassadas	N	5	5	G	N
-587	1	085.2	LICENÇAS	\N	085.2 0852 licencas	N	\N	5	E	N
 588	1	085.2.a	ADOTANTE, PARA ACOMPANHAR CÔNJUGE/COMPANHEIRO, CANDIDATO A CARGO ELETIVO, ESPECIAL, GESTANTE, PATERNIDADE, PARA TRATAR DE INTERESSE PARTICULAR, PARA TRATAMENTO DE SAÚDE DE PESSOA DA FAMÍLIA, PARA TRATAMENTO DE SAÚDE PRÓPRIA	\N	085.2.a 0852a adotante para acompanhar conjuge companheiro candidato a cargo eletivo especial gestante paternidade para tratar de interesse particular para tratamento de saude de pessoa da familia para tratamento de saude propria	N	47	5	E	N
 589	1	085.3	AFASTAMENTOS	\N	085.3 0853 afastamentos	N	\N	5	E	N
 590	1	085.3.a	INSTALAÇÃO (NO BRASIL E NO EXTERIOR), LUTO, NÚPCIAS, TRÂNSITO (NO BRASIL E NO EXTERIOR)	\N	085.3.a 0853a instalacao no brasil e no exterior luto nupcias transito no brasil e no exterior	N	47	5	E	N
@@ -5588,6 +5593,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 608	1	085.629	OUTROS DIREITOS PECUNIÁRIOS NA INATIVIDADE	\N	085.629 085629 outros direitos pecuniarios na inatividade	N	\N	5	E	N
 609	1	085.629.a	ADICIONAL NATALINO, ASSISTÊNCIA PRÉ-ESCOLAR, AUXÍLIOS: INVALIDEZ, NATALIDADE E FUNERAL, SALÁRIO-FAMÍLIA, ADICIONAL DESIGNAÇÃO PARA O SERVIÇO ATIVO, PRO-LABORE PARA TAREFA POR TEMPO CERTO, AJUDA DE TRANSPORTE POR BAIXA/ALTA EM ORGANIZAÇÃO, HOSPITALAR	\N	085.629.a 085629a adicional natalino assistencia pre-escolar auxilios: invalidez natalidade e funeral salario-familia adicional designacao para o servico ativo pro-labore para tarefa por tempo certo ajuda de transporte por baixa alta em organizacao hospitalar	N	47	5	E	N
 610	1	085.63	DESCONTOS	\N	085.63 08563 descontos	N	\N	\N	\N	S
+611	1	085.631	OBRIGATÓRIOS	\N	085.631 085631 obrigatorios	N	\N	5	E	N
 612	1	085.631.a	CONTR. PARA A ASSISTÊNCIA MÉDICO-HOSPITALAR E SOCIAL, INDENIZAÇÃO PELA ASSISTÊNCIA, INDENIZAÇÃO À FAZENDA, MULTA POR OCUPAÇÃO IRREGULAR DE PRÓPRIO NACIONAL RESIDENCIAL, PENSÃO ALIMENTÍCIA OU JUDICIAL, CONTR. A PENSÃO MILITAR, TAXA DE USO POR OCUPAÇÃO	OBRIGATÓRIOS: CONTRIBUIÇÃO PARA A ASSISTÊNCIA MÉDICO-HOSPITALAR E SOCIAL (PRESTADA POR ENTIDADE MILITAR), IMPOSTOS INCIDENTES SOBRE A REMUNERAÇÃO OU PROVENTOS, INDENIZAÇÃO PELA ASSISTÊNCIA MÉDICO-HOSPITALAR (PRESTADA POR ENTIDADE MILITAR), INDENIZAÇÃO À FAZENDA NACIONAL, MULTA POR OCUPAÇÃO IRREGULAR DE PRÓPRIO NACIONAL RESIDENCIAL, PENSÃO ALIMENTÍCIA OU JUDICIAL, CONTRIBUIÇÃO PARA A PENSÃO MILITAR, TAXA DE USO POR OCUPAÇÃO DE PRÓPRIO NACIONAL RESIDENCIAL	085.631.a 085631a contr para a assistencia medico-hospitalar e social indenizacao pela assistencia indenizacao a fazenda multa por ocupacao irregular de proprio nacional residencial pensao alimenticia ou judicial contr a pensao militar taxa de uso por ocupacao obrigatorios: contribuicao para a assistencia medico-hospitalar e social prestada por entidade militar impostos incidentes sobre a remuneracao ou proventos indenizacao pela assistencia medico-hospitalar prestada por entidade militar indenizacao a fazenda nacional multa por ocupacao irregular de proprio nacional residencial pensao alimenticia ou judicial contribuicao para a pensao militar taxa de uso por ocupacao de proprio nacional residencial	N	47	5	E	N
 613	1	085.632	AUTORIZADOS	\N	085.632 085632 autorizados	N	\N	5	E	N
 614	1	085.632.a	DESCONTOS EM FAVOR DE ENTIDADE CONSIGNATÁRIAS, DE TERCEIRO OU BENEFÍCIO FAMÍLIA	\N	085.632.a 085632a descontos em favor de entidade consignatarias de terceiro ou beneficio familia	N	47	5	E	N
@@ -5621,7 +5627,6 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 642	1	087.11.a	ATENDIMENTO AMBULATORIAL OU PRONTO-ATENDIMENTO	\N	087.11.a 08711a atendimento ambulatorial ou pronto-atendimento	N	20	5	E	N
 643	1	087.11.b	PRONTUÁRIOS MÉDICOS, FICHAS ODONTOLÓGICAS	\N	087.11.b 08711b prontuarios medicos fichas odontologicas	N	95	5	E	N
 644	1	087.12	PERICIAL	\N	087.12 08712 pericial	N	\N	5	E	N
-682	1	990	OUTRAS AÇÕES REFERENTES À ADMINISTRAÇÃO DE ATIVIDADES ACESSÓRIAS	Nas subdivisões deste descritor classificam-se documentos referentes às comunicações ocasionais e genéricas produzidas ou recebidas pelo órgão e entidade no relacionamento com outras instituições públicas e privadas e que não dizem respeito ao desenvolvimento de suas atividades específicas.	990 990 Nas subdivisoes deste descritor classificam-se documentos referentes as comunicacoes ocasionais e genericas produzidas ou recebidas pelo orgao e entidade no relacionamento com outras instituicoes publicas e privadas e que nao dizem respeito ao desenvolvimento de suas atividades especificas.	S	\N	\N	\N	S
 645	1	087.12.a	CONTROLE E VERIFICAÇÃO DE HIGIDEZ DO PESSOAL; ATESTADO E INQUÉRITO SANITÁRIO; RESULTADO DE EXAMES; CORPO DE DELITO; INSPEÇÃO; PROCESSOS DE PERÍCIA PARA REFORMA, ISENÇÃO DE IMPOSTO DE RENDA, MELHORIA DE REFORMA E MOVIMENTAÇÃO POR MOTIVO DE SAÚDE	Controle e verificação do estado de higidez (em estado saudável) do pessoal em serviço ativo, inativo e a ser selecionado para ingresso nas Forças Armadas; atestado sanitário de origem; inquérito sanitário de origem; resultado de exames; auto de corpo de delito; atas de inspeção de saúde; processos de perícia médica para reforma, isenção de imposto de renda, melhoria de reforma e movimentação por motivo de saúde.	087.12.a 08712a controle e verificacao de higidez do pessoal; atestado e inquerito sanitario; resultado de exames; corpo de delito; inspecao; processos de pericia para reforma isencao de imposto de renda melhoria de reforma e movimentacao por motivo de saude controle e verificacao do estado de higidez em estado saudavel do pessoal em servico ativo inativo e a ser selecionado para ingresso nas forcas armadas; atestado sanitario de origem; inquerito sanitario de origem; resultado de exames; auto de corpo de delito; atas de inspecao de saude; processos de pericia medica para reforma isencao de imposto de renda melhoria de reforma e movimentacao por motivo de saude	N	125	5	E	N
 646	1	087.2	SOCIAL	\N	087.2 0872 social	N	\N	5	E	N
 647	1	087.2.a	PROGRAMAS DE ASSISTÊNCIA SOCIAL COM VISTAS À CONCESSÃO DE LICENÇAS E BENEFÍCIOS; ATENDIMENTOS EDUCACIONAIS E ASSISTENCIAIS PRESTADOS POR EMPRESAS CONVENIADAS	\N	087.2.a 0872a programas de assistencia social com vistas a concessao de licencas e beneficios; atendimentos educacionais e assistenciais prestados por empresas conveniadas	N	95	5	E	N
@@ -5631,12 +5636,6 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 651	1	087.4.a	TRIAGEM PARA ENCAMINHAMENTO AO SERVIÇO DE SAÚDE ESPECÍFICO; ORIENTAÇÃO E ACONSELHAMENTO PSICOLÓGICO; ATENDIMENTOS PSICOLÓGICOS PRESTADOS POR EMPRESAS CONVENIADAS	\N	087.4.a 0874a triagem para encaminhamento ao servico de saude especifico; orientacao e aconselhamento psicologico; atendimentos psicologicos prestados por empresas conveniadas	N	125	5	E	N
 652	1	087.5	RELIGIOSA	\N	087.5 0875 religiosa	N	\N	5	E	N
 653	1	087.5.a	CENSO RELIGIOSO	\N	087.5.a 0875a censo religioso	N	45	5	E	N
-654	1	087.5.b	PROCESSOS DE HABILITAÇÃO E REGISTROS DE CASAMENTO; BATIZADO E CRISMA; LIVRO TOMBO	\N	087.5.b 0875b processos de habilitacao e registros de casamento; batizado e crisma; livro tombo	N	15	15	G	N
-655	1	088	VAGA	\N	088 088 vaga	N	\N	\N	\N	S
-656	1	089	OUTROS ASSUNTOS REFERENTES A PESSOAL MILITAR	\N	089 089 outros assuntos referentes a pessoal militar	N	\N	\N	\N	S
-657	1	089.1	SERVIÇOS DE ESCALA	\N	089.1 0891 servicos de escala	N	\N	5	E	N
-658	1	089.1.a	ESCALAS DE SERVIÇO	\N	089.1.a 0891a escalas de servico	N	47	5	E	N
-659	1	089.2	TABELAS MESTRAS	\N	089.2 0892 tabelas mestras	N	\N	5	E	N
 660	1	089.2.a	TABELAS INDIVIDUAIS E GERAIS	Condicional "Enquanto vigora" convencionada para 1 ano no corrente, a contar da perda da validade do documento.	089.2.a 0892a tabelas individuais e gerais condicional enquanto vigora convencionada para 1 ano no corrente a contar da perda da validade do documento	N	5	1	E	N
 661	1	089.3	CONTROLE DE FREQUÊNCIA	\N	089.3 0893 controle de frequencia	N	\N	5	E	N
 662	1	089.3.a	FICHAS DE CONTROLE DE EFETIVOS; LIVROS DE LICENCIADOS	\N	089.3.a 0893a fichas de controle de efetivos; livros de licenciados	N	47	5	E	N
@@ -5659,6 +5658,7 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 679	1	920.01	NORMATIZAÇÃO. REGULAMENTAÇÃO	Incluem-se documentos referentes às determinações legais, aos atos e instruções normativas, aos procedimentos operacionais e às decisões de caráter geral sobre a promoção de visitas ao órgão e entidade.	920.01 92001 Incluem-se documentos referentes as determinacoes legais aos atos e instrucoes normativas aos procedimentos operacionais e as decisoes de carater geral sobre a promocao de visitas ao orgao e entidade.	S	5	\N	G	N
 680	1	921	PROGRAMAÇÃO DE VISITAS	Incluem-se documentos referentes ao atendimento de solicitação de visitas ao órgão e entidade, bem como aqueles referentes ao planejamento e à programação de visitas monitoradas, dirigidas a diferentes públicos.	921 921 Incluem-se documentos referentes ao atendimento de solicitacao de visitas ao orgao e entidade bem como aqueles referentes ao planejamento e a programacao de visitas monitoradas dirigidas a diferentes publicos.	S	5	5	G	N
 681	1	922	CONTROLE DE VISITAS E VISITANTES	Incluem-se documentos referentes ao controle da entrada de visitantes e ao acompanhamento dos mesmos por ocasião das visitas.	922 922 Incluem-se documentos referentes ao controle da entrada de visitantes e ao acompanhamento dos mesmos por ocasiao das visitas.	S	\N	2	E	N
+682	1	990	OUTRAS AÇÕES REFERENTES À ADMINISTRAÇÃO DE ATIVIDADES ACESSÓRIAS	Nas subdivisões deste descritor classificam-se documentos referentes às comunicações ocasionais e genéricas produzidas ou recebidas pelo órgão e entidade no relacionamento com outras instituições públicas e privadas e que não dizem respeito ao desenvolvimento de suas atividades específicas.	990 990 Nas subdivisoes deste descritor classificam-se documentos referentes as comunicacoes ocasionais e genericas produzidas ou recebidas pelo orgao e entidade no relacionamento com outras instituicoes publicas e privadas e que nao dizem respeito ao desenvolvimento de suas atividades especificas.	S	\N	\N	\N	S
 683	1	991	GESTÃO DE COMUNICAÇÕES EVENTUAIS	Incluem-se comunicados, informes, pedidos, solicitações e oferecimentos, trocados entre o órgão e entidade e demais instituições públicas e privadas, que não tiveram solução de con-tinuidade, como por exemplo: apresentação e recomendação de pessoas e de profissionais; comunicado de falecimento e envio de pêsames; informe de posse, afastamento e mudança de titular; comunicados de alterações de telefones e endereços; informe de luto oficial; envio de cumprimentos e felicitações; recebimento de convites para solenidade e eventos diversos. Quanto às solicitações de informações efetuadas pelos cidadãos por meio do SIC, classificar nas subdivisões do código 002.1. Quanto aos elogios e reclamações recebidos pela ouvidoria e outros canais de comunicação, classificar no código 002.2.	991 991 Incluem-se comunicados informes pedidos solicitacoes e oferecimentos trocados entre o orgao e entidade e demais instituicoes publicas e privadas que nao tiveram solucao de con-tinuidade como por exemplo: apresentacao e recomendacao de pessoas e de profissionais comunicado de falecimento e envio de pesames informe de posse afastamento e mudanca de titular comunicados de alteracoes de telefones e enderecos informe de luto oficial envio de cumprimentos e felicitacoes recebimento de convites para solenidade e eventos diversos. Quanto as solicitacoes de informacoes efetuadas pelos cidadaos por meio do SIC classificar nas subdivisoes do codigo 002.1. Quanto aos elogios e reclamacoes recebidos pela ouvidoria e outros canais de comunicacao classificar no codigo 002.2.	S	\N	1	E	N
 684	1	992	RELACIONAMENTO COM ASSOCIAÇÕES CULTURAIS, DE AMIGOS E DE SERVIDORES	Incluem-se documentos referentes ao relacionamento do órgão e entidade com associações culturais, de amigos e de servidores.	992 992 Incluem-se documentos referentes ao relacionamento do orgao e entidade com associacoes culturais, de amigos e de servidores.	S	\N	1	E	N
 \.
@@ -5669,11 +5669,15 @@ COPY public.assunto (id_assunto, id_tabela_assuntos, codigo_estruturado, descric
 --
 
 COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
+1	1
+534	534
+21	21
 2	2
 4	4
 6	6
 7	7
 8	8
+90	90
 10	10
 11	11
 12	12
@@ -5682,13 +5686,15 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 16	16
 17	17
 20	20
-21	21
+86	86
+535	535
 23	23
 24	24
 26	26
 27	27
 29	29
 30	30
+87	87
 31	31
 33	33
 34	34
@@ -5698,6 +5704,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 39	39
 41	41
 42	42
+91	91
 44	44
 45	45
 46	46
@@ -5709,10 +5716,12 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 54	54
 55	55
 56	56
+88	88
 58	58
 59	59
 61	61
 62	62
+536	536
 66	66
 67	67
 68	68
@@ -5721,6 +5730,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 71	71
 72	72
 73	73
+537	537
 75	75
 77	77
 78	78
@@ -5729,11 +5739,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 82	82
 84	84
 85	85
-86	86
-87	87
-88	88
-90	90
-91	91
+553	553
 92	92
 93	93
 94	94
@@ -5770,6 +5776,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 133	133
 134	134
 135	135
+538	538
 137	137
 138	138
 139	139
@@ -5779,6 +5786,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 144	144
 145	145
 146	146
+157	157
 147	147
 148	148
 149	149
@@ -5787,7 +5795,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 153	153
 155	155
 156	156
-157	157
+540	540
 159	159
 161	161
 162	162
@@ -5807,6 +5815,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 181	181
 184	184
 185	185
+541	541
 186	186
 188	188
 189	189
@@ -5824,6 +5833,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 205	205
 206	206
 207	207
+339	339
 210	210
 211	211
 213	213
@@ -5831,6 +5841,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 215	215
 218	218
 219	219
+233	233
 220	220
 222	222
 223	223
@@ -5841,7 +5852,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 229	229
 231	231
 232	232
-233	233
+542	542
 234	234
 237	237
 238	238
@@ -5867,6 +5878,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 267	267
 269	269
 270	270
+587	587
 271	271
 273	273
 275	275
@@ -5875,6 +5887,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 280	280
 281	281
 282	282
+654	654
 284	284
 287	287
 288	288
@@ -5888,6 +5901,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 299	299
 300	300
 301	301
+406	406
 303	303
 304	304
 305	305
@@ -5904,6 +5918,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 321	321
 322	322
 323	323
+543	543
 325	325
 326	326
 328	328
@@ -5915,7 +5930,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 335	335
 336	336
 338	338
-339	339
+544	544
 340	340
 341	341
 342	342
@@ -5923,10 +5938,13 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 347	347
 348	348
 349	349
+545	545
+546	546
 356	356
 357	357
 358	358
 365	365
+547	547
 366	366
 367	367
 368	368
@@ -5936,6 +5954,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 373	373
 374	374
 375	375
+548	548
 378	378
 379	379
 381	381
@@ -5945,10 +5964,17 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 386	386
 387	387
 388	388
+657	657
+658	658
 390	390
 393	393
 394	394
 395	395
+407	407
+408	408
+409	409
+549	549
+550	550
 397	397
 398	398
 399	399
@@ -5956,10 +5982,6 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 402	402
 403	403
 405	405
-406	406
-407	407
-408	408
-409	409
 411	411
 412	412
 414	414
@@ -5978,6 +6000,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 432	432
 433	433
 434	434
+659	659
 437	437
 438	438
 439	439
@@ -5990,6 +6013,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 449	449
 450	450
 451	451
+551	551
 453	453
 454	454
 455	455
@@ -6000,6 +6024,7 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 462	462
 463	463
 465	465
+496	496
 466	466
 468	468
 469	469
@@ -6009,13 +6034,14 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 478	478
 479	479
 480	480
+533	533
 481	481
 483	483
 490	490
 492	492
 493	493
 495	495
-496	496
+552	552
 497	497
 498	498
 500	500
@@ -6046,26 +6072,6 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 530	530
 531	531
 532	532
-533	533
-534	534
-535	535
-536	536
-537	537
-538	538
-540	540
-541	541
-542	542
-543	543
-544	544
-545	545
-546	546
-547	547
-548	548
-549	549
-550	550
-551	551
-552	552
-553	553
 555	555
 557	557
 558	558
@@ -6094,7 +6100,6 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 584	584
 585	585
 586	586
-587	587
 588	588
 589	589
 590	590
@@ -6151,10 +6156,6 @@ COPY public.assunto_proxy (id_assunto_proxy, id_assunto) FROM stdin;
 651	651
 652	652
 653	653
-654	654
-657	657
-658	658
-659	659
 660	660
 661	661
 662	662
@@ -14100,7 +14101,7 @@ COPY public.infra_agendamento_tarefa (id_infra_agendamento_tarefa, descricao, co
 7	Remove arquivos com mais de 24 horas criados pelo serviço adicionarArquivo e que ainda não foram utilizados.	AgendamentoRN::removerAquivosNaoUtilizados	D	5	\N	\N	N	\N	\N	S
 9	Processa reaberturas programadas de processos.	AgendamentoRN::reabrirProcessos	D	00:01,01:01	\N	\N	N	\N	\N	S
 5	Confirmar Publicações Internas.	AgendamentoRN::confirmarPublicacaoInterna	D	00:00,01:00	2014-11-25 00:00:01	2014-11-25 00:00:01	S	idOrgao=0	\N	S
-8	Processa replicações de sinalizações em processos e envia e-mails de aviso sobre solicitações do SEI Federação.	AgendamentoRN::processarFederacao	N	0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55	2023-10-04 18:30:01	2023-10-04 18:30:01	S	\N	\N	S
+8	Processa replicações de sinalizações em processos e envia e-mails de aviso sobre solicitações do SEI Federação.	AgendamentoRN::processarFederacao	N	0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55	2025-03-27 15:30:01	2025-03-27 15:30:01	S	\N	\N	S
 \.
 
 
@@ -61047,106 +61048,14 @@ COPY public.rel_situacao_unidade (id_unidade, id_situacao) FROM stdin;
 --
 
 COPY public.rel_tipo_procedimento_assunto (id_tipo_procedimento, id_assunto_proxy, sequencia) FROM stdin;
-100000267	30	0
-100000305	30	0
-100000306	30	0
-100000307	30	0
-100000308	30	0
-100000310	30	0
-100000313	30	0
-100000314	30	0
-100000315	30	0
-100000316	30	0
-100000401	30	0
-100000402	30	0
-100000403	30	0
-100000404	30	0
-100000423	30	0
-100000219	29	0
-100000255	24	0
-100000257	23	0
-100000258	23	0
-100000264	24	0
-100000339	15	0
-100000340	15	0
-100000374	15	0
-100000375	15	0
-100000385	24	0
-100000295	61	0
-100000141	45	0
-100000304	41	0
-100000309	61	0
-100000311	61	0
-100000312	61	0
-100000346	34	0
-100000347	34	0
-100000348	34	0
-100000349	34	0
-100000350	34	0
-100000372	41	0
-100000373	55	0
-100000376	41	0
-100000377	41	0
-100000378	41	0
-100000379	41	0
-100000380	41	0
-100000383	61	0
-100000408	61	0
-100000416	41	0
-100000150	88	0
-100000152	91	0
-100000153	91	0
-100000154	91	0
-100000123	84	0
-100000172	84	0
-100000214	81	0
-100000215	80	0
-100000229	77	0
-100000242	82	0
-100000252	78	0
-100000341	68	0
-100000342	68	0
-100000344	68	0
-100000345	68	0
-100000185	96	0
-100000186	96	0
-100000220	96	0
-100000221	96	0
-100000400	96	0
-100000142	107	0
-100000101	96	0
-100000405	96	0
-100000159	110	0
-100000108	123	0
-100000140	119	0
-100000170	102	1
-100000179	107	0
-100000181	107	0
-100000187	119	0
-100000188	118	0
-100000189	120	0
-100000232	106	0
-100000233	106	0
-100000253	117	0
-100000289	107	0
-100000144	145	0
-100000145	145	0
-100000147	145	0
-100000158	145	0
-100000160	145	0
-100000161	145	0
-100000414	145	0
-100000415	145	0
-100000177	147	0
-100000178	147	0
-100000407	147	0
-100000175	152	0
+100000101	113	0
 100000102	129	0
 100000103	126	0
 100000104	125	0
 100000105	124	0
 100000106	127	0
 100000107	128	0
+100000108	123	0
 100000109	147	0
 100000110	147	0
 100000111	147	0
@@ -61156,95 +61065,102 @@ COPY public.rel_tipo_procedimento_assunto (id_tipo_procedimento, id_assunto_prox
 100000116	147	0
 100000118	147	0
 100000119	151	0
-100000124	149	0
+100000120	189	0
+100000121	200	0
+100000122	201	0
+100000123	84	0
+100000124	175	0
+100000125	175	0
+100000126	178	0
 100000127	148	0
 100000128	148	0
 100000129	148	0
 100000130	148	0
-100000131	149	0
+100000131	192	0
 100000132	149	0
 100000133	149	0
-100000134	149	0
-100000135	149	0
+100000134	192	0
+100000135	192	0
 100000136	149	0
-100000137	149	0
+100000137	192	0
+100000138	203	0
 100000139	149	0
+100000140	106	0
+100000141	56	0
+100000142	106	0
+100000143	189	0
+100000144	164	0
+100000145	164	0
 100000146	133	0
+100000147	164	0
+100000148	99	0
+100000149	184	0
+100000150	88	0
+100000151	195	0
+100000152	92	0
+100000153	93	0
+100000154	92	0
+100000155	218	0
+100000156	218	0
+100000157	218	0
+100000158	164	0
+100000159	161	0
+100000160	164	0
+100000161	161	0
+100000162	227	0
 100000163	132	0
-100000164	131	0
+100000164	2	0
 100000165	131	0
 100000166	135	0
 100000167	134	0
 100000169	133	0
-100000174	140	0
+100000170	96	0
+100000170	102	1
+100000172	84	0
+100000173	227	0
+100000174	132	0
+100000175	166	0
+100000176	166	0
+100000177	169	0
+100000178	169	0
+100000179	107	0
+100000181	107	0
 100000182	145	0
 100000183	145	0
 100000184	145	0
+100000185	110	0
+100000186	110	0
+100000187	119	0
+100000188	118	0
+100000189	119	0
+100000190	219	0
+100000191	219	0
 100000192	148	0
 100000193	148	0
 100000194	148	0
 100000195	148	0
 100000196	152	0
+100000197	178	0
+100000198	146	0
+100000199	146	0
+100000200	146	0
 100000201	146	0
 100000202	146	0
 100000203	146	0
 100000204	146	0
+100000205	146	0
+100000206	146	0
 100000207	146	0
 100000208	146	0
+100000209	146	0
 100000210	146	0
 100000211	146	0
 100000212	146	0
-100000269	141	0
-100000392	149	0
-100000393	149	0
-100000394	149	0
-100000395	149	0
-100000398	149	0
-100000410	149	0
-100000170	161	0
-100000234	161	0
-100000235	161	0
-100000236	161	0
-100000237	161	0
-100000238	161	0
-100000239	161	0
-100000240	161	0
-100000213	166	0
-100000243	166	0
-100000244	166	0
-100000245	166	0
-100000246	166	0
-100000247	166	0
-100000248	166	0
-100000249	166	0
-100000148	169	0
-100000250	169	0
-100000251	169	0
-100000126	178	0
-100000176	166	0
-100000197	178	0
+100000213	98	0
+100000214	81	0
+100000215	80	0
 100000218	156	0
-100000241	153	0
-100000396	178	0
-100000399	178	0
-100000125	205	0
-100000254	189	0
-100000120	189	0
-100000121	200	0
-100000122	201	0
-100000138	203	0
-100000143	189	0
-100000149	184	0
-100000151	195	0
-100000151	196	1
-100000151	197	2
-100000151	198	3
-100000198	193	0
-100000199	193	0
-100000200	193	0
-100000205	193	0
-100000206	193	0
-100000209	193	0
+100000219	75	0
 100000222	206	0
 100000223	206	0
 100000224	206	0
@@ -61252,130 +61168,218 @@ COPY public.rel_tipo_procedimento_assunto (id_tipo_procedimento, id_assunto_prox
 100000226	206	0
 100000227	206	0
 100000228	200	0
-100000231	186	0
-100000285	213	0
-100000286	210	0
-100000286	213	1
-100000287	210	0
-100000303	205	0
-100000327	205	0
-100000360	205	0
-100000361	205	0
-100000362	205	0
-100000363	205	0
-100000364	205	0
-100000406	195	0
-100000406	196	1
-100000406	197	2
-100000406	198	3
-100000412	205	0
-100000413	205	0
-100000420	213	0
-100000421	214	0
-100000155	218	0
-100000156	218	0
-100000157	218	0
+100000229	77	0
 100000230	226	0
-100000162	227	0
-100000173	227	0
-100000190	219	0
-100000191	219	0
-100000422	215	0
-100000317	250	0
-100000318	250	0
-100000319	250	0
-100000320	250	0
-100000321	250	0
-100000322	250	0
-100000323	250	0
-100000324	250	0
-100000325	250	0
-100000326	250	0
-100000328	250	0
-100000329	250	0
-100000330	250	0
-100000331	250	0
-100000332	250	0
-100000417	250	0
-100000294	273	0
-100000291	266	0
-100000292	267	0
-100000293	251	0
-100000391	250	0
-100000296	328	0
-100000418	328	0
-100000288	347	0
-100000290	349	0
-100000297	368	0
-100000298	370	0
-100000299	370	0
-100000300	367	0
-100000301	366	0
-100000284	385	0
-100000217	381	1
+100000231	185	0
+100000232	106	0
+100000233	106	0
+100000234	96	0
+100000235	96	0
+100000236	96	0
+100000237	96	0
+100000238	96	0
+100000239	96	0
+100000240	96	0
+100000241	153	0
+100000242	82	0
+100000243	98	0
+100000244	98	0
+100000245	98	0
+100000246	98	0
+100000247	98	0
+100000248	98	0
+100000249	98	0
+100000250	99	0
+100000251	99	0
+100000252	78	0
+100000253	117	0
+100000254	190	0
+100000255	20	0
 100000256	393	0
+100000257	20	0
+100000258	20	0
 100000259	381	0
 100000260	393	0
 100000261	393	0
 100000262	393	0
 100000263	393	0
+100000264	20	0
 100000265	399	0
-100000266	382	0
+100000266	381	0
+100000267	2	0
 100000268	397	0
-100000270	383	0
+100000269	141	0
+100000270	381	0
 100000271	399	0
 100000272	399	0
+100000273	465	0
 100000274	381	0
+100000275	411	0
 100000276	397	0
 100000277	381	0
 100000278	393	0
 100000279	387	0
-100000280	387	0
+100000280	381	0
 100000281	388	0
 100000282	387	0
+100000283	465	0
+100000284	385	0
+100000285	213	0
+100000286	210	0
+100000286	213	1
+100000287	210	0
+100000288	347	0
+100000289	107	0
+100000290	349	0
+100000291	260	0
+100000292	260	0
+100000293	251	0
+100000294	277	0
+100000295	276	0
+100000296	284	0
+100000297	61	0
+100000298	370	0
+100000299	370	0
+100000300	365	0
+100000301	366	0
+100000302	61	0
+100000303	205	0
+100000304	41	0
+100000305	2	0
+100000306	2	0
+100000307	2	0
+100000308	2	0
+100000309	61	0
+100000310	2	0
+100000311	61	0
+100000312	61	0
+100000313	2	0
+100000314	2	0
+100000315	2	0
+100000316	2	0
+100000317	61	0
+100000318	61	0
+100000319	61	0
+100000320	61	0
+100000321	61	0
+100000322	61	0
+100000323	61	0
+100000324	61	0
+100000325	61	0
+100000326	61	0
+100000327	205	0
+100000328	61	0
+100000329	61	0
+100000330	61	0
+100000331	61	0
+100000332	61	0
+100000333	6	0
+100000334	6	0
+100000335	6	0
+100000336	6	0
+100000337	6	0
+100000338	6	0
+100000339	411	0
+100000340	411	0
+100000341	68	0
+100000342	68	0
+100000343	481	0
+100000344	68	0
+100000345	68	0
+100000346	33	0
+100000347	33	0
+100000348	33	0
+100000349	33	0
+100000350	33	0
+100000351	6	0
+100000352	6	0
+100000353	6	0
+100000354	6	0
+100000355	6	0
+100000356	6	0
+100000357	6	0
+100000358	6	0
 100000359	393	0
-100000390	397	0
-100000370	425	2
-100000371	425	2
-100000275	411	0
+100000360	205	0
+100000361	205	0
+100000362	205	0
+100000363	205	0
+100000364	205	0
 100000365	420	0
 100000366	420	0
-100000368	430	0
-100000397	417	0
-100000409	420	0
-100000419	420	0
-100000389	462	0
-100000424	463	0
-100000273	455	0
-100000283	455	0
-100000384	455	0
+100000367	6	0
+100000368	428	0
+100000369	6	0
 100000370	441	0
 100000370	442	1
+100000370	448	2
+100000370	443	3
 100000371	441	0
 100000371	442	1
-100000343	481	0
-100000411	469	0
-100000333	683	0
-100000334	683	0
-100000335	683	0
-100000336	683	0
-100000337	683	0
-100000338	683	0
-100000351	683	0
-100000352	683	0
-100000353	683	0
-100000354	683	0
-100000355	683	0
-100000356	683	0
-100000357	683	0
-100000358	683	0
-100000367	683	0
-100000369	683	0
-100000381	683	0
-100000382	683	0
-100000386	683	0
-100000387	683	0
-100000388	683	0
+100000371	448	2
+100000371	443	3
+100000372	365	0
+100000373	55	0
+100000374	411	0
+100000375	411	0
+100000376	41	0
+100000377	41	0
+100000378	41	0
+100000379	41	0
+100000380	41	0
+100000381	6	0
+100000382	6	0
+100000383	61	0
+100000384	465	0
+100000385	20	0
+100000386	6	0
+100000387	6	0
+100000388	6	0
+100000389	425	0
+100000390	397	0
+100000391	250	0
+100000392	175	0
+100000393	175	0
+100000394	175	0
+100000395	175	0
+100000396	178	0
+100000397	175	0
+100000398	175	0
+100000399	178	0
+100000400	110	0
+100000401	2	0
+100000402	2	0
+100000403	2	0
+100000404	2	0
+100000405	113	0
+100000406	195	0
+100000407	169	0
+100000408	61	0
+100000409	420	0
+100000410	175	0
+100000412	205	0
+100000413	205	0
+100000414	164	0
+100000415	164	0
+100000416	41	0
+100000417	61	0
+100000418	328	0
+100000419	420	0
+100000420	213	0
+100000421	213	0
+100000422	215	0
+100000423	2	0
+100000151	196	1
+100000151	197	2
+100000151	198	3
+100000217	381	0
+100000406	196	1
+100000406	197	2
+100000406	198	3
+100000424	426	0
+100000220	110	0
+100000221	110	0
+100000411	483	0
 \.
 
 
