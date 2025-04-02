@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.10 (Debian 15.10-1.pgdg120+1)
--- Dumped by pg_dump version 15.10 (Debian 15.10-1.pgdg120+1)
+-- Dumped from database version 14.13 (Debian 14.13-1.pgdg120+1)
+-- Dumped by pg_dump version 14.13 (Debian 14.13-1.pgdg120+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -13385,7 +13385,7 @@ SEI_TAM_MB_DOC_EXTERNO	200
 SEI_TIPO_ASSINATURA_INTERNA	1
 SEI_TIPO_AUTENTICACAO_INTERNA	1
 SEI_WS_NUM_MAX_DOCS	5
-SEI_VERSAO	4.0.0
+SEI_VERSAO	4.0.12.15
 \.
 
 
@@ -67350,7 +67350,7 @@ ALTER TABLE ONLY public.versao_secao_documento
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
 --
 
 GRANT ALL ON SCHEMA public TO sei_user;

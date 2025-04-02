@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.7 (Debian 15.7-1.pgdg120+1)
--- Dumped by pg_dump version 15.7 (Debian 15.7-1.pgdg120+1)
+-- Dumped from database version 14.13 (Debian 14.13-1.pgdg120+1)
+-- Dumped by pg_dump version 14.13 (Debian 14.13-1.pgdg120+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -8428,7 +8428,7 @@ ALTER TABLE ONLY public.usuario
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
 --
 
 GRANT ALL ON SCHEMA public TO sip_user;

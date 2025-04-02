@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.4 (Debian 15.4-2.pgdg120+1)
--- Dumped by pg_dump version 15.4 (Debian 15.4-2.pgdg120+1)
+-- Dumped from database version 14.13 (Debian 14.13-1.pgdg120+1)
+-- Dumped by pg_dump version 14.13 (Debian 14.13-1.pgdg120+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -807,7 +807,7 @@ COPY public.infra_agendamento_tarefa (id_infra_agendamento_tarefa, descricao, co
 3	Replicar todos os usuários para o SEI	AgendamentoRN::replicarTodosUsuariosSEI	D	6	\N	\N	N	\N	\N	N
 4	Replicar todas as unidades da hierarquia para o SEI	AgendamentoRN::replicarUnidadesHierarquiaSEI	D	5	\N	\N	N	\N	\N	N
 5	Replica regras de auditoria para o SEI.	AgendamentoRN::replicarRegrasAuditoriaSEI	D	7	\N	\N	N	\N	\N	S
-2	Teste de agendamento SIP	AgendamentoRN::testarAgendamento	N	0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55	2023-10-04 18:30:01	2014-11-14 08:05:04	N	\N	\N	S
+2	Teste de agendamento SIP	AgendamentoRN::testarAgendamento	N	0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55	2025-04-02 18:35:01	2014-11-14 08:05:04	N	\N	\N	S
 \.
 
 
@@ -848,6 +848,9 @@ COPY public.infra_erro_php (id_infra_erro_php, sta_tipo, arquivo, linha, erro, d
 --
 
 COPY public.infra_log (id_infra_log, dth_log, texto_log, ip, sta_tipo) FROM stdin;
+2	2025-04-02 18:35:01	Teste Agendamento SIP	\N	I
+3	2025-04-02 18:35:01	Agendamento FALHOU (ef91c3e1d7d1)\n\nServidor: ef91c3e1d7d1\n\nData/Hora: 02/04/2025 18:35:01\n\nComando: AgendamentoRN::testarAgendamento()\n\nErro: Validação:\nFalha na conexão com o servidor de e-mails.\n\nTrilha de Processamento:\n#0 /opt/infra/infra_php/formularios/rn/InfraAgendamentoTarefaRN.php(666): AgendamentoRN->testarAgendamento()\n#1 /opt/infra/infra_php/InfraAgendamentoTarefa.php(218): InfraAgendamentoTarefaRN->executar()\n#2 /opt/sip/scripts/AgendamentoTarefaSip.php(34): InfraAgendamentoTarefa->executar()\n#3 {main}	\N	E
+4	2025-04-02 18:35:01	Erro executando agendamentos.\n\nValidação:\nFalha na conexão com o servidor de e-mails.\n\nTrilha de Processamento:\n#0 /opt/infra/infra_php/InfraAgendamentoTarefa.php(254): InfraMail::enviarConfigurado()\n#1 /opt/sip/scripts/AgendamentoTarefaSip.php(34): InfraAgendamentoTarefa->executar()\n#2 {main}	\N	E
 \.
 
 
@@ -6599,7 +6602,7 @@ SELECT pg_catalog.setval('public.seq_infra_auditoria', 1, true);
 -- Name: seq_infra_log; Type: SEQUENCE SET; Schema: public; Owner: sip_user
 --
 
-SELECT pg_catalog.setval('public.seq_infra_log', 1, true);
+SELECT pg_catalog.setval('public.seq_infra_log', 4, true);
 
 
 --
@@ -7969,7 +7972,7 @@ ALTER TABLE ONLY public.usuario
 
 
 --
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pg_database_owner
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
 --
 
 GRANT ALL ON SCHEMA public TO sip_user;
