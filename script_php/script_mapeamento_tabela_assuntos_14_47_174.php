@@ -18,7 +18,7 @@
     // Menu
     echo color("Selecione uma das opções abaixo:\n", "36"); // ciano
     echo "  " . color("14", "33") . utf8_encode(" - Atualização dos assuntos arquivísticos, segundo a Portaria 174/2024\n");
-    echo utf8_encode("       e mapeamento dos assuntos da tabela referente à Portaria 14/2001\n\n");
+    echo utf8_encode("       e mapeamento dos assuntos da tabela referente à resolução 14/2001\n\n");
     echo "  " . color("47", "33") . utf8_encode(" - Atualização dos assuntos arquivísticos, segundo a Portaria 174/2024\n");
     echo utf8_encode("       e mapeamento dos assuntos da tabela referente à Portaria 47/2020\n\n");
 
