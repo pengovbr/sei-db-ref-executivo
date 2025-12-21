@@ -174,6 +174,7 @@ truncate table procedimento;
 
 truncate table protocolo;
 truncate table seq_protocolo;
+truncate table protocolo_idx;
 
 truncate table protocolo_federacao;
 
